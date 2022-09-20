@@ -1,0 +1,5 @@
+# STOCKHOLM 1.0
+#=GF NH (fam1_0-seq1:0.75,(fam1_0-seq2:2,fam1_0-seq3:2.5)fam1_0-internal-1:0.75);
+fam1_0-seq1 AQ
+fam1_0-seq2 Ax
+fam1_0-seq3 Qx

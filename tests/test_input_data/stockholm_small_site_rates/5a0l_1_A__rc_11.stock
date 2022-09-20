@@ -1,0 +1,10 @@
+# STOCKHOLM 1.0
+#=GF NH ((5a0l_1_A__rc_11-seq1:1.1876,5a0l_1_A__rc_11-seq30:0.0749896)5a0l_1_A__rc_11-internal-2:3.30331,5a0l_1_A__rc_11-seq119:0.014576,((5a0l_1_A__rc_11-seq115:1.96238,5a0l_1_A__rc_11-seq110:0.0908739)5a0l_1_A__rc_11-internal-4:1.73408e-08,(5a0l_1_A__rc_11-seq80:0.294625,(5a0l_1_A__rc_11-seq55:0.581299,5a0l_1_A__rc_11-seq60:0.466659)5a0l_1_A__rc_11-internal-6:1.42335)5a0l_1_A__rc_11-internal-5:0.938099)5a0l_1_A__rc_11-internal-3:0.905448);
+5a0l_1_A__rc_11-seq1 NDM
+5a0l_1_A__rc_11-seq30 K-S
+5a0l_1_A__rc_11-seq119 GET
+5a0l_1_A__rc_11-seq115 Y-G
+5a0l_1_A__rc_11-seq110 TN-
+5a0l_1_A__rc_11-seq80 SGN
+5a0l_1_A__rc_11-seq55 PAH
+5a0l_1_A__rc_11-seq60 -RT

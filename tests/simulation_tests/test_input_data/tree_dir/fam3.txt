@@ -1,0 +1,7 @@
+3 nodes
+internal-0
+seq1
+seq2
+2 edges
+internal-0 seq1 100
+internal-0 seq2 100

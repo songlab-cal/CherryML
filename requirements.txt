@@ -1,0 +1,15 @@
+biotite
+ete3
+flake8
+matplotlib
+networkx
+numpy
+pandas
+parameterized
+pytest
+scipy
+seaborn
+threadpoolctl
+torch
+tqdm
+wget

@@ -1,0 +1,286 @@
+EM iteration #1: log-likelihood = -1100.74 bits
+EM iteration #2: log-likelihood = -1023.32 bits
+EM iteration #3: log-likelihood = -1003.37 bits
+EM iteration #4: log-likelihood = -991.039 bits
+EM iteration #5: log-likelihood = -983.096 bits
+EM iteration #6: log-likelihood = -977.768 bits
+EM iteration #7: log-likelihood = -973.872 bits
+EM iteration #8: log-likelihood = -970.786 bits
+EM iteration #9: log-likelihood = -968.186 bits
+EM iteration #10: log-likelihood = -966.004 bits
+EM iteration #11: log-likelihood = -964.323 bits
+EM iteration #12: log-likelihood = -963.057 bits
+EM iteration #13: log-likelihood = -962.123 bits
+EM iteration #14: log-likelihood = -961.42 bits
+EM iteration #15: log-likelihood = -960.894 bits
+EM iteration #16: log-likelihood = -960.48 bits
+Failed EM improvement threshold for the 4th time; stopping
+Checking post-iteration log-likelihood
+Post-iteration log-likelihood = -960.159 bits
+Best log-likelihood: -960.159
+Processing alignment Alignment1 (1 of 19): 2 columns
+Desired annotations:
+Selected algorithms:
+# STOCKHOLM 1.0
+#=GF NH               (6anz_1_B__rc_6-seq97:0.3136880000,(6anz_1_B__rc_6-seq6:0.1660140000,((6anz_1_B__rc_6-seq1:0.8470920000,6anz_1_B__rc_6-seq71:0.0001000000)6anz_1_B__rc_6-internal-4:0.6385960000,(6anz_1_B__rc_6-seq93:0.1182330000,6anz_1_B__rc_6-seq123:0.5439010000)6anz_1_B__rc_6-internal-5:0.1159830000)6anz_1_B__rc_6-internal-3:0.0901254000)6anz_1_B__rc_6-internal-2:0.3809960000,(6anz_1_B__rc_6-seq15:0.6386460000,6anz_1_B__rc_6-seq25:0.1709750000)6anz_1_B__rc_6-internal-6:0.1086060000);
+6anz_1_B__rc_6-seq97  FG
+6anz_1_B__rc_6-seq6   FG
+6anz_1_B__rc_6-seq1   FN
+6anz_1_B__rc_6-seq71  FG
+6anz_1_B__rc_6-seq93  FG
+6anz_1_B__rc_6-seq123 FG
+6anz_1_B__rc_6-seq15  LG
+6anz_1_B__rc_6-seq25  FG
+//
+Processing alignment Alignment2 (2 of 19): 2 columns
+Desired annotations:
+Selected algorithms:
+# STOCKHOLM 1.0
+#=GF NH               (6anz_1_B__rc_7-seq97:0.4299800000,(6anz_1_B__rc_7-seq6:0.2275590000,((6anz_1_B__rc_7-seq1:1.1611300000,6anz_1_B__rc_7-seq71:0.0001000000)6anz_1_B__rc_7-internal-4:0.8753380000,(6anz_1_B__rc_7-seq93:0.1620650000,6anz_1_B__rc_7-seq123:0.7455370000)6anz_1_B__rc_7-internal-5:0.1589810000)6anz_1_B__rc_7-internal-3:0.1235370000)6anz_1_B__rc_7-internal-2:0.5222400000,(6anz_1_B__rc_7-seq15:0.8754070000,6anz_1_B__rc_7-seq25:0.2343590000)6anz_1_B__rc_7-internal-6:0.1488690000);
+6anz_1_B__rc_7-seq97  -V
+6anz_1_B__rc_7-seq6   SI
+6anz_1_B__rc_7-seq1   GM
+6anz_1_B__rc_7-seq71  GV
+6anz_1_B__rc_7-seq93  -I
+6anz_1_B__rc_7-seq123 -V
+6anz_1_B__rc_7-seq15  -V
+6anz_1_B__rc_7-seq25  GV
+//
+Processing alignment Alignment3 (3 of 19): 1 columns
+Desired annotations:
+Selected algorithms:
+# STOCKHOLM 1.0
+#=GF NH               (6anz_1_B__rc_8-seq97:0.5893850000,(6anz_1_B__rc_8-seq6:0.3119210000,((6anz_1_B__rc_8-seq1:1.5915900000,6anz_1_B__rc_8-seq71:0.0001000000)6anz_1_B__rc_8-internal-4:1.1998500000,(6anz_1_B__rc_8-seq93:0.2221470000,6anz_1_B__rc_8-seq123:1.0219300000)6anz_1_B__rc_8-internal-5:0.2179190000)6anz_1_B__rc_8-internal-3:0.1693350000)6anz_1_B__rc_8-internal-2:0.7158480000,(6anz_1_B__rc_8-seq15:1.1999400000,6anz_1_B__rc_8-seq25:0.3212420000)6anz_1_B__rc_8-internal-6:0.2040590000);
+6anz_1_B__rc_8-seq97  W
+6anz_1_B__rc_8-seq6   W
+6anz_1_B__rc_8-seq1   Y
+6anz_1_B__rc_8-seq71  Y
+6anz_1_B__rc_8-seq93  W
+6anz_1_B__rc_8-seq123 W
+6anz_1_B__rc_8-seq15  F
+6anz_1_B__rc_8-seq25  W
+//
+Processing alignment Alignment4 (4 of 19): 6 columns
+Desired annotations:
+Selected algorithms:
+# STOCKHOLM 1.0
+#=GF NH               (6anz_1_B__rc_9-seq97:0.8078850000,(6anz_1_B__rc_9-seq6:0.4275580000,((6anz_1_B__rc_9-seq1:2.1816300000,6anz_1_B__rc_9-seq71:0.0001000000)6anz_1_B__rc_9-internal-4:1.6446600000,(6anz_1_B__rc_9-seq93:0.3045020000,6anz_1_B__rc_9-seq123:1.4007800000)6anz_1_B__rc_9-internal-5:0.2987070000)6anz_1_B__rc_9-internal-3:0.2321120000)6anz_1_B__rc_9-internal-2:0.9812320000,(6anz_1_B__rc_9-seq15:1.6447900000,6anz_1_B__rc_9-seq25:0.4403350000)6anz_1_B__rc_9-internal-6:0.2797090000);
+6anz_1_B__rc_9-seq97  AEKPSE
+6anz_1_B__rc_9-seq6   GDNKAI
+6anz_1_B__rc_9-seq1   IRTEIM
+6anz_1_B__rc_9-seq71  LRNKAQ
+6anz_1_B__rc_9-seq93  -SFKPE
+6anz_1_B__rc_9-seq123 -LASDE
+6anz_1_B__rc_9-seq15  -EDFAE
+6anz_1_B__rc_9-seq25  GEDPNL
+//
+Processing alignment Alignment5 (5 of 19): 4 columns
+Desired annotations:
+Selected algorithms:
+# STOCKHOLM 1.0
+#=GF NH                (6anz_1_B__rc_10-seq97:1.1073900000,(6anz_1_B__rc_10-seq6:0.5860640000,((6anz_1_B__rc_10-seq1:2.9904200000,6anz_1_B__rc_10-seq71:0.0001000000)6anz_1_B__rc_10-internal-4:2.2543800000,(6anz_1_B__rc_10-seq93:0.4173890000,6anz_1_B__rc_10-seq123:1.9200900000)6anz_1_B__rc_10-internal-5:0.4094450000)6anz_1_B__rc_10-internal-3:0.3181620000)6anz_1_B__rc_10-internal-2:1.3450000000,(6anz_1_B__rc_10-seq15:2.2545600000,6anz_1_B__rc_10-seq25:0.6035780000)6anz_1_B__rc_10-internal-6:0.3834040000);
+6anz_1_B__rc_10-seq97  HHWL
+6anz_1_B__rc_10-seq6   NLQI
+6anz_1_B__rc_10-seq1   IFYQ
+6anz_1_B__rc_10-seq71  VIGC
+6anz_1_B__rc_10-seq93  SLNI
+6anz_1_B__rc_10-seq123 -INV
+6anz_1_B__rc_10-seq15  MTRK
+6anz_1_B__rc_10-seq25  YFKK
+//
+Processing alignment Alignment6 (6 of 19): 1 columns
+Desired annotations:
+Selected algorithms:
+# STOCKHOLM 1.0
+#=GF NH                (6anz_1_B__rc_11-seq97:1.5179300000,(6anz_1_B__rc_11-seq6:0.8033330000,((6anz_1_B__rc_11-seq1:4.0990500000,6anz_1_B__rc_11-seq71:0.0001000000)6anz_1_B__rc_11-internal-4:3.0901400000,(6anz_1_B__rc_11-seq93:0.5721260000,6anz_1_B__rc_11-seq123:2.6319100000)6anz_1_B__rc_11-internal-5:0.5612370000)6anz_1_B__rc_11-internal-3:0.4361130000)6anz_1_B__rc_11-internal-2:1.8436200000,(6anz_1_B__rc_11-seq15:3.0903800000,6anz_1_B__rc_11-seq25:0.8273400000)6anz_1_B__rc_11-internal-6:0.5255410000);
+6anz_1_B__rc_11-seq97  E
+6anz_1_B__rc_11-seq6   G
+6anz_1_B__rc_11-seq1   N
+6anz_1_B__rc_11-seq71  A
+6anz_1_B__rc_11-seq93  T
+6anz_1_B__rc_11-seq123 F
+6anz_1_B__rc_11-seq15  L
+6anz_1_B__rc_11-seq25  N
+//
+Processing alignment Alignment7 (7 of 19): 2 columns
+Desired annotations:
+Selected algorithms:
+# STOCKHOLM 1.0
+#=GF NH               ((5a0l_1_A__rc_5-seq1:0.1790470000,5a0l_1_A__rc_5-seq30:0.0113057000)5a0l_1_A__rc_5-internal-2:0.4980200000,5a0l_1_A__rc_5-seq119:0.0021975300,((5a0l_1_A__rc_5-seq115:0.2958570000,5a0l_1_A__rc_5-seq110:0.0137005000)5a0l_1_A__rc_5-internal-4:0.0001000000,(5a0l_1_A__rc_5-seq80:0.0444188000,(5a0l_1_A__rc_5-seq55:0.0876388000,5a0l_1_A__rc_5-seq60:0.0703553000)5a0l_1_A__rc_5-internal-6:0.2145890000)5a0l_1_A__rc_5-internal-5:0.1414310000)5a0l_1_A__rc_5-internal-3:0.1365090000);
+5a0l_1_A__rc_5-seq1   RT
+5a0l_1_A__rc_5-seq30  RT
+5a0l_1_A__rc_5-seq119 RT
+5a0l_1_A__rc_5-seq115 RT
+5a0l_1_A__rc_5-seq110 RT
+5a0l_1_A__rc_5-seq80  RT
+5a0l_1_A__rc_5-seq55  RT
+5a0l_1_A__rc_5-seq60  RT
+//
+Processing alignment Alignment8 (8 of 19): 1 columns
+Desired annotations:
+Selected algorithms:
+# STOCKHOLM 1.0
+#=GF NH               ((5a0l_1_A__rc_6-seq1:0.2454250000,5a0l_1_A__rc_6-seq30:0.0154970000)5a0l_1_A__rc_6-internal-2:0.6826490000,5a0l_1_A__rc_6-seq119:0.0030122100,((5a0l_1_A__rc_6-seq115:0.4055380000,5a0l_1_A__rc_6-seq110:0.0187796000)5a0l_1_A__rc_6-internal-4:0.0001000000,(5a0l_1_A__rc_6-seq80:0.0608859000,(5a0l_1_A__rc_6-seq55:0.1201290000,5a0l_1_A__rc_6-seq60:0.0964378000)5a0l_1_A__rc_6-internal-6:0.2941430000)5a0l_1_A__rc_6-internal-5:0.1938640000)5a0l_1_A__rc_6-internal-3:0.1871160000);
+5a0l_1_A__rc_6-seq1   Y
+5a0l_1_A__rc_6-seq30  Y
+5a0l_1_A__rc_6-seq119 Y
+5a0l_1_A__rc_6-seq115 Y
+5a0l_1_A__rc_6-seq110 Y
+5a0l_1_A__rc_6-seq80  Y
+5a0l_1_A__rc_6-seq55  Y
+5a0l_1_A__rc_6-seq60  Y
+//
+Processing alignment Alignment9 (9 of 19): 1 columns
+Desired annotations:
+Selected algorithms:
+# STOCKHOLM 1.0
+#=GF NH               ((5a0l_1_A__rc_7-seq1:0.3364100000,5a0l_1_A__rc_7-seq30:0.0212422000)5a0l_1_A__rc_7-internal-2:0.9357240000,5a0l_1_A__rc_7-seq119:0.0041289100,((5a0l_1_A__rc_7-seq115:0.5558820000,5a0l_1_A__rc_7-seq110:0.0257417000)5a0l_1_A__rc_7-internal-4:0.0001000000,(5a0l_1_A__rc_7-seq80:0.0834579000,(5a0l_1_A__rc_7-seq55:0.1646640000,5a0l_1_A__rc_7-seq60:0.1321900000)5a0l_1_A__rc_7-internal-6:0.4031890000)5a0l_1_A__rc_7-internal-5:0.2657340000)5a0l_1_A__rc_7-internal-3:0.2564850000);
+5a0l_1_A__rc_7-seq1   I
+5a0l_1_A__rc_7-seq30  V
+5a0l_1_A__rc_7-seq119 I
+5a0l_1_A__rc_7-seq115 I
+5a0l_1_A__rc_7-seq110 I
+5a0l_1_A__rc_7-seq80  I
+5a0l_1_A__rc_7-seq55  I
+5a0l_1_A__rc_7-seq60  I
+//
+Processing alignment Alignment10 (10 of 19): 1 columns
+Desired annotations:
+Selected algorithms:
+# STOCKHOLM 1.0
+#=GF NH               ((5a0l_1_A__rc_8-seq1:0.4611250000,5a0l_1_A__rc_8-seq30:0.0291172000)5a0l_1_A__rc_8-internal-2:1.2826200000,5a0l_1_A__rc_8-seq119:0.0056596000,((5a0l_1_A__rc_8-seq115:0.7619600000,5a0l_1_A__rc_8-seq110:0.0352848000)5a0l_1_A__rc_8-internal-4:0.0001000000,(5a0l_1_A__rc_8-seq80:0.1143980000,(5a0l_1_A__rc_8-seq55:0.2257080000,5a0l_1_A__rc_8-seq60:0.1811960000)5a0l_1_A__rc_8-internal-6:0.5526610000)5a0l_1_A__rc_8-internal-5:0.3642480000)5a0l_1_A__rc_8-internal-3:0.3515700000);
+5a0l_1_A__rc_8-seq1   K
+5a0l_1_A__rc_8-seq30  K
+5a0l_1_A__rc_8-seq119 K
+5a0l_1_A__rc_8-seq115 K
+5a0l_1_A__rc_8-seq110 K
+5a0l_1_A__rc_8-seq80  M
+5a0l_1_A__rc_8-seq55  Q
+5a0l_1_A__rc_8-seq60  Q
+//
+Processing alignment Alignment11 (11 of 19): 4 columns
+Desired annotations:
+Selected algorithms:
+# STOCKHOLM 1.0
+#=GF NH               ((5a0l_1_A__rc_9-seq1:0.6320770000,5a0l_1_A__rc_9-seq30:0.0399117000)5a0l_1_A__rc_9-internal-2:1.7581200000,5a0l_1_A__rc_9-seq119:0.0077577600,((5a0l_1_A__rc_9-seq115:1.0444400000,5a0l_1_A__rc_9-seq110:0.0483658000)5a0l_1_A__rc_9-internal-4:0.0001000000,(5a0l_1_A__rc_9-seq80:0.1568080000,(5a0l_1_A__rc_9-seq55:0.3093850000,5a0l_1_A__rc_9-seq60:0.2483700000)5a0l_1_A__rc_9-internal-6:0.7575470000)5a0l_1_A__rc_9-internal-5:0.4992840000)5a0l_1_A__rc_9-internal-3:0.4819060000);
+5a0l_1_A__rc_9-seq1   PKIQ
+5a0l_1_A__rc_9-seq30  PKIQ
+5a0l_1_A__rc_9-seq119 -SGM
+5a0l_1_A__rc_9-seq115 --GT
+5a0l_1_A__rc_9-seq110 ---M
+5a0l_1_A__rc_9-seq80  IT-L
+5a0l_1_A__rc_9-seq55  VR-L
+5a0l_1_A__rc_9-seq60  VT-L
+//
+Processing alignment Alignment12 (12 of 19): 4 columns
+Desired annotations:
+Selected algorithms:
+# STOCKHOLM 1.0
+#=GF NH                ((5a0l_1_A__rc_10-seq1:0.8664030000,5a0l_1_A__rc_10-seq30:0.0547080000)5a0l_1_A__rc_10-internal-2:2.4099000000,5a0l_1_A__rc_10-seq119:0.0106338000,((5a0l_1_A__rc_10-seq115:1.4316400000,5a0l_1_A__rc_10-seq110:0.0662962000)5a0l_1_A__rc_10-internal-4:0.0001000000,(5a0l_1_A__rc_10-seq80:0.2149410000,(5a0l_1_A__rc_10-seq55:0.4240810000,5a0l_1_A__rc_10-seq60:0.3404470000)5a0l_1_A__rc_10-internal-6:1.0383900000)5a0l_1_A__rc_10-internal-5:0.6843810000)5a0l_1_A__rc_10-internal-3:0.6605610000);
+5a0l_1_A__rc_10-seq1   FRAW
+5a0l_1_A__rc_10-seq30  HNAF
+5a0l_1_A__rc_10-seq119 -PGY
+5a0l_1_A__rc_10-seq115 -AKL
+5a0l_1_A__rc_10-seq110 -PN-
+5a0l_1_A__rc_10-seq80  KANY
+5a0l_1_A__rc_10-seq55  ET-T
+5a0l_1_A__rc_10-seq60  EEPT
+//
+Processing alignment Alignment13 (13 of 19): 3 columns
+Desired annotations:
+Selected algorithms:
+# STOCKHOLM 1.0
+#=GF NH                ((5a0l_1_A__rc_11-seq1:1.1876000000,5a0l_1_A__rc_11-seq30:0.0749896000)5a0l_1_A__rc_11-internal-2:3.3033100000,5a0l_1_A__rc_11-seq119:0.0145760000,((5a0l_1_A__rc_11-seq115:1.9623800000,5a0l_1_A__rc_11-seq110:0.0908739000)5a0l_1_A__rc_11-internal-4:0.0001000000,(5a0l_1_A__rc_11-seq80:0.2946250000,(5a0l_1_A__rc_11-seq55:0.5812990000,5a0l_1_A__rc_11-seq60:0.4666590000)5a0l_1_A__rc_11-internal-6:1.4233500000)5a0l_1_A__rc_11-internal-5:0.9380990000)5a0l_1_A__rc_11-internal-3:0.9054480000);
+5a0l_1_A__rc_11-seq1   NDM
+5a0l_1_A__rc_11-seq30  K-S
+5a0l_1_A__rc_11-seq119 GET
+5a0l_1_A__rc_11-seq115 Y-G
+5a0l_1_A__rc_11-seq110 TN-
+5a0l_1_A__rc_11-seq80  SGN
+5a0l_1_A__rc_11-seq55  PAH
+5a0l_1_A__rc_11-seq60  -RT
+//
+Processing alignment Alignment14 (14 of 19): 2 columns
+Desired annotations:
+Selected algorithms:
+# STOCKHOLM 1.0
+#=GF NH               (1e7l_1_A__rc_6-seq49:0.0001000000,(1e7l_1_A__rc_6-seq21:0.0001000000,(1e7l_1_A__rc_6-seq1:0.0201874000,(1e7l_1_A__rc_6-seq3:0.1647240000,1e7l_1_A__rc_6-seq5:0.0323190000)1e7l_1_A__rc_6-internal-4:0.0362355000)1e7l_1_A__rc_6-internal-3:0.3070360000)1e7l_1_A__rc_6-internal-2:0.5478860000,(1e7l_1_A__rc_6-seq99:0.0001000000,(1e7l_1_A__rc_6-seq58:0.1133960000,1e7l_1_A__rc_6-seq112:0.1804900000)1e7l_1_A__rc_6-internal-6:0.1191590000)1e7l_1_A__rc_6-internal-5:0.2555200000);
+1e7l_1_A__rc_6-seq49  GY
+1e7l_1_A__rc_6-seq21  GY
+1e7l_1_A__rc_6-seq1   GY
+1e7l_1_A__rc_6-seq3   GY
+1e7l_1_A__rc_6-seq5   GY
+1e7l_1_A__rc_6-seq99  GY
+1e7l_1_A__rc_6-seq58  GY
+1e7l_1_A__rc_6-seq112 GY
+//
+Processing alignment Alignment15 (15 of 19): 3 columns
+Desired annotations:
+Selected algorithms:
+# STOCKHOLM 1.0
+#=GF NH               (1e7l_1_A__rc_7-seq49:0.0001000000,(1e7l_1_A__rc_7-seq21:0.0001000000,(1e7l_1_A__rc_7-seq1:0.0276714000,(1e7l_1_A__rc_7-seq3:0.2257910000,1e7l_1_A__rc_7-seq5:0.0443005000)1e7l_1_A__rc_7-internal-4:0.0496689000)1e7l_1_A__rc_7-internal-3:0.4208620000)1e7l_1_A__rc_7-internal-2:0.7510010000,(1e7l_1_A__rc_7-seq99:0.0001000000,(1e7l_1_A__rc_7-seq58:0.1554340000,1e7l_1_A__rc_7-seq112:0.2474010000)1e7l_1_A__rc_7-internal-6:0.1633340000)1e7l_1_A__rc_7-internal-5:0.3502470000);
+1e7l_1_A__rc_7-seq49  KIE
+1e7l_1_A__rc_7-seq21  QIE
+1e7l_1_A__rc_7-seq1   QIE
+1e7l_1_A__rc_7-seq3   QLE
+1e7l_1_A__rc_7-seq5   QIE
+1e7l_1_A__rc_7-seq99  KIE
+1e7l_1_A__rc_7-seq58  KIL
+1e7l_1_A__rc_7-seq112 --E
+//
+Processing alignment Alignment16 (16 of 19): 1 columns
+Desired annotations:
+Selected algorithms:
+# STOCKHOLM 1.0
+#=GF NH               (1e7l_1_A__rc_8-seq49:0.0001000000,(1e7l_1_A__rc_8-seq21:0.0001000000,(1e7l_1_A__rc_8-seq1:0.0379299000,(1e7l_1_A__rc_8-seq3:0.3094970000,1e7l_1_A__rc_8-seq5:0.0607238000)1e7l_1_A__rc_8-internal-4:0.0680824000)1e7l_1_A__rc_8-internal-3:0.5768860000)1e7l_1_A__rc_8-internal-2:1.0294200000,(1e7l_1_A__rc_8-seq99:0.0001000000,(1e7l_1_A__rc_8-seq58:0.2130580000,1e7l_1_A__rc_8-seq112:0.3391190000)1e7l_1_A__rc_8-internal-6:0.2238860000)1e7l_1_A__rc_8-internal-5:0.4800930000);
+1e7l_1_A__rc_8-seq49  L
+1e7l_1_A__rc_8-seq21  L
+1e7l_1_A__rc_8-seq1   Y
+1e7l_1_A__rc_8-seq3   Y
+1e7l_1_A__rc_8-seq5   Y
+1e7l_1_A__rc_8-seq99  L
+1e7l_1_A__rc_8-seq58  L
+1e7l_1_A__rc_8-seq112 -
+//
+Processing alignment Alignment17 (17 of 19): 8 columns
+Desired annotations:
+Selected algorithms:
+# STOCKHOLM 1.0
+#=GF NH               (1e7l_1_A__rc_9-seq49:0.0001000000,(1e7l_1_A__rc_9-seq21:0.0001000000,(1e7l_1_A__rc_9-seq1:0.0519915000,(1e7l_1_A__rc_9-seq3:0.4242360000,1e7l_1_A__rc_9-seq5:0.0832357000)1e7l_1_A__rc_9-internal-4:0.0933223000)1e7l_1_A__rc_9-internal-3:0.7907530000)1e7l_1_A__rc_9-internal-2:1.4110500000,(1e7l_1_A__rc_9-seq99:0.0001000000,(1e7l_1_A__rc_9-seq58:0.2920440000,1e7l_1_A__rc_9-seq112:0.4648400000)1e7l_1_A__rc_9-internal-6:0.3068870000)1e7l_1_A__rc_9-internal-5:0.6580760000);
+1e7l_1_A__rc_9-seq49  QNNGFN--
+1e7l_1_A__rc_9-seq21  QKASFLET
+1e7l_1_A__rc_9-seq1   DEANFLEK
+1e7l_1_A__rc_9-seq3   DESSYGDK
+1e7l_1_A__rc_9-seq5   DESSFLPK
+1e7l_1_A__rc_9-seq99  EDNAYNA-
+1e7l_1_A__rc_9-seq58  ADNAHN--
+1e7l_1_A__rc_9-seq112 --TRHNA-
+//
+Processing alignment Alignment18 (18 of 19): 1 columns
+Desired annotations:
+Selected algorithms:
+# STOCKHOLM 1.0
+#=GF NH                (1e7l_1_A__rc_11-seq49:0.0001000000,(1e7l_1_A__rc_11-seq21:0.0001000000,(1e7l_1_A__rc_11-seq1:0.0976862000,(1e7l_1_A__rc_11-seq3:0.7970920000,1e7l_1_A__rc_11-seq5:0.1563900000)1e7l_1_A__rc_11-internal-4:0.1753420000)1e7l_1_A__rc_11-internal-3:1.4857400000)1e7l_1_A__rc_11-internal-2:2.6512000000,(1e7l_1_A__rc_11-seq99:0.0001000000,(1e7l_1_A__rc_11-seq58:0.5487170000,1e7l_1_A__rc_11-seq112:0.8733820000)1e7l_1_A__rc_11-internal-6:0.5766060000)1e7l_1_A__rc_11-internal-5:1.2364500000);
+1e7l_1_A__rc_11-seq49  P
+1e7l_1_A__rc_11-seq21  E
+1e7l_1_A__rc_11-seq1   K
+1e7l_1_A__rc_11-seq3   K
+1e7l_1_A__rc_11-seq5   K
+1e7l_1_A__rc_11-seq99  A
+1e7l_1_A__rc_11-seq58  K
+1e7l_1_A__rc_11-seq112 -
+//
+Processing alignment Alignment19 (19 of 19): 1 columns
+Desired annotations:
+Selected algorithms:
+# STOCKHOLM 1.0
+#=GF NH                (1e7l_1_A__rc_12-seq49:0.0001000000,(1e7l_1_A__rc_12-seq21:0.0001000000,(1e7l_1_A__rc_12-seq1:0.1339010000,(1e7l_1_A__rc_12-seq3:1.0925900000,1e7l_1_A__rc_12-seq5:0.2143680000)1e7l_1_A__rc_12-internal-4:0.2403460000)1e7l_1_A__rc_12-internal-3:2.0365400000)1e7l_1_A__rc_12-internal-2:3.6340700000,(1e7l_1_A__rc_12-seq99:0.0001000000,(1e7l_1_A__rc_12-seq58:0.7521410000,1e7l_1_A__rc_12-seq112:1.1971700000)1e7l_1_A__rc_12-internal-6:0.7903680000)1e7l_1_A__rc_12-internal-5:1.6948300000);
+1e7l_1_A__rc_12-seq49  W
+1e7l_1_A__rc_12-seq21  P
+1e7l_1_A__rc_12-seq1   N
+1e7l_1_A__rc_12-seq3   D
+1e7l_1_A__rc_12-seq5   N
+1e7l_1_A__rc_12-seq99  Y
+1e7l_1_A__rc_12-seq58  L
+1e7l_1_A__rc_12-seq112 V
+//

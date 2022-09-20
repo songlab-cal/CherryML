@@ -1,0 +1,10 @@
+# STOCKHOLM 1.0
+#=GF NH (6anz_1_B__rc_7-seq97:0.42998,(6anz_1_B__rc_7-seq6:0.227559,((6anz_1_B__rc_7-seq1:1.16113,6anz_1_B__rc_7-seq71:2.67244e-09)6anz_1_B__rc_7-internal-4:0.875338,(6anz_1_B__rc_7-seq93:0.162065,6anz_1_B__rc_7-seq123:0.745537)6anz_1_B__rc_7-internal-5:0.158981)6anz_1_B__rc_7-internal-3:0.123537)6anz_1_B__rc_7-internal-2:0.52224,(6anz_1_B__rc_7-seq15:0.875407,6anz_1_B__rc_7-seq25:0.234359)6anz_1_B__rc_7-internal-6:0.148869);
+6anz_1_B__rc_7-seq97 -V
+6anz_1_B__rc_7-seq6 SI
+6anz_1_B__rc_7-seq1 GM
+6anz_1_B__rc_7-seq71 GV
+6anz_1_B__rc_7-seq93 -I
+6anz_1_B__rc_7-seq123 -V
+6anz_1_B__rc_7-seq15 -V
+6anz_1_B__rc_7-seq25 GV

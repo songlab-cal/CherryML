@@ -1,0 +1,4 @@
+module load openmpi
+mpicxx -O3 -o /global/homes/a/andy_pyc/cs267-project/src/counting/count /global/homes/a/andy_pyc/cs267-project/src/counting/_count_co_transitions.cpp
+
+/global/u2/a/andy_pyc/cs267-project/src/counting/count /global/homes/a/andy_pyc/cs267-project/tests/counting_tests/test_input_data/medium/tree_dir /global/homes/a/andy_pyc/cs267-project/tests/counting_tests/test_input_data/medium/msa_dir /global/homes/a/andy_pyc/cs267-project/tests/counting_tests/test_input_data/medium/contact_map_dir 32 20 10 13gs_1_A 19hc_1_A 1a0b_1_A 1a0p_1_A 1a0t_1_A 1a12_1_A 1a17_1_A 1a27_1_A 1a2o_1_A 1a2t_1_A 1a3a_1_A 1a40_1_A 1a41_1_A 1a45_1_A 1a4a_1_A 1a4m_1_A 1a4p_1_A 1a5k_1_B 1a5t_1_B 1a62_1_A 1a64_1_A 1a6l_1_A 1a6q_1_A 1a79_1_A 1a7j_1_A 1a82_1_A 1a8h_1_A 1a8l_1_A 1a8m_1_A 1a92_1_A 1a95_1_B 1a9y_1_A A R N D C Q E G H I L K M F P S T W Y V 0.001875 0.00375 0.0075 0.015 0.03 0.06 0.12 0.24 0.48 0.96 cherry 7 /tmp/tmp4sumala4/count_co_matrices_dir_cherries 32

@@ -1,0 +1,4093 @@
+2046 nodes
+root
+internal-2
+internal-3
+internal-4
+internal-5
+internal-6
+internal-7
+internal-8
+internal-9
+internal-10
+internal-11
+seq3718
+seq3731
+internal-12
+seq3486
+seq3720
+internal-13
+seq3727
+seq3730
+internal-14
+seq3726
+internal-15
+internal-16
+internal-17
+seq4240
+seq4239
+seq5212
+seq3728
+internal-18
+internal-19
+seq1085
+internal-20
+internal-21
+internal-22
+internal-23
+internal-24
+internal-25
+seq3125
+seq3129
+internal-26
+seq1036
+internal-27
+seq820
+seq958
+seq963
+internal-28
+seq1025
+internal-29
+seq3873
+seq4229
+internal-30
+internal-31
+internal-32
+internal-33
+seq2280
+seq2522
+internal-34
+seq1077
+seq1100
+seq1078
+internal-35
+internal-36
+seq836
+internal-37
+seq846
+internal-38
+internal-39
+internal-40
+seq868
+internal-41
+internal-42
+internal-43
+internal-44
+seq871
+seq996
+internal-45
+internal-46
+seq967
+internal-47
+seq925
+internal-48
+seq977
+internal-49
+internal-50
+seq862
+seq887
+internal-51
+seq937
+seq1008
+internal-52
+seq954
+internal-53
+seq916
+seq971
+internal-54
+internal-55
+seq874
+internal-56
+seq866
+seq1023
+internal-57
+seq1020
+seq1022
+internal-58
+seq816
+internal-59
+seq980
+seq1037
+internal-60
+internal-61
+seq993
+seq1070
+internal-62
+seq906
+internal-63
+seq894
+seq1081
+internal-64
+seq835
+seq837
+seq1091
+internal-65
+internal-66
+seq1076
+seq1433
+internal-67
+seq1039
+internal-68
+seq1094
+internal-69
+seq1056
+seq1072
+internal-70
+seq1069
+seq2603
+internal-71
+internal-72
+seq4216
+seq4225
+internal-73
+seq4213
+seq4218
+internal-74
+internal-75
+seq1549
+seq1554
+internal-76
+internal-77
+internal-78
+seq1287
+seq3672
+internal-79
+internal-80
+internal-81
+seq744
+internal-82
+seq746
+seq1409
+internal-83
+internal-84
+seq755
+seq1290
+internal-85
+internal-86
+internal-87
+internal-88
+internal-89
+seq2642
+seq328
+internal-90
+internal-91
+internal-92
+internal-93
+seq1400
+internal-94
+seq1392
+internal-95
+seq1396
+internal-96
+seq1390
+internal-97
+internal-98
+seq2179
+seq2192
+internal-99
+seq1377
+seq1389
+internal-100
+seq1449
+internal-101
+seq344
+seq1467
+internal-102
+seq1478
+internal-103
+seq1461
+internal-104
+seq1439
+internal-105
+seq332
+internal-106
+seq1452
+internal-107
+seq1378
+seq1380
+internal-108
+seq1487
+internal-109
+seq315
+internal-110
+seq1444
+internal-111
+seq1441
+seq2191
+seq742
+internal-112
+seq2643
+internal-113
+seq2631
+seq3501
+internal-114
+seq1466
+internal-115
+internal-116
+seq321
+seq1391
+internal-117
+internal-118
+seq314
+internal-119
+internal-120
+seq264
+internal-121
+seq732
+internal-122
+seq1855
+seq2601
+seq333
+seq727
+internal-123
+seq734
+internal-124
+seq725
+seq731
+internal-125
+seq720
+internal-126
+internal-127
+seq2539
+internal-128
+seq382
+internal-129
+seq2240
+internal-130
+seq286
+internal-131
+internal-132
+seq1243
+internal-133
+seq1234
+seq1246
+internal-134
+seq1242
+internal-135
+internal-136
+seq289
+seq1239
+internal-137
+seq282
+seq3670
+internal-138
+internal-139
+seq380
+internal-140
+seq1542
+internal-141
+seq376
+seq1541
+internal-142
+internal-143
+internal-144
+internal-145
+internal-146
+seq1102
+seq1252
+internal-147
+seq1260
+internal-148
+seq263
+seq688
+seq698
+seq766
+internal-149
+internal-150
+internal-151
+internal-152
+internal-153
+internal-154
+seq272
+seq642
+internal-155
+seq763
+seq769
+internal-156
+seq679
+seq706
+internal-157
+internal-158
+seq645
+seq650
+internal-159
+seq651
+internal-160
+seq393
+seq656
+internal-161
+internal-162
+internal-163
+seq711
+internal-164
+seq273
+seq1537
+internal-165
+seq694
+seq708
+seq2623
+internal-166
+internal-167
+seq271
+seq2281
+internal-168
+seq685
+seq701
+internal-169
+internal-170
+seq4643
+internal-171
+internal-172
+internal-173
+seq4662
+internal-174
+seq4650
+seq4654
+seq4620
+internal-175
+internal-176
+internal-177
+seq4679
+internal-178
+seq4674
+seq4689
+internal-179
+seq4362
+seq4484
+internal-180
+internal-181
+internal-182
+internal-183
+internal-184
+seq4590
+seq4721
+internal-185
+internal-186
+seq4356
+seq4397
+internal-187
+internal-188
+seq4569
+internal-189
+internal-190
+internal-191
+internal-192
+internal-193
+internal-194
+seq4512
+internal-195
+seq4455
+internal-196
+seq4403
+internal-197
+seq4367
+seq4421
+seq4562
+internal-198
+seq4345
+seq4553
+seq4448
+internal-199
+seq4592
+internal-200
+seq4018
+seq4357
+seq4678
+internal-201
+seq4331
+internal-202
+seq4026
+internal-203
+internal-204
+seq4462
+seq4500
+internal-205
+internal-206
+seq4610
+internal-207
+internal-208
+internal-209
+internal-210
+internal-211
+seq4624
+internal-212
+seq4481
+seq4619
+internal-213
+seq4381
+seq4460
+seq4465
+seq4401
+internal-214
+internal-215
+internal-216
+seq4467
+seq4531
+internal-217
+internal-218
+seq4012
+seq4469
+internal-219
+seq4342
+seq4350
+internal-220
+seq4537
+seq4518
+internal-221
+internal-222
+internal-223
+internal-224
+seq4014
+seq4015
+seq4695
+internal-225
+seq4412
+internal-226
+seq4443
+seq4690
+internal-227
+seq4593
+seq4468
+internal-228
+internal-229
+seq4493
+internal-230
+internal-231
+seq4050
+seq4052
+internal-232
+seq4568
+internal-233
+seq4044
+internal-234
+seq4025
+seq4046
+internal-235
+seq4669
+internal-236
+seq4711
+seq4727
+internal-237
+seq4680
+internal-238
+seq4720
+internal-239
+internal-240
+seq4685
+internal-241
+seq4699
+seq4715
+internal-242
+seq4683
+internal-243
+internal-244
+seq4751
+internal-245
+seq4734
+internal-246
+seq4749
+seq4741
+internal-247
+seq4348
+seq4702
+internal-248
+seq4634
+internal-249
+seq4501
+internal-250
+internal-251
+seq4389
+internal-252
+seq4570
+seq4577
+internal-253
+internal-254
+seq4561
+seq4605
+seq4411
+internal-255
+seq4314
+seq4315
+internal-256
+internal-257
+internal-258
+internal-259
+seq1620
+internal-260
+seq1891
+internal-261
+seq1890
+seq1895
+internal-262
+internal-263
+internal-264
+internal-265
+internal-266
+seq3175
+seq3993
+internal-267
+internal-268
+seq1518
+seq1522
+internal-269
+seq1840
+seq2243
+internal-270
+internal-271
+seq1643
+internal-272
+seq1652
+internal-273
+internal-274
+seq1641
+seq1700
+internal-275
+seq1642
+internal-276
+seq1625
+seq1697
+internal-277
+seq3985
+internal-278
+seq3987
+internal-279
+seq3981
+seq3986
+internal-280
+internal-281
+seq3992
+internal-282
+seq2071
+internal-283
+seq2258
+internal-284
+seq2254
+seq2250
+internal-285
+internal-286
+internal-287
+seq2709
+seq2712
+internal-288
+seq2582
+internal-289
+seq2581
+seq2593
+seq2070
+internal-290
+internal-291
+seq2625
+internal-292
+seq3837
+internal-293
+seq3962
+internal-294
+seq3206
+internal-295
+seq3190
+internal-296
+seq3185
+internal-297
+seq3189
+seq3191
+internal-298
+seq2621
+internal-299
+internal-300
+seq2200
+internal-301
+seq2202
+seq3309
+internal-302
+seq2193
+seq2196
+internal-303
+internal-304
+seq360
+seq363
+internal-305
+seq3665
+internal-306
+seq366
+seq368
+internal-307
+internal-308
+seq1910
+seq3895
+internal-309
+seq619
+seq2807
+internal-310
+internal-311
+internal-312
+seq2540
+seq4816
+internal-313
+seq3830
+internal-314
+internal-315
+seq217
+internal-316
+internal-317
+internal-318
+internal-319
+seq184
+internal-320
+seq446
+seq469
+internal-321
+seq504
+internal-322
+seq245
+internal-323
+seq536
+internal-324
+seq151
+internal-325
+internal-326
+internal-327
+seq135
+seq148
+seq202
+internal-328
+internal-329
+seq84
+seq620
+seq253
+internal-330
+internal-331
+internal-332
+internal-333
+internal-334
+internal-335
+seq11
+seq35
+internal-336
+seq193
+seq494
+seq576
+internal-337
+seq22
+internal-338
+internal-339
+internal-340
+seq638
+internal-341
+seq556
+internal-342
+internal-343
+internal-344
+seq31
+seq589
+internal-345
+seq425
+seq419
+internal-346
+internal-347
+seq25
+internal-348
+seq210
+seq571
+internal-349
+seq58
+seq539
+internal-350
+internal-351
+seq117
+internal-352
+internal-353
+seq48
+seq214
+internal-354
+seq235
+internal-355
+seq54
+seq55
+internal-356
+seq593
+internal-357
+seq615
+internal-358
+seq599
+seq600
+seq585
+internal-359
+seq543
+internal-360
+seq527
+seq491
+internal-361
+internal-362
+seq37
+internal-363
+internal-364
+seq39
+seq631
+internal-365
+seq630
+seq632
+internal-366
+internal-367
+seq232
+seq59
+internal-368
+internal-369
+internal-370
+internal-371
+seq90
+seq209
+internal-372
+seq453
+seq454
+internal-373
+seq1905
+internal-374
+internal-375
+seq532
+internal-376
+seq407
+seq61
+internal-377
+seq497
+internal-378
+internal-379
+internal-380
+internal-381
+internal-382
+internal-383
+seq137
+seq483
+internal-384
+seq481
+internal-385
+seq1
+seq4
+seq639
+seq560
+seq457
+seq124
+internal-386
+seq431
+internal-387
+seq12
+seq406
+internal-388
+internal-389
+seq786
+seq2541
+internal-390
+internal-391
+seq803
+seq806
+internal-392
+seq162
+seq791
+internal-393
+internal-394
+seq478
+internal-395
+seq471
+internal-396
+seq107
+seq479
+internal-397
+seq436
+internal-398
+seq445
+seq781
+internal-399
+internal-400
+internal-401
+internal-402
+seq3717
+internal-403
+seq3215
+seq3218
+internal-404
+internal-405
+seq2121
+seq2481
+internal-406
+internal-407
+internal-408
+internal-409
+internal-410
+internal-411
+seq1741
+internal-412
+internal-413
+internal-414
+internal-415
+internal-416
+seq2470
+internal-417
+seq2490
+seq2479
+internal-418
+internal-419
+seq2493
+seq2494
+internal-420
+internal-421
+seq1763
+seq2116
+seq2488
+seq1734
+internal-422
+internal-423
+internal-424
+seq2087
+internal-425
+seq2504
+seq2506
+internal-426
+seq2471
+internal-427
+seq2112
+seq2093
+seq2092
+internal-428
+internal-429
+seq2482
+internal-430
+seq2099
+seq2467
+seq2085
+internal-431
+seq1772
+seq1789
+seq2128
+internal-432
+internal-433
+seq1783
+internal-434
+internal-435
+seq1723
+internal-436
+seq1718
+internal-437
+seq1722
+seq1754
+internal-438
+internal-439
+seq2746
+internal-440
+internal-441
+seq3087
+internal-442
+seq3295
+internal-443
+internal-444
+seq3835
+internal-445
+seq3834
+seq3831
+seq3297
+internal-446
+internal-447
+internal-448
+internal-449
+seq2731
+internal-450
+seq2734
+seq3735
+seq2737
+internal-451
+seq2751
+internal-452
+seq2759
+internal-453
+seq2742
+internal-454
+seq2724
+seq2728
+internal-455
+internal-456
+seq3738
+seq3791
+internal-457
+internal-458
+internal-459
+seq3279
+seq3281
+internal-460
+internal-461
+internal-462
+internal-463
+seq3254
+seq3273
+seq3280
+seq3258
+seq3744
+internal-464
+seq3253
+internal-465
+seq3289
+seq3268
+internal-466
+seq1802
+seq1810
+seq2074
+internal-467
+seq2780
+internal-468
+internal-469
+internal-470
+internal-471
+internal-472
+seq4241
+seq4243
+seq3586
+internal-473
+internal-474
+internal-475
+internal-476
+seq5156
+seq5159
+internal-477
+seq5149
+seq5158
+internal-478
+seq5160
+seq5167
+internal-479
+seq5150
+seq5163
+seq3913
+internal-480
+seq3588
+internal-481
+seq3966
+seq3967
+seq1796
+internal-482
+internal-483
+seq3114
+internal-484
+seq3937
+seq3938
+internal-485
+internal-486
+internal-487
+seq3220
+internal-488
+seq3224
+internal-489
+seq3226
+seq3228
+internal-490
+internal-491
+seq4988
+internal-492
+seq3540
+internal-493
+seq3559
+seq3567
+internal-494
+seq3510
+internal-495
+internal-496
+internal-497
+internal-498
+internal-499
+seq4999
+seq3513
+seq5032
+internal-500
+seq4992
+seq3536
+internal-501
+internal-502
+seq4974
+seq5000
+seq4996
+internal-503
+seq5012
+internal-504
+internal-505
+seq4990
+seq5007
+seq3566
+internal-506
+seq5221
+internal-507
+seq5228
+seq5229
+internal-508
+internal-509
+internal-510
+internal-511
+internal-512
+internal-513
+internal-514
+seq2699
+internal-515
+seq2654
+seq2682
+internal-516
+seq2672
+internal-517
+seq2675
+seq3927
+internal-518
+seq3136
+internal-519
+seq2269
+seq2270
+internal-520
+internal-521
+internal-522
+internal-523
+internal-524
+internal-525
+internal-526
+seq3151
+internal-527
+internal-528
+seq3807
+seq5058
+seq3159
+internal-529
+seq3153
+seq3921
+internal-530
+internal-531
+internal-532
+internal-533
+seq4898
+seq4920
+internal-534
+seq4877
+internal-535
+internal-536
+seq4962
+internal-537
+internal-538
+internal-539
+seq4905
+internal-540
+seq4841
+seq4919
+internal-541
+internal-542
+seq4914
+internal-543
+seq4972
+internal-544
+seq4951
+internal-545
+seq4944
+internal-546
+seq4859
+seq4882
+internal-547
+internal-548
+internal-549
+seq4947
+seq4966
+internal-550
+seq4946
+seq4955
+internal-551
+seq4938
+seq4948
+internal-552
+seq4956
+seq4940
+internal-553
+internal-554
+seq4884
+seq4936
+internal-555
+seq4846
+seq4964
+internal-556
+seq4837
+internal-557
+seq4864
+internal-558
+internal-559
+seq4839
+internal-560
+seq4861
+seq4866
+internal-561
+seq4843
+internal-562
+seq4853
+internal-563
+seq4854
+seq4968
+seq4842
+internal-564
+internal-565
+seq4757
+internal-566
+internal-567
+internal-568
+internal-569
+seq3863
+internal-570
+seq4813
+internal-571
+seq4781
+internal-572
+seq4790
+internal-573
+seq4800
+internal-574
+seq4786
+seq4802
+seq4811
+seq3859
+internal-575
+seq3816
+internal-576
+seq3152
+internal-577
+internal-578
+internal-579
+seq4293
+internal-580
+internal-581
+internal-582
+internal-583
+internal-584
+seq3184
+seq3652
+internal-585
+seq4285
+internal-586
+internal-587
+internal-588
+internal-589
+internal-590
+internal-591
+seq3613
+internal-592
+seq3619
+seq4254
+internal-593
+seq3609
+internal-594
+seq3628
+seq3634
+internal-595
+seq3636
+seq3630
+internal-596
+internal-597
+seq4290
+internal-598
+seq3629
+seq4300
+internal-599
+internal-600
+seq4298
+seq4273
+seq3615
+internal-601
+seq4263
+seq4299
+seq4279
+seq4302
+seq4291
+internal-602
+seq3182
+seq4294
+internal-603
+internal-604
+seq3150
+internal-605
+seq3164
+internal-606
+seq3167
+seq3901
+internal-607
+seq4324
+internal-608
+seq5070
+seq5074
+internal-609
+internal-610
+seq4249
+internal-611
+seq3643
+seq3644
+internal-612
+seq2944
+internal-613
+seq2961
+seq2962
+internal-614
+internal-615
+seq4766
+internal-616
+seq3693
+internal-617
+seq3685
+internal-618
+seq3699
+internal-619
+seq3688
+internal-620
+seq3707
+seq3711
+internal-621
+seq3622
+internal-622
+internal-623
+seq5061
+internal-624
+seq5065
+internal-625
+seq5654
+seq5658
+internal-626
+seq5093
+internal-627
+seq5086
+internal-628
+seq5082
+internal-629
+internal-630
+seq5100
+internal-631
+seq5101
+seq5102
+internal-632
+seq5097
+seq5083
+internal-633
+internal-634
+internal-635
+internal-636
+seq3420
+internal-637
+internal-638
+seq3429
+internal-639
+seq3403
+internal-640
+seq3435
+seq3448
+internal-641
+seq3449
+internal-642
+seq3441
+seq3428
+internal-643
+internal-644
+internal-645
+seq5117
+internal-646
+seq3409
+internal-647
+internal-648
+internal-649
+seq5121
+seq5125
+internal-650
+internal-651
+seq5112
+internal-652
+seq5108
+seq5111
+seq5251
+seq5142
+seq5139
+internal-653
+seq3453
+seq5471
+internal-654
+internal-655
+internal-656
+seq5520
+internal-657
+seq3405
+internal-658
+internal-659
+seq3396
+seq5525
+internal-660
+seq3444
+internal-661
+seq3427
+seq3459
+internal-662
+internal-663
+internal-664
+seq5313
+internal-665
+seq5434
+seq5542
+internal-666
+seq5491
+internal-667
+seq5511
+internal-668
+seq5495
+seq5513
+internal-669
+internal-670
+internal-671
+seq5527
+internal-672
+internal-673
+seq5489
+seq5623
+internal-674
+internal-675
+seq5515
+seq5501
+seq5613
+internal-676
+internal-677
+seq5616
+internal-678
+seq5276
+seq5283
+internal-679
+internal-680
+seq5561
+internal-681
+seq5282
+internal-682
+seq5556
+seq5572
+seq5568
+internal-683
+internal-684
+seq5483
+internal-685
+internal-686
+seq5407
+internal-687
+seq5390
+internal-688
+seq5360
+seq5373
+internal-689
+internal-690
+internal-691
+seq5430
+internal-692
+internal-693
+internal-694
+seq5441
+internal-695
+seq5339
+seq5466
+internal-696
+internal-697
+seq5287
+seq5452
+seq5405
+internal-698
+seq5447
+internal-699
+seq5406
+internal-700
+seq5410
+internal-701
+seq5331
+seq5398
+seq5487
+internal-702
+seq5388
+internal-703
+seq5349
+seq5393
+internal-704
+seq5250
+internal-705
+seq5292
+internal-706
+seq5601
+internal-707
+seq5296
+internal-708
+seq5363
+internal-709
+internal-710
+seq5416
+internal-711
+seq5383
+internal-712
+seq5477
+seq5402
+internal-713
+seq5443
+seq5413
+seq3407
+seq3421
+internal-714
+internal-715
+internal-716
+internal-717
+internal-718
+internal-719
+seq2939
+internal-720
+seq2916
+seq2965
+internal-721
+seq2956
+internal-722
+seq3951
+seq3952
+seq2908
+seq2847
+internal-723
+internal-724
+internal-725
+internal-726
+seq2929
+internal-727
+seq2854
+seq2912
+internal-728
+internal-729
+seq2845
+internal-730
+seq2903
+seq2915
+internal-731
+internal-732
+seq2870
+internal-733
+seq2869
+seq2958
+internal-734
+seq5631
+internal-735
+seq2972
+seq2979
+internal-736
+internal-737
+seq2813
+seq2914
+seq2818
+internal-738
+seq2833
+internal-739
+seq2911
+internal-740
+internal-741
+seq2850
+seq2860
+internal-742
+seq2865
+seq2868
+internal-743
+seq2811
+internal-744
+seq2951
+internal-745
+seq2919
+seq2974
+internal-746
+seq3924
+internal-747
+seq5639
+internal-748
+seq5642
+internal-749
+internal-750
+seq5191
+internal-751
+seq5187
+seq5192
+internal-752
+seq5190
+seq5199
+internal-753
+internal-754
+seq3876
+internal-755
+internal-756
+seq3881
+seq3882
+internal-757
+seq80
+seq190
+internal-758
+internal-759
+internal-760
+internal-761
+internal-762
+internal-763
+internal-764
+internal-765
+internal-766
+seq1160
+seq3911
+internal-767
+seq3907
+internal-768
+seq1596
+internal-769
+internal-770
+internal-771
+seq3352
+seq3360
+internal-772
+seq1170
+seq3327
+internal-773
+seq3818
+internal-774
+seq3348
+internal-775
+seq3336
+internal-776
+internal-777
+seq3344
+internal-778
+internal-779
+seq3342
+internal-780
+seq3356
+internal-781
+seq3368
+seq3364
+seq3366
+seq3349
+seq2518
+internal-782
+seq1154
+seq1157
+internal-783
+internal-784
+internal-785
+seq1144
+seq5105
+seq1214
+internal-786
+internal-787
+internal-788
+internal-789
+internal-790
+seq1878
+seq3829
+internal-791
+internal-792
+internal-793
+seq3392
+seq3393
+internal-794
+seq1608
+seq1605
+internal-795
+internal-796
+seq1427
+internal-797
+seq2607
+seq294
+internal-798
+seq2458
+seq2460
+internal-799
+internal-800
+seq1121
+internal-801
+seq1120
+internal-802
+seq1114
+internal-803
+seq1115
+internal-804
+seq1108
+seq270
+internal-805
+internal-806
+seq1617
+seq1618
+internal-807
+internal-808
+seq1133
+seq1117
+seq2770
+internal-809
+seq305
+internal-810
+seq3118
+seq3121
+internal-811
+seq1528
+seq1529
+internal-812
+seq1215
+internal-813
+seq2627
+internal-814
+internal-815
+internal-816
+seq1426
+seq1859
+internal-817
+internal-818
+internal-819
+internal-820
+seq1871
+seq1885
+internal-821
+seq1887
+internal-822
+seq1863
+seq1867
+internal-823
+seq1708
+seq2238
+internal-824
+seq1876
+seq1953
+seq2771
+seq1592
+internal-825
+seq2354
+internal-826
+internal-827
+internal-828
+seq2373
+internal-829
+seq3489
+internal-830
+seq2377
+internal-831
+internal-832
+seq2369
+internal-833
+seq2368
+seq2370
+seq2376
+internal-834
+seq2343
+internal-835
+seq3491
+seq2394
+internal-836
+seq2396
+internal-837
+internal-838
+seq2283
+seq2344
+internal-839
+internal-840
+internal-841
+seq2341
+internal-842
+internal-843
+seq2308
+internal-844
+seq2380
+seq2319
+internal-845
+seq2305
+internal-846
+seq2312
+seq2313
+internal-847
+seq2337
+seq2381
+internal-848
+internal-849
+seq2388
+internal-850
+seq2329
+seq2332
+internal-851
+seq2304
+seq2350
+internal-852
+internal-853
+internal-854
+seq3759
+internal-855
+internal-856
+internal-857
+seq3773
+internal-858
+seq3788
+internal-859
+seq3761
+seq3768
+seq3775
+seq3769
+internal-860
+seq5186
+internal-861
+seq5180
+internal-862
+seq5181
+internal-863
+internal-864
+seq5178
+seq5185
+internal-865
+seq5175
+seq5176
+internal-866
+internal-867
+internal-868
+seq2577
+internal-869
+internal-870
+seq2210
+seq2211
+internal-871
+seq2212
+seq2217
+internal-872
+internal-873
+seq2220
+internal-874
+seq2216
+internal-875
+seq2227
+seq2231
+seq2219
+internal-876
+internal-877
+seq4079
+internal-878
+internal-879
+internal-880
+seq4086
+internal-881
+seq4074
+internal-882
+seq4104
+seq4096
+seq4094
+seq4102
+internal-883
+seq4140
+internal-884
+internal-885
+internal-886
+internal-887
+internal-888
+internal-889
+internal-890
+internal-891
+seq4152
+internal-892
+seq4122
+internal-893
+internal-894
+seq4161
+seq4185
+internal-895
+seq4150
+seq4200
+internal-896
+seq4067
+seq4204
+seq4164
+internal-897
+seq4155
+seq4144
+seq4179
+seq4119
+internal-898
+seq4060
+seq4187
+seq4167
+internal-899
+internal-900
+internal-901
+internal-902
+internal-903
+seq1970
+seq1972
+internal-904
+seq1993
+internal-905
+seq1989
+internal-906
+internal-907
+internal-908
+seq2014
+seq2010
+internal-909
+seq2009
+seq2041
+internal-910
+seq2016
+seq2064
+internal-911
+seq1977
+seq3379
+internal-912
+seq1984
+internal-913
+internal-914
+seq3072
+internal-915
+seq3022
+internal-916
+internal-917
+seq3026
+internal-918
+internal-919
+seq3015
+internal-920
+seq3060
+seq3064
+internal-921
+internal-922
+internal-923
+seq3002
+seq3041
+internal-924
+seq3080
+internal-925
+seq3053
+seq3081
+internal-926
+seq3066
+internal-927
+seq3038
+seq3044
+internal-928
+internal-929
+seq3067
+seq3076
+seq3001
+internal-930
+seq2001
+seq2019
+internal-931
+internal-932
+internal-933
+seq5079
+internal-934
+seq2168
+seq2173
+internal-935
+seq2160
+seq2531
+internal-936
+seq3102
+seq3105
+internal-937
+internal-938
+seq3971
+internal-939
+internal-940
+internal-941
+seq2768
+internal-942
+internal-943
+seq1819
+internal-944
+seq1570
+seq1572
+internal-945
+internal-946
+internal-947
+seq384
+seq1508
+internal-948
+internal-949
+seq1177
+seq1184
+internal-950
+seq1817
+internal-951
+seq1199
+internal-952
+seq1195
+seq3669
+internal-953
+internal-954
+internal-955
+seq1309
+internal-956
+internal-957
+seq1300
+internal-958
+seq1330
+seq1363
+seq1341
+seq1500
+internal-959
+internal-960
+seq1504
+internal-961
+seq1305
+internal-962
+seq290
+seq1337
+seq1329
+internal-963
+internal-964
+seq1960
+seq5235
+internal-965
+internal-966
+internal-967
+seq3300
+internal-968
+internal-969
+seq2144
+internal-970
+internal-971
+seq2142
+internal-972
+seq2149
+seq2137
+internal-973
+seq2138
+seq2140
+internal-974
+seq2154
+internal-975
+seq2139
+seq2515
+internal-976
+seq1196
+internal-977
+seq1929
+internal-978
+seq1927
+internal-979
+seq1966
+seq3171
+internal-980
+internal-981
+seq2983
+internal-982
+seq387
+seq1602
+internal-983
+internal-984
+internal-985
+seq1673
+internal-986
+seq4232
+internal-987
+seq1672
+internal-988
+seq1666
+seq3320
+internal-989
+seq2610
+seq2613
+seq1826
+internal-990
+seq1264
+internal-991
+seq1709
+internal-992
+internal-993
+seq1269
+seq2523
+seq1276
+internal-994
+internal-995
+seq2988
+internal-996
+seq1918
+seq1922
+internal-997
+internal-998
+seq2402
+internal-999
+seq2439
+seq2399
+internal-1000
+internal-1001
+internal-1002
+seq2547
+internal-1003
+seq2549
+internal-1004
+internal-1005
+seq2543
+seq2544
+seq2556
+internal-1006
+seq2574
+internal-1007
+seq2557
+seq2558
+internal-1008
+internal-1009
+seq2421
+internal-1010
+seq2571
+seq2572
+internal-1011
+internal-1012
+seq2407
+seq2408
+internal-1013
+seq2431
+internal-1014
+seq2420
+internal-1015
+seq2401
+seq2434
+internal-1016
+seq231
+internal-1017
+seq566
+internal-1018
+seq3247
+seq3852
+internal-1019
+internal-1020
+seq3116
+seq3303
+internal-1021
+seq2803
+internal-1022
+seq428
+seq465
+2045 edges
+root internal-2 0.0833044
+internal-2 internal-3 0.0689333
+internal-3 internal-4 0.110197
+internal-4 internal-5 0.0559301
+internal-5 internal-6 0.084199
+internal-6 internal-7 0.112006
+internal-7 internal-8 0.674058
+internal-8 internal-9 0.0630967
+internal-9 internal-10 0.0960359
+internal-10 internal-11 0.437553
+internal-11 seq3718 0.552585
+internal-11 seq3731 0.672647
+internal-10 internal-12 0.0721422
+internal-12 seq3486 0.714334
+internal-12 seq3720 1.08082
+internal-9 internal-13 0.257145
+internal-13 seq3727 1.52215
+internal-13 seq3730 0.398953
+internal-8 internal-14 0.0369274
+internal-14 seq3726 0.264563
+internal-14 internal-15 0.503435
+internal-15 internal-16 0.0919341
+internal-16 internal-17 0.0495912
+internal-17 seq4240 0.302728
+internal-17 seq4239 0.49936
+internal-16 seq5212 0.147805
+internal-15 seq3728 0.129546
+internal-7 internal-18 0.373544
+internal-18 internal-19 0.0164252
+internal-19 seq1085 0.479755
+internal-19 internal-20 0.139299
+internal-20 internal-21 0.123358
+internal-21 internal-22 0.167372
+internal-22 internal-23 0.0896769
+internal-23 internal-24 0.0401606
+internal-24 internal-25 0.477081
+internal-25 seq3125 0.267977
+internal-25 seq3129 1.17193
+internal-24 internal-26 0.019563
+internal-26 seq1036 0.138115
+internal-26 internal-27 0.0570302
+internal-27 seq820 0.111325
+internal-27 seq958 0.0763334
+internal-23 seq963 0.12525
+internal-22 internal-28 0.172657
+internal-28 seq1025 0.238684
+internal-28 internal-29 0.0744243
+internal-29 seq3873 0.200962
+internal-29 seq4229 0.296087
+internal-21 internal-30 0.0993746
+internal-30 internal-31 0.193243
+internal-31 internal-32 0.0739069
+internal-32 internal-33 0.110264
+internal-33 seq2280 0.394407
+internal-33 seq2522 0.467261
+internal-32 internal-34 0.327991
+internal-34 seq1077 0.00208545
+internal-34 seq1100 0.162496
+internal-31 seq1078 0.386547
+internal-30 internal-35 0.223962
+internal-35 internal-36 0.068724
+internal-36 seq836 0.376561
+internal-36 internal-37 0.0925033
+internal-37 seq846 0.532136
+internal-37 internal-38 0.0815067
+internal-38 internal-39 0.0936917
+internal-39 internal-40 0.0674998
+internal-40 seq868 0.590903
+internal-40 internal-41 0.0464184
+internal-41 internal-42 0.19164
+internal-42 internal-43 0.0892903
+internal-43 internal-44 0.0854857
+internal-44 seq871 0.207094
+internal-44 seq996 0.211031
+internal-43 internal-45 0.127056
+internal-45 internal-46 0.123171
+internal-46 seq967 0.196547
+internal-46 internal-47 0.0445203
+internal-47 seq925 0.0948804
+internal-47 internal-48 0.0266406
+internal-48 seq977 0.104087
+internal-48 internal-49 0.0365229
+internal-49 internal-50 0.0816175
+internal-50 seq862 0.0850739
+internal-50 seq887 0.0703515
+internal-49 internal-51 0.0540737
+internal-51 seq937 0.0701556
+internal-51 seq1008 0.103903
+internal-45 internal-52 0.0976308
+internal-52 seq954 0.10833
+internal-52 internal-53 0.0769678
+internal-53 seq916 0.225688
+internal-53 seq971 0.2831
+internal-42 internal-54 0.115174
+internal-54 internal-55 0.189788
+internal-55 seq874 0.125957
+internal-55 internal-56 0.0563347
+internal-56 seq866 0.167877
+internal-56 seq1023 0.208048
+internal-54 internal-57 0.212647
+internal-57 seq1020 0.382088
+internal-57 seq1022 0.212827
+internal-41 internal-58 0.0966069
+internal-58 seq816 0.349511
+internal-58 internal-59 0.0892073
+internal-59 seq980 0.442591
+internal-59 seq1037 0.330655
+internal-39 internal-60 0.166536
+internal-60 internal-61 0.0959321
+internal-61 seq993 0.19465
+internal-61 seq1070 0.104337
+internal-60 internal-62 0.120349
+internal-62 seq906 0.0842775
+internal-62 internal-63 0.0341571
+internal-63 seq894 0.0500527
+internal-63 seq1081 0.241621
+internal-38 internal-64 0.28935
+internal-64 seq835 0.0638316
+internal-64 seq837 0.171937
+internal-35 seq1091 0.310087
+internal-20 internal-65 0.0898789
+internal-65 internal-66 0.109882
+internal-66 seq1076 0.450011
+internal-66 seq1433 0.395036
+internal-65 internal-67 0.134614
+internal-67 seq1039 0.526911
+internal-67 internal-68 0.0716869
+internal-68 seq1094 0.32548
+internal-68 internal-69 0.0626543
+internal-69 seq1056 0.358293
+internal-69 seq1072 0.292115
+internal-18 internal-70 0.152927
+internal-70 seq1069 0.699821
+internal-70 seq2603 0.26935
+internal-6 internal-71 0.58101
+internal-71 internal-72 0.716073
+internal-72 seq4216 1.14922
+internal-72 seq4225 0.547306
+internal-71 internal-73 1.19308
+internal-73 seq4213 0.450385
+internal-73 seq4218 0.463615
+internal-5 internal-74 0.140875
+internal-74 internal-75 0.754448
+internal-75 seq1549 0.404092
+internal-75 seq1554 0.226626
+internal-74 internal-76 0.0762725
+internal-76 internal-77 0.0957104
+internal-77 internal-78 0.140444
+internal-78 seq1287 0.771932
+internal-78 seq3672 0.565217
+internal-77 internal-79 0.0924401
+internal-79 internal-80 0.0259576
+internal-80 internal-81 0.12151
+internal-81 seq744 0.417628
+internal-81 internal-82 0.0939278
+internal-82 seq746 0.208646
+internal-82 seq1409 0.356379
+internal-80 internal-83 0.118708
+internal-83 internal-84 0.450462
+internal-84 seq755 0.105581
+internal-84 seq1290 0.232799
+internal-83 internal-85 0.11133
+internal-85 internal-86 0.0457046
+internal-86 internal-87 0.118573
+internal-87 internal-88 0.173911
+internal-88 internal-89 0.0787375
+internal-89 seq2642 0.913422
+internal-89 seq328 0.12638
+internal-88 internal-90 0.12598
+internal-90 internal-91 0.0574196
+internal-91 internal-92 0.112477
+internal-92 internal-93 0.0692878
+internal-93 seq1400 0.114009
+internal-93 internal-94 0.0113621
+internal-94 seq1392 0.179436
+internal-94 internal-95 0.0393585
+internal-95 seq1396 0.081002
+internal-95 internal-96 0.0339557
+internal-96 seq1390 0.0575699
+internal-96 internal-97 0.0274641
+internal-97 internal-98 0.0296822
+internal-98 seq2179 0.151081
+internal-98 seq2192 0.0848614
+internal-97 internal-99 0.0381953
+internal-99 seq1377 0.143215
+internal-99 seq1389 0.0995647
+internal-92 internal-100 0.0287342
+internal-100 seq1449 0.0561265
+internal-100 internal-101 0.0383463
+internal-101 seq344 0.0492647
+internal-101 seq1467 0.078323
+internal-91 internal-102 0.134747
+internal-102 seq1478 0.269023
+internal-102 internal-103 0.0754249
+internal-103 seq1461 0.254471
+internal-103 internal-104 0.0560013
+internal-104 seq1439 0.0609521
+internal-104 internal-105 0.0485389
+internal-105 seq332 0.145092
+internal-105 internal-106 0.094146
+internal-106 seq1452 0.0610581
+internal-106 internal-107 0.0100603
+internal-107 seq1378 0.074653
+internal-107 seq1380 0.0563514
+internal-90 internal-108 0.104231
+internal-108 seq1487 0.14061
+internal-108 internal-109 0.0506739
+internal-109 seq315 0.132135
+internal-109 internal-110 0.159052
+internal-110 seq1444 0.0648225
+internal-110 internal-111 0.0631664
+internal-111 seq1441 0.113366
+internal-111 seq2191 0.181001
+internal-87 seq742 0.580108
+internal-86 internal-112 0.518625
+internal-112 seq2643 1.1216
+internal-112 internal-113 0.103917
+internal-113 seq2631 0.521415
+internal-113 seq3501 0.587624
+internal-85 internal-114 0.116094
+internal-114 seq1466 0.353869
+internal-114 internal-115 0.0711311
+internal-115 internal-116 0.17216
+internal-116 seq321 0.328756
+internal-116 seq1391 0.305678
+internal-115 internal-117 0.0812259
+internal-117 internal-118 0.0958541
+internal-118 seq314 0.261726
+internal-118 internal-119 0.0631417
+internal-119 internal-120 0.320042
+internal-120 seq264 0.153326
+internal-120 internal-121 0.0811812
+internal-121 seq732 0.147296
+internal-121 internal-122 0.0499398
+internal-122 seq1855 0.0817906
+internal-122 seq2601 0.0744657
+internal-119 seq333 0.242544
+internal-117 seq727 0.280153
+internal-79 internal-123 0.0895339
+internal-123 seq734 0.462811
+internal-123 internal-124 0.380059
+internal-124 seq725 0.0672218
+internal-124 seq731 0.0544084
+internal-76 internal-125 0.0451425
+internal-125 seq720 0.762975
+internal-125 internal-126 0.0692148
+internal-126 internal-127 0.163001
+internal-127 seq2539 0.611379
+internal-127 internal-128 0.228525
+internal-128 seq382 0.566967
+internal-128 internal-129 0.0975623
+internal-129 seq2240 0.573217
+internal-129 internal-130 0.0547021
+internal-130 seq286 0.285794
+internal-130 internal-131 0.0664064
+internal-131 internal-132 0.0191904
+internal-132 seq1243 0.127188
+internal-132 internal-133 0.0418917
+internal-133 seq1234 0.0940463
+internal-133 seq1246 0.0606122
+internal-131 internal-134 0.0285115
+internal-134 seq1242 0.285532
+internal-134 internal-135 0.0509381
+internal-135 internal-136 0.0461407
+internal-136 seq289 0.134597
+internal-136 seq1239 0.120489
+internal-135 internal-137 0.0876816
+internal-137 seq282 0.135131
+internal-137 seq3670 0.561835
+internal-126 internal-138 0.0572932
+internal-138 internal-139 0.628837
+internal-139 seq380 0.106478
+internal-139 internal-140 0.12144
+internal-140 seq1542 0.133044
+internal-140 internal-141 0.111629
+internal-141 seq376 0.0312605
+internal-141 seq1541 0.101764
+internal-138 internal-142 0.112902
+internal-142 internal-143 5e-09
+internal-143 internal-144 0.0954171
+internal-144 internal-145 0.1625
+internal-145 internal-146 0.194522
+internal-146 seq1102 0.054374
+internal-146 seq1252 0.064611
+internal-145 internal-147 0.0563648
+internal-147 seq1260 0.363995
+internal-147 internal-148 0.171617
+internal-148 seq263 0.145092
+internal-148 seq688 0.150119
+internal-144 seq698 0.641351
+internal-143 seq766 0.630887
+internal-142 internal-149 0.032586
+internal-149 internal-150 0.0550858
+internal-150 internal-151 0.0570465
+internal-151 internal-152 0.0695269
+internal-152 internal-153 0.0460217
+internal-153 internal-154 0.505708
+internal-154 seq272 0.115581
+internal-154 seq642 0.103453
+internal-153 internal-155 0.242771
+internal-155 seq763 0.428096
+internal-155 seq769 0.671778
+internal-152 internal-156 0.620855
+internal-156 seq679 0.0865616
+internal-156 seq706 0.0956413
+internal-151 internal-157 0.309366
+internal-157 internal-158 0.530352
+internal-158 seq645 0.149718
+internal-158 seq650 0.170911
+internal-157 internal-159 0.0654774
+internal-159 seq651 0.146034
+internal-159 internal-160 0.0552077
+internal-160 seq393 0.232094
+internal-160 seq656 0.0436208
+internal-150 internal-161 0.164735
+internal-161 internal-162 0.0581892
+internal-162 internal-163 0.0452681
+internal-163 seq711 0.524837
+internal-163 internal-164 0.195445
+internal-164 seq273 0.569563
+internal-164 seq1537 0.342448
+internal-162 internal-165 0.0655747
+internal-165 seq694 0.338209
+internal-165 seq708 0.258685
+internal-161 seq2623 0.679395
+internal-149 internal-166 0.095925
+internal-166 internal-167 0.320136
+internal-167 seq271 0.297163
+internal-167 seq2281 0.236229
+internal-166 internal-168 0.312291
+internal-168 seq685 0.360081
+internal-168 seq701 0.43326
+internal-4 internal-169 0.130174
+internal-169 internal-170 0.433046
+internal-170 seq4643 0.833007
+internal-170 internal-171 0.173577
+internal-171 internal-172 0.0298647
+internal-172 internal-173 0.245936
+internal-173 seq4662 0.395803
+internal-173 internal-174 0.369246
+internal-174 seq4650 0.0698254
+internal-174 seq4654 0.0766119
+internal-172 seq4620 0.693778
+internal-171 internal-175 0.155423
+internal-175 internal-176 0.11255
+internal-176 internal-177 0.495786
+internal-177 seq4679 0.220083
+internal-177 internal-178 0.195105
+internal-178 seq4674 0.117928
+internal-178 seq4689 0.167816
+internal-176 internal-179 0.332102
+internal-179 seq4362 0.633864
+internal-179 seq4484 0.317985
+internal-175 internal-180 0.169903
+internal-180 internal-181 0.0520996
+internal-181 internal-182 0.0666061
+internal-182 internal-183 0.0740724
+internal-183 internal-184 0.132195
+internal-184 seq4590 0.389561
+internal-184 seq4721 0.411311
+internal-183 internal-185 0.134533
+internal-185 internal-186 0.368898
+internal-186 seq4356 0.121937
+internal-186 seq4397 0.0267807
+internal-185 internal-187 0.128459
+internal-187 internal-188 0.19
+internal-188 seq4569 0.216262
+internal-188 internal-189 0.139282
+internal-189 internal-190 0.0363591
+internal-190 internal-191 0.0622871
+internal-191 internal-192 0.0450225
+internal-192 internal-193 0.0568602
+internal-193 internal-194 0.0223029
+internal-194 seq4512 0.295735
+internal-194 internal-195 0.0374329
+internal-195 seq4455 0.136796
+internal-195 internal-196 0.039256
+internal-196 seq4403 0.0958797
+internal-196 internal-197 0.0993105
+internal-197 seq4367 0.048001
+internal-197 seq4421 0.100336
+internal-193 seq4562 0.211685
+internal-192 internal-198 0.0955992
+internal-198 seq4345 0.296024
+internal-198 seq4553 0.387488
+internal-191 seq4448 0.180695
+internal-190 internal-199 0.137732
+internal-199 seq4592 0.156832
+internal-199 internal-200 0.0473441
+internal-200 seq4018 0.120605
+internal-200 seq4357 0.246795
+internal-189 seq4678 0.328387
+internal-187 internal-201 0.0736226
+internal-201 seq4331 0.356827
+internal-201 internal-202 0.0261874
+internal-202 seq4026 0.513362
+internal-202 internal-203 0.0970339
+internal-203 internal-204 0.0788532
+internal-204 seq4462 0.389005
+internal-204 seq4500 0.263202
+internal-203 internal-205 0.0531145
+internal-205 internal-206 0.113948
+internal-206 seq4610 0.286609
+internal-206 internal-207 0.0919319
+internal-207 internal-208 0.0903925
+internal-208 internal-209 0.0483244
+internal-209 internal-210 0.13241
+internal-210 internal-211 0.0964329
+internal-211 seq4624 0.192764
+internal-211 internal-212 0.0523829
+internal-212 seq4481 0.0394689
+internal-212 seq4619 0.131536
+internal-210 internal-213 0.0684231
+internal-213 seq4381 0.169193
+internal-213 seq4460 0.0942362
+internal-209 seq4465 0.204585
+internal-208 seq4401 0.0550192
+internal-207 internal-214 0.0950991
+internal-214 internal-215 0.0272136
+internal-215 internal-216 0.0672819
+internal-216 seq4467 0.064013
+internal-216 seq4531 0.067656
+internal-215 internal-217 0.0425699
+internal-217 internal-218 0.110107
+internal-218 seq4012 0.189465
+internal-218 seq4469 0.0667163
+internal-217 internal-219 0.164329
+internal-219 seq4342 0.153525
+internal-219 seq4350 0.180572
+internal-214 internal-220 0.0695428
+internal-220 seq4537 0.0648883
+internal-220 seq4518 0.193219
+internal-205 internal-221 0.118533
+internal-221 internal-222 0.0581424
+internal-222 internal-223 0.0338811
+internal-223 internal-224 0.332316
+internal-224 seq4014 0.308646
+internal-224 seq4015 0.0532121
+internal-223 seq4695 0.175614
+internal-222 internal-225 0.0581231
+internal-225 seq4412 0.299531
+internal-225 internal-226 0.0906549
+internal-226 seq4443 0.210488
+internal-226 seq4690 0.192734
+internal-221 internal-227 0.0211012
+internal-227 seq4593 0.275444
+internal-227 seq4468 0.171286
+internal-182 internal-228 0.07424
+internal-228 internal-229 0.0777579
+internal-229 seq4493 0.194913
+internal-229 internal-230 0.0942582
+internal-230 internal-231 0.206003
+internal-231 seq4050 0.242397
+internal-231 seq4052 0.295458
+internal-230 internal-232 0.12121
+internal-232 seq4568 0.423415
+internal-232 internal-233 0.113507
+internal-233 seq4044 0.366106
+internal-233 internal-234 0.197425
+internal-234 seq4025 0.277436
+internal-234 seq4046 0.195793
+internal-228 internal-235 0.0547004
+internal-235 seq4669 0.42884
+internal-235 internal-236 0.190252
+internal-236 seq4711 0.156845
+internal-236 seq4727 0.0934029
+internal-181 internal-237 0.118845
+internal-237 seq4680 0.273701
+internal-237 internal-238 0.231235
+internal-238 seq4720 0.219228
+internal-238 internal-239 0.033882
+internal-239 internal-240 0.0623442
+internal-240 seq4685 0.0862414
+internal-240 internal-241 0.0348309
+internal-241 seq4699 0.191695
+internal-241 seq4715 0.125321
+internal-239 internal-242 0.0313535
+internal-242 seq4683 0.221648
+internal-242 internal-243 0.0171288
+internal-243 internal-244 0.0405047
+internal-244 seq4751 0.161985
+internal-244 internal-245 0.0597171
+internal-245 seq4734 0.252301
+internal-245 internal-246 0.0741983
+internal-246 seq4749 0.274101
+internal-246 seq4741 0.172799
+internal-243 internal-247 0.0639859
+internal-247 seq4348 0.189095
+internal-247 seq4702 0.189074
+internal-180 internal-248 0.134092
+internal-248 seq4634 0.39
+internal-248 internal-249 0.422568
+internal-249 seq4501 0.141683
+internal-249 internal-250 0.0567769
+internal-250 internal-251 0.0123055
+internal-251 seq4389 0.0775986
+internal-251 internal-252 0.0404253
+internal-252 seq4570 0.0531554
+internal-252 seq4577 0.0788577
+internal-250 internal-253 0.0116684
+internal-253 internal-254 0.0205572
+internal-254 seq4561 0.085122
+internal-254 seq4605 0.0508485
+internal-253 seq4411 0.111452
+internal-169 internal-255 0.720036
+internal-255 seq4314 1.29833
+internal-255 seq4315 0.274786
+internal-3 internal-256 0.103585
+internal-256 internal-257 0.0793609
+internal-257 internal-258 0.106868
+internal-258 internal-259 0.225292
+internal-259 seq1620 0.830859
+internal-259 internal-260 0.763035
+internal-260 seq1891 0.388778
+internal-260 internal-261 0.150321
+internal-261 seq1890 0.11801
+internal-261 seq1895 0.0808898
+internal-258 internal-262 0.0560448
+internal-262 internal-263 0.02652
+internal-263 internal-264 0.121924
+internal-264 internal-265 0.0864762
+internal-265 internal-266 0.151066
+internal-266 seq3175 0.650736
+internal-266 seq3993 0.720618
+internal-265 internal-267 0.124683
+internal-267 internal-268 0.535384
+internal-268 seq1518 0.523911
+internal-268 seq1522 0.527416
+internal-267 internal-269 0.331794
+internal-269 seq1840 1.04686
+internal-269 seq2243 0.970957
+internal-264 internal-270 0.0884131
+internal-270 internal-271 0.345939
+internal-271 seq1643 0.919432
+internal-271 internal-272 0.0402882
+internal-272 seq1652 1.68819
+internal-272 internal-273 0.0672771
+internal-273 internal-274 0.0912445
+internal-274 seq1641 0.508529
+internal-274 seq1700 0.626806
+internal-273 internal-275 0.0945342
+internal-275 seq1642 0.619558
+internal-275 internal-276 0.18418
+internal-276 seq1625 0.585247
+internal-276 seq1697 0.358793
+internal-270 internal-277 0.790793
+internal-277 seq3985 0.613403
+internal-277 internal-278 0.143165
+internal-278 seq3987 0.352893
+internal-278 internal-279 0.175132
+internal-279 seq3981 0.17672
+internal-279 seq3986 0.471481
+internal-263 internal-280 0.448733
+internal-280 internal-281 0.107637
+internal-281 seq3992 0.503052
+internal-281 internal-282 0.106752
+internal-282 seq2071 0.209714
+internal-282 internal-283 0.118261
+internal-283 seq2258 0.308812
+internal-283 internal-284 0.0395231
+internal-284 seq2254 0.596041
+internal-284 seq2250 0.43022
+internal-280 internal-285 0.159525
+internal-285 internal-286 0.118688
+internal-286 internal-287 0.149
+internal-287 seq2709 0.357108
+internal-287 seq2712 0.43383
+internal-286 internal-288 0.102858
+internal-288 seq2582 0.493026
+internal-288 internal-289 0.117107
+internal-289 seq2581 0.250873
+internal-289 seq2593 0.480217
+internal-285 seq2070 0.917399
+internal-262 internal-290 0.154022
+internal-290 internal-291 0.0668234
+internal-291 seq2625 0.820752
+internal-291 internal-292 0.191848
+internal-292 seq3837 0.737502
+internal-292 internal-293 0.480615
+internal-293 seq3962 0.552719
+internal-293 internal-294 0.318741
+internal-294 seq3206 0.374082
+internal-294 internal-295 0.295207
+internal-295 seq3190 0.155879
+internal-295 internal-296 0.0626447
+internal-296 seq3185 0.252447
+internal-296 internal-297 0.0326801
+internal-297 seq3189 0.269948
+internal-297 seq3191 0.233873
+internal-290 internal-298 0.349032
+internal-298 seq2621 0.945424
+internal-298 internal-299 0.344603
+internal-299 internal-300 0.59026
+internal-300 seq2200 0.0822202
+internal-300 internal-301 0.0702554
+internal-301 seq2202 0.127184
+internal-301 seq3309 0.112706
+internal-299 internal-302 0.0870928
+internal-302 seq2193 0.832519
+internal-302 seq2196 0.530343
+internal-257 internal-303 0.39885
+internal-303 internal-304 0.660643
+internal-304 seq360 0.319179
+internal-304 seq363 0.181364
+internal-303 internal-305 0.387579
+internal-305 seq3665 0.24843
+internal-305 internal-306 0.13654
+internal-306 seq366 0.172151
+internal-306 seq368 0.306098
+internal-256 internal-307 9e-09
+internal-307 internal-308 0.267247
+internal-308 seq1910 0.930027
+internal-308 seq3895 1.25599
+internal-307 internal-309 0.298602
+internal-309 seq619 0.732287
+internal-309 seq2807 1.11739
+internal-2 internal-310 0.0460492
+internal-310 internal-311 0.096542
+internal-311 internal-312 0.265071
+internal-312 seq2540 0.976276
+internal-312 seq4816 1.11595
+internal-311 internal-313 0.0879343
+internal-313 seq3830 0.849755
+internal-313 internal-314 0.085244
+internal-314 internal-315 0.114307
+internal-315 seq217 1.17415
+internal-315 internal-316 0.0291874
+internal-316 internal-317 0.106295
+internal-317 internal-318 0.0890864
+internal-318 internal-319 0.182544
+internal-319 seq184 0.555134
+internal-319 internal-320 0.180767
+internal-320 seq446 0.565712
+internal-320 seq469 0.334285
+internal-318 internal-321 0.143326
+internal-321 seq504 0.60797
+internal-321 internal-322 0.29758
+internal-322 seq245 0.112165
+internal-322 internal-323 0.0292531
+internal-323 seq536 0.126692
+internal-323 internal-324 0.0172932
+internal-324 seq151 0.0656495
+internal-324 internal-325 0.0321874
+internal-325 internal-326 0.00845096
+internal-326 internal-327 0.0641698
+internal-327 seq135 0.083601
+internal-327 seq148 0.119627
+internal-326 seq202 0.103603
+internal-325 internal-328 0.0204071
+internal-328 internal-329 0.0482734
+internal-329 seq84 0.0857698
+internal-329 seq620 0.110555
+internal-328 seq253 0.120545
+internal-317 internal-330 0.063879
+internal-330 internal-331 0.0270434
+internal-331 internal-332 0.148876
+internal-332 internal-333 0.134329
+internal-333 internal-334 0.0507092
+internal-334 internal-335 0.166399
+internal-335 seq11 0.612414
+internal-335 seq35 0.633798
+internal-334 internal-336 0.232442
+internal-336 seq193 0.546641
+internal-336 seq494 0.575644
+internal-333 seq576 0.413576
+internal-332 internal-337 0.0416961
+internal-337 seq22 0.29952
+internal-337 internal-338 0.244598
+internal-338 internal-339 0.0474102
+internal-339 internal-340 0.0772915
+internal-340 seq638 0.158297
+internal-340 internal-341 0.0274015
+internal-341 seq556 0.0920235
+internal-341 internal-342 0.140753
+internal-342 internal-343 0.0419541
+internal-343 internal-344 0.0602833
+internal-344 seq31 0.114513
+internal-344 seq589 0.0578249
+internal-343 internal-345 0.0916363
+internal-345 seq425 0.137261
+internal-345 seq419 0.239645
+internal-342 internal-346 0.0395568
+internal-346 internal-347 0.12714
+internal-347 seq25 0.115896
+internal-347 internal-348 0.161832
+internal-348 seq210 0.0633864
+internal-348 seq571 0.0659727
+internal-346 internal-349 0.0589213
+internal-349 seq58 0.150064
+internal-349 seq539 0.344789
+internal-339 internal-350 0.0433426
+internal-350 internal-351 0.136954
+internal-351 seq117 0.178186
+internal-351 internal-352 0.15305
+internal-352 internal-353 0.01912
+internal-353 seq48 0.0966091
+internal-353 seq214 0.100992
+internal-352 internal-354 0.0437377
+internal-354 seq235 0.0900173
+internal-354 internal-355 0.0719591
+internal-355 seq54 0.0957041
+internal-355 seq55 0.135056
+internal-350 internal-356 0.0918288
+internal-356 seq593 0.213266
+internal-356 internal-357 0.167011
+internal-357 seq615 0.130551
+internal-357 internal-358 0.0948964
+internal-358 seq599 0.123933
+internal-358 seq600 0.00106369
+internal-338 seq585 0.289701
+internal-331 internal-359 0.267001
+internal-359 seq543 0.303396
+internal-359 internal-360 0.0812786
+internal-360 seq527 0.273563
+internal-360 seq491 0.658083
+internal-330 internal-361 0.0876109
+internal-361 internal-362 0.546697
+internal-362 seq37 0.341896
+internal-362 internal-363 0.0901688
+internal-363 internal-364 0.274878
+internal-364 seq39 0.182105
+internal-364 seq631 0.0633676
+internal-363 internal-365 0.0638754
+internal-365 seq630 0.0991318
+internal-365 seq632 0.186349
+internal-361 internal-366 0.0940335
+internal-366 internal-367 0.163568
+internal-367 seq232 1.28649
+internal-367 seq59 0.470474
+internal-366 internal-368 0.105052
+internal-368 internal-369 0.0772018
+internal-369 internal-370 0.0535279
+internal-370 internal-371 0.0796651
+internal-371 seq90 0.415713
+internal-371 seq209 0.452574
+internal-370 internal-372 0.555225
+internal-372 seq453 5e-09
+internal-372 seq454 0.116933
+internal-369 internal-373 0.101004
+internal-373 seq1905 0.30824
+internal-373 internal-374 0.0772675
+internal-374 internal-375 0.03438
+internal-375 seq532 0.156909
+internal-375 internal-376 0.03815
+internal-376 seq407 0.339795
+internal-376 seq61 0.228385
+internal-374 internal-377 0.0254436
+internal-377 seq497 0.174582
+internal-377 internal-378 0.125821
+internal-378 internal-379 0.04205
+internal-379 internal-380 0.0826937
+internal-380 internal-381 0.139928
+internal-381 internal-382 0.065859
+internal-382 internal-383 0.0613624
+internal-383 seq137 0.0672046
+internal-383 seq483 0.22987
+internal-382 internal-384 0.0739008
+internal-384 seq481 0.197872
+internal-384 internal-385 0.12524
+internal-385 seq1 0.0366362
+internal-385 seq4 0.102902
+internal-381 seq639 0.128898
+internal-380 seq560 0.320072
+internal-379 seq457 0.584697
+internal-378 seq124 0.186205
+internal-368 internal-386 0.137956
+internal-386 seq431 0.391605
+internal-386 internal-387 0.165248
+internal-387 seq12 0.306615
+internal-387 seq406 0.32039
+internal-316 internal-388 0.424022
+internal-388 internal-389 0.23451
+internal-389 seq786 0.212206
+internal-389 seq2541 0.326835
+internal-388 internal-390 0.0589704
+internal-390 internal-391 0.280069
+internal-391 seq803 0.258152
+internal-391 seq806 0.258295
+internal-390 internal-392 0.694375
+internal-392 seq162 0.308717
+internal-392 seq791 0.0582051
+internal-314 internal-393 0.208773
+internal-393 internal-394 0.594476
+internal-394 seq478 0.289977
+internal-394 internal-395 0.125403
+internal-395 seq471 0.225195
+internal-395 internal-396 0.0968974
+internal-396 seq107 0.144219
+internal-396 seq479 0.244773
+internal-393 internal-397 0.163338
+internal-397 seq436 0.812668
+internal-397 internal-398 0.49114
+internal-398 seq445 0.163418
+internal-398 seq781 0.0909019
+internal-310 internal-399 0.020059
+internal-399 internal-400 0.076569
+internal-400 internal-401 0.20963
+internal-401 internal-402 0.722383
+internal-402 seq3717 0.457051
+internal-402 internal-403 0.176042
+internal-403 seq3215 0.276416
+internal-403 seq3218 0.0730128
+internal-401 internal-404 0.17411
+internal-404 internal-405 0.326484
+internal-405 seq2121 0.458284
+internal-405 seq2481 0.886479
+internal-404 internal-406 0.165459
+internal-406 internal-407 0.0157292
+internal-407 internal-408 0.0807617
+internal-408 internal-409 0.078106
+internal-409 internal-410 0.0152499
+internal-410 internal-411 0.0648914
+internal-411 seq1741 0.744073
+internal-411 internal-412 0.185008
+internal-412 internal-413 0.0334244
+internal-413 internal-414 0.0570756
+internal-414 internal-415 0.308861
+internal-415 internal-416 0.107568
+internal-416 seq2470 0.160688
+internal-416 internal-417 0.0619719
+internal-417 seq2490 0.19754
+internal-417 seq2479 0.186694
+internal-415 internal-418 0.259162
+internal-418 internal-419 0.0505573
+internal-419 seq2493 0.0887072
+internal-419 seq2494 0.103112
+internal-418 internal-420 0.0749232
+internal-420 internal-421 0.0707311
+internal-421 seq1763 0.0711921
+internal-421 seq2116 0.295471
+internal-420 seq2488 0.0667467
+internal-414 seq1734 0.368406
+internal-413 internal-422 0.0593124
+internal-422 internal-423 0.0539695
+internal-423 internal-424 0.277845
+internal-424 seq2087 0.105284
+internal-424 internal-425 0.0420847
+internal-425 seq2504 0.061036
+internal-425 seq2506 0.0654899
+internal-423 internal-426 0.1257
+internal-426 seq2471 0.137397
+internal-426 internal-427 0.0620265
+internal-427 seq2112 0.204841
+internal-427 seq2093 0.234654
+internal-422 seq2092 0.527467
+internal-412 internal-428 0.0749492
+internal-428 internal-429 0.118
+internal-429 seq2482 0.202583
+internal-429 internal-430 0.160018
+internal-430 seq2099 0.206089
+internal-430 seq2467 0.203144
+internal-428 seq2085 0.533517
+internal-410 internal-431 0.235316
+internal-431 seq1772 0.515398
+internal-431 seq1789 0.592086
+internal-409 seq2128 0.893757
+internal-408 internal-432 0.0852515
+internal-432 internal-433 0.0668644
+internal-433 seq1783 1.22202
+internal-433 internal-434 0.051174
+internal-434 internal-435 0.278197
+internal-435 seq1723 0.381795
+internal-435 internal-436 0.293241
+internal-436 seq1718 0.340915
+internal-436 internal-437 0.129283
+internal-437 seq1722 0.344168
+internal-437 seq1754 0.262649
+internal-434 internal-438 0.0435653
+internal-438 internal-439 0.198017
+internal-439 seq2746 0.396912
+internal-439 internal-440 0.145069
+internal-440 internal-441 0.110075
+internal-441 seq3087 0.374238
+internal-441 internal-442 0.172018
+internal-442 seq3295 0.157246
+internal-442 internal-443 0.0579079
+internal-443 internal-444 0.0787716
+internal-444 seq3835 0.0647346
+internal-444 internal-445 0.0623192
+internal-445 seq3834 0.0530365
+internal-445 seq3831 0.199104
+internal-443 seq3297 0.128401
+internal-440 internal-446 0.0738941
+internal-446 internal-447 0.0477877
+internal-447 internal-448 0.0495977
+internal-448 internal-449 0.0268828
+internal-449 seq2731 0.081724
+internal-449 internal-450 0.0253694
+internal-450 seq2734 0.119338
+internal-450 seq3735 0.190599
+internal-448 seq2737 0.133657
+internal-447 internal-451 0.0738733
+internal-451 seq2751 0.378125
+internal-451 internal-452 0.0577341
+internal-452 seq2759 0.182092
+internal-452 internal-453 0.0750297
+internal-453 seq2742 0.263738
+internal-453 internal-454 0.0157512
+internal-454 seq2724 0.188022
+internal-454 seq2728 0.0869807
+internal-446 internal-455 0.175107
+internal-455 internal-456 0.0835139
+internal-456 seq3738 0.093593
+internal-456 seq3791 0.118156
+internal-455 internal-457 0.10261
+internal-457 internal-458 0.0403345
+internal-458 internal-459 0.0480352
+internal-459 seq3279 0.1323
+internal-459 seq3281 0.13691
+internal-458 internal-460 0.031297
+internal-460 internal-461 0.000209625
+internal-461 internal-462 0.0329311
+internal-462 internal-463 0.0635636
+internal-463 seq3254 0.127537
+internal-463 seq3273 0.269592
+internal-462 seq3280 0.103505
+internal-461 seq3258 0.21882
+internal-460 seq3744 0.220549
+internal-457 internal-464 0.0763171
+internal-464 seq3253 0.151885
+internal-464 internal-465 0.0794851
+internal-465 seq3289 0.197297
+internal-465 seq3268 0.0889819
+internal-438 internal-466 0.141373
+internal-466 seq1802 0.451043
+internal-466 seq1810 0.589547
+internal-432 seq2074 1.49896
+internal-407 internal-467 0.801878
+internal-467 seq2780 0.693206
+internal-467 internal-468 0.161976
+internal-468 internal-469 0.171145
+internal-469 internal-470 0.0635815
+internal-470 internal-471 0.041932
+internal-471 internal-472 0.171542
+internal-472 seq4241 0.124396
+internal-472 seq4243 0.125195
+internal-471 seq3586 0.413811
+internal-470 internal-473 0.0773255
+internal-473 internal-474 0.043427
+internal-474 internal-475 0.0093459
+internal-475 internal-476 0.0214327
+internal-476 seq5156 0.28332
+internal-476 seq5159 0.0921169
+internal-475 internal-477 0.0303342
+internal-477 seq5149 0.114452
+internal-477 seq5158 0.127556
+internal-474 internal-478 0.0528895
+internal-478 seq5160 0.248744
+internal-478 seq5167 0.213128
+internal-473 internal-479 0.0329579
+internal-479 seq5150 0.119648
+internal-479 seq5163 0.198473
+internal-469 seq3913 0.264775
+internal-468 internal-480 0.0328041
+internal-480 seq3588 0.575537
+internal-480 internal-481 0.0702026
+internal-481 seq3966 0.268456
+internal-481 seq3967 0.391822
+internal-406 seq1796 0.835437
+internal-400 internal-482 0.141278
+internal-482 internal-483 0.266683
+internal-483 seq3114 1.0918
+internal-483 internal-484 0.629286
+internal-484 seq3937 0.280716
+internal-484 seq3938 0.359118
+internal-482 internal-485 0.232635
+internal-485 internal-486 0.195652
+internal-486 internal-487 0.456178
+internal-487 seq3220 0.434176
+internal-487 internal-488 0.16237
+internal-488 seq3224 0.463976
+internal-488 internal-489 0.0919656
+internal-489 seq3226 0.107949
+internal-489 seq3228 0.0401821
+internal-486 internal-490 1.15007
+internal-490 internal-491 0.113937
+internal-491 seq4988 0.280838
+internal-491 internal-492 0.0555619
+internal-492 seq3540 0.329212
+internal-492 internal-493 0.225522
+internal-493 seq3559 0.206815
+internal-493 seq3567 0.140073
+internal-490 internal-494 0.0362486
+internal-494 seq3510 0.233601
+internal-494 internal-495 0.117874
+internal-495 internal-496 0.28921
+internal-496 internal-497 0.0984865
+internal-497 internal-498 0.0416581
+internal-498 internal-499 0.0998108
+internal-499 seq4999 0.155289
+internal-499 seq3513 0.762971
+internal-498 seq5032 0.218601
+internal-497 internal-500 0.0603963
+internal-500 seq4992 0.155832
+internal-500 seq3536 0.351577
+internal-496 internal-501 0.0568329
+internal-501 internal-502 0.0295436
+internal-502 seq4974 0.18618
+internal-502 seq5000 0.294351
+internal-501 seq4996 0.177996
+internal-495 internal-503 0.0842108
+internal-503 seq5012 0.210873
+internal-503 internal-504 0.0663275
+internal-504 internal-505 0.13403
+internal-505 seq4990 0.146591
+internal-505 seq5007 0.100065
+internal-504 seq3566 0.24343
+internal-485 internal-506 0.485719
+internal-506 seq5221 0.744027
+internal-506 internal-507 0.440538
+internal-507 seq5228 0.396108
+internal-507 seq5229 0.394806
+internal-399 internal-508 0.066122
+internal-508 internal-509 0.0427106
+internal-509 internal-510 0.0492598
+internal-510 internal-511 0.0851763
+internal-511 internal-512 0.352715
+internal-512 internal-513 0.492763
+internal-513 internal-514 0.150232
+internal-514 seq2699 0.224852
+internal-514 internal-515 0.189166
+internal-515 seq2654 0.251548
+internal-515 seq2682 0.0834659
+internal-513 internal-516 0.133773
+internal-516 seq2672 0.401311
+internal-516 internal-517 0.102451
+internal-517 seq2675 0.286811
+internal-517 seq3927 0.332183
+internal-512 internal-518 0.428075
+internal-518 seq3136 0.56192
+internal-518 internal-519 0.240673
+internal-519 seq2269 0.570441
+internal-519 seq2270 0.393727
+internal-511 internal-520 0.134952
+internal-520 internal-521 0.0724472
+internal-521 internal-522 0.0695817
+internal-522 internal-523 0.0601628
+internal-523 internal-524 0.152503
+internal-524 internal-525 0.132093
+internal-525 internal-526 0.288555
+internal-526 seq3151 0.862822
+internal-526 internal-527 0.152155
+internal-527 internal-528 0.0970951
+internal-528 seq3807 0.423808
+internal-528 seq5058 0.771002
+internal-527 seq3159 0.891843
+internal-525 internal-529 0.043926
+internal-529 seq3153 0.80213
+internal-529 seq3921 1.02783
+internal-524 internal-530 0.173388
+internal-530 internal-531 0.20122
+internal-531 internal-532 0.146695
+internal-532 internal-533 0.183352
+internal-533 seq4898 0.60208
+internal-533 seq4920 0.496586
+internal-532 internal-534 0.103257
+internal-534 seq4877 0.532694
+internal-534 internal-535 0.134772
+internal-535 internal-536 0.033665
+internal-536 seq4962 0.450099
+internal-536 internal-537 0.0529466
+internal-537 internal-538 0.0594237
+internal-538 internal-539 0.0116839
+internal-539 seq4905 0.628118
+internal-539 internal-540 0.092404
+internal-540 seq4841 0.41815
+internal-540 seq4919 0.344241
+internal-538 internal-541 0.112403
+internal-541 internal-542 0.105039
+internal-542 seq4914 0.586877
+internal-542 internal-543 0.116796
+internal-543 seq4972 0.653368
+internal-543 internal-544 0.192982
+internal-544 seq4951 0.164671
+internal-544 internal-545 0.333924
+internal-545 seq4944 0.0840557
+internal-545 internal-546 0.110197
+internal-546 seq4859 0.0765505
+internal-546 seq4882 0.0442146
+internal-541 internal-547 0.0334242
+internal-547 internal-548 0.320493
+internal-548 internal-549 0.0761731
+internal-549 seq4947 0.0911719
+internal-549 seq4966 0.157309
+internal-548 internal-550 0.144939
+internal-550 seq4946 0.0903152
+internal-550 seq4955 0.189821
+internal-547 internal-551 0.165389
+internal-551 seq4938 0.257708
+internal-551 seq4948 0.303295
+internal-537 internal-552 0.139807
+internal-552 seq4956 0.371468
+internal-552 seq4940 0.526773
+internal-535 internal-553 0.29018
+internal-553 internal-554 0.158348
+internal-554 seq4884 0.254509
+internal-554 seq4936 0.3134
+internal-553 internal-555 0.281252
+internal-555 seq4846 0.407406
+internal-555 seq4964 0.225652
+internal-531 internal-556 0.123529
+internal-556 seq4837 0.653217
+internal-556 internal-557 0.0730765
+internal-557 seq4864 0.837147
+internal-557 internal-558 0.217617
+internal-558 internal-559 0.0299961
+internal-559 seq4839 0.5158
+internal-559 internal-560 0.349193
+internal-560 seq4861 0.281022
+internal-560 seq4866 0.190531
+internal-558 internal-561 0.115398
+internal-561 seq4843 0.64749
+internal-561 internal-562 0.196956
+internal-562 seq4853 0.37585
+internal-562 internal-563 0.248255
+internal-563 seq4854 0.0630246
+internal-563 seq4968 0.119783
+internal-530 seq4842 1.4046
+internal-523 internal-564 0.0980774
+internal-564 internal-565 0.0635531
+internal-565 seq4757 1.51541
+internal-565 internal-566 0.014733
+internal-566 internal-567 0.237761
+internal-567 internal-568 0.0835978
+internal-568 internal-569 0.0863627
+internal-569 seq3863 0.80721
+internal-569 internal-570 0.341329
+internal-570 seq4813 1.24419
+internal-570 internal-571 0.537033
+internal-571 seq4781 0.317308
+internal-571 internal-572 0.130978
+internal-572 seq4790 0.151047
+internal-572 internal-573 0.061346
+internal-573 seq4800 0.250127
+internal-573 internal-574 0.111795
+internal-574 seq4786 0.211849
+internal-574 seq4802 0.197729
+internal-568 seq4811 0.95084
+internal-567 seq3859 0.868263
+internal-566 internal-575 0.11054
+internal-575 seq3816 1.04353
+internal-575 internal-576 0.0713747
+internal-576 seq3152 0.970492
+internal-576 internal-577 0.0833246
+internal-577 internal-578 0.0771798
+internal-578 internal-579 0.0853456
+internal-579 seq4293 0.823454
+internal-579 internal-580 0.130409
+internal-580 internal-581 0.0698228
+internal-581 internal-582 0.0515728
+internal-582 internal-583 0.080079
+internal-583 internal-584 0.321675
+internal-584 seq3184 0.706256
+internal-584 seq3652 0.139306
+internal-583 internal-585 0.0589024
+internal-585 seq4285 0.153649
+internal-585 internal-586 0.0180927
+internal-586 internal-587 0.033993
+internal-587 internal-588 0.0533752
+internal-588 internal-589 0.00773591
+internal-589 internal-590 0.047394
+internal-590 internal-591 0.0346595
+internal-591 seq3613 0.124396
+internal-591 internal-592 0.0290971
+internal-592 seq3619 0.0619236
+internal-592 seq4254 0.169134
+internal-590 internal-593 0.0114255
+internal-593 seq3609 0.0858503
+internal-593 internal-594 0.0180018
+internal-594 seq3628 0.0658428
+internal-594 seq3634 0.0717658
+internal-589 internal-595 0.0219986
+internal-595 seq3636 0.107919
+internal-595 seq3630 0.0754099
+internal-588 internal-596 0.0144484
+internal-596 internal-597 0.0225724
+internal-597 seq4290 0.0984458
+internal-597 internal-598 0.0197554
+internal-598 seq3629 0.0653388
+internal-598 seq4300 0.0812079
+internal-596 internal-599 0.0159369
+internal-599 internal-600 0.0295682
+internal-600 seq4298 0.144087
+internal-600 seq4273 0.0491136
+internal-599 seq3615 0.262807
+internal-587 internal-601 0.0769619
+internal-601 seq4263 0.118857
+internal-601 seq4299 0.20483
+internal-586 seq4279 0.237448
+internal-582 seq4302 0.336079
+internal-581 seq4291 0.660597
+internal-580 internal-602 0.473056
+internal-602 seq3182 0.106821
+internal-602 seq4294 0.0571726
+internal-578 internal-603 0.15036
+internal-603 internal-604 0.0906111
+internal-604 seq3150 1.11861
+internal-604 internal-605 0.23317
+internal-605 seq3164 0.953703
+internal-605 internal-606 0.0969703
+internal-606 seq3167 0.551451
+internal-606 seq3901 0.430059
+internal-603 internal-607 0.210005
+internal-607 seq4324 1.26666
+internal-607 internal-608 0.530032
+internal-608 seq5070 0.252085
+internal-608 seq5074 0.447936
+internal-577 internal-609 0.149261
+internal-609 internal-610 0.282894
+internal-610 seq4249 0.731098
+internal-610 internal-611 0.44822
+internal-611 seq3643 0.0898131
+internal-611 seq3644 0.119973
+internal-609 internal-612 0.793594
+internal-612 seq2944 0.674907
+internal-612 internal-613 0.139969
+internal-613 seq2961 0.290193
+internal-613 seq2962 0.288165
+internal-564 internal-614 0.0471089
+internal-614 internal-615 0.148656
+internal-615 seq4766 1.13782
+internal-615 internal-616 0.112966
+internal-616 seq3693 0.743643
+internal-616 internal-617 0.110019
+internal-617 seq3685 0.580181
+internal-617 internal-618 0.29407
+internal-618 seq3699 0.8628
+internal-618 internal-619 0.0584424
+internal-619 seq3688 0.618217
+internal-619 internal-620 0.215666
+internal-620 seq3707 0.57611
+internal-620 seq3711 0.700282
+internal-614 internal-621 0.0760751
+internal-621 seq3622 0.934563
+internal-621 internal-622 0.1232
+internal-622 internal-623 0.478685
+internal-623 seq5061 0.889254
+internal-623 internal-624 0.173111
+internal-624 seq5065 0.793154
+internal-624 internal-625 0.435339
+internal-625 seq5654 0.168967
+internal-625 seq5658 0.286758
+internal-622 internal-626 0.621566
+internal-626 seq5093 0.607307
+internal-626 internal-627 0.123857
+internal-627 seq5086 0.561731
+internal-627 internal-628 0.203441
+internal-628 seq5082 0.511254
+internal-628 internal-629 0.126787
+internal-629 internal-630 0.1138
+internal-630 seq5100 0.167613
+internal-630 internal-631 0.11424
+internal-631 seq5101 0.20169
+internal-631 seq5102 0.0742577
+internal-629 internal-632 0.0788233
+internal-632 seq5097 0.470902
+internal-632 seq5083 0.665691
+internal-522 internal-633 0.1788
+internal-633 internal-634 0.124052
+internal-634 internal-635 0.160097
+internal-635 internal-636 0.0782105
+internal-636 seq3420 0.438871
+internal-636 internal-637 0.308287
+internal-637 internal-638 0.198392
+internal-638 seq3429 0.0467262
+internal-638 internal-639 0.089274
+internal-639 seq3403 0.117106
+internal-639 internal-640 0.0706404
+internal-640 seq3435 0.0776117
+internal-640 seq3448 0.0760963
+internal-637 internal-641 0.101359
+internal-641 seq3449 0.173033
+internal-641 internal-642 0.0326495
+internal-642 seq3441 0.207671
+internal-642 seq3428 0.29015
+internal-635 internal-643 0.155046
+internal-643 internal-644 0.237554
+internal-644 internal-645 0.0894032
+internal-645 seq5117 0.709127
+internal-645 internal-646 0.413135
+internal-646 seq3409 0.721588
+internal-646 internal-647 0.163131
+internal-647 internal-648 0.351384
+internal-648 internal-649 0.0391132
+internal-649 seq5121 0.379108
+internal-649 seq5125 0.114343
+internal-648 internal-650 0.0413178
+internal-650 internal-651 0.273886
+internal-651 seq5112 0.0626592
+internal-651 internal-652 0.0600073
+internal-652 seq5108 0.106245
+internal-652 seq5111 0.0702613
+internal-650 seq5251 0.681236
+internal-647 seq5142 0.407944
+internal-644 seq5139 0.794107
+internal-643 internal-653 0.313202
+internal-653 seq3453 0.247066
+internal-653 seq5471 0.558645
+internal-634 internal-654 0.0439499
+internal-654 internal-655 0.0411163
+internal-655 internal-656 0.739002
+internal-656 seq5520 0.259208
+internal-656 internal-657 0.105618
+internal-657 seq3405 0.207811
+internal-657 internal-658 0.0449185
+internal-658 internal-659 0.046624
+internal-659 seq3396 0.149263
+internal-659 seq5525 0.100341
+internal-658 internal-660 0.0310682
+internal-660 seq3444 0.100759
+internal-660 internal-661 0.237228
+internal-661 seq3427 0.092095
+internal-661 seq3459 0.0810494
+internal-655 internal-662 0.192694
+internal-662 internal-663 0.162316
+internal-663 internal-664 0.259136
+internal-664 seq5313 0.974029
+internal-664 internal-665 0.233209
+internal-665 seq5434 0.477108
+internal-665 seq5542 0.231528
+internal-663 internal-666 0.179125
+internal-666 seq5491 0.580314
+internal-666 internal-667 0.294231
+internal-667 seq5511 0.350335
+internal-667 internal-668 0.156494
+internal-668 seq5495 0.273854
+internal-668 seq5513 0.258207
+internal-662 internal-669 0.228576
+internal-669 internal-670 0.135953
+internal-670 internal-671 0.170781
+internal-671 seq5527 0.658209
+internal-671 internal-672 0.110219
+internal-672 internal-673 0.192362
+internal-673 seq5489 0.441342
+internal-673 seq5623 0.437708
+internal-672 internal-674 0.119915
+internal-674 internal-675 0.117445
+internal-675 seq5515 0.257072
+internal-675 seq5501 0.865043
+internal-674 seq5613 0.590609
+internal-670 internal-676 0.535406
+internal-676 internal-677 0.14228
+internal-677 seq5616 0.449804
+internal-677 internal-678 0.125937
+internal-678 seq5276 0.529277
+internal-678 seq5283 0.475516
+internal-676 internal-679 0.106359
+internal-679 internal-680 0.328354
+internal-680 seq5561 0.557043
+internal-680 internal-681 0.0599162
+internal-681 seq5282 0.401155
+internal-681 internal-682 0.0788273
+internal-682 seq5556 0.378054
+internal-682 seq5572 0.16018
+internal-679 seq5568 0.626202
+internal-669 internal-683 0.0988575
+internal-683 internal-684 0.227236
+internal-684 seq5483 0.391989
+internal-684 internal-685 0.0471002
+internal-685 internal-686 0.106895
+internal-686 seq5407 0.580972
+internal-686 internal-687 0.157237
+internal-687 seq5390 0.3698
+internal-687 internal-688 0.117489
+internal-688 seq5360 0.258903
+internal-688 seq5373 0.0618579
+internal-685 internal-689 0.126306
+internal-689 internal-690 0.113538
+internal-690 internal-691 0.0865357
+internal-691 seq5430 0.486996
+internal-691 internal-692 0.0781276
+internal-692 internal-693 0.0350549
+internal-693 internal-694 0.180853
+internal-694 seq5441 0.216424
+internal-694 internal-695 0.125906
+internal-695 seq5339 0.0584061
+internal-695 seq5466 0.270083
+internal-693 internal-696 0.0770747
+internal-696 internal-697 0.0379095
+internal-697 seq5287 0.0748304
+internal-697 seq5452 0.466433
+internal-696 seq5405 0.156717
+internal-692 internal-698 0.124976
+internal-698 seq5447 0.246253
+internal-698 internal-699 0.0321654
+internal-699 seq5406 0.0474968
+internal-699 internal-700 0.128013
+internal-700 seq5410 0.10964
+internal-700 internal-701 0.0489328
+internal-701 seq5331 0.0993194
+internal-701 seq5398 0.0865416
+internal-690 seq5487 0.264436
+internal-689 internal-702 0.20361
+internal-702 seq5388 0.265697
+internal-702 internal-703 0.0683715
+internal-703 seq5349 0.191422
+internal-703 seq5393 0.207371
+internal-683 internal-704 0.170977
+internal-704 seq5250 0.495878
+internal-704 internal-705 0.140197
+internal-705 seq5292 0.867099
+internal-705 internal-706 0.250172
+internal-706 seq5601 0.25757
+internal-706 internal-707 0.148727
+internal-707 seq5296 0.742843
+internal-707 internal-708 0.106081
+internal-708 seq5363 0.287797
+internal-708 internal-709 0.0807656
+internal-709 internal-710 0.0760879
+internal-710 seq5416 0.173706
+internal-710 internal-711 0.171166
+internal-711 seq5383 0.107511
+internal-711 internal-712 0.0692819
+internal-712 seq5477 0.421981
+internal-712 seq5402 0.354617
+internal-709 internal-713 0.060081
+internal-713 seq5443 0.158151
+internal-713 seq5413 0.310056
+internal-654 seq3407 0.986747
+internal-633 seq3421 1.08493
+internal-521 internal-714 0.410581
+internal-714 internal-715 0.0655414
+internal-715 internal-716 0.0671378
+internal-716 internal-717 0.102713
+internal-717 internal-718 0.0996975
+internal-718 internal-719 0.418592
+internal-719 seq2939 0.351183
+internal-719 internal-720 0.23867
+internal-720 seq2916 0.159988
+internal-720 seq2965 0.0174246
+internal-718 internal-721 0.135177
+internal-721 seq2956 0.663263
+internal-721 internal-722 1.06322
+internal-722 seq3951 0.0440882
+internal-722 seq3952 0.209515
+internal-717 seq2908 0.71084
+internal-716 seq2847 0.656293
+internal-715 internal-723 0.133124
+internal-723 internal-724 0.0467107
+internal-724 internal-725 0.128451
+internal-725 internal-726 5e-09
+internal-726 seq2929 0.611667
+internal-726 internal-727 0.118298
+internal-727 seq2854 0.500949
+internal-727 seq2912 0.378621
+internal-725 internal-728 0.258403
+internal-728 internal-729 0.0583005
+internal-729 seq2845 0.178885
+internal-729 internal-730 0.221329
+internal-730 seq2903 0.101109
+internal-730 seq2915 0.0645288
+internal-728 internal-731 0.103592
+internal-731 internal-732 0.298856
+internal-732 seq2870 0.0953144
+internal-732 internal-733 0.0606704
+internal-733 seq2869 0.173789
+internal-733 seq2958 0.136142
+internal-731 internal-734 0.0514803
+internal-734 seq5631 0.198919
+internal-734 internal-735 0.0841804
+internal-735 seq2972 0.0180777
+internal-735 seq2979 0.370568
+internal-724 internal-736 0.0638194
+internal-736 internal-737 0.095187
+internal-737 seq2813 0.486145
+internal-737 seq2914 1.03821
+internal-736 seq2818 0.529222
+internal-723 internal-738 0.110062
+internal-738 seq2833 0.277726
+internal-738 internal-739 0.100258
+internal-739 seq2911 0.500444
+internal-739 internal-740 0.181175
+internal-740 internal-741 0.225601
+internal-741 seq2850 0.146081
+internal-741 seq2860 0.155343
+internal-740 internal-742 0.119836
+internal-742 seq2865 0.111191
+internal-742 seq2868 0.184411
+internal-714 internal-743 0.0777273
+internal-743 seq2811 0.963839
+internal-743 internal-744 0.0590404
+internal-744 seq2951 1.08091
+internal-744 internal-745 0.0900421
+internal-745 seq2919 0.359528
+internal-745 seq2974 0.609566
+internal-520 internal-746 0.400835
+internal-746 seq3924 1.69657
+internal-746 internal-747 0.286803
+internal-747 seq5639 0.659261
+internal-747 internal-748 0.33467
+internal-748 seq5642 0.535663
+internal-748 internal-749 0.457685
+internal-749 internal-750 0.0744307
+internal-750 seq5191 0.166874
+internal-750 internal-751 0.0511575
+internal-751 seq5187 0.0582123
+internal-751 seq5192 0.0719907
+internal-749 internal-752 0.105085
+internal-752 seq5190 0.110835
+internal-752 seq5199 0.131477
+internal-510 internal-753 0.0688267
+internal-753 internal-754 0.171483
+internal-754 seq3876 1.23352
+internal-754 internal-755 0.343081
+internal-755 internal-756 0.906901
+internal-756 seq3881 0.288868
+internal-756 seq3882 0.361181
+internal-755 internal-757 0.0786473
+internal-757 seq80 1.12421
+internal-757 seq190 1.03222
+internal-753 internal-758 0.119576
+internal-758 internal-759 0.100137
+internal-759 internal-760 0.156408
+internal-760 internal-761 0.127232
+internal-761 internal-762 0.0230967
+internal-762 internal-763 0.116932
+internal-763 internal-764 0.0916438
+internal-764 internal-765 0.323853
+internal-765 internal-766 0.134281
+internal-766 seq1160 0.393055
+internal-766 seq3911 0.429071
+internal-765 internal-767 0.108353
+internal-767 seq3907 0.701273
+internal-767 internal-768 0.0835846
+internal-768 seq1596 0.606844
+internal-768 internal-769 0.262911
+internal-769 internal-770 0.119158
+internal-770 internal-771 0.309749
+internal-771 seq3352 0.489774
+internal-771 seq3360 0.496399
+internal-770 internal-772 0.10153
+internal-772 seq1170 0.887929
+internal-772 seq3327 0.589504
+internal-769 internal-773 0.17441
+internal-773 seq3818 0.648231
+internal-773 internal-774 0.0920403
+internal-774 seq3348 0.894113
+internal-774 internal-775 0.114176
+internal-775 seq3336 0.499486
+internal-775 internal-776 0.129724
+internal-776 internal-777 0.110762
+internal-777 seq3344 0.175011
+internal-777 internal-778 0.0197992
+internal-778 internal-779 0.0796895
+internal-779 seq3342 0.196509
+internal-779 internal-780 0.111149
+internal-780 seq3356 0.136704
+internal-780 internal-781 0.0912578
+internal-781 seq3368 0.392561
+internal-781 seq3364 0.229759
+internal-778 seq3366 0.228052
+internal-776 seq3349 0.281951
+internal-764 seq2518 0.670157
+internal-763 internal-782 0.457318
+internal-782 seq1154 0.782838
+internal-782 seq1157 0.617362
+internal-762 internal-783 0.0685798
+internal-783 internal-784 0.0556643
+internal-784 internal-785 0.466671
+internal-785 seq1144 1.04464
+internal-785 seq5105 0.584219
+internal-784 seq1214 0.652689
+internal-783 internal-786 0.0766917
+internal-786 internal-787 0.025002
+internal-787 internal-788 0.0857154
+internal-788 internal-789 0.0738119
+internal-789 internal-790 0.347045
+internal-790 seq1878 0.350258
+internal-790 seq3829 0.0341842
+internal-789 internal-791 0.190054
+internal-791 internal-792 0.0566401
+internal-792 internal-793 0.0456533
+internal-793 seq3392 0.194104
+internal-793 seq3393 0.13589
+internal-792 internal-794 0.0628603
+internal-794 seq1608 0.1426
+internal-794 seq1605 0.379797
+internal-791 internal-795 0.107389
+internal-795 internal-796 0.0389936
+internal-796 seq1427 0.242322
+internal-796 internal-797 0.0211881
+internal-797 seq2607 0.426895
+internal-797 seq294 0.143458
+internal-795 internal-798 0.0409051
+internal-798 seq2458 0.067863
+internal-798 seq2460 0.173814
+internal-788 internal-799 0.110466
+internal-799 internal-800 0.138247
+internal-800 seq1121 0.268131
+internal-800 internal-801 0.13367
+internal-801 seq1120 0.317843
+internal-801 internal-802 0.0714636
+internal-802 seq1114 0.190655
+internal-802 internal-803 0.0460007
+internal-803 seq1115 0.076127
+internal-803 internal-804 0.0304971
+internal-804 seq1108 0.0551019
+internal-804 seq270 0.13412
+internal-799 internal-805 0.0423607
+internal-805 internal-806 0.162492
+internal-806 seq1617 0.130745
+internal-806 seq1618 0.26489
+internal-805 internal-807 0.0518214
+internal-807 internal-808 0.043649
+internal-808 seq1133 0.271399
+internal-808 seq1117 0.363103
+internal-807 seq2770 0.593513
+internal-787 internal-809 0.139946
+internal-809 seq305 0.426401
+internal-809 internal-810 0.227197
+internal-810 seq3118 0.581217
+internal-810 seq3121 0.60122
+internal-786 internal-811 0.679345
+internal-811 seq1528 0.215649
+internal-811 seq1529 0.193291
+internal-761 internal-812 0.0333853
+internal-812 seq1215 1.12975
+internal-812 internal-813 0.0808676
+internal-813 seq2627 0.558593
+internal-813 internal-814 0.468293
+internal-814 internal-815 0.0840262
+internal-815 internal-816 0.0391357
+internal-816 seq1426 0.172061
+internal-816 seq1859 0.114376
+internal-815 internal-817 0.0496022
+internal-817 internal-818 0.0120548
+internal-818 internal-819 0.0215462
+internal-819 internal-820 0.0634777
+internal-820 seq1871 0.0471649
+internal-820 seq1885 0.0823589
+internal-819 internal-821 0.0365555
+internal-821 seq1887 0.185881
+internal-821 internal-822 0.0550451
+internal-822 seq1863 0.132431
+internal-822 seq1867 0.10554
+internal-818 internal-823 0.0238156
+internal-823 seq1708 0.210812
+internal-823 seq2238 0.193056
+internal-817 internal-824 0.0218792
+internal-824 seq1876 0.212405
+internal-824 seq1953 0.202296
+internal-814 seq2771 0.174657
+internal-760 seq1592 0.676636
+internal-759 internal-825 0.353871
+internal-825 seq2354 0.514092
+internal-825 internal-826 0.0417608
+internal-826 internal-827 0.442123
+internal-827 internal-828 0.0695835
+internal-828 seq2373 0.338898
+internal-828 internal-829 0.0866855
+internal-829 seq3489 0.122812
+internal-829 internal-830 0.173125
+internal-830 seq2377 0.113237
+internal-830 internal-831 0.0117522
+internal-831 internal-832 0.0399638
+internal-832 seq2369 0.0952822
+internal-832 internal-833 0.0141171
+internal-833 seq2368 0.0539082
+internal-833 seq2370 0.0841333
+internal-831 seq2376 0.0297026
+internal-827 internal-834 0.262349
+internal-834 seq2343 0.24308
+internal-834 internal-835 0.0989955
+internal-835 seq3491 0.506812
+internal-835 seq2394 0.183073
+internal-826 internal-836 0.142708
+internal-836 seq2396 0.537105
+internal-836 internal-837 0.111403
+internal-837 internal-838 0.148965
+internal-838 seq2283 0.521903
+internal-838 seq2344 0.416452
+internal-837 internal-839 0.20702
+internal-839 internal-840 0.030819
+internal-840 internal-841 0.0235427
+internal-841 seq2341 0.456498
+internal-841 internal-842 0.0907795
+internal-842 internal-843 0.280435
+internal-843 seq2308 0.189187
+internal-843 internal-844 0.0322662
+internal-844 seq2380 0.190771
+internal-844 seq2319 0.188902
+internal-842 internal-845 0.287999
+internal-845 seq2305 0.189649
+internal-845 internal-846 0.0863285
+internal-846 seq2312 0.149592
+internal-846 seq2313 0.0642853
+internal-840 internal-847 0.138076
+internal-847 seq2337 0.393398
+internal-847 seq2381 0.596569
+internal-839 internal-848 0.158516
+internal-848 internal-849 0.255653
+internal-849 seq2388 0.116584
+internal-849 internal-850 0.0306488
+internal-850 seq2329 0.145117
+internal-850 seq2332 0.14679
+internal-848 internal-851 0.237475
+internal-851 seq2304 0.154708
+internal-851 seq2350 0.187344
+internal-758 internal-852 0.0847381
+internal-852 internal-853 0.181629
+internal-853 internal-854 0.423419
+internal-854 seq3759 0.574688
+internal-854 internal-855 0.121363
+internal-855 internal-856 0.542165
+internal-856 internal-857 0.0481403
+internal-857 seq3773 0.113835
+internal-857 internal-858 0.371
+internal-858 seq3788 0.0386528
+internal-858 internal-859 0.0520131
+internal-859 seq3761 0.0547907
+internal-859 seq3768 0.246507
+internal-856 seq3775 0.036854
+internal-855 seq3769 0.549753
+internal-853 internal-860 0.464727
+internal-860 seq5186 0.50772
+internal-860 internal-861 0.492003
+internal-861 seq5180 0.24933
+internal-861 internal-862 0.0615667
+internal-862 seq5181 0.472609
+internal-862 internal-863 0.108895
+internal-863 internal-864 0.12611
+internal-864 seq5178 0.192041
+internal-864 seq5185 0.289229
+internal-863 internal-865 0.090607
+internal-865 seq5175 0.321739
+internal-865 seq5176 0.336226
+internal-852 internal-866 0.0733547
+internal-866 internal-867 0.254725
+internal-867 internal-868 0.181534
+internal-868 seq2577 0.818272
+internal-868 internal-869 0.403819
+internal-869 internal-870 0.393633
+internal-870 seq2210 0.103334
+internal-870 seq2211 0.241524
+internal-869 internal-871 0.32353
+internal-871 seq2212 0.114395
+internal-871 seq2217 0.15179
+internal-867 internal-872 0.179482
+internal-872 internal-873 0.129364
+internal-873 seq2220 0.410835
+internal-873 internal-874 0.472988
+internal-874 seq2216 0.425754
+internal-874 internal-875 0.145243
+internal-875 seq2227 5e-09
+internal-875 seq2231 0.227754
+internal-872 seq2219 0.88357
+internal-866 internal-876 0.510094
+internal-876 internal-877 0.515513
+internal-877 seq4079 0.190347
+internal-877 internal-878 0.0447453
+internal-878 internal-879 0.066467
+internal-879 internal-880 1.7e-08
+internal-880 seq4086 0.0229456
+internal-880 internal-881 0.0309183
+internal-881 seq4074 0.139718
+internal-881 internal-882 0.0402664
+internal-882 seq4104 0.10882
+internal-882 seq4096 0.13598
+internal-879 seq4094 0.140886
+internal-878 seq4102 0.159943
+internal-876 internal-883 0.440265
+internal-883 seq4140 0.241741
+internal-883 internal-884 0.12146
+internal-884 internal-885 0.0237193
+internal-885 internal-886 0.0225614
+internal-886 internal-887 0.016669
+internal-887 internal-888 0.10344
+internal-888 internal-889 0.00910933
+internal-889 internal-890 0.0195029
+internal-890 internal-891 0.0170338
+internal-891 seq4152 0.0951056
+internal-891 internal-892 0.0545079
+internal-892 seq4122 0.113361
+internal-892 internal-893 0.15592
+internal-893 internal-894 0.0566484
+internal-894 seq4161 0.0535066
+internal-894 seq4185 0.0946098
+internal-893 internal-895 0.022848
+internal-895 seq4150 0.092241
+internal-895 seq4200 0.183711
+internal-890 internal-896 0.0427775
+internal-896 seq4067 0.0996307
+internal-896 seq4204 0.174699
+internal-889 seq4164 0.0933175
+internal-888 internal-897 0.0497267
+internal-897 seq4155 0.105212
+internal-897 seq4144 0.280576
+internal-887 seq4179 0.171688
+internal-886 seq4119 0.083791
+internal-885 internal-898 0.0816114
+internal-898 seq4060 0.40828
+internal-898 seq4187 0.247427
+internal-884 seq4167 0.148637
+internal-509 internal-899 0.209597
+internal-899 internal-900 0.504948
+internal-900 internal-901 0.0384447
+internal-901 internal-902 0.151643
+internal-902 internal-903 0.171644
+internal-903 seq1970 0.482048
+internal-903 seq1972 0.237214
+internal-902 internal-904 0.103596
+internal-904 seq1993 0.346429
+internal-904 internal-905 0.0397562
+internal-905 seq1989 0.32606
+internal-905 internal-906 0.056741
+internal-906 internal-907 0.024524
+internal-907 internal-908 0.0760725
+internal-908 seq2014 0.279714
+internal-908 seq2010 0.241864
+internal-907 internal-909 0.0459907
+internal-909 seq2009 0.142807
+internal-909 seq2041 0.198696
+internal-906 internal-910 0.0696426
+internal-910 seq2016 0.16888
+internal-910 seq2064 0.0489618
+internal-901 internal-911 0.282987
+internal-911 seq1977 0.262413
+internal-911 seq3379 0.581782
+internal-900 internal-912 0.0831359
+internal-912 seq1984 0.634458
+internal-912 internal-913 0.0560797
+internal-913 internal-914 0.174106
+internal-914 seq3072 0.415544
+internal-914 internal-915 0.0812547
+internal-915 seq3022 0.365235
+internal-915 internal-916 0.0862083
+internal-916 internal-917 0.175586
+internal-917 seq3026 0.394475
+internal-917 internal-918 0.047651
+internal-918 internal-919 0.0623702
+internal-919 seq3015 0.211049
+internal-919 internal-920 0.0509567
+internal-920 seq3060 0.143266
+internal-920 seq3064 0.187389
+internal-918 internal-921 0.0174317
+internal-921 internal-922 0.0242829
+internal-922 internal-923 0.0512201
+internal-923 seq3002 0.234033
+internal-923 seq3041 0.232357
+internal-922 internal-924 0.0504761
+internal-924 seq3080 0.172524
+internal-924 internal-925 0.047389
+internal-925 seq3053 0.201792
+internal-925 seq3081 0.117464
+internal-921 internal-926 0.101524
+internal-926 seq3066 0.101743
+internal-926 internal-927 0.041614
+internal-927 seq3038 0.0471454
+internal-927 seq3044 0.0929255
+internal-916 internal-928 0.0820387
+internal-928 internal-929 0.402077
+internal-929 seq3067 0.532556
+internal-929 seq3076 0.872183
+internal-928 seq3001 0.439393
+internal-913 internal-930 0.308468
+internal-930 seq2001 0.23863
+internal-930 seq2019 0.341463
+internal-899 internal-931 0.0950911
+internal-931 internal-932 0.163092
+internal-932 internal-933 0.303614
+internal-933 seq5079 1.33811
+internal-933 internal-934 0.416586
+internal-934 seq2168 0.599365
+internal-934 seq2173 0.337088
+internal-932 internal-935 0.254866
+internal-935 seq2160 1.00915
+internal-935 seq2531 1.25183
+internal-931 internal-936 0.303264
+internal-936 seq3102 0.899493
+internal-936 seq3105 0.834688
+internal-508 internal-937 0.126869
+internal-937 internal-938 0.0529502
+internal-938 seq3971 1.44196
+internal-938 internal-939 0.0709584
+internal-939 internal-940 0.0394214
+internal-940 internal-941 0.125015
+internal-941 seq2768 0.838722
+internal-941 internal-942 0.0976795
+internal-942 internal-943 0.164796
+internal-943 seq1819 0.81366
+internal-943 internal-944 0.502931
+internal-944 seq1570 0.244387
+internal-944 seq1572 0.35279
+internal-942 internal-945 0.139844
+internal-945 internal-946 0.188526
+internal-946 internal-947 0.341599
+internal-947 seq384 0.392853
+internal-947 seq1508 0.434705
+internal-946 internal-948 0.165099
+internal-948 internal-949 0.225725
+internal-949 seq1177 0.378702
+internal-949 seq1184 0.358868
+internal-948 internal-950 0.0632266
+internal-950 seq1817 0.669333
+internal-950 internal-951 0.111424
+internal-951 seq1199 0.557408
+internal-951 internal-952 0.149895
+internal-952 seq1195 0.370378
+internal-952 seq3669 0.263866
+internal-945 internal-953 0.723139
+internal-953 internal-954 0.0411572
+internal-954 internal-955 0.109161
+internal-955 seq1309 0.0794204
+internal-955 internal-956 0.0158756
+internal-956 internal-957 0.096469
+internal-957 seq1300 0.112393
+internal-957 internal-958 0.0892084
+internal-958 seq1330 0.1023
+internal-958 seq1363 0.142249
+internal-956 seq1341 0.0691465
+internal-954 seq1500 0.0746953
+internal-953 internal-959 0.217798
+internal-959 internal-960 0.036168
+internal-960 seq1504 0.170294
+internal-960 internal-961 0.0317063
+internal-961 seq1305 0.210943
+internal-961 internal-962 0.0312137
+internal-962 seq290 0.0920907
+internal-962 seq1337 0.170901
+internal-959 seq1329 0.056947
+internal-940 internal-963 0.122579
+internal-963 internal-964 0.115721
+internal-964 seq1960 0.711159
+internal-964 seq5235 0.731459
+internal-963 internal-965 0.0873167
+internal-965 internal-966 0.250043
+internal-966 internal-967 0.0932704
+internal-967 seq3300 0.513379
+internal-967 internal-968 0.169669
+internal-968 internal-969 0.150437
+internal-969 seq2144 0.0209047
+internal-969 internal-970 0.190979
+internal-970 internal-971 0.0167281
+internal-971 seq2142 0.297405
+internal-971 internal-972 0.0408257
+internal-972 seq2149 0.0471285
+internal-972 seq2137 0.583984
+internal-970 internal-973 0.118736
+internal-973 seq2138 0.113081
+internal-973 seq2140 0.0464195
+internal-968 internal-974 0.0218111
+internal-974 seq2154 0.155161
+internal-974 internal-975 0.117226
+internal-975 seq2139 0.0962181
+internal-975 seq2515 0.0850197
+internal-966 internal-976 0.147039
+internal-976 seq1196 0.316849
+internal-976 internal-977 0.277366
+internal-977 seq1929 0.324894
+internal-977 internal-978 0.0553113
+internal-978 seq1927 0.281471
+internal-978 internal-979 0.127184
+internal-979 seq1966 0.179013
+internal-979 seq3171 0.228985
+internal-965 internal-980 0.14807
+internal-980 internal-981 0.356391
+internal-981 seq2983 0.703339
+internal-981 internal-982 0.0905498
+internal-982 seq387 0.503835
+internal-982 seq1602 0.440043
+internal-980 internal-983 0.00163177
+internal-983 internal-984 0.512806
+internal-984 internal-985 0.112757
+internal-985 seq1673 0.0566291
+internal-985 internal-986 0.0278453
+internal-986 seq4232 0.124157
+internal-986 internal-987 0.015837
+internal-987 seq1672 0.0663385
+internal-987 internal-988 0.0209698
+internal-988 seq1666 0.0624838
+internal-988 seq3320 0.0747791
+internal-984 internal-989 0.150139
+internal-989 seq2610 0.271166
+internal-989 seq2613 0.0415809
+internal-983 seq1826 0.921311
+internal-939 internal-990 0.349969
+internal-990 seq1264 0.678711
+internal-990 internal-991 0.038302
+internal-991 seq1709 0.509128
+internal-991 internal-992 0.171101
+internal-992 internal-993 0.448497
+internal-993 seq1269 0.158181
+internal-993 seq2523 0.385653
+internal-992 seq1276 0.42151
+internal-937 internal-994 0.11174
+internal-994 internal-995 0.285209
+internal-995 seq2988 0.827377
+internal-995 internal-996 0.324718
+internal-996 seq1918 0.157713
+internal-996 seq1922 0.162918
+internal-994 internal-997 0.242645
+internal-997 internal-998 0.141657
+internal-998 seq2402 0.416525
+internal-998 internal-999 0.047745
+internal-999 seq2439 0.374819
+internal-999 seq2399 0.660392
+internal-997 internal-1000 0.316504
+internal-1000 internal-1001 0.340337
+internal-1001 internal-1002 0.0718253
+internal-1002 seq2547 0.269198
+internal-1002 internal-1003 0.128323
+internal-1003 seq2549 0.134821
+internal-1003 internal-1004 0.0455717
+internal-1004 internal-1005 0.0758035
+internal-1005 seq2543 0.104254
+internal-1005 seq2544 0.0786959
+internal-1004 seq2556 0.175798
+internal-1001 internal-1006 0.0747293
+internal-1006 seq2574 0.247715
+internal-1006 internal-1007 0.301442
+internal-1007 seq2557 0.0745749
+internal-1007 seq2558 0.0464826
+internal-1000 internal-1008 0.197222
+internal-1008 internal-1009 0.263032
+internal-1009 seq2421 0.142777
+internal-1009 internal-1010 0.212914
+internal-1010 seq2571 0.164551
+internal-1010 seq2572 0.0429619
+internal-1008 internal-1011 0.0888583
+internal-1011 internal-1012 0.215615
+internal-1012 seq2407 0.232452
+internal-1012 seq2408 0.162804
+internal-1011 internal-1013 0.220375
+internal-1013 seq2431 0.0960592
+internal-1013 internal-1014 0.0865822
+internal-1014 seq2420 0.043861
+internal-1014 internal-1015 0.0399754
+internal-1015 seq2401 0.057845
+internal-1015 seq2434 0.432626
+root internal-1016 0.208116
+internal-1016 seq231 1.4799
+internal-1016 internal-1017 0.15613
+internal-1017 seq566 1.51453
+internal-1017 internal-1018 0.200737
+internal-1018 seq3247 1.17525
+internal-1018 seq3852 0.669858
+root internal-1019 0.153914
+internal-1019 internal-1020 0.235844
+internal-1020 seq3116 1.4318
+internal-1020 seq3303 1.07812
+internal-1019 internal-1021 0.211945
+internal-1021 seq2803 1.617
+internal-1021 internal-1022 0.51922
+internal-1022 seq428 0.305177
+internal-1022 seq465 0.412283

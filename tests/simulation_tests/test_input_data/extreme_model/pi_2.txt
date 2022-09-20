@@ -1,0 +1,5 @@
+state   prob
+SS  0.25
+ST  0.25
+TS  0.25
+TT  0.25

@@ -1,0 +1,9 @@
+4 nodes
+internal-1
+seq1
+seq2
+seq3
+3 edges
+internal-1 seq1 3.0
+internal-1 seq2 4.0
+internal-1 seq3 5.0

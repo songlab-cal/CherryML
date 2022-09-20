@@ -1,0 +1,10 @@
+# STOCKHOLM 1.0
+#=GF NH ((5a0l_1_A__rc_10-seq1:0.866403,5a0l_1_A__rc_10-seq30:0.054708)5a0l_1_A__rc_10-internal-2:2.4099,5a0l_1_A__rc_10-seq119:0.0106338,((5a0l_1_A__rc_10-seq115:1.43164,5a0l_1_A__rc_10-seq110:0.0662962)5a0l_1_A__rc_10-internal-4:1.26508e-08,(5a0l_1_A__rc_10-seq80:0.214941,(5a0l_1_A__rc_10-seq55:0.424081,5a0l_1_A__rc_10-seq60:0.340447)5a0l_1_A__rc_10-internal-6:1.03839)5a0l_1_A__rc_10-internal-5:0.684381)5a0l_1_A__rc_10-internal-3:0.660561);
+5a0l_1_A__rc_10-seq1 FRAW
+5a0l_1_A__rc_10-seq30 HNAF
+5a0l_1_A__rc_10-seq119 -PGY
+5a0l_1_A__rc_10-seq115 -AKL
+5a0l_1_A__rc_10-seq110 -PN-
+5a0l_1_A__rc_10-seq80 KANY
+5a0l_1_A__rc_10-seq55 ET-T
+5a0l_1_A__rc_10-seq60 EEPT

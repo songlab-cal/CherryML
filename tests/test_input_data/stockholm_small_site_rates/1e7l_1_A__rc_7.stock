@@ -1,0 +1,10 @@
+# STOCKHOLM 1.0
+#=GF NH (1e7l_1_A__rc_7-seq49:2.73691e-09,(1e7l_1_A__rc_7-seq21:2.73691e-09,(1e7l_1_A__rc_7-seq1:0.0276714,(1e7l_1_A__rc_7-seq3:0.225791,1e7l_1_A__rc_7-seq5:0.0443005)1e7l_1_A__rc_7-internal-4:0.0496689)1e7l_1_A__rc_7-internal-3:0.420862)1e7l_1_A__rc_7-internal-2:0.751001,(1e7l_1_A__rc_7-seq99:2.73691e-09,(1e7l_1_A__rc_7-seq58:0.155434,1e7l_1_A__rc_7-seq112:0.247401)1e7l_1_A__rc_7-internal-6:0.163334)1e7l_1_A__rc_7-internal-5:0.350247);
+1e7l_1_A__rc_7-seq49 KIE
+1e7l_1_A__rc_7-seq21 QIE
+1e7l_1_A__rc_7-seq1 QIE
+1e7l_1_A__rc_7-seq3 QLE
+1e7l_1_A__rc_7-seq5 QIE
+1e7l_1_A__rc_7-seq99 KIE
+1e7l_1_A__rc_7-seq58 KIL
+1e7l_1_A__rc_7-seq112 --E

@@ -1,0 +1,13 @@
+6 nodes
+internal-0
+internal-1
+internal-2
+seq1
+seq2
+seq3
+5 edges
+internal-0 internal-1 1.0
+internal-1 internal-2 2.0
+internal-2 seq1 3.0
+internal-2 seq2 4.0
+internal-1 seq3 5.0
