@@ -22,7 +22,7 @@ python -m cherryml \
     --cache_dir _cache_demo
 ```
 
-The learned rate matrix is written to the `output_path`, in this case `learned_rate_matrix.txt`. The directories `msa_dir`, `tree_dir`, `site_rates_dir` should contain one file per family, named `[family_name].txt`, where `[family_name]` is the name of the family. Check out the contents of the directories in `demo_data/`; the demo data is based on real data obtained from Pfam. The format of the files in these diretories is as follows:
+The learned rate matrix is written to the `output_path`, in this case `learned_rate_matrix.txt`. The directories `msa_dir`, `tree_dir`, `site_rates_dir` should contain one file per family, named `[family_name].txt`, where `[family_name]` is the name of the family. Check out the contents of the directories in `demo_data/` for an example; this demo data is based on real data obtained from Pfam. The format of the files in these directories should be as follows:
 
 Each file in `msa_dir` should list the protein sequences in a family following the format in the following toy example:
 ```
