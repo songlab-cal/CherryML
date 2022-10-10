@@ -134,7 +134,7 @@ def cherryml_public_api(
     following the format in the following example:
     ```
     5 sites
-    1.0 1.0 1.0 1.0 1.0
+    1.0 0.8 1.2 0.7 1.05
     ```
 
     Args:

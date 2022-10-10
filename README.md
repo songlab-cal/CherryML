@@ -56,7 +56,7 @@ This format is intended to be easier to parse than the newick format. It first l
 Each file in `site_rates_dir` should list the site rates for a family following the format in the following toy example:
 ```
 5 sites
-1.0 1.0 1.0 1.0 1.0
+1.0 0.8 1.2 0.7 1.05
 ```
 
 The `cache_dir` is used to store intermediate computations for future runs. Caching is transparent to the user; just make sure to use a different `cache_dir` for different datasets. If not provided, a temporary directory will be used as the caching directory (so, all intermediate data will be lost).
