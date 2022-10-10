@@ -71,7 +71,7 @@ python -m cherryml \
     --cache_dir _cache_demo
 ```
 
-FastTree will be run with 20 rate categories and with the LG rate matrix. Briefly, all intermediate data, such as the trees estimated with FastTree will be saved in the `cache_dir`, and will be re-used by CherryML if they are needed in the future.
+FastTree will (by default - this can be changed by using the full API described below) be run with 20 rate categories and with the LG rate matrix. Briefly, all intermediate data, such as the trees estimated with FastTree will be saved in the `cache_dir`, and will be re-used by CherryML if they are needed in the future.
 
 The CherryML API provides control over many aspects of the rate estimation process, such as the number of processes used to parallelize tree estimation, the number of rounds used to iterate tree estiation and rate estimation, among others. These options are all described below or by running `python -m cherryml --help`.
 
