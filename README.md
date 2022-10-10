@@ -59,7 +59,7 @@ Each file in `site_rates_dir` should list the site rates for a family following 
 1.0 0.8 1.2 0.7 1.05
 ```
 
-The `cache_dir` is used to store intermediate computations for future runs. Caching is transparent to the user; just make sure to use a different `cache_dir` for different datasets. If not provided, a temporary directory will be used as the caching directory (so, all intermediate data will be lost).
+The `cache_dir` is used to store intermediate computations for future runs. Caching is transparent to the user; just make sure to use a different `cache_dir` for different datasets. If not provided, a temporary directory will be used as the caching directory (in which case all intermediate data will be lost).
 
 If you have not estimated trees and site rates already, cherryml will do that for you using FastTree. You can simply run:
 
