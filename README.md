@@ -71,7 +71,13 @@ python -m cherryml \
     --cache_dir _cache_demo
 ```
 
-FastTree will by default be run with 20 rate categories and with the LG rate matrix (this can be changed by using the full API described later). Briefly, all intermediate data, such as the trees estimated with FastTree will be saved in the `cache_dir`, and will be re-used by CherryML if they are needed in the future.
+FastTree will by default be run with 20 rate categories and with the LG rate matrix (this can be changed by using the full API described later). The trees estimated with FastTree will be saved in the `cache_dir`, and will be re-used by CherryML if they are needed in future runs with the same data (for example when learning a rate matrix on a subset of families, as done via the `--families` argument, or when learning a rate matrix on a subset of sites, as done via the `--sites_subset_dir` argument; clearly trees do not need to be reestimated in this case!).
+
+To learn a rate matrix on only a subset of sites from each family (for example, when learning a domain-specific or structure-specific rate matrix), you can provide the indices of the sites used for each family with the `--sites_subset_dir` argument. Each file in `sites_subset_dir` should list the sites (0-based) for a family following the format in the following toy example:
+```
+3 sites
+0 1 4
+```
 
 The CherryML API provides control over many aspects of the rate estimation process, such as the number of processes used to parallelize tree estimation, the number of rounds used to iterate tree estiation and rate estimation, among others. These options are all described below or by running `python -m cherryml --help`.
 
@@ -158,6 +164,11 @@ The CherryML API provides extensive functionality through additional flags, whic
                         The number of epochs of the PyTorch optimizer. (default: 500)
   --minimum_distance_for_nontrivial_contact MINIMUM_DISTANCE_FOR_NONTRIVIAL_CONTACT
                         Minimum distance in primary structure used to determine if two site are in non-trivial contact. (default: 7)
+  --families FAMILIES   Subset of families on which to run rate matrix estimation. (default: None)
+  --sites_subset_dir SITES_SUBSET_DIR
+                        Directory where the subset of sites from each family used to learn the rate matrix are specified. Currently only implemented for the LG
+                        model. This enables learning e.g. domain-specific or structure-specific rate matrices. See README at https://github.com/songlab-
+                        cal/CherryML for the expected format of these files. (default: None)
 ```
 
 # Reproducing all figures in our paper

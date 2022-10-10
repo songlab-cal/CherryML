@@ -6,7 +6,7 @@ import os
 import sys
 import tempfile
 from functools import partial
-from typing import Optional
+from typing import List, Optional
 
 from cherryml import caching, utils
 from cherryml.estimation_end_to_end import (
@@ -63,6 +63,7 @@ def cherryml_public_api(
     sites_subset_dir: Optional[str] = None,
     coevolution_mask_path: Optional[str] = None,
     use_maximal_matching: bool = True,
+    families: Optional[List[str]] = None,
 ) -> str:
     """
     CherryML method applied to the LG model and the co-evolution model.
@@ -152,7 +153,8 @@ def cherryml_public_api(
 
     caching.set_cache_dir(cache_dir)
 
-    families = utils.get_families(msa_dir)
+    if families is None:
+        families = utils.get_families(msa_dir)
 
     if model_name == "LG":
         outputs = lg_end_to_end_with_cherryml_optimizer(

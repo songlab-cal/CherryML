@@ -154,13 +154,26 @@ if __name__ == "__main__":
         default=500,
         help="The number of epochs of the PyTorch optimizer.",  # noqa
     )
-
     parser.add_argument(
         "--minimum_distance_for_nontrivial_contact",
         type=int,
         required=False,
         default=7,
         help="Minimum distance in primary structure used to determine if two site are in non-trivial contact.",  # noqa
+    )
+    parser.add_argument(
+        "--families",
+        type=none_or_value,
+        required=False,
+        default=None,
+        help="Subset of families on which to run rate matrix estimation.",  # noqa
+    )
+    parser.add_argument(
+        "--sites_subset_dir",
+        type=none_or_value,
+        required=False,
+        default=None,
+        help="Directory where the subset of sites from each family used to learn the rate matrix are specified. Currently only implemented for the LG model. This enables learning e.g. domain-specific or structure-specific rate matrices. See README at https://github.com/songlab-cal/CherryML for the expected format of these files.",  # noqa
     )
 
     # Functionality not currently exposed:
@@ -169,7 +182,6 @@ if __name__ == "__main__":
     # parser.add_argument("--cpp_counting_command_line_prefix")
     # parser.add_argument("--cpp_counting_command_line_suffix")
     # parser.add_argument("--optimizer_initialization")
-    # parser.add_argument("--sites_subset_dir")
     # parser.add_argument("--coevolution_mask_path")
     # parser.add_argument("--use_maximal_matching")
 
