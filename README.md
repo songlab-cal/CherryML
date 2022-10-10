@@ -3,13 +3,14 @@
 This package implements the CherryML method as applied to:
 1. The classical LG model of amino acid evolution (involving a $20 \times 20$ rate matrix), as well as
 2. A model of co-evolution at protein contact sites (involving a $400 \times 400$ rate matrix).
-We expect that the CherryML method will be applied to enavble scalable estimation of many more models in the future.
 
-This package also enables reproduction of all results in our paper.
+We expect that the CherryML method will be applied to enable scalable estimation of many models in the future.
+
+This package also enables seamless reproduction of all results in our paper.
 
 # Demo: CherryML applied to the LG model
 
-The following command learns a rate matrix from a set of MSAs, tree, and site rates (try it out!):
+The following command learns a rate matrix from a set of MSAs, trees, and site rates (try it out!):
 
 ```
 python -m cherryml \
@@ -21,9 +22,9 @@ python -m cherryml \
     --cache_dir _cache_demo
 ```
 
-The learned rate matrix is written to the `output_path`, in this case `learned_rate_matrix.txt`. The directories `msa_dir`, `tree_dir`, `site_rates_dir` should contain one file per family, named `[family_name].txt`, where `family_name` is the name of the family. Check out the contents of these directories in `demo_data/` as a real, concrete example. This demo data is based on real data obtained from Pfam. The format of the files in these diretories is as follows:
+The learned rate matrix is written to the `output_path`, in this case `learned_rate_matrix.txt`. The directories `msa_dir`, `tree_dir`, `site_rates_dir` should contain one file per family, named `[family_name].txt`, where `[family_name]` is the name of the family. Check out the contents of the directories in `demo_data/`; the demo data is based on real data obtained from Pfam. The format of the files in these diretories is as follows:
 
-The files in `msa_dir` should list the protein sequences in each family following the format in the following toy example:
+Each file in `msa_dir` should list the protein sequences in a family following the format in the following toy example:
 ```
 >seq1
 TTLLS
@@ -34,7 +35,7 @@ SSIIS
 ```
 All sequences should have the same length.
 
-The files in `tree_dir` should list the trees for in each family following the format in the following toy example:
+Each file in `tree_dir` should list the tree for a family following the format in the following toy example:
 ```
 6 nodes
 internal-0
@@ -50,17 +51,17 @@ internal-2 seq1 3.0
 internal-2 seq2 4.0
 internal-1 seq3 5.0
 ```
-This format is intended to be easier to parse than the newick format. It first lists the node in the tree, and then the edges with their length.
+This format is intended to be easier to parse than the newick format. It first lists the nodes in the tree, and then the edges in the tree with their lengths.
 
-The files in `site_rates_dir` should list the site rates for in each family following the format in the following toy example:
+Each files in `site_rates_dir` should list the site rates for a family following the format in the following toy example:
 ```
 5 sites
 1.0 1.0 1.0 1.0 1.0
 ```
 
-The `cache_dir` is used to store intermediate computations for future runs. Caching is transparent to the user. If not provided, a temporary directory will be used as the caching directory.
+The `cache_dir` is used to store intermediate computations for future runs. Caching is transparent to the user; just make sure to use a different `cache_dir` for different datasets. If not provided, a temporary directory will be used as the caching directory (so, all intermediate data will be lost).
 
-If you have not estimated trees and site rates already, we will do that for you using FastTree. You can simply run:
+If you have not estimated trees and site rates already, cherryml will do that for you using FastTree. You can simply run:
 
 ```
 python -m cherryml \
@@ -70,11 +71,13 @@ python -m cherryml \
     --cache_dir _cache_demo
 ```
 
-FastTree will be run with 20 rate categories and with the LG rate matrix. Briefly, all intermediate data, such as the trees estimated with FastTree will be saved in the `cache_dir`, and will be re-used by CherryML if they are needed in the future. Make sure to use a different `cache_dir` for different datasets.
+FastTree will be run with 20 rate categories and with the LG rate matrix. Briefly, all intermediate data, such as the trees estimated with FastTree will be saved in the `cache_dir`, and will be re-used by CherryML if they are needed in the future.
+
+The cherryml API provides control over many aspects of the rate estimation process, such as the number of processes used to parallelize tree estimation, the number of rounds used to iterate tree estiation and rate estimation, among others. These options are all described below or by running `python -m cherryml --help`.
 
 # Demo: CherryML applied to the co-evolution model
 
-To learn a coevolution model, this is just like for the LG model, but you need to set `--model_name co-evolution` and provide the directory with the contact maps:
+To learn a coevolution model, you just need to set `--model_name co-evolution` and provide the directory with the contact maps:
 
 ```
 python -m cherryml \
@@ -87,7 +90,7 @@ python -m cherryml \
     --cache_dir _cache_demo
 ```
 
-The files in `contact_map_dir` should list the contact map for each family following the format in the following toy example:
+Each files in `contact_map_dir` should list the contact map for a family following the format in the following toy example:
 ```
 5 sites
 10101
@@ -97,9 +100,9 @@ The files in `contact_map_dir` should list the contact map for each family follo
 10011
 ```
 
-As before, if you have not estiamted trees and site rates already, you can omit the `tree_dir` and `site_rates_dir` and we will estimate them for you.
+As before, if you have not estimated trees already, you can omit the `tree_dir` and cherryml will estimate these for you. (In this case, we recommend using `--num_rate_categories 1` since the coevolution model does not model site rate variation.)
 
-# Advanced options
+# Full API
 
 The CherryML API provides extensive functionality through additional flags, which we describe below (this is shown when running `python -m cherryml --help`):
 

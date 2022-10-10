@@ -1,0 +1,4093 @@
+2046 nodes
+internal-1
+internal-2
+internal-3
+seq1341
+internal-4
+seq1338
+internal-5
+seq1346
+internal-6
+seq1345
+seq1348
+internal-7
+seq1199
+seq633
+internal-8
+internal-9
+internal-10
+seq677
+seq1344
+internal-11
+internal-12
+internal-13
+internal-14
+seq1406
+seq1474
+internal-15
+seq1417
+internal-16
+seq1299
+internal-17
+internal-18
+internal-19
+seq676
+seq1404
+internal-20
+seq1308
+internal-21
+internal-22
+seq675
+internal-23
+seq1306
+internal-24
+seq1319
+seq1414
+seq1298
+internal-25
+seq1310
+seq1294
+internal-26
+internal-27
+seq685
+seq1182
+internal-28
+internal-29
+seq1195
+seq1325
+internal-30
+internal-31
+seq1191
+internal-32
+seq1184
+seq1197
+internal-33
+seq1193
+seq1192
+seq1289
+internal-34
+seq1302
+seq1405
+internal-35
+internal-36
+internal-37
+seq1361
+internal-38
+internal-39
+internal-40
+seq1376
+internal-41
+internal-42
+seq1392
+seq1394
+internal-43
+seq1377
+seq1384
+internal-44
+internal-45
+seq1368
+internal-46
+seq1482
+internal-47
+seq1369
+seq695
+internal-48
+seq1383
+internal-49
+seq659
+seq1353
+seq1379
+internal-50
+seq1327
+seq1407
+internal-51
+internal-52
+internal-53
+internal-54
+internal-55
+seq1250
+seq1254
+seq1265
+internal-56
+internal-57
+internal-58
+internal-59
+seq1401
+internal-60
+internal-61
+seq1256
+seq1257
+seq1466
+internal-62
+seq1472
+seq1467
+internal-63
+seq1263
+seq1267
+seq670
+internal-64
+internal-65
+seq1085
+seq1086
+internal-66
+seq1262
+seq1271
+internal-67
+internal-68
+internal-69
+internal-70
+internal-71
+internal-72
+seq682
+internal-73
+seq1117
+internal-74
+seq587
+seq1113
+internal-75
+internal-76
+internal-77
+internal-78
+seq1109
+internal-79
+seq1121
+internal-80
+internal-81
+seq578
+seq1118
+internal-82
+seq1101
+seq1106
+internal-83
+seq1108
+internal-84
+seq698
+internal-85
+seq1112
+seq1127
+internal-86
+internal-87
+seq579
+internal-88
+seq575
+seq1100
+seq583
+seq584
+internal-89
+seq688
+internal-90
+seq1398
+internal-91
+seq1423
+seq1424
+internal-92
+seq658
+internal-93
+internal-94
+seq1240
+internal-95
+seq1218
+internal-96
+seq1233
+internal-97
+seq1217
+internal-98
+internal-99
+internal-100
+internal-101
+seq643
+seq640
+seq1229
+internal-102
+seq1231
+seq648
+seq1230
+internal-103
+seq1225
+internal-104
+seq700
+seq1215
+seq1201
+internal-105
+internal-106
+seq1275
+internal-107
+internal-108
+seq1287
+seq1473
+internal-109
+internal-110
+seq1094
+seq1277
+internal-111
+internal-112
+seq1284
+internal-113
+seq1282
+seq1281
+seq1274
+internal-114
+internal-115
+seq663
+seq664
+internal-116
+internal-117
+internal-118
+internal-119
+seq1081
+internal-120
+internal-121
+seq1078
+internal-122
+seq921
+seq924
+internal-123
+internal-124
+internal-125
+internal-126
+seq1464
+internal-127
+seq1462
+seq1465
+internal-128
+seq1067
+seq2365
+internal-129
+internal-130
+seq1070
+seq1071
+internal-131
+internal-132
+seq1057
+internal-133
+seq1059
+internal-134
+seq1058
+seq1060
+internal-135
+seq1056
+internal-136
+seq920
+seq1080
+internal-137
+seq1066
+internal-138
+internal-139
+seq173
+internal-140
+seq167
+internal-141
+internal-142
+internal-143
+seq566
+seq569
+internal-144
+seq163
+seq565
+seq990
+internal-145
+seq559
+internal-146
+seq1087
+seq1088
+internal-147
+internal-148
+internal-149
+internal-150
+internal-151
+internal-152
+internal-153
+internal-154
+internal-155
+internal-156
+seq76
+internal-157
+seq367
+seq758
+internal-158
+internal-159
+internal-160
+seq385
+seq801
+internal-161
+internal-162
+seq92
+internal-163
+seq60
+seq306
+internal-164
+internal-165
+seq233
+seq238
+internal-166
+seq20
+seq57
+internal-167
+internal-168
+internal-169
+internal-170
+internal-171
+internal-172
+internal-173
+internal-174
+seq87
+internal-175
+internal-176
+internal-177
+internal-178
+seq294
+seq715
+internal-179
+seq5
+seq767
+internal-180
+seq83
+internal-181
+internal-182
+seq728
+seq1008
+seq368
+internal-183
+seq835
+internal-184
+seq302
+seq401
+internal-185
+internal-186
+seq735
+internal-187
+internal-188
+internal-189
+seq744
+seq759
+internal-190
+seq55
+internal-191
+seq93
+internal-192
+seq325
+internal-193
+internal-194
+internal-195
+internal-196
+seq207
+seq332
+internal-197
+seq300
+internal-198
+internal-199
+seq321
+internal-200
+seq323
+internal-201
+internal-202
+seq299
+internal-203
+internal-204
+seq196
+internal-205
+seq288
+seq705
+seq301
+internal-206
+seq750
+seq328
+seq298
+seq339
+internal-207
+seq326
+internal-208
+seq1288
+internal-209
+seq109
+seq89
+internal-210
+seq877
+seq327
+seq54
+internal-211
+seq203
+seq396
+internal-212
+seq795
+seq818
+internal-213
+internal-214
+seq110
+seq389
+internal-215
+seq733
+internal-216
+seq1
+seq784
+internal-217
+internal-218
+seq354
+seq384
+internal-219
+internal-220
+seq53
+seq826
+internal-221
+internal-222
+internal-223
+seq9
+seq782
+internal-224
+seq741
+internal-225
+seq200
+internal-226
+seq392
+seq739
+internal-227
+seq221
+internal-228
+internal-229
+seq65
+internal-230
+seq743
+internal-231
+seq751
+seq749
+internal-232
+seq372
+seq781
+internal-233
+internal-234
+internal-235
+seq1007
+internal-236
+internal-237
+seq23
+seq43
+seq432
+internal-238
+seq1036
+internal-239
+seq755
+seq37
+internal-240
+internal-241
+internal-242
+internal-243
+internal-244
+seq32
+seq77
+seq1003
+seq119
+internal-245
+seq1002
+internal-246
+seq29
+seq245
+internal-247
+seq1004
+seq35
+internal-248
+seq102
+internal-249
+seq533
+seq822
+internal-250
+internal-251
+internal-252
+internal-253
+seq343
+seq873
+internal-254
+seq8
+internal-255
+internal-256
+seq64
+seq723
+internal-257
+seq191
+seq778
+internal-258
+seq72
+internal-259
+seq118
+internal-260
+seq117
+internal-261
+seq234
+seq413
+internal-262
+internal-263
+internal-264
+seq419
+seq760
+internal-265
+internal-266
+seq713
+seq712
+internal-267
+seq709
+seq369
+internal-268
+internal-269
+internal-270
+internal-271
+seq192
+seq796
+internal-272
+seq241
+internal-273
+seq428
+seq429
+seq304
+internal-274
+seq190
+internal-275
+seq736
+seq786
+internal-276
+internal-277
+seq246
+internal-278
+seq352
+internal-279
+seq66
+seq764
+internal-280
+seq414
+internal-281
+seq380
+seq1040
+internal-282
+seq346
+internal-283
+internal-284
+seq351
+internal-285
+seq1249
+internal-286
+seq227
+seq388
+internal-287
+seq232
+internal-288
+internal-289
+seq112
+seq558
+seq237
+internal-290
+seq10
+seq68
+internal-291
+internal-292
+internal-293
+internal-294
+seq242
+seq363
+internal-295
+internal-296
+seq224
+internal-297
+seq19
+seq120
+internal-298
+seq340
+internal-299
+seq806
+internal-300
+seq124
+seq255
+internal-301
+internal-302
+seq710
+seq720
+internal-303
+seq338
+seq62
+internal-304
+seq825
+internal-305
+seq816
+internal-306
+seq361
+seq6
+internal-307
+seq516
+seq1082
+internal-308
+internal-309
+internal-310
+internal-311
+internal-312
+internal-313
+seq1016
+seq859
+internal-314
+seq1015
+internal-315
+seq138
+seq903
+internal-316
+internal-317
+seq905
+seq1020
+internal-318
+internal-319
+seq858
+seq860
+internal-320
+internal-321
+seq934
+internal-322
+seq654
+internal-323
+seq909
+internal-324
+seq518
+seq881
+seq895
+internal-325
+seq1012
+seq1045
+internal-326
+internal-327
+internal-328
+internal-329
+seq910
+internal-330
+seq274
+seq915
+internal-331
+seq917
+internal-332
+seq523
+internal-333
+seq273
+seq930
+internal-334
+internal-335
+seq506
+seq899
+internal-336
+seq528
+internal-337
+seq1029
+seq1028
+internal-338
+internal-339
+internal-340
+seq864
+seq865
+internal-341
+seq756
+internal-342
+seq513
+seq906
+internal-343
+seq445
+seq271
+internal-344
+internal-345
+internal-346
+seq123
+internal-347
+internal-348
+seq480
+seq851
+internal-349
+seq452
+internal-350
+seq457
+internal-351
+internal-352
+seq135
+seq845
+internal-353
+internal-354
+seq941
+seq942
+internal-355
+internal-356
+seq466
+seq477
+internal-357
+seq454
+seq944
+internal-358
+internal-359
+internal-360
+seq880
+internal-361
+seq932
+seq879
+internal-362
+internal-363
+internal-364
+internal-365
+internal-366
+internal-367
+seq488
+internal-368
+seq496
+seq492
+internal-369
+internal-370
+internal-371
+seq958
+internal-372
+seq1053
+seq262
+internal-373
+seq259
+seq482
+seq481
+internal-374
+internal-375
+internal-376
+internal-377
+seq462
+seq950
+internal-378
+seq253
+seq983
+internal-379
+seq998
+seq475
+internal-380
+seq571
+internal-381
+internal-382
+seq183
+seq275
+internal-383
+internal-384
+seq158
+internal-385
+seq261
+seq264
+internal-386
+seq152
+internal-387
+seq151
+seq155
+internal-388
+seq937
+internal-389
+seq972
+internal-390
+seq976
+seq977
+internal-391
+internal-392
+internal-393
+seq495
+internal-394
+seq168
+seq995
+internal-395
+seq945
+internal-396
+internal-397
+seq162
+seq988
+internal-398
+seq438
+internal-399
+seq166
+internal-400
+seq436
+seq890
+internal-401
+seq491
+seq1031
+internal-402
+internal-403
+seq468
+seq844
+internal-404
+internal-405
+seq435
+seq884
+internal-406
+internal-407
+internal-408
+seq461
+internal-409
+seq970
+internal-410
+seq148
+seq971
+internal-411
+seq956
+internal-412
+seq871
+seq896
+internal-413
+internal-414
+seq142
+seq846
+internal-415
+seq287
+seq961
+internal-416
+internal-417
+internal-418
+seq954
+internal-419
+seq145
+seq149
+internal-420
+internal-421
+internal-422
+seq456
+seq936
+internal-423
+seq951
+seq966
+seq957
+internal-424
+internal-425
+seq257
+seq530
+seq434
+internal-426
+seq422
+seq1075
+internal-427
+internal-428
+internal-429
+internal-430
+seq1439
+internal-431
+seq1453
+seq1444
+internal-432
+internal-433
+seq1440
+seq1443
+seq1455
+internal-434
+internal-435
+seq3218
+internal-436
+seq2986
+seq3208
+seq3205
+internal-437
+internal-438
+internal-439
+seq2623
+seq2622
+internal-440
+internal-441
+internal-442
+internal-443
+seq2369
+internal-444
+seq2367
+seq2376
+internal-445
+internal-446
+internal-447
+seq2639
+seq2640
+internal-448
+seq2696
+internal-449
+internal-450
+internal-451
+internal-452
+seq3143
+internal-453
+internal-454
+internal-455
+internal-456
+seq2697
+internal-457
+seq2872
+seq2888
+seq2878
+internal-458
+internal-459
+seq2874
+seq2885
+internal-460
+seq2717
+internal-461
+seq2714
+seq2886
+seq2873
+internal-462
+seq2695
+internal-463
+seq2722
+internal-464
+internal-465
+seq2731
+internal-466
+seq2738
+internal-467
+seq2733
+seq2749
+seq2743
+internal-468
+internal-469
+seq2751
+internal-470
+seq3281
+internal-471
+internal-472
+seq3276
+seq3282
+internal-473
+seq3264
+internal-474
+internal-475
+seq3248
+seq3280
+internal-476
+internal-477
+seq3268
+internal-478
+seq3261
+seq3279
+internal-479
+seq3251
+internal-480
+seq3244
+seq3250
+internal-481
+seq3142
+internal-482
+internal-483
+seq3138
+internal-484
+seq3235
+internal-485
+seq2700
+seq3239
+seq3137
+internal-486
+internal-487
+seq2636
+seq2820
+internal-488
+seq2880
+internal-489
+seq2701
+seq2702
+seq3044
+internal-490
+internal-491
+internal-492
+seq2632
+seq2633
+internal-493
+seq3111
+internal-494
+internal-495
+seq3095
+internal-496
+seq3103
+internal-497
+seq3100
+seq3104
+internal-498
+seq3094
+seq3106
+internal-499
+seq3060
+internal-500
+internal-501
+internal-502
+internal-503
+seq1816
+seq2981
+seq2665
+internal-504
+internal-505
+internal-506
+internal-507
+internal-508
+internal-509
+seq1580
+seq1591
+internal-510
+seq1637
+internal-511
+seq2546
+seq2557
+internal-512
+internal-513
+internal-514
+seq1642
+internal-515
+internal-516
+seq1585
+internal-517
+seq1554
+seq1597
+internal-518
+internal-519
+internal-520
+internal-521
+seq1559
+internal-522
+internal-523
+seq1564
+seq1571
+seq1557
+internal-524
+seq1617
+internal-525
+internal-526
+seq1603
+internal-527
+seq1586
+seq1614
+internal-528
+seq1596
+internal-529
+seq1618
+seq2657
+internal-530
+internal-531
+seq1612
+internal-532
+seq1608
+seq1609
+internal-533
+seq1660
+internal-534
+seq1595
+seq1668
+internal-535
+seq1582
+seq2405
+internal-536
+internal-537
+internal-538
+internal-539
+seq2414
+internal-540
+seq2402
+seq2392
+internal-541
+seq2395
+seq2396
+seq2417
+seq2385
+internal-542
+internal-543
+seq2431
+internal-544
+internal-545
+seq2427
+internal-546
+seq2437
+internal-547
+seq2429
+internal-548
+seq1653
+internal-549
+seq2425
+internal-550
+seq2439
+seq2424
+internal-551
+seq2432
+seq2654
+internal-552
+internal-553
+internal-554
+seq1594
+seq1573
+seq1636
+internal-555
+internal-556
+seq2487
+internal-557
+seq2492
+seq2514
+internal-558
+internal-559
+internal-560
+internal-561
+internal-562
+internal-563
+seq2507
+seq2541
+internal-564
+seq2505
+internal-565
+seq2419
+seq2501
+seq2561
+seq2559
+internal-566
+internal-567
+seq2542
+internal-568
+internal-569
+seq2517
+internal-570
+seq2539
+seq2548
+seq2387
+seq2495
+internal-571
+internal-572
+seq2519
+internal-573
+seq2491
+seq2521
+internal-574
+seq2500
+seq2515
+internal-575
+internal-576
+internal-577
+internal-578
+seq1654
+seq1680
+internal-579
+seq1626
+seq1656
+internal-580
+seq1667
+seq1670
+internal-581
+seq1650
+internal-582
+seq1676
+internal-583
+seq1851
+internal-584
+seq2270
+internal-585
+internal-586
+internal-587
+internal-588
+internal-589
+seq3116
+seq3120
+seq3131
+internal-590
+internal-591
+seq2995
+internal-592
+internal-593
+internal-594
+internal-595
+internal-596
+internal-597
+seq3023
+seq3035
+seq2988
+internal-598
+seq3033
+seq3029
+seq3028
+internal-599
+internal-600
+internal-601
+internal-602
+seq3026
+internal-603
+seq3014
+seq3022
+internal-604
+seq3038
+seq2998
+internal-605
+seq3006
+seq3007
+internal-606
+seq3030
+internal-607
+seq2996
+seq3041
+internal-608
+seq3027
+internal-609
+seq3039
+seq3040
+internal-610
+seq3021
+internal-611
+seq3128
+seq3134
+internal-612
+seq3122
+internal-613
+seq2992
+internal-614
+internal-615
+seq3135
+internal-616
+seq3031
+seq3125
+seq3117
+internal-617
+seq2267
+seq2474
+internal-618
+internal-619
+internal-620
+internal-621
+internal-622
+internal-623
+internal-624
+seq2278
+seq2282
+internal-625
+seq2068
+seq2132
+internal-626
+seq2061
+internal-627
+seq2041
+seq2443
+internal-628
+internal-629
+seq2453
+internal-630
+seq2447
+seq2455
+internal-631
+internal-632
+seq2014
+internal-633
+internal-634
+internal-635
+internal-636
+internal-637
+seq2124
+seq2128
+internal-638
+seq2134
+seq2144
+seq2175
+internal-639
+seq2069
+seq2151
+internal-640
+seq2031
+internal-641
+internal-642
+internal-643
+seq2152
+seq2170
+internal-644
+internal-645
+internal-646
+seq2157
+seq2166
+internal-647
+seq2161
+seq2154
+seq2210
+seq2006
+internal-648
+internal-649
+seq2100
+internal-650
+internal-651
+seq2280
+seq2473
+internal-652
+internal-653
+internal-654
+seq2142
+seq2148
+internal-655
+seq2146
+seq2276
+seq2176
+internal-656
+seq2204
+seq2179
+internal-657
+seq2155
+internal-658
+seq2208
+seq2162
+internal-659
+internal-660
+internal-661
+seq2092
+internal-662
+internal-663
+seq2038
+internal-664
+seq2182
+seq2235
+internal-665
+internal-666
+internal-667
+seq2215
+internal-668
+seq2221
+internal-669
+seq2222
+internal-670
+seq2073
+seq2095
+internal-671
+internal-672
+seq2160
+internal-673
+internal-674
+internal-675
+internal-676
+seq2216
+seq2348
+seq2200
+internal-677
+internal-678
+seq2198
+seq2201
+seq2074
+seq2044
+internal-679
+seq2343
+internal-680
+internal-681
+seq2139
+internal-682
+seq2085
+seq2125
+internal-683
+internal-684
+internal-685
+seq2127
+seq2220
+seq2185
+seq2117
+seq2184
+seq2236
+seq2232
+internal-686
+internal-687
+internal-688
+seq1812
+seq2015
+seq2138
+seq2108
+internal-689
+internal-690
+seq2296
+internal-691
+seq1772
+seq2301
+internal-692
+internal-693
+internal-694
+internal-695
+seq1536
+internal-696
+seq1778
+seq1866
+internal-697
+internal-698
+seq1982
+seq2028
+internal-699
+seq1901
+seq1993
+seq1537
+internal-700
+internal-701
+internal-702
+internal-703
+internal-704
+internal-705
+seq1525
+seq1717
+internal-706
+seq1534
+seq2002
+internal-707
+seq1521
+internal-708
+internal-709
+seq2350
+internal-710
+seq1538
+seq1802
+seq2219
+internal-711
+internal-712
+seq1527
+internal-713
+seq1681
+seq1682
+seq1691
+internal-714
+internal-715
+seq2045
+internal-716
+seq2060
+seq2063
+internal-717
+internal-718
+seq1509
+seq1515
+internal-719
+internal-720
+internal-721
+internal-722
+internal-723
+seq2067
+seq2077
+internal-724
+internal-725
+seq1877
+seq1886
+internal-726
+seq1760
+seq1782
+seq2042
+internal-727
+seq2119
+internal-728
+seq2023
+internal-729
+seq2080
+internal-730
+seq1510
+seq2072
+internal-731
+internal-732
+seq1868
+internal-733
+seq2035
+internal-734
+seq1888
+internal-735
+seq1823
+internal-736
+seq1543
+internal-737
+seq1892
+seq1548
+internal-738
+internal-739
+internal-740
+internal-741
+internal-742
+seq1841
+internal-743
+seq2285
+seq2043
+internal-744
+seq1975
+seq2070
+internal-745
+internal-746
+seq1813
+internal-747
+internal-748
+seq2025
+internal-749
+seq2032
+seq2055
+internal-750
+seq1513
+seq1520
+internal-751
+seq1894
+internal-752
+seq2046
+seq1499
+seq2243
+seq1872
+internal-753
+internal-754
+internal-755
+internal-756
+seq1511
+seq1824
+internal-757
+internal-758
+seq1853
+internal-759
+internal-760
+internal-761
+seq1494
+internal-762
+internal-763
+seq1506
+seq1904
+internal-764
+seq1844
+internal-765
+seq1860
+seq1822
+seq1836
+internal-766
+seq1887
+seq1843
+seq1544
+seq2264
+internal-767
+seq1966
+internal-768
+internal-769
+internal-770
+internal-771
+seq1733
+internal-772
+seq1977
+seq1967
+seq1969
+internal-773
+seq1954
+internal-774
+internal-775
+internal-776
+internal-777
+internal-778
+internal-779
+seq1739
+seq1765
+internal-780
+seq1744
+internal-781
+internal-782
+seq1776
+internal-783
+seq1741
+seq1689
+internal-784
+internal-785
+seq1704
+internal-786
+seq1735
+seq1738
+internal-787
+internal-788
+seq1762
+seq1737
+internal-789
+internal-790
+seq1731
+seq1973
+internal-791
+seq1718
+internal-792
+seq2251
+internal-793
+internal-794
+seq2242
+seq2249
+seq2260
+seq2000
+internal-795
+internal-796
+seq1749
+seq1539
+internal-797
+seq1711
+internal-798
+seq1712
+seq1750
+internal-799
+internal-800
+internal-801
+seq1699
+internal-802
+internal-803
+seq1748
+internal-804
+seq1688
+seq1701
+internal-805
+internal-806
+seq1781
+seq1958
+internal-807
+seq1806
+internal-808
+seq1745
+seq1746
+internal-809
+seq1786
+seq1788
+seq1814
+seq1971
+internal-810
+seq1964
+seq1796
+internal-811
+internal-812
+seq2357
+seq2359
+internal-813
+seq2356
+seq2361
+internal-814
+seq2689
+internal-815
+internal-816
+internal-817
+seq3228
+internal-818
+seq3144
+internal-819
+seq3148
+seq3150
+internal-820
+internal-821
+internal-822
+internal-823
+seq2828
+internal-824
+seq2826
+seq3221
+internal-825
+seq2827
+seq3232
+internal-826
+seq3292
+internal-827
+internal-828
+internal-829
+seq2850
+internal-830
+internal-831
+seq2846
+seq2852
+seq2853
+internal-832
+internal-833
+seq2836
+internal-834
+internal-835
+seq3241
+seq3242
+internal-836
+seq2842
+seq2840
+seq2833
+internal-837
+internal-838
+internal-839
+seq3211
+internal-840
+seq3212
+seq3213
+internal-841
+seq2942
+internal-842
+seq2971
+seq2974
+internal-843
+internal-844
+internal-845
+internal-846
+internal-847
+internal-848
+seq2905
+internal-849
+seq3203
+seq3202
+seq2969
+internal-850
+internal-851
+seq2979
+seq2972
+internal-852
+seq2967
+internal-853
+internal-854
+internal-855
+internal-856
+seq2912
+internal-857
+seq2938
+seq3198
+internal-858
+internal-859
+seq3161
+seq3163
+internal-860
+internal-861
+seq3194
+seq2926
+internal-862
+internal-863
+seq3176
+internal-864
+internal-865
+seq3197
+internal-866
+seq3195
+seq3196
+seq3173
+internal-867
+seq3186
+seq3189
+internal-868
+seq3193
+internal-869
+seq2948
+seq2964
+internal-870
+seq2957
+internal-871
+seq2946
+seq2962
+internal-872
+internal-873
+seq2895
+internal-874
+seq3169
+seq3171
+internal-875
+seq2898
+internal-876
+seq2899
+seq3178
+internal-877
+internal-878
+internal-879
+seq2973
+internal-880
+seq2945
+seq2947
+internal-881
+seq2976
+seq2954
+internal-882
+seq3170
+internal-883
+seq2909
+internal-884
+internal-885
+internal-886
+seq2932
+internal-887
+seq2927
+internal-888
+seq2918
+seq2921
+seq2933
+seq2950
+seq2955
+internal-889
+seq2857
+seq2858
+internal-890
+internal-891
+seq3289
+internal-892
+seq2796
+seq2799
+internal-893
+seq2806
+internal-894
+seq3288
+internal-895
+seq2792
+internal-896
+seq2810
+internal-897
+seq2798
+seq3287
+internal-898
+internal-899
+internal-900
+internal-901
+seq1432
+seq1435
+internal-902
+internal-903
+seq2646
+internal-904
+internal-905
+internal-906
+seq1910
+internal-907
+seq1929
+internal-908
+seq1927
+seq1928
+internal-909
+internal-910
+internal-911
+seq1922
+internal-912
+seq1943
+seq1944
+internal-913
+seq1940
+internal-914
+seq1924
+seq1937
+internal-915
+seq1938
+internal-916
+seq1939
+internal-917
+seq1932
+seq1951
+internal-918
+seq2815
+internal-919
+internal-920
+seq1949
+internal-921
+seq1946
+seq1935
+seq1931
+internal-922
+seq2291
+seq2813
+internal-923
+seq1447
+internal-924
+seq3207
+internal-925
+internal-926
+internal-927
+internal-928
+seq2371
+seq2372
+internal-929
+internal-930
+seq2790
+internal-931
+seq2574
+seq2576
+internal-932
+seq2667
+internal-933
+internal-934
+seq2605
+internal-935
+internal-936
+internal-937
+internal-938
+internal-939
+seq2613
+internal-940
+internal-941
+seq2593
+internal-942
+seq2677
+internal-943
+seq3075
+seq3233
+seq2585
+seq2668
+internal-944
+internal-945
+seq2590
+seq2602
+internal-946
+seq2608
+seq2609
+internal-947
+seq2589
+internal-948
+internal-949
+internal-950
+seq2584
+internal-951
+seq2598
+seq2600
+seq2607
+internal-952
+seq2685
+seq2767
+seq2587
+internal-953
+internal-954
+internal-955
+internal-956
+seq3070
+seq3071
+internal-957
+seq3065
+internal-958
+seq3087
+seq3090
+seq3062
+internal-959
+seq3085
+seq3093
+seq2373
+internal-960
+seq2572
+internal-961
+internal-962
+internal-963
+seq2327
+seq2332
+internal-964
+internal-965
+internal-966
+seq2317
+seq2320
+internal-967
+seq2331
+internal-968
+internal-969
+seq2312
+seq2339
+seq2338
+seq2326
+seq2337
+internal-970
+internal-971
+internal-972
+seq2240
+seq3045
+internal-973
+seq3054
+internal-974
+seq3057
+internal-975
+seq3049
+seq3052
+seq2759
+internal-976
+internal-977
+seq939
+internal-978
+seq1317
+seq1428
+internal-979
+seq549
+internal-980
+internal-981
+internal-982
+internal-983
+seq1132
+internal-984
+seq1133
+seq1134
+internal-985
+internal-986
+seq1457
+seq1458
+internal-987
+internal-988
+seq544
+seq547
+internal-989
+seq286
+seq543
+internal-990
+seq540
+internal-991
+seq652
+internal-992
+seq537
+seq539
+seq1493
+internal-993
+seq631
+internal-994
+internal-995
+internal-996
+seq1098
+internal-997
+seq1111
+seq1124
+internal-998
+seq573
+internal-999
+seq673
+internal-1000
+seq671
+seq674
+internal-1001
+seq699
+internal-1002
+internal-1003
+seq1180
+internal-1004
+seq604
+seq1158
+internal-1005
+internal-1006
+seq1156
+internal-1007
+internal-1008
+internal-1009
+internal-1010
+internal-1011
+seq1170
+internal-1012
+internal-1013
+seq1161
+internal-1014
+seq602
+seq601
+internal-1015
+seq606
+seq607
+internal-1016
+seq620
+seq621
+internal-1017
+seq1165
+seq614
+internal-1018
+seq1154
+internal-1019
+seq1148
+internal-1020
+seq1142
+internal-1021
+seq1140
+seq1141
+internal-1022
+seq1153
+seq1162
+seq624
+2045 edges
+internal-1 internal-2 0.1745940877277983
+internal-2 internal-3 0.17567429573391055
+internal-3 seq1341 0.30962660847979495
+internal-3 internal-4 0.18379519374405773
+internal-4 seq1338 0.2540211411184159
+internal-4 internal-5 0.08735807375124795
+internal-5 seq1346 0.46430223497382306
+internal-5 internal-6 0.05976887667640468
+internal-6 seq1345 0.2788676432558265
+internal-6 seq1348 0.21064223818879363
+internal-2 internal-7 0.061533476419241444
+internal-7 seq1199 0.3352093662581978
+internal-7 seq633 0.44168122172852303
+internal-1 internal-8 0.08476645953494497
+internal-8 internal-9 0.0667154778541122
+internal-9 internal-10 0.1857276611770381
+internal-10 seq677 0.9849678819099831
+internal-10 seq1344 0.4212532894351533
+internal-9 internal-11 0.14787858904025036
+internal-11 internal-12 0.10296200194894219
+internal-12 internal-13 0.05812879870372105
+internal-13 internal-14 0.19229617905262572
+internal-14 seq1406 0.6659752057184212
+internal-14 seq1474 0.6281299755745416
+internal-13 internal-15 0.1071978611302372
+internal-15 seq1417 0.37696471418463773
+internal-15 internal-16 0.06355695168423622
+internal-16 seq1299 0.2098535156446468
+internal-16 internal-17 0.055047264391730646
+internal-17 internal-18 0.18801175196097913
+internal-18 internal-19 0.16540759668456204
+internal-19 seq676 0.14179160227583484
+internal-19 seq1404 0.12041509573337845
+internal-18 internal-20 0.01705345952209592
+internal-20 seq1308 0.14898544899716748
+internal-20 internal-21 0.027716694839503182
+internal-21 internal-22 0.034177046914747225
+internal-22 seq675 0.17571744765425915
+internal-22 internal-23 0.041253657852477955
+internal-23 seq1306 0.1508861544887752
+internal-23 internal-24 0.04102396827644744
+internal-24 seq1319 0.25662257531659277
+internal-24 seq1414 0.08930680615420585
+internal-21 seq1298 0.23420202570126958
+internal-17 internal-25 0.05564435728959457
+internal-25 seq1310 0.3015676133553852
+internal-25 seq1294 0.21902900570818906
+internal-12 internal-26 0.11517360940830709
+internal-26 internal-27 0.3409945825796323
+internal-27 seq685 0.07218483575856982
+internal-27 seq1182 0.060986877428174005
+internal-26 internal-28 0.35854139919107153
+internal-28 internal-29 0.03947895912828226
+internal-29 seq1195 0.2316543884037924
+internal-29 seq1325 0.13519703344833306
+internal-28 internal-30 0.039346616372565396
+internal-30 internal-31 0.06991708994445862
+internal-31 seq1191 0.16161915767740237
+internal-31 internal-32 0.17815370915731787
+internal-32 seq1184 0.04991884285796012
+internal-32 seq1197 0.087332361798708
+internal-30 internal-33 0.020126801849207385
+internal-33 seq1193 0.14975069758464343
+internal-33 seq1192 0.23372638757921996
+internal-11 seq1289 0.6322676329371012
+internal-8 internal-34 0.12049506758576348
+internal-34 seq1302 0.5579919720378536
+internal-34 seq1405 0.293286129641653
+internal-1 internal-35 0.05666906639814873
+internal-35 internal-36 0.13643443316429504
+internal-36 internal-37 0.1504675112615223
+internal-37 seq1361 0.39520977250723666
+internal-37 internal-38 0.056917350939855976
+internal-38 internal-39 0.07453251242514171
+internal-39 internal-40 0.07993367845547039
+internal-40 seq1376 0.2619234725320014
+internal-40 internal-41 0.16515002316000074
+internal-41 internal-42 0.0886574943527295
+internal-42 seq1392 0.1115630670727792
+internal-42 seq1394 0.21615734300880993
+internal-41 internal-43 0.1272346701455567
+internal-43 seq1377 0.25308852383987523
+internal-43 seq1384 0.19100637343339646
+internal-39 internal-44 0.07747223299889713
+internal-44 internal-45 0.2803198675752574
+internal-45 seq1368 0.23049489954401967
+internal-45 internal-46 0.07383364171514302
+internal-46 seq1482 0.17956735354796097
+internal-46 internal-47 0.044322441188004574
+internal-47 seq1369 0.1689586041299816
+internal-47 seq695 0.12303956088904396
+internal-44 internal-48 0.10048852851457062
+internal-48 seq1383 0.3355792155755163
+internal-48 internal-49 0.2573002150657804
+internal-49 seq659 0.19728560884295235
+internal-49 seq1353 0.1859933526866149
+internal-38 seq1379 0.30060963812365116
+internal-36 internal-50 0.20296790435436188
+internal-50 seq1327 0.8398106598465332
+internal-50 seq1407 0.4301772759629301
+internal-35 internal-51 0.07508951039701432
+internal-51 internal-52 0.1246575519024965
+internal-52 internal-53 0.14511369614379158
+internal-53 internal-54 0.07448775650775383
+internal-54 internal-55 0.13107112206409233
+internal-55 seq1250 0.2411230319262212
+internal-55 seq1254 0.15890079769505142
+internal-54 seq1265 0.5523831793907698
+internal-53 internal-56 0.03250071500898244
+internal-56 internal-57 0.07518620121853885
+internal-57 internal-58 0.18774149845982302
+internal-58 internal-59 0.08018477099199453
+internal-59 seq1401 0.1578914205581969
+internal-59 internal-60 0.030597009522912184
+internal-60 internal-61 0.18092112304912333
+internal-61 seq1256 0.08761515227672291
+internal-61 seq1257 0.1626012638645946
+internal-60 seq1466 0.17567145973914533
+internal-58 internal-62 0.03445900139430526
+internal-62 seq1472 0.26146910137069634
+internal-62 seq1467 0.27483384070156797
+internal-57 internal-63 0.07414151614685704
+internal-63 seq1263 0.35063405378674106
+internal-63 seq1267 0.2762762840390529
+internal-56 seq670 0.44777787947508746
+internal-52 internal-64 0.05728419826271567
+internal-64 internal-65 0.3881900024645869
+internal-65 seq1085 0.2650207118150029
+internal-65 seq1086 0.24101598312381584
+internal-64 internal-66 0.18173423654824847
+internal-66 seq1262 0.5850117911636755
+internal-66 seq1271 0.36069835820967705
+internal-51 internal-67 0.04865604418888044
+internal-67 internal-68 0.2612737527312781
+internal-68 internal-69 0.02153658924696985
+internal-69 internal-70 0.06065122304773723
+internal-70 internal-71 0.13142926340302186
+internal-71 internal-72 7.999985233332421e-09
+internal-72 seq682 0.7739819063556727
+internal-72 internal-73 0.5884428148305656
+internal-73 seq1117 0.12411498590398483
+internal-73 internal-74 0.038005600847861275
+internal-74 seq587 0.05626138415066365
+internal-74 seq1113 0.08147370161283889
+internal-71 internal-75 0.31548486666640607
+internal-75 internal-76 0.07232983449092581
+internal-76 internal-77 0.04575513054349376
+internal-77 internal-78 0.12841023197566132
+internal-78 seq1109 0.3128134525974006
+internal-78 internal-79 0.19093618956294445
+internal-79 seq1121 0.33166233580543736
+internal-79 internal-80 0.08361976165156218
+internal-80 internal-81 0.30987865701455447
+internal-81 seq578 0.15805059826438086
+internal-81 seq1118 0.30558759893514764
+internal-80 internal-82 0.10448400213957815
+internal-82 seq1101 0.2086300469029705
+internal-82 seq1106 0.21792924673816472
+internal-77 internal-83 0.11489936591451584
+internal-83 seq1108 0.34232597612209703
+internal-83 internal-84 0.2940442102423599
+internal-84 seq698 0.2809073084909373
+internal-84 internal-85 0.1007113591032617
+internal-85 seq1112 0.2004689059671052
+internal-85 seq1127 0.27006068151204116
+internal-76 internal-86 0.1357405314451244
+internal-86 internal-87 0.0357785409586505
+internal-87 seq579 0.3689120290485807
+internal-87 internal-88 0.14274593651428955
+internal-88 seq575 0.07848902712206106
+internal-88 seq1100 0.33497798168529597
+internal-86 seq583 0.41980514610818964
+internal-75 seq584 0.4074600898951493
+internal-70 internal-89 0.20452334048328052
+internal-89 seq688 0.7883659868050067
+internal-89 internal-90 0.18914966186058313
+internal-90 seq1398 0.3298678341177947
+internal-90 internal-91 0.31173568858677714
+internal-91 seq1423 0.16712879750750612
+internal-91 seq1424 0.30034984760318206
+internal-69 internal-92 0.3529239965598803
+internal-92 seq658 0.5841383867758376
+internal-92 internal-93 0.2176820891943772
+internal-93 internal-94 0.18675159228702834
+internal-94 seq1240 0.5112229493658392
+internal-94 internal-95 0.26189949857625333
+internal-95 seq1218 0.33695100204342227
+internal-95 internal-96 0.10474434665902464
+internal-96 seq1233 0.42039323102268084
+internal-96 internal-97 0.09577812820920109
+internal-97 seq1217 0.26457167364385414
+internal-97 internal-98 0.12650676148915732
+internal-98 internal-99 0.15637179036318635
+internal-99 internal-100 0.05317503384756279
+internal-100 internal-101 0.11038734124297726
+internal-101 seq643 0.22616197154189785
+internal-101 seq640 0.304927278153992
+internal-100 seq1229 0.1741211766007151
+internal-99 internal-102 0.04442942199053547
+internal-102 seq1231 0.09353142735624434
+internal-102 seq648 0.3030583666036979
+internal-98 seq1230 0.2139336501133842
+internal-93 internal-103 0.17922731117562368
+internal-103 seq1225 0.3816891634640751
+internal-103 internal-104 0.34025235994965414
+internal-104 seq700 0.47202326372206366
+internal-104 seq1215 0.6256315311862624
+internal-68 seq1201 0.7527965274604257
+internal-67 internal-105 0.09322628291949119
+internal-105 internal-106 0.2344469982490902
+internal-106 seq1275 0.37949784450889246
+internal-106 internal-107 0.15759361710789352
+internal-107 internal-108 0.14918880662180245
+internal-108 seq1287 0.19986147208832905
+internal-108 seq1473 0.3567244435448752
+internal-107 internal-109 0.24879305476861036
+internal-109 internal-110 0.08477912551156563
+internal-110 seq1094 0.22748948509152442
+internal-110 seq1277 0.1555084059568531
+internal-109 internal-111 0.0673898336093615
+internal-111 internal-112 0.1683099023273793
+internal-112 seq1284 0.03287435531930338
+internal-112 internal-113 0.06101131538306553
+internal-113 seq1282 0.11993074262741528
+internal-113 seq1281 0.04037101148169916
+internal-111 seq1274 0.3617865312010873
+internal-105 internal-114 0.06450352893700904
+internal-114 internal-115 0.4974599517700874
+internal-115 seq663 0.15929756096269113
+internal-115 seq664 0.13752730514703165
+internal-114 internal-116 0.09514716937384816
+internal-116 internal-117 0.11959134125389484
+internal-117 internal-118 0.04426493829414554
+internal-118 internal-119 0.06937999393585023
+internal-119 seq1081 0.8158959819891269
+internal-119 internal-120 0.10054187341610463
+internal-120 internal-121 0.7553299417841561
+internal-121 seq1078 0.2799515712550723
+internal-121 internal-122 0.22534962104136436
+internal-122 seq921 0.10816062235313706
+internal-122 seq924 0.1846833881045958
+internal-120 internal-123 0.04600871207542362
+internal-123 internal-124 0.12822365432005325
+internal-124 internal-125 0.1550829167422368
+internal-125 internal-126 1.0137841537198464
+internal-126 seq1464 0.07347749437253291
+internal-126 internal-127 0.09105735792297287
+internal-127 seq1462 0.159369825829302
+internal-127 seq1465 0.1296819776282263
+internal-125 internal-128 0.13984411287058257
+internal-128 seq1067 0.5746076653679945
+internal-128 seq2365 1.0911840928521863
+internal-124 internal-129 0.09562278849593286
+internal-129 internal-130 0.18382094269652935
+internal-130 seq1070 0.1723512608676908
+internal-130 seq1071 0.23366255669704133
+internal-129 internal-131 0.0866308470935897
+internal-131 internal-132 0.1768615915423562
+internal-132 seq1057 0.10963593062995866
+internal-132 internal-133 0.10353230589625415
+internal-133 seq1059 0.1411067365399853
+internal-133 internal-134 0.08291427195378107
+internal-134 seq1058 0.11263089710173917
+internal-134 seq1060 0.07557556849983037
+internal-131 internal-135 0.06277449812851783
+internal-135 seq1056 0.20856300602671698
+internal-135 internal-136 0.46716151169606474
+internal-136 seq920 0.07553696157109245
+internal-136 seq1080 0.2166584070839274
+internal-123 internal-137 0.34357164182280137
+internal-137 seq1066 0.29187633524390344
+internal-137 internal-138 0.21989665010665907
+internal-138 internal-139 0.2396353006723304
+internal-139 seq173 0.42100998088426117
+internal-139 internal-140 0.160704542365633
+internal-140 seq167 0.4507327370209025
+internal-140 internal-141 0.23203433570247167
+internal-141 internal-142 0.07169873665582946
+internal-142 internal-143 0.09092358316989924
+internal-143 seq566 0.21633064868891588
+internal-143 seq569 0.3776514819169765
+internal-142 internal-144 0.04881295989923964
+internal-144 seq163 0.08162793932814123
+internal-144 seq565 0.31446968254027036
+internal-141 seq990 0.26266965615466814
+internal-138 internal-145 0.5055424408511312
+internal-145 seq559 0.0943300158821802
+internal-145 internal-146 0.04463714360711525
+internal-146 seq1087 0.13143590339076552
+internal-146 seq1088 0.09667529555317655
+internal-118 internal-147 0.12347732408100452
+internal-147 internal-148 0.08414832267592476
+internal-148 internal-149 0.11158970202361543
+internal-149 internal-150 0.36893812100041923
+internal-150 internal-151 0.08113741923356131
+internal-151 internal-152 0.015453641475099028
+internal-152 internal-153 0.07726985637245137
+internal-153 internal-154 0.017522486656348348
+internal-154 internal-155 0.02504381877319633
+internal-155 internal-156 0.13539704807913866
+internal-156 seq76 0.530998472863449
+internal-156 internal-157 0.13020285266677598
+internal-157 seq367 0.44006072571969423
+internal-157 seq758 0.5126654787031655
+internal-155 internal-158 0.0253735431645789
+internal-158 internal-159 0.057061085674545105
+internal-159 internal-160 0.10199756472913596
+internal-160 seq385 0.22460372541816598
+internal-160 seq801 0.2891774472256104
+internal-159 internal-161 0.042126085242119325
+internal-161 internal-162 0.2566969621792868
+internal-162 seq92 0.026881681380801797
+internal-162 internal-163 0.11143740730472664
+internal-163 seq60 0.0751178483447071
+internal-163 seq306 0.03747914381961506
+internal-161 internal-164 0.07844108221055955
+internal-164 internal-165 0.20109066381944163
+internal-165 seq233 0.08780224893137302
+internal-165 seq238 0.12210682761071741
+internal-164 internal-166 0.11532127213574579
+internal-166 seq20 0.09248691128425059
+internal-166 seq57 0.09951659530860074
+internal-158 internal-167 0.05440240758203112
+internal-167 internal-168 0.03174302940754645
+internal-168 internal-169 0.0021032731177009645
+internal-169 internal-170 0.06931936904775388
+internal-170 internal-171 0.02324842108720755
+internal-171 internal-172 0.04550912999757063
+internal-172 internal-173 0.008968080446386598
+internal-173 internal-174 0.11249450035350532
+internal-174 seq87 0.1583111357834711
+internal-174 internal-175 0.05405264622763351
+internal-175 internal-176 0.0064391701143424905
+internal-176 internal-177 0.053346564530945134
+internal-177 internal-178 0.07318947890416248
+internal-178 seq294 0.07511087335758179
+internal-178 seq715 0.07597281376658041
+internal-177 internal-179 0.04705319314748197
+internal-179 seq5 0.13665180176306807
+internal-179 seq767 0.19523884262094887
+internal-176 internal-180 0.012405974100595789
+internal-180 seq83 0.13907433029147565
+internal-180 internal-181 0.039839406462955286
+internal-181 internal-182 0.05065219050432001
+internal-182 seq728 0.10083928486713162
+internal-182 seq1008 0.13352228253964998
+internal-181 seq368 0.20783748136591718
+internal-175 internal-183 0.06572221468751398
+internal-183 seq835 0.17414653455390844
+internal-183 internal-184 0.15911260130409652
+internal-184 seq302 0.09503115258799623
+internal-184 seq401 0.0959263909355323
+internal-173 internal-185 0.025765772440587642
+internal-185 internal-186 0.051948743111095416
+internal-186 seq735 0.1305967539396985
+internal-186 internal-187 0.015719100985104085
+internal-187 internal-188 0.054393145599127224
+internal-188 internal-189 0.17599114714905453
+internal-189 seq744 0.4266899923998866
+internal-189 seq759 0.19969802139003234
+internal-188 internal-190 0.036332413936291344
+internal-190 seq55 0.2599024422624935
+internal-190 internal-191 0.09323481490374254
+internal-191 seq93 0.25637569977228475
+internal-191 internal-192 0.03793698497451498
+internal-192 seq325 0.11704369195643981
+internal-192 internal-193 0.07950913023911714
+internal-193 internal-194 0.029701381176095998
+internal-194 internal-195 0.025989295028001416
+internal-195 internal-196 0.06823984504037908
+internal-196 seq207 0.025558330823491026
+internal-196 seq332 0.08814360730128115
+internal-195 internal-197 0.058232598512123535
+internal-197 seq300 0.09764186776904192
+internal-197 internal-198 0.03310168589968822
+internal-198 internal-199 0.020800561605556794
+internal-199 seq321 0.05852390697441564
+internal-199 internal-200 0.049480860666403795
+internal-200 seq323 0.07795820810186638
+internal-200 internal-201 0.024416539931050737
+internal-201 internal-202 0.024892605052312188
+internal-202 seq299 0.06036979956719906
+internal-202 internal-203 0.028658647100812982
+internal-203 internal-204 0.028793232852389643
+internal-204 seq196 0.10365889066259933
+internal-204 internal-205 0.049836488009973735
+internal-205 seq288 0.11884334763456902
+internal-205 seq705 0.08398358198000921
+internal-203 seq301 0.05446355146916947
+internal-201 internal-206 0.02699431517289819
+internal-206 seq750 0.030036344557808244
+internal-206 seq328 0.15725438073406853
+internal-198 seq298 0.031954137017876236
+internal-194 seq339 0.053724331833648324
+internal-193 internal-207 0.16828732636905083
+internal-207 seq326 0.07779230540809569
+internal-207 internal-208 0.06632915456720198
+internal-208 seq1288 0.04082328964686745
+internal-208 internal-209 0.03948973310839526
+internal-209 seq109 0.22996600452027358
+internal-209 seq89 0.07386040166574852
+internal-187 internal-210 0.09652485483086558
+internal-210 seq877 0.21625723682442222
+internal-210 seq327 0.09826842361252205
+internal-185 seq54 0.41336922698784634
+internal-172 internal-211 0.05665845441773672
+internal-211 seq203 0.3087482481011049
+internal-211 seq396 0.2606934098024965
+internal-171 internal-212 0.09709042878690832
+internal-212 seq795 0.06385866012733167
+internal-212 seq818 0.07210020091479194
+internal-170 internal-213 0.09121759262720575
+internal-213 internal-214 0.06007853010483497
+internal-214 seq110 0.06196852861620606
+internal-214 seq389 0.0795172342241585
+internal-213 internal-215 0.04705415814570074
+internal-215 seq733 0.09581376114342852
+internal-215 internal-216 0.09066064365524268
+internal-216 seq1 0.10008447026039623
+internal-216 seq784 0.03563114823071343
+internal-169 internal-217 0.0545351993369192
+internal-217 internal-218 0.11263819608826643
+internal-218 seq354 0.20106367186926435
+internal-218 seq384 0.31619901034821335
+internal-217 internal-219 0.0803085217635708
+internal-219 internal-220 0.17559794387484362
+internal-220 seq53 0.09884374855056609
+internal-220 seq826 0.15182346275865707
+internal-219 internal-221 0.03080149614546324
+internal-221 internal-222 0.1766987848428708
+internal-222 internal-223 0.14107019860742834
+internal-223 seq9 0.08570685879912135
+internal-223 seq782 0.11889826153320693
+internal-222 internal-224 0.05336241850168128
+internal-224 seq741 0.3024671366950118
+internal-224 internal-225 0.17480017534739417
+internal-225 seq200 0.2830576555217475
+internal-225 internal-226 0.15742839341286952
+internal-226 seq392 0.07641217595558948
+internal-226 seq739 0.11581724922025301
+internal-221 internal-227 0.042651543272209526
+internal-227 seq221 0.3061494568980495
+internal-227 internal-228 0.11461503243934905
+internal-228 internal-229 0.1226939965268994
+internal-229 seq65 0.09033656725343486
+internal-229 internal-230 0.042085882316327365
+internal-230 seq743 0.03973847264926264
+internal-230 internal-231 0.01707528848180322
+internal-231 seq751 0.1069008536784645
+internal-231 seq749 0.06583399748118117
+internal-228 internal-232 0.044687787513634857
+internal-232 seq372 0.2033471586543203
+internal-232 seq781 0.14561678621516938
+internal-168 internal-233 0.12422374370323568
+internal-233 internal-234 0.02268964311862052
+internal-234 internal-235 0.06305621060852255
+internal-235 seq1007 0.3444939361203966
+internal-235 internal-236 0.0488160088936117
+internal-236 internal-237 0.26612833977050243
+internal-237 seq23 0.17834288780812496
+internal-237 seq43 0.0759553377988382
+internal-236 seq432 0.4089821880856044
+internal-234 internal-238 0.08135538783122684
+internal-238 seq1036 0.251361575027541
+internal-238 internal-239 0.1441396749416758
+internal-239 seq755 0.37386832590006536
+internal-239 seq37 0.40321669572776264
+internal-233 internal-240 0.14427197869746464
+internal-240 internal-241 0.08282456011937447
+internal-241 internal-242 0.05852607497041387
+internal-242 internal-243 0.0843743572587018
+internal-243 internal-244 0.13391210582009982
+internal-244 seq32 0.04716431994236003
+internal-244 seq77 0.08540213636158926
+internal-243 seq1003 0.32400293494344173
+internal-242 seq119 0.3765757059026836
+internal-241 internal-245 0.14958771188548842
+internal-245 seq1002 0.101691552293985
+internal-245 internal-246 0.051481317973885964
+internal-246 seq29 0.15900359550530344
+internal-246 seq245 0.12433879949086146
+internal-240 internal-247 0.18098004894035574
+internal-247 seq1004 0.16789414309480302
+internal-247 seq35 0.5257381915730702
+internal-167 internal-248 0.21700666344110295
+internal-248 seq102 0.6463456949512955
+internal-248 internal-249 0.5147520328517269
+internal-249 seq533 0.10516151788899461
+internal-249 seq822 0.021946687489995394
+internal-154 internal-250 0.08872352123085465
+internal-250 internal-251 0.01661759432663196
+internal-251 internal-252 0.05934847845239122
+internal-252 internal-253 0.10023313098599279
+internal-253 seq343 0.33085516629534056
+internal-253 seq873 0.272788018477822
+internal-252 internal-254 0.07385653067289374
+internal-254 seq8 0.22697554204017945
+internal-254 internal-255 0.05049369679687353
+internal-255 internal-256 0.13175948379348887
+internal-256 seq64 0.23121638021228405
+internal-256 seq723 0.20731443933136742
+internal-255 internal-257 0.2727386695689121
+internal-257 seq191 0.06505008992814662
+internal-257 seq778 0.07115126766636791
+internal-251 internal-258 0.03462277509200573
+internal-258 seq72 0.39660136893857667
+internal-258 internal-259 0.043715319308652516
+internal-259 seq118 0.3310479849394288
+internal-259 internal-260 0.10387511226348953
+internal-260 seq117 0.1306377418640415
+internal-260 internal-261 0.06421093047709807
+internal-261 seq234 0.1701683258970326
+internal-261 seq413 0.15183590073569858
+internal-250 internal-262 0.040302490608177505
+internal-262 internal-263 0.08810112337969954
+internal-263 internal-264 0.30308856554795555
+internal-264 seq419 0.09148740412917775
+internal-264 seq760 0.055897022823215216
+internal-263 internal-265 0.10858235857468079
+internal-265 internal-266 0.046427496302416264
+internal-266 seq713 0.11387191381102481
+internal-266 seq712 0.19583539151981694
+internal-265 internal-267 0.04173874995707707
+internal-267 seq709 0.085599900996548
+internal-267 seq369 0.2848450812224513
+internal-262 internal-268 0.05048156981925796
+internal-268 internal-269 0.06521257462822638
+internal-269 internal-270 0.11023091453171546
+internal-270 internal-271 0.3813418681051257
+internal-271 seq192 0.09110436483620578
+internal-271 seq796 0.1068521407683806
+internal-270 internal-272 0.07567951930795414
+internal-272 seq241 0.5275752981820712
+internal-272 internal-273 0.3009837184331599
+internal-273 seq428 0.16983147251880898
+internal-273 seq429 0.1251590689767778
+internal-269 seq304 0.494551269139041
+internal-268 internal-274 0.22495721976567307
+internal-274 seq190 0.05976913967591923
+internal-274 internal-275 0.09901489123466461
+internal-275 seq736 0.12034386786485349
+internal-275 seq786 0.10699114651179867
+internal-153 internal-276 0.07818105069053531
+internal-276 internal-277 0.13450404472747715
+internal-277 seq246 0.606431640626128
+internal-277 internal-278 0.17815461115565295
+internal-278 seq352 0.5639898649667217
+internal-278 internal-279 0.37528902927767865
+internal-279 seq66 0.14189273208916572
+internal-279 seq764 0.1742915102863069
+internal-276 internal-280 0.13494963990498116
+internal-280 seq414 0.500045874996895
+internal-280 internal-281 0.3478172339861309
+internal-281 seq380 0.07883758447868104
+internal-281 seq1040 0.14362168189780644
+internal-152 internal-282 0.08557557504144975
+internal-282 seq346 1.0117809904173591
+internal-282 internal-283 0.24598587495020635
+internal-283 internal-284 0.06446522000772108
+internal-284 seq351 0.543005315700776
+internal-284 internal-285 0.3383947533784929
+internal-285 seq1249 0.38417109688283096
+internal-285 internal-286 0.20849016516116933
+internal-286 seq227 0.3324138604182455
+internal-286 seq388 0.37151667524082876
+internal-283 internal-287 0.05286394142178865
+internal-287 seq232 0.6924864197830451
+internal-287 internal-288 0.07465047620739981
+internal-288 internal-289 0.17286210792475046
+internal-289 seq112 0.3576031409229432
+internal-289 seq558 0.40589604478212143
+internal-288 seq237 0.34718101916047966
+internal-151 internal-290 0.27859089176666463
+internal-290 seq10 0.04521461154120365
+internal-290 seq68 0.10215862743184048
+internal-150 internal-291 0.07632240612128996
+internal-291 internal-292 0.11324185197401616
+internal-292 internal-293 0.0738180597439048
+internal-293 internal-294 0.11086917035359935
+internal-294 seq242 0.12057172744426187
+internal-294 seq363 0.28507096580550517
+internal-293 internal-295 0.07098788696794202
+internal-295 internal-296 0.151942800538379
+internal-296 seq224 0.08147699760675503
+internal-296 internal-297 0.009967836600999843
+internal-297 seq19 0.2884538885611817
+internal-297 seq120 0.07027362428635439
+internal-295 internal-298 0.058950913186231836
+internal-298 seq340 0.17482705129778556
+internal-298 internal-299 0.07111120874031014
+internal-299 seq806 0.24449118970915146
+internal-299 internal-300 0.1659557136728275
+internal-300 seq124 0.029728008126946988
+internal-300 seq255 0.10557302312942307
+internal-292 internal-301 0.04399873678551009
+internal-301 internal-302 0.23336851423979574
+internal-302 seq710 0.2162513418353034
+internal-302 seq720 0.4463846240468097
+internal-301 internal-303 0.026992506176237305
+internal-303 seq338 0.3481319214052692
+internal-303 seq62 0.23873468133472675
+internal-291 internal-304 0.23765671032448538
+internal-304 seq825 0.29567163123840623
+internal-304 internal-305 0.13788797548129306
+internal-305 seq816 0.11063456178664847
+internal-305 internal-306 0.09809448093359187
+internal-306 seq361 0.20173818162422938
+internal-306 seq6 0.1373778744228564
+internal-149 internal-307 0.33328084181793927
+internal-307 seq516 0.07271027378869695
+internal-307 seq1082 0.23542447744482306
+internal-148 internal-308 0.16553250745399714
+internal-308 internal-309 0.049443291735749906
+internal-309 internal-310 0.07711710565440427
+internal-310 internal-311 0.10319424352026214
+internal-311 internal-312 0.03425586276926602
+internal-312 internal-313 0.09380275585541618
+internal-313 seq1016 0.30541226125879234
+internal-313 seq859 0.3661514301441959
+internal-312 internal-314 0.07245027826860626
+internal-314 seq1015 0.6425858108914281
+internal-314 internal-315 0.1909692775018695
+internal-315 seq138 0.48843443842971257
+internal-315 seq903 0.4128724409048324
+internal-311 internal-316 0.10999850396070746
+internal-316 internal-317 0.13613278972107964
+internal-317 seq905 0.5378130852847864
+internal-317 seq1020 0.3753593231479277
+internal-316 internal-318 0.09851093116489268
+internal-318 internal-319 0.1557428105241805
+internal-319 seq858 0.19882244900619614
+internal-319 seq860 0.3312143456323541
+internal-318 internal-320 0.05912450986580069
+internal-320 internal-321 0.1825412280586738
+internal-321 seq934 0.2738203665722759
+internal-321 internal-322 0.04904624346863623
+internal-322 seq654 0.4594871128617529
+internal-322 internal-323 0.046920914391646966
+internal-323 seq909 0.4196741373500104
+internal-323 internal-324 0.13408107550820933
+internal-324 seq518 0.29081140320959425
+internal-324 seq881 0.36757835251033005
+internal-320 seq895 0.47041750168603835
+internal-310 internal-325 0.28397122183545315
+internal-325 seq1012 0.10334807123632127
+internal-325 seq1045 0.17212530628476608
+internal-309 internal-326 0.0456532917314716
+internal-326 internal-327 0.21157158647336832
+internal-327 internal-328 0.12916911257489153
+internal-328 internal-329 0.07938037047678664
+internal-329 seq910 0.1428171653828127
+internal-329 internal-330 0.05299288018378873
+internal-330 seq274 0.08751267546587839
+internal-330 seq915 0.10028901488284023
+internal-328 internal-331 0.048290333863922036
+internal-331 seq917 0.38006091146956267
+internal-331 internal-332 0.0730826701013141
+internal-332 seq523 0.09862660495137775
+internal-332 internal-333 0.020228108662211534
+internal-333 seq273 0.205432306805477
+internal-333 seq930 0.08537649540891827
+internal-327 internal-334 0.12027966498336153
+internal-334 internal-335 0.3583629295204974
+internal-335 seq506 0.11503727765995327
+internal-335 seq899 0.04664579889946528
+internal-334 internal-336 0.2289626163723644
+internal-336 seq528 0.10766318427132661
+internal-336 internal-337 0.10941672303458012
+internal-337 seq1029 0.2918125413616566
+internal-337 seq1028 0.23912905360677988
+internal-326 internal-338 0.10546260033324553
+internal-338 internal-339 0.12485943952984489
+internal-339 internal-340 0.4948361986131077
+internal-340 seq864 0.06877565405136306
+internal-340 seq865 0.05184963129403967
+internal-339 internal-341 0.40910471985943075
+internal-341 seq756 0.4075375487521729
+internal-341 internal-342 0.16086842406313415
+internal-342 seq513 0.2573036490594418
+internal-342 seq906 0.21916789145182866
+internal-338 internal-343 0.007689298806808877
+internal-343 seq445 0.7512107593874948
+internal-343 seq271 0.5031181413259926
+internal-308 internal-344 0.0693695829550672
+internal-344 internal-345 0.11645365904554429
+internal-345 internal-346 0.05310185598263718
+internal-346 seq123 0.4004639688088475
+internal-346 internal-347 0.06265638734653108
+internal-347 internal-348 0.1518773916591131
+internal-348 seq480 0.32485626036834225
+internal-348 seq851 0.5265338551044051
+internal-347 internal-349 0.126804248940044
+internal-349 seq452 0.33005238477714427
+internal-349 internal-350 0.0627100462474855
+internal-350 seq457 0.28840877864444725
+internal-350 internal-351 0.11576149032317484
+internal-351 internal-352 0.099624921108649
+internal-352 seq135 0.1744379510160012
+internal-352 seq845 0.0747884629526988
+internal-351 internal-353 0.12867092749445994
+internal-353 internal-354 0.04865677918752375
+internal-354 seq941 0.13760382700578477
+internal-354 seq942 0.04023746872819729
+internal-353 internal-355 0.07256799305132397
+internal-355 internal-356 0.1288279092046973
+internal-356 seq466 0.05792227008493918
+internal-356 seq477 0.1131403731613295
+internal-355 internal-357 0.09903963918898392
+internal-357 seq454 0.11942527956041764
+internal-357 seq944 0.13710659192359964
+internal-345 internal-358 0.08509757492375998
+internal-358 internal-359 0.12564266208414385
+internal-359 internal-360 0.032504143002654924
+internal-360 seq880 0.2600646689630495
+internal-360 internal-361 0.046154234806812404
+internal-361 seq932 0.3442153126346901
+internal-361 seq879 0.14069585829839948
+internal-359 internal-362 0.07691372402981357
+internal-362 internal-363 0.06527171351906563
+internal-363 internal-364 0.0629636137794412
+internal-364 internal-365 0.042053418376250505
+internal-365 internal-366 0.039913921325413014
+internal-366 internal-367 0.04558163986372925
+internal-367 seq488 0.19730909579959924
+internal-367 internal-368 0.08151756253187879
+internal-368 seq496 0.5949606507997037
+internal-368 seq492 0.08407152681767738
+internal-366 internal-369 0.07637051703248506
+internal-369 internal-370 0.06370029841964153
+internal-370 internal-371 0.057125640555387325
+internal-371 seq958 0.16006416254766967
+internal-371 internal-372 0.0897928942569665
+internal-372 seq1053 0.11166805287899254
+internal-372 seq262 0.24290154164338243
+internal-370 internal-373 0.0812722069847651
+internal-373 seq259 0.04507877479193614
+internal-373 seq482 0.12471059980457873
+internal-369 seq481 0.3671979442125017
+internal-365 internal-374 0.044233579352029026
+internal-374 internal-375 0.0582786964270343
+internal-375 internal-376 0.059066860972211144
+internal-376 internal-377 0.10423039560769443
+internal-377 seq462 0.07110081775949019
+internal-377 seq950 0.13999634258959134
+internal-376 internal-378 0.18377390278335737
+internal-378 seq253 0.15674462467499506
+internal-378 seq983 0.11014959268182231
+internal-375 internal-379 0.0860390181860093
+internal-379 seq998 0.5538485896858614
+internal-379 seq475 0.08000663532080392
+internal-374 internal-380 0.025216802453896677
+internal-380 seq571 0.5362235642187829
+internal-380 internal-381 0.08503750303464289
+internal-381 internal-382 0.14322366863247402
+internal-382 seq183 0.2479209133784411
+internal-382 seq275 0.20806877093899434
+internal-381 internal-383 0.018699669483460902
+internal-383 internal-384 0.19412423567833145
+internal-384 seq158 0.24505741466399256
+internal-384 internal-385 0.1265671323777225
+internal-385 seq261 0.20853862807171472
+internal-385 seq264 0.06272238022471899
+internal-383 internal-386 0.05979950061987788
+internal-386 seq152 0.45500141914161174
+internal-386 internal-387 0.07626482222758044
+internal-387 seq151 0.40426663178975203
+internal-387 seq155 0.49613512921549374
+internal-364 internal-388 0.03655845451905731
+internal-388 seq937 0.2402346545660209
+internal-388 internal-389 0.16177536338907209
+internal-389 seq972 0.13350358557416153
+internal-389 internal-390 0.08790768973674648
+internal-390 seq976 0.10871100633721802
+internal-390 seq977 0.05739433805941557
+internal-363 internal-391 0.0808934646838616
+internal-391 internal-392 0.10189389992048427
+internal-392 internal-393 0.09263088401850042
+internal-393 seq495 0.20246620228042206
+internal-393 internal-394 0.13578762535819675
+internal-394 seq168 0.25849222386552656
+internal-394 seq995 0.2385759056278008
+internal-392 internal-395 0.14549889243278205
+internal-395 seq945 0.42990028847420375
+internal-395 internal-396 0.04691845139619326
+internal-396 internal-397 0.13878727482133318
+internal-397 seq162 0.21234281604980434
+internal-397 seq988 0.03784935213627091
+internal-396 internal-398 0.029111792264380938
+internal-398 seq438 0.3559909038988697
+internal-398 internal-399 0.10988731716594013
+internal-399 seq166 0.23714588126739247
+internal-399 internal-400 0.05731685220244182
+internal-400 seq436 0.05088222407971556
+internal-400 seq890 0.06134686076370349
+internal-391 internal-401 0.0784161082566574
+internal-401 seq491 0.22948275141228
+internal-401 seq1031 0.4499320514988373
+internal-362 internal-402 0.07865170082179196
+internal-402 internal-403 0.3674918706699614
+internal-403 seq468 0.05507292634436287
+internal-403 seq844 0.13118280585794226
+internal-402 internal-404 0.11256080323112103
+internal-404 internal-405 0.0758855109277272
+internal-405 seq435 0.22684838127489745
+internal-405 seq884 0.33101843199397873
+internal-404 internal-406 0.05291633232508359
+internal-406 internal-407 0.16318749878250055
+internal-407 internal-408 0.10191542488075271
+internal-408 seq461 0.24966084816680534
+internal-408 internal-409 0.048672108159228976
+internal-409 seq970 0.244896286961408
+internal-409 internal-410 0.13113282095020626
+internal-410 seq148 0.12250362987828516
+internal-410 seq971 4.999990770832763e-09
+internal-407 internal-411 0.08087440671903949
+internal-411 seq956 0.14719352730476254
+internal-411 internal-412 0.5473450416903499
+internal-412 seq871 0.0743771197119713
+internal-412 seq896 0.04209320730280664
+internal-406 internal-413 0.04756321820605892
+internal-413 internal-414 0.07265738488632123
+internal-414 seq142 0.20121855358337798
+internal-414 seq846 0.1595221855480708
+internal-413 internal-415 0.08075155494580381
+internal-415 seq287 0.3253784034045514
+internal-415 seq961 0.4126335243458334
+internal-358 internal-416 0.0698555370580752
+internal-416 internal-417 0.08339292607026365
+internal-417 internal-418 0.12139247892928855
+internal-418 seq954 0.09164593483655592
+internal-418 internal-419 0.1670706836147749
+internal-419 seq145 0.02004167300634134
+internal-419 seq149 0.09550188671909782
+internal-417 internal-420 0.04469275150447215
+internal-420 internal-421 0.04678757863776302
+internal-421 internal-422 0.1761359318818055
+internal-422 seq456 0.3012655979128564
+internal-422 seq936 0.2576430824329031
+internal-421 internal-423 0.11406949044633057
+internal-423 seq951 0.1636831698675726
+internal-423 seq966 0.27787244209280554
+internal-420 seq957 0.21675404190740108
+internal-416 internal-424 0.0181498514983352
+internal-424 internal-425 0.20296513535947297
+internal-425 seq257 0.19059877318576005
+internal-425 seq530 0.22620917045477634
+internal-424 seq434 0.6859673028162715
+internal-344 internal-426 0.22964641211018902
+internal-426 seq422 0.43742411958643906
+internal-426 seq1075 0.7105231884901128
+internal-147 internal-427 0.3151935312041638
+internal-427 internal-428 0.21339099411503865
+internal-428 internal-429 0.29469859703446866
+internal-429 internal-430 0.031022110738244697
+internal-430 seq1439 0.31884937445607364
+internal-430 internal-431 0.2110331384672555
+internal-431 seq1453 0.10177114314707326
+internal-431 seq1444 0.8728984857718047
+internal-429 internal-432 0.07106700982189414
+internal-432 internal-433 0.04884691583656252
+internal-433 seq1440 0.2793099754393535
+internal-433 seq1443 0.48317132314456473
+internal-432 seq1455 0.9551060750300068
+internal-428 internal-434 0.28474689140369364
+internal-434 internal-435 0.7895779125679895
+internal-435 seq3218 1.7994560024977926
+internal-435 internal-436 1.2465777590208305
+internal-436 seq2986 0.5516716607041171
+internal-436 seq3208 0.7844019021220604
+internal-434 seq3205 1.1662270103352035
+internal-427 internal-437 0.05483661778054993
+internal-437 internal-438 0.09405739838538762
+internal-438 internal-439 0.38431168962331974
+internal-439 seq2623 1.1329412237753351
+internal-439 seq2622 0.8634759631642442
+internal-438 internal-440 0.08451707499526814
+internal-440 internal-441 0.09445246065616712
+internal-441 internal-442 0.23711304532800226
+internal-442 internal-443 0.30616642986672016
+internal-443 seq2369 0.755260969911467
+internal-443 internal-444 0.25302342096004454
+internal-444 seq2367 0.9419192913706581
+internal-444 seq2376 1.1610454818994598
+internal-442 internal-445 0.3449815462203479
+internal-445 internal-446 0.1956406658792487
+internal-446 internal-447 0.14804207173848796
+internal-447 seq2639 0.8096095505928538
+internal-447 seq2640 0.7565883874612708
+internal-446 internal-448 0.09875722271027869
+internal-448 seq2696 0.7779068451108759
+internal-448 internal-449 0.17508286182560107
+internal-449 internal-450 4.999990770832763e-09
+internal-450 internal-451 0.05329193963177378
+internal-451 internal-452 0.13642106418897199
+internal-452 seq3143 0.3710145371676937
+internal-452 internal-453 0.5171312474600849
+internal-453 internal-454 0.17625057667018995
+internal-454 internal-455 0.15957037845911456
+internal-455 internal-456 0.04187092371310588
+internal-456 seq2697 0.19153091846517192
+internal-456 internal-457 0.0873658047369778
+internal-457 seq2872 0.10972620346332974
+internal-457 seq2888 0.3461850579988615
+internal-455 seq2878 0.07068099653441168
+internal-454 internal-458 0.0792731336747283
+internal-458 internal-459 0.044315447200914335
+internal-459 seq2874 0.09072611253439783
+internal-459 seq2885 0.1861216914497225
+internal-458 internal-460 0.0754256797765005
+internal-460 seq2717 0.17052016924758717
+internal-460 internal-461 0.08718833106456525
+internal-461 seq2714 0.11277190684145821
+internal-461 seq2886 0.13405552255537592
+internal-453 seq2873 0.07247292922679628
+internal-451 internal-462 0.4374611545180786
+internal-462 seq2695 0.30219379319955936
+internal-462 internal-463 0.1304616741890337
+internal-463 seq2722 0.2679084814846513
+internal-463 internal-464 0.04904119347795769
+internal-464 internal-465 0.18598704269826213
+internal-465 seq2731 0.20155141096897758
+internal-465 internal-466 0.0905459938668675
+internal-466 seq2738 0.25524761285454917
+internal-466 internal-467 0.05932391649772858
+internal-467 seq2733 0.08967213847986197
+internal-467 seq2749 0.19567422181730992
+internal-464 seq2743 0.25357197094751077
+internal-450 internal-468 0.36071942217079644
+internal-468 internal-469 0.18667756542366984
+internal-469 seq2751 0.5021391621330284
+internal-469 internal-470 0.48825604575899634
+internal-470 seq3281 0.6643088167943032
+internal-470 internal-471 0.08080629584476107
+internal-471 internal-472 0.2535852749229538
+internal-472 seq3276 0.2609878792589539
+internal-472 seq3282 0.10069884612635861
+internal-471 internal-473 0.18264591686543533
+internal-473 seq3264 0.3372413365075122
+internal-473 internal-474 0.06780930883507867
+internal-474 internal-475 0.11411016837124575
+internal-475 seq3248 0.21828129408834274
+internal-475 seq3280 0.1810815387530221
+internal-474 internal-476 0.193049669661805
+internal-476 internal-477 0.09559324455046617
+internal-477 seq3268 0.1469650257265392
+internal-477 internal-478 0.04947946466898057
+internal-478 seq3261 0.20073570247464234
+internal-478 seq3279 0.21360883571293862
+internal-476 internal-479 0.10285993913733349
+internal-479 seq3251 0.30492653615536164
+internal-479 internal-480 0.09287729956365752
+internal-480 seq3244 0.12433245650256958
+internal-480 seq3250 0.30374115934337387
+internal-468 internal-481 0.30371628538928713
+internal-481 seq3142 0.799581325103322
+internal-481 internal-482 5.999988924999316e-09
+internal-482 internal-483 0.13649383505464882
+internal-483 seq3138 0.3977193618749441
+internal-483 internal-484 0.13416925334544744
+internal-484 seq3235 0.2958088349851505
+internal-484 internal-485 0.14191852304155983
+internal-485 seq2700 0.9178532317926777
+internal-485 seq3239 0.2866347449190241
+internal-482 seq3137 0.5244367199753744
+internal-449 internal-486 0.20488847980929292
+internal-486 internal-487 0.2182053172285836
+internal-487 seq2636 0.3623504081602624
+internal-487 seq2820 0.7765205896696773
+internal-486 internal-488 0.6132066751205196
+internal-488 seq2880 0.508494715401714
+internal-488 internal-489 0.33539946990729747
+internal-489 seq2701 0.3247277926054727
+internal-489 seq2702 0.43257605353517803
+internal-445 seq3044 1.148872962367945
+internal-441 internal-490 0.03046274177074855
+internal-490 internal-491 0.5746495222907334
+internal-491 internal-492 0.995211692001581
+internal-492 seq2632 0.2534897410992937
+internal-492 seq2633 0.17692939841719577
+internal-491 internal-493 0.5626121285097984
+internal-493 seq3111 0.5964292210889627
+internal-493 internal-494 0.33029614832719656
+internal-494 internal-495 0.15528215137448215
+internal-495 seq3095 0.3306494816750008
+internal-495 internal-496 0.1525005345088931
+internal-496 seq3103 0.16761043161848813
+internal-496 internal-497 0.07275727570193907
+internal-497 seq3100 0.1774612614354634
+internal-497 seq3104 0.11320410304369452
+internal-494 internal-498 0.12799468474269374
+internal-498 seq3094 0.381138045481349
+internal-498 seq3106 0.36379603849186465
+internal-490 internal-499 0.24162505699956482
+internal-499 seq3060 1.0211041082084047
+internal-499 internal-500 0.25783119108568525
+internal-500 internal-501 0.04039135744414383
+internal-501 internal-502 0.09258292110703213
+internal-502 internal-503 0.12463352194685189
+internal-503 seq1816 0.5053800911508022
+internal-503 seq2981 0.6681000907962299
+internal-502 seq2665 1.483251250160178
+internal-501 internal-504 0.09671163048610819
+internal-504 internal-505 0.1391429571648016
+internal-505 internal-506 0.12052912252290361
+internal-506 internal-507 0.20346091444434566
+internal-507 internal-508 0.2103635477032108
+internal-508 internal-509 0.3586877989208415
+internal-509 seq1580 0.13877642384136235
+internal-509 seq1591 0.44900201121553995
+internal-508 internal-510 0.1100018499545313
+internal-510 seq1637 0.450478126490872
+internal-510 internal-511 0.16490580161079388
+internal-511 seq2546 0.3237768473607625
+internal-511 seq2557 0.09938243055624699
+internal-507 internal-512 0.05070916939914626
+internal-512 internal-513 0.11071368864059321
+internal-513 internal-514 0.06335375105931142
+internal-514 seq1642 0.2924380812070121
+internal-514 internal-515 0.12412106289276768
+internal-515 internal-516 0.0999610394882293
+internal-516 seq1585 0.14798170484991538
+internal-516 internal-517 0.06594224428137524
+internal-517 seq1554 0.027986492341501006
+internal-517 seq1597 0.20027417032655542
+internal-515 internal-518 0.04219022212373311
+internal-518 internal-519 0.050936529979475724
+internal-519 internal-520 0.047741975876101427
+internal-520 internal-521 0.02981459496712181
+internal-521 seq1559 0.08089693467745655
+internal-521 internal-522 0.011041541619115549
+internal-522 internal-523 0.04689606643751224
+internal-523 seq1564 0.062457896712912395
+internal-523 seq1571 0.07653583872732819
+internal-522 seq1557 0.07843588722014866
+internal-520 internal-524 0.02887081970917696
+internal-524 seq1617 0.05953499910810452
+internal-524 internal-525 0.011120850472724344
+internal-525 internal-526 0.0985820010337093
+internal-526 seq1603 0.07844053121157661
+internal-526 internal-527 0.03365629287597422
+internal-527 seq1586 0.10655872330998135
+internal-527 seq1614 0.04668529082656963
+internal-525 internal-528 4.999990770832763e-09
+internal-528 seq1596 0.04054051716881931
+internal-528 internal-529 0.03376992366623033
+internal-529 seq1618 0.06392570200358329
+internal-529 seq2657 0.1576618749819006
+internal-519 internal-530 0.005456789927656045
+internal-530 internal-531 0.06321579131396261
+internal-531 seq1612 0.06820671510153155
+internal-531 internal-532 0.05341253540917365
+internal-532 seq1608 0.033301915530096995
+internal-532 seq1609 0.07315854996125226
+internal-530 internal-533 0.14021809218027778
+internal-533 seq1660 0.15730413764222537
+internal-533 internal-534 0.2130096718188974
+internal-534 seq1595 0.07885754144184375
+internal-534 seq1668 0.07256875904991006
+internal-518 internal-535 0.08103545942176248
+internal-535 seq1582 0.01226332136390947
+internal-535 seq2405 0.16843783609123447
+internal-513 internal-536 0.07891211734110555
+internal-536 internal-537 0.10653969134511125
+internal-537 internal-538 0.019489983024671042
+internal-538 internal-539 0.04637936139126545
+internal-539 seq2414 0.17902097355648927
+internal-539 internal-540 0.09418723214573568
+internal-540 seq2402 0.1252319108423236
+internal-540 seq2392 0.29586235888635415
+internal-538 internal-541 0.11168276585183479
+internal-541 seq2395 0.10744247967871128
+internal-541 seq2396 0.037002965698562186
+internal-537 seq2417 0.21866855237352711
+internal-536 seq2385 0.34840799189568816
+internal-512 internal-542 0.06846361362733877
+internal-542 internal-543 0.08209409746768935
+internal-543 seq2431 0.21935078311424047
+internal-543 internal-544 0.0975630289145656
+internal-544 internal-545 0.17624903367303807
+internal-545 seq2427 0.30926795414181235
+internal-545 internal-546 0.17269116324028647
+internal-546 seq2437 0.30968592037031484
+internal-546 internal-547 0.09512877640779858
+internal-547 seq2429 0.2785641718159853
+internal-547 internal-548 0.03135730211953609
+internal-548 seq1653 0.34908292664986873
+internal-548 internal-549 0.15151636232551438
+internal-549 seq2425 0.2328315022310323
+internal-549 internal-550 0.0870724692784272
+internal-550 seq2439 0.25330092344782024
+internal-550 seq2424 0.40031944407561654
+internal-544 internal-551 0.06350333678320058
+internal-551 seq2432 0.18426384087901157
+internal-551 seq2654 0.3973360525824705
+internal-542 internal-552 0.09728340543070493
+internal-552 internal-553 0.08849173965868562
+internal-553 internal-554 0.04834240076781503
+internal-554 seq1594 0.4596942574793978
+internal-554 seq1573 0.3900978879429416
+internal-553 seq1636 0.35675908648093
+internal-552 internal-555 0.1528845867999952
+internal-555 internal-556 0.056312333056620284
+internal-556 seq2487 0.4427617227340944
+internal-556 internal-557 0.03950887807305677
+internal-557 seq2492 0.25365782478903853
+internal-557 seq2514 0.2673867704476447
+internal-555 internal-558 0.04766162102442337
+internal-558 internal-559 0.03601743551769012
+internal-559 internal-560 0.0499231568499972
+internal-560 internal-561 0.026720046679153085
+internal-561 internal-562 0.052226172599005846
+internal-562 internal-563 0.16067078942793542
+internal-563 seq2507 0.11023496452423982
+internal-563 seq2541 0.16052331270015344
+internal-562 internal-564 0.08420016058024045
+internal-564 seq2505 0.19391471406507416
+internal-564 internal-565 0.09699516396275165
+internal-565 seq2419 0.2315243956437378
+internal-565 seq2501 0.13834786863240534
+internal-561 seq2561 0.4268000001968301
+internal-560 seq2559 0.2837131143118775
+internal-559 internal-566 0.12856661468700437
+internal-566 internal-567 0.14135189108746998
+internal-567 seq2542 0.17880319395847488
+internal-567 internal-568 0.09176462561747209
+internal-568 internal-569 0.028969115527738915
+internal-569 seq2517 0.024890846055559013
+internal-569 internal-570 0.0717476105656162
+internal-570 seq2539 0.14370652774119486
+internal-570 seq2548 0.12628185090430555
+internal-568 seq2387 0.29397325937332364
+internal-566 seq2495 0.1704962562917266
+internal-558 internal-571 0.12440686636522111
+internal-571 internal-572 0.025334393236843278
+internal-572 seq2519 0.17097949039975527
+internal-572 internal-573 0.10472922468693734
+internal-573 seq2491 0.2237060390751485
+internal-573 seq2521 0.5300339016438902
+internal-571 internal-574 0.11331583183746141
+internal-574 seq2500 0.2278410664425626
+internal-574 seq2515 0.3993737398212323
+internal-506 internal-575 0.06258190948400505
+internal-575 internal-576 0.42010482155503764
+internal-576 internal-577 0.19734303373695536
+internal-577 internal-578 0.08951713776596801
+internal-578 seq1654 0.11943849253602863
+internal-578 seq1680 0.1860001036741537
+internal-577 internal-579 0.07561667142396108
+internal-579 seq1626 0.27331774250003793
+internal-579 seq1656 0.17028943867347815
+internal-576 internal-580 0.1127854648164324
+internal-580 seq1667 0.3461601440448486
+internal-580 seq1670 0.2677330488084714
+internal-575 internal-581 0.07029732824260075
+internal-581 seq1650 0.38984553240874875
+internal-581 internal-582 0.1117753526809346
+internal-582 seq1676 0.6632576797345308
+internal-582 internal-583 0.1549382490092698
+internal-583 seq1851 0.6403853739530757
+internal-583 internal-584 0.10879134718892192
+internal-584 seq2270 0.4500109223532546
+internal-584 internal-585 0.153375384894062
+internal-585 internal-586 0.277772300277651
+internal-586 internal-587 0.3375192929944499
+internal-587 internal-588 0.06543445721866731
+internal-588 internal-589 0.09138275432234422
+internal-589 seq3116 0.11776093363252868
+internal-589 seq3120 0.0997150949422028
+internal-588 seq3131 0.3147833119613616
+internal-587 internal-590 0.05911448888429778
+internal-590 internal-591 0.04856797335144484
+internal-591 seq2995 0.2206949266331708
+internal-591 internal-592 0.08807557342686059
+internal-592 internal-593 0.01836565509999696
+internal-593 internal-594 0.02749724724456764
+internal-594 internal-595 0.014471778287458287
+internal-595 internal-596 0.03785276212997662
+internal-596 internal-597 0.045141300676523555
+internal-597 seq3023 0.22224407977368685
+internal-597 seq3035 0.11260683514615362
+internal-596 seq2988 0.11304054334559904
+internal-595 internal-598 0.0457656745240313
+internal-598 seq3033 0.08076496592104936
+internal-598 seq3029 0.16710453155229713
+internal-594 seq3028 0.13539637908037352
+internal-593 internal-599 0.01376132959883066
+internal-599 internal-600 0.007536212089381982
+internal-600 internal-601 0.02486899509589232
+internal-601 internal-602 0.025140440594848212
+internal-602 seq3026 0.06915425935251944
+internal-602 internal-603 0.007513137131974589
+internal-603 seq3014 0.11594680398111605
+internal-603 seq3022 0.06635153252589591
+internal-601 internal-604 0.037434603901828484
+internal-604 seq3038 0.1078796828717055
+internal-604 seq2998 0.051710653550569904
+internal-600 internal-605 0.09039359914816328
+internal-605 seq3006 0.06104856531430823
+internal-605 seq3007 0.054360381659604114
+internal-599 internal-606 0.05169834257329396
+internal-606 seq3030 0.08627164675661493
+internal-606 internal-607 0.045680806680683486
+internal-607 seq2996 0.04363758945212915
+internal-607 seq3041 0.07792971915445233
+internal-592 internal-608 0.03954694300279512
+internal-608 seq3027 0.18381154571387465
+internal-608 internal-609 0.0906482356781458
+internal-609 seq3039 0.1238799033379089
+internal-609 seq3040 0.08193047476971017
+internal-590 internal-610 0.18201012503900332
+internal-610 seq3021 0.2169830524846849
+internal-610 internal-611 0.2530922118330678
+internal-611 seq3128 0.15167061404079085
+internal-611 seq3134 0.39891076767580336
+internal-586 internal-612 0.1188771465721817
+internal-612 seq3122 0.34507075405568477
+internal-612 internal-613 0.06706453320981297
+internal-613 seq2992 0.3249027362825552
+internal-613 internal-614 0.18761922668551678
+internal-614 internal-615 0.04065053696574072
+internal-615 seq3135 0.21540687939404332
+internal-615 internal-616 0.029875694854341384
+internal-616 seq3031 0.19897563772343477
+internal-616 seq3125 0.3851009961663886
+internal-614 seq3117 0.08553125812325155
+internal-585 internal-617 0.16982922052296578
+internal-617 seq2267 0.5442862033364665
+internal-617 seq2474 0.47641139662228627
+internal-505 internal-618 0.1478016341822965
+internal-618 internal-619 0.04742074546904035
+internal-619 internal-620 0.07868619575811994
+internal-620 internal-621 0.045493748025963246
+internal-621 internal-622 0.09248587028617211
+internal-622 internal-623 0.1974094816143034
+internal-623 internal-624 0.11738280833048631
+internal-624 seq2278 0.06620144880292599
+internal-624 seq2282 0.0450549828358522
+internal-623 internal-625 0.2060498696655567
+internal-625 seq2068 0.06796211555302241
+internal-625 seq2132 0.05701101776696229
+internal-622 internal-626 0.11593489100310546
+internal-626 seq2061 0.36830395217099143
+internal-626 internal-627 0.1304854291451859
+internal-627 seq2041 0.22616651353351405
+internal-627 seq2443 0.20327804378189507
+internal-621 internal-628 0.0361929951936356
+internal-628 internal-629 0.14845565697507712
+internal-629 seq2453 0.07781093637370597
+internal-629 internal-630 0.08930070316547097
+internal-630 seq2447 0.08225175217668448
+internal-630 seq2455 0.14576489394178668
+internal-628 internal-631 0.05088795806913155
+internal-631 internal-632 0.12671576210337626
+internal-632 seq2014 0.23938050114264875
+internal-632 internal-633 0.06677136875094673
+internal-633 internal-634 0.06019416489139202
+internal-634 internal-635 0.09509094447763015
+internal-635 internal-636 0.12400703910323702
+internal-636 internal-637 0.03923541557782392
+internal-637 seq2124 0.05036999902519944
+internal-637 seq2128 0.15929981495853063
+internal-636 internal-638 0.037182602366982204
+internal-638 seq2134 0.12647635054529094
+internal-638 seq2144 0.16075489827268422
+internal-635 seq2175 0.38393467831922107
+internal-634 internal-639 0.11428876704158174
+internal-639 seq2069 0.15258793834755985
+internal-639 seq2151 0.09908396210717105
+internal-633 internal-640 0.35040087121715807
+internal-640 seq2031 0.05245668917350986
+internal-640 internal-641 0.12381745545317749
+internal-641 internal-642 0.012121114626399906
+internal-642 internal-643 0.1368169704581936
+internal-643 seq2152 0.07115341566240305
+internal-643 seq2170 0.1533710559020526
+internal-642 internal-644 0.022878703769645396
+internal-644 internal-645 0.03269525164989954
+internal-645 internal-646 0.04695567732748026
+internal-646 seq2157 0.08299300380845491
+internal-646 seq2166 0.06624886571540209
+internal-645 internal-647 0.04301108160856042
+internal-647 seq2161 0.15935803585106437
+internal-647 seq2154 5.999988924999316e-09
+internal-644 seq2210 0.09834381047337022
+internal-641 seq2006 0.007633081910576096
+internal-631 internal-648 0.0764784328332901
+internal-648 internal-649 0.043080439480537094
+internal-649 seq2100 0.22424997607112954
+internal-649 internal-650 0.04570795763056726
+internal-650 internal-651 0.27100147777548467
+internal-651 seq2280 0.3630561628575544
+internal-651 seq2473 0.3713045226324279
+internal-650 internal-652 0.07748672697214362
+internal-652 internal-653 0.07544280974488136
+internal-653 internal-654 0.06549004511606113
+internal-654 seq2142 0.11399531058325449
+internal-654 seq2148 0.10341435911396465
+internal-653 internal-655 0.08627118775746216
+internal-655 seq2146 0.09883316857009501
+internal-655 seq2276 0.24752909710167004
+internal-652 seq2176 0.17206914338843363
+internal-648 internal-656 0.02455024868424619
+internal-656 seq2204 0.2812185499164364
+internal-656 seq2179 0.24778940562118296
+internal-620 internal-657 0.2707795331851582
+internal-657 seq2155 0.24872068590219149
+internal-657 internal-658 0.08224324319239068
+internal-658 seq2208 0.4147550754297962
+internal-658 seq2162 0.27917137269519154
+internal-619 internal-659 0.1059061825144652
+internal-659 internal-660 0.1429317661712783
+internal-660 internal-661 0.054005147315308755
+internal-661 seq2092 0.18544158170509414
+internal-661 internal-662 0.06721130193890185
+internal-662 internal-663 0.1134815835315108
+internal-663 seq2038 0.38602416146237606
+internal-663 internal-664 0.0965279048252358
+internal-664 seq2182 0.305800202542716
+internal-664 seq2235 0.2574074568678295
+internal-662 internal-665 0.03489115859661356
+internal-665 internal-666 0.11682687235665341
+internal-666 internal-667 0.10020994302879396
+internal-667 seq2215 0.22637024015746796
+internal-667 internal-668 0.09385586775738028
+internal-668 seq2221 0.11552263176406877
+internal-668 internal-669 0.11225184080141526
+internal-669 seq2222 0.10214655045413261
+internal-669 internal-670 0.1227985923338326
+internal-670 seq2073 0.09700043495302227
+internal-670 seq2095 0.05241394625240632
+internal-666 internal-671 0.08922602730331042
+internal-671 internal-672 0.04249627055881763
+internal-672 seq2160 0.15606377393173443
+internal-672 internal-673 0.07148381305254337
+internal-673 internal-674 0.03735759804396873
+internal-674 internal-675 0.02158399115947365
+internal-675 internal-676 0.07996365940013046
+internal-676 seq2216 0.30341756294068
+internal-676 seq2348 0.34023657697878695
+internal-675 seq2200 0.0874229856314312
+internal-674 internal-677 0.03155184276044581
+internal-677 internal-678 0.012719157522510287
+internal-678 seq2198 0.17878798798654263
+internal-678 seq2201 0.18315663592273126
+internal-677 seq2074 0.12271672048495467
+internal-673 seq2044 0.41401707679202127
+internal-671 internal-679 0.012717316525908467
+internal-679 seq2343 0.2702551861530173
+internal-679 internal-680 0.045314602356636924
+internal-680 internal-681 0.03670515924826431
+internal-681 seq2139 0.028285788789048593
+internal-681 internal-682 0.020885071449565407
+internal-682 seq2085 0.11555041171279151
+internal-682 seq2125 0.09087207026498366
+internal-680 internal-683 0.019648021732957367
+internal-683 internal-684 0.02681279050796311
+internal-684 internal-685 0.022771703967149576
+internal-685 seq2127 0.12625748694927744
+internal-685 seq2220 0.2182082412231864
+internal-684 seq2185 0.13760384600574974
+internal-683 seq2117 0.0991896829120277
+internal-665 seq2184 0.3918269937512944
+internal-660 seq2236 0.3737641690923218
+internal-659 seq2232 0.5304056319577367
+internal-618 internal-686 0.09050426494389227
+internal-686 internal-687 0.09933267264809197
+internal-687 internal-688 0.651740612993157
+internal-688 seq1812 0.10432175343906278
+internal-688 seq2015 0.12916954957408494
+internal-687 seq2138 0.5882162732487245
+internal-686 seq2108 0.4822051329279942
+internal-504 internal-689 0.15953500552440722
+internal-689 internal-690 0.20713537466189158
+internal-690 seq2296 0.6655026825906216
+internal-690 internal-691 0.18078762229554393
+internal-691 seq1772 0.3543095480023784
+internal-691 seq2301 0.6836038891787475
+internal-689 internal-692 0.13655517194143096
+internal-692 internal-693 5.999988924999316e-09
+internal-693 internal-694 0.03936883533155283
+internal-694 internal-695 0.0988047376225739
+internal-695 seq1536 0.34920597742273707
+internal-695 internal-696 0.14144865290886346
+internal-696 seq1778 0.24196922836428064
+internal-696 seq1866 0.23218637342183482
+internal-694 internal-697 0.09630054224491003
+internal-697 internal-698 0.11906713022150288
+internal-698 seq1982 0.18654933166036844
+internal-698 seq2028 0.336743556426333
+internal-697 internal-699 0.18486153677576245
+internal-699 seq1901 0.11316972010715982
+internal-699 seq1993 0.09598265783167279
+internal-693 seq1537 0.4475943078139308
+internal-692 internal-700 0.04074680078805341
+internal-700 internal-701 0.07232438850097823
+internal-701 internal-702 0.2269001131794088
+internal-702 internal-703 0.13032749743670208
+internal-703 internal-704 0.08339741206198326
+internal-704 internal-705 0.344897683375145
+internal-705 seq1525 0.13280938585554097
+internal-705 seq1717 0.04357174657366436
+internal-704 internal-706 0.12164699245949809
+internal-706 seq1534 0.18227126055698975
+internal-706 seq2002 0.22449137362554905
+internal-703 internal-707 0.13255624032280633
+internal-707 seq1521 0.2424153135408802
+internal-707 internal-708 0.1140253035278924
+internal-708 internal-709 0.09656968674811318
+internal-709 seq2350 0.6203215479876251
+internal-709 internal-710 0.06289245191079439
+internal-710 seq1538 0.1457445629793143
+internal-710 seq1802 0.13713933486316152
+internal-708 seq2219 0.4232207498035424
+internal-702 internal-711 0.2205877088310774
+internal-711 internal-712 0.04911317234509644
+internal-712 seq1527 0.056608000510866396
+internal-712 internal-713 0.14961709583125046
+internal-713 seq1681 0.0714602640960109
+internal-713 seq1682 0.18738738511345848
+internal-711 seq1691 0.08738290670541035
+internal-701 internal-714 0.1456451211628677
+internal-714 internal-715 0.018491174868307945
+internal-715 seq2045 0.4117980498879829
+internal-715 internal-716 0.02268774812211837
+internal-716 seq2060 0.597037200966731
+internal-716 seq2063 0.09270128288855559
+internal-714 internal-717 0.04849843047980964
+internal-717 internal-718 0.06869277520434389
+internal-718 seq1509 0.24566522054208206
+internal-718 seq1515 0.3327511057957455
+internal-717 internal-719 0.06791440464108897
+internal-719 internal-720 0.1088179131398855
+internal-720 internal-721 0.0823952669117797
+internal-721 internal-722 4.999990770832763e-09
+internal-722 internal-723 0.07844225220839993
+internal-723 seq2067 0.1225066138727772
+internal-723 seq2077 0.08587519548839928
+internal-722 internal-724 0.08018536599089626
+internal-724 internal-725 0.07724875541140029
+internal-725 seq1877 0.07172193761300427
+internal-725 seq1886 0.08830226300842861
+internal-724 internal-726 0.05297168722290748
+internal-726 seq1760 0.060366280573694545
+internal-726 seq1782 0.16574340306471821
+internal-721 seq2042 0.4491362799677017
+internal-720 internal-727 0.029680660214343513
+internal-727 seq2119 0.17426546033439086
+internal-727 internal-728 0.035083195242145246
+internal-728 seq2023 0.24747698119786746
+internal-728 internal-729 0.09307294820252204
+internal-729 seq2080 0.1697919175918209
+internal-729 internal-730 0.09779904247892307
+internal-730 seq1510 0.08358817670986284
+internal-730 seq2072 0.052084632860265115
+internal-719 internal-731 0.03392035538855791
+internal-731 internal-732 0.10389046023515967
+internal-732 seq1868 0.22776074359082546
+internal-732 internal-733 0.09967818901032514
+internal-733 seq2035 0.26381818403467305
+internal-733 internal-734 0.1059547604247983
+internal-734 seq1888 0.36655765039437965
+internal-734 internal-735 0.16228852444186054
+internal-735 seq1823 0.18907971598969178
+internal-735 internal-736 0.10567583893964186
+internal-736 seq1543 0.08850521363381486
+internal-736 internal-737 0.028944991572267802
+internal-737 seq1892 0.09770704964872683
+internal-737 seq1548 0.10651350739344255
+internal-731 internal-738 0.025686474586958545
+internal-738 internal-739 0.023697001259201735
+internal-739 internal-740 0.03512855215842378
+internal-740 internal-741 0.03082085910972237
+internal-741 internal-742 0.05711177458098165
+internal-742 seq1841 0.12038493478905064
+internal-742 internal-743 0.11283979871614089
+internal-743 seq2285 0.2479042224092499
+internal-743 seq2043 0.03996486923137149
+internal-741 internal-744 0.05098183089585762
+internal-744 seq1975 0.14974035360373672
+internal-744 seq2070 0.13450457972648963
+internal-740 internal-745 0.06253937056252497
+internal-745 internal-746 0.010879120918917663
+internal-746 seq1813 0.07160054783707
+internal-746 internal-747 0.09639949006226849
+internal-747 internal-748 0.048106081204022384
+internal-748 seq2025 0.052504068086056115
+internal-748 internal-749 0.026993592174232733
+internal-749 seq2032 0.07190684127170228
+internal-749 seq2055 0.09531013007304931
+internal-747 internal-750 0.018123265547408528
+internal-750 seq1513 0.07498251759450558
+internal-750 seq1520 0.1617478644398307
+internal-745 internal-751 0.06030577668537486
+internal-751 seq1894 0.07975571578396044
+internal-751 internal-752 0.026921137307972593
+internal-752 seq2046 0.07946036932912182
+internal-752 seq1499 0.027552387142788383
+internal-739 seq2243 0.29701252476333556
+internal-738 seq1872 0.28646255423685996
+internal-700 internal-753 0.03475439384905898
+internal-753 internal-754 0.15480348925801432
+internal-754 internal-755 0.04809259722891161
+internal-755 internal-756 0.18513357427362562
+internal-756 seq1511 0.10148299267895201
+internal-756 seq1824 0.2097326238677933
+internal-755 internal-757 0.0373421340725127
+internal-757 internal-758 0.051643158675154434
+internal-758 seq1853 0.17806789131572362
+internal-758 internal-759 0.061641344220135084
+internal-759 internal-760 0.028321561723017592
+internal-760 internal-761 0.03319250673204778
+internal-761 seq1494 0.26751230721592434
+internal-761 internal-762 0.06342553992680089
+internal-762 internal-763 0.04854063140191362
+internal-763 seq1506 0.17755757125769117
+internal-763 seq1904 0.2589177670800432
+internal-762 internal-764 0.04067088392818354
+internal-764 seq1844 0.08330435723374728
+internal-764 internal-765 0.10306689575532534
+internal-765 seq1860 0.14880112933739148
+internal-765 seq1822 0.4238144467076748
+internal-760 seq1836 0.21741531668679573
+internal-759 internal-766 0.028059796206194032
+internal-766 seq1887 0.18799892998464643
+internal-766 seq1843 0.3304388450638016
+internal-757 seq1544 0.7241470073427658
+internal-754 seq2264 0.591991194280836
+internal-753 internal-767 0.018310548201715304
+internal-767 seq1966 0.4738892522777532
+internal-767 internal-768 0.07487706378915611
+internal-768 internal-769 0.023079239399489342
+internal-769 internal-770 0.09609047063266794
+internal-770 internal-771 0.1531179773691943
+internal-771 seq1733 0.024602114588510197
+internal-771 internal-772 0.06086411265477775
+internal-772 seq1977 0.14782697913551382
+internal-772 seq1967 0.0969355080728667
+internal-770 seq1969 0.24228657577850907
+internal-769 internal-773 7.999985233332421e-09
+internal-773 seq1954 0.33951186031649566
+internal-773 internal-774 0.07442831061748124
+internal-774 internal-775 0.13031283046377493
+internal-775 internal-776 0.038057891751340805
+internal-776 internal-777 4.999990770832763e-09
+internal-777 internal-778 0.06641601140687842
+internal-778 internal-779 0.115677024479085
+internal-779 seq1739 0.10591471149872209
+internal-779 seq1765 0.24907496424825146
+internal-778 internal-780 0.03554881038269566
+internal-780 seq1744 0.12458196404201936
+internal-780 internal-781 0.02985247089720902
+internal-781 internal-782 0.030023530581460754
+internal-782 seq1776 0.09842403032529745
+internal-782 internal-783 0.047621357098744
+internal-783 seq1741 0.2167683458809983
+internal-783 seq1689 0.05823935049966047
+internal-781 internal-784 0.011339739068691708
+internal-784 internal-785 0.0733399666263867
+internal-785 seq1704 0.15093764439373325
+internal-785 internal-786 0.04649781717261541
+internal-786 seq1735 0.03625620707695677
+internal-786 seq1738 0.09380016686019504
+internal-784 internal-787 0.10369963358739452
+internal-787 internal-788 0.06717319400924286
+internal-788 seq1762 0.194479679022241
+internal-788 seq1737 0.3018342758631697
+internal-787 internal-789 0.07468921913588668
+internal-789 internal-790 0.048849758831314816
+internal-790 seq1731 0.18681014217895478
+internal-790 seq1973 0.13419149230439795
+internal-789 internal-791 0.08084221877845318
+internal-791 seq1718 0.5259733731389634
+internal-791 internal-792 0.052462850162137684
+internal-792 seq2251 0.3091178984187907
+internal-792 internal-793 0.045813812435176564
+internal-793 internal-794 0.042407797722124045
+internal-794 seq2242 0.1267450870492472
+internal-794 seq2249 0.08930447515850849
+internal-793 seq2260 0.4909103538595766
+internal-777 seq2000 0.39297265863658387
+internal-776 internal-795 0.018393543048520356
+internal-795 internal-796 0.05323070974479416
+internal-796 seq1749 0.2696725032285549
+internal-796 seq1539 0.42878401053467075
+internal-795 internal-797 0.09842397732539529
+internal-797 seq1711 0.1310741840584404
+internal-797 internal-798 0.3628984041487512
+internal-798 seq1712 0.13995578466445469
+internal-798 seq1750 0.14637124182256742
+internal-775 internal-799 0.06688334554425585
+internal-799 internal-800 0.13150282126724605
+internal-800 internal-801 0.05773646242790981
+internal-801 seq1699 0.4193849888837313
+internal-801 internal-802 0.07882543350110978
+internal-802 internal-803 0.07815624473632307
+internal-803 seq1748 0.05807497480307119
+internal-803 internal-804 0.07908318502534252
+internal-804 seq1688 0.19164236325946302
+internal-804 seq1701 0.024451963865663933
+internal-802 internal-805 0.16441637651419275
+internal-805 internal-806 0.07800744501098308
+internal-806 seq1781 0.058163091640421875
+internal-806 seq1958 0.06357656864802651
+internal-805 internal-807 0.018878268153796892
+internal-807 seq1806 0.18177615847086745
+internal-807 internal-808 0.14702826560980867
+internal-808 seq1745 0.0571847594462635
+internal-808 seq1746 0.07480104992946529
+internal-800 internal-809 0.09165068582778636
+internal-809 seq1786 0.24597298197400466
+internal-809 seq1788 0.19303997767969483
+internal-799 seq1814 0.2299001726417885
+internal-774 seq1971 0.36310974175865646
+internal-768 internal-810 0.1651756541126902
+internal-810 seq1964 0.2846476035869628
+internal-810 seq1796 0.6513312157488375
+internal-500 internal-811 0.1906292821294455
+internal-811 internal-812 0.297092447615811
+internal-812 seq2357 0.32053144835123965
+internal-812 seq2359 0.20088625419674846
+internal-811 internal-813 0.27032449202508996
+internal-813 seq2356 0.331248262569749
+internal-813 seq2361 0.4305268553176636
+internal-440 internal-814 0.26787869953962384
+internal-814 seq2689 0.9028653584578468
+internal-814 internal-815 0.25150616476065196
+internal-815 internal-816 0.09277384475461822
+internal-816 internal-817 0.4368086527224905
+internal-817 seq3228 1.1675199919485704
+internal-817 internal-818 0.8201219081887567
+internal-818 seq3144 4.999990770832763e-09
+internal-818 internal-819 0.14503128229591408
+internal-819 seq3148 0.30815974118739264
+internal-819 seq3150 0.03816358155625466
+internal-816 internal-820 0.2623978076564561
+internal-820 internal-821 0.2018378854401924
+internal-821 internal-822 0.18787679421008915
+internal-822 internal-823 0.06054562824264801
+internal-823 seq2828 0.6814615501331559
+internal-823 internal-824 0.20518146826848402
+internal-824 seq2826 0.29064169052285616
+internal-824 seq3221 0.45240612693209775
+internal-822 internal-825 0.16370652382446502
+internal-825 seq2827 0.5758875800054808
+internal-825 seq3232 1.1311577340673664
+internal-821 internal-826 0.15676779163223262
+internal-826 seq3292 1.4592692994269465
+internal-826 internal-827 0.38599245552090006
+internal-827 internal-828 0.19408791674537026
+internal-828 internal-829 0.26579329438894156
+internal-829 seq2850 0.23994085210833227
+internal-829 internal-830 0.21256723763555874
+internal-830 internal-831 0.1276623653561011
+internal-831 seq2846 0.41913206335059056
+internal-831 seq2852 0.28767184700470283
+internal-830 seq2853 0.5104029818793654
+internal-828 internal-832 0.19203205054016387
+internal-832 internal-833 0.09529763209611854
+internal-833 seq2836 0.29394685642205914
+internal-833 internal-834 0.09249767726437834
+internal-834 internal-835 2.5851896291617065
+internal-835 seq3241 0.1884724091106812
+internal-835 seq3242 0.022209735004452603
+internal-834 internal-836 4.999990770832763e-09
+internal-836 seq2842 0.05962345494482948
+internal-836 seq2840 0.10255932169222426
+internal-832 seq2833 0.18590034585829035
+internal-827 internal-837 0.10092727370471857
+internal-837 internal-838 0.0756181324212643
+internal-838 internal-839 0.2435598654282241
+internal-839 seq3211 0.107278888980673
+internal-839 internal-840 0.04122858189876408
+internal-840 seq3212 0.17384646510778767
+internal-840 seq3213 0.10005720631072103
+internal-838 internal-841 0.13933894580303857
+internal-841 seq2942 0.38847033494713884
+internal-841 internal-842 0.24808623907327682
+internal-842 seq2971 0.37870993296324856
+internal-842 seq2974 0.16844336908102148
+internal-837 internal-843 0.1480496747244541
+internal-843 internal-844 0.06635014452845793
+internal-844 internal-845 0.024738431336891714
+internal-845 internal-846 0.10015395313214219
+internal-846 internal-847 0.1118574865293289
+internal-847 internal-848 0.09484497493164981
+internal-848 seq2905 0.3309521381163464
+internal-848 internal-849 0.14224508243878445
+internal-849 seq3203 0.2494328585876369
+internal-849 seq3202 0.8530083264857937
+internal-847 seq2969 0.113098026239495
+internal-846 internal-850 0.04549112603080302
+internal-850 internal-851 0.0776483556738034
+internal-851 seq2979 0.22629033330496298
+internal-851 seq2972 0.38409568702202523
+internal-850 internal-852 0.08104883039708184
+internal-852 seq2967 0.4200419876710187
+internal-852 internal-853 0.10568835191654494
+internal-853 internal-854 0.052514327067119705
+internal-854 internal-855 0.023284947019786634
+internal-855 internal-856 0.06600072317343275
+internal-856 seq2912 0.26006192396811634
+internal-856 internal-857 0.13872641893366325
+internal-857 seq2938 0.20323810985560659
+internal-857 seq3198 0.24227203880534198
+internal-855 internal-858 0.06488428023420426
+internal-858 internal-859 0.21185163895643713
+internal-859 seq3161 0.18371406189381387
+internal-859 seq3163 0.10899523481257863
+internal-858 internal-860 0.19557388000252454
+internal-860 internal-861 0.03337725039104113
+internal-861 seq3194 0.23476702965836446
+internal-861 seq2926 0.2781053496628962
+internal-860 internal-862 0.0933228407412612
+internal-862 internal-863 0.08729193887332212
+internal-863 seq3176 0.18710143564127457
+internal-863 internal-864 0.06126584391324739
+internal-864 internal-865 0.1288921630860951
+internal-865 seq3197 0.1332042491266878
+internal-865 internal-866 0.08029096379597994
+internal-866 seq3195 0.07777062644811152
+internal-866 seq3196 0.06243266875947908
+internal-864 seq3173 0.36302607291309547
+internal-862 internal-867 0.06697686937162611
+internal-867 seq3186 0.2516246955418635
+internal-867 seq3189 0.15705318910543542
+internal-854 internal-868 0.07754018287347275
+internal-868 seq3193 0.23646347252700767
+internal-868 internal-869 0.22598247587321757
+internal-869 seq2948 0.11180090863376249
+internal-869 seq2964 0.22220560584470347
+internal-853 internal-870 0.1308876784026994
+internal-870 seq2957 0.22429571698669928
+internal-870 internal-871 0.12992676017639768
+internal-871 seq2946 0.29528809194635725
+internal-871 seq2962 0.1675815666717681
+internal-845 internal-872 0.10947567692576086
+internal-872 internal-873 0.14949039606511755
+internal-873 seq2895 0.1042387525922688
+internal-873 internal-874 0.08028581180548969
+internal-874 seq3169 0.08123238605826803
+internal-874 seq3171 0.09190866335160193
+internal-872 internal-875 0.015550734295881522
+internal-875 seq2898 0.22207049809409032
+internal-875 internal-876 0.0656881017504809
+internal-876 seq2899 0.06870216718700782
+internal-876 seq3178 0.1518125917787231
+internal-844 internal-877 0.03528561686850795
+internal-877 internal-878 0.04708884808166877
+internal-878 internal-879 0.08081576882727548
+internal-879 seq2973 0.1904866423927352
+internal-879 internal-880 0.09687311618803193
+internal-880 seq2945 0.06775470993585933
+internal-880 seq2947 0.139916426737103
+internal-878 internal-881 0.0556575392652628
+internal-881 seq2976 0.28655731706194326
+internal-881 seq2954 0.280733066812559
+internal-877 internal-882 0.05627203513100368
+internal-882 seq3170 0.28732056765310715
+internal-882 internal-883 0.16135422516642456
+internal-883 seq2909 0.3524508264332752
+internal-883 internal-884 0.028045573232447323
+internal-884 internal-885 0.06102917535009894
+internal-885 internal-886 0.09740369920866224
+internal-886 seq2932 0.09448364459860666
+internal-886 internal-887 0.3031626834111461
+internal-887 seq2927 0.06368023145668188
+internal-887 internal-888 0.026477273127273458
+internal-888 seq2918 0.08390633812258877
+internal-888 seq2921 0.0891044835276604
+internal-885 seq2933 0.09676437238875525
+internal-884 seq2950 0.15566539766707202
+internal-843 seq2955 0.35851947323154326
+internal-820 internal-889 0.6709151686000555
+internal-889 seq2857 0.18074496837427612
+internal-889 seq2858 0.21379869536248866
+internal-815 internal-890 0.7188454121286456
+internal-890 internal-891 0.14894492407196985
+internal-891 seq3289 0.39570591359144114
+internal-891 internal-892 0.10475310164286436
+internal-892 seq2796 0.284308771212392
+internal-892 seq2799 0.11301042040120109
+internal-890 internal-893 0.1487879533617122
+internal-893 seq2806 0.48715435279254177
+internal-893 internal-894 0.280013009141668
+internal-894 seq3288 0.17502391093441477
+internal-894 internal-895 0.0562443431821185
+internal-895 seq2792 0.31629100017841516
+internal-895 internal-896 0.13222697993056728
+internal-896 seq2810 0.05324349472119518
+internal-896 internal-897 0.059714635776524534
+internal-897 seq2798 0.21429391144840054
+internal-897 seq3287 0.08068439506977
+internal-437 internal-898 0.13033931241489355
+internal-898 internal-899 0.13622835254468627
+internal-899 internal-900 0.15419878137420642
+internal-900 internal-901 0.40582770690826203
+internal-901 seq1432 0.671275488934963
+internal-901 seq1435 0.8455568242400513
+internal-900 internal-902 0.049882090925798185
+internal-902 internal-903 0.1917945969784644
+internal-903 seq2646 1.338484149376628
+internal-903 internal-904 0.08765588020154581
+internal-904 internal-905 0.21023202894597298
+internal-905 internal-906 0.11626201039929643
+internal-906 seq1910 0.7866232070218939
+internal-906 internal-907 0.3425011807986978
+internal-907 seq1929 0.44456982939662454
+internal-907 internal-908 0.38453287221505267
+internal-908 seq1927 0.07999977733346265
+internal-908 seq1928 0.07396654146983175
+internal-905 internal-909 0.12959398279065046
+internal-909 internal-910 0.28461050665543763
+internal-910 internal-911 0.2347528636845125
+internal-911 seq1922 0.20907006409077053
+internal-911 internal-912 0.09167627778054778
+internal-912 seq1943 0.10913822554864104
+internal-912 seq1944 0.23427471756709223
+internal-910 internal-913 0.12789525292622864
+internal-913 seq1940 0.43793284064742294
+internal-913 internal-914 0.15293426170830343
+internal-914 seq1924 0.25895008902038225
+internal-914 seq1937 0.30061233311867663
+internal-909 internal-915 0.14587628173618297
+internal-915 seq1938 0.6338808099594396
+internal-915 internal-916 0.20149269607735568
+internal-916 seq1939 0.6345527837190857
+internal-916 internal-917 0.3148847377741461
+internal-917 seq1932 0.1585309463777366
+internal-917 seq1951 0.12819212737824684
+internal-904 internal-918 0.11484307101842704
+internal-918 seq2815 0.8877451333673154
+internal-918 internal-919 0.38853335083082186
+internal-919 internal-920 0.027969570372736202
+internal-920 seq1949 0.33605357869991936
+internal-920 internal-921 0.27860905273314246
+internal-921 seq1946 0.4366429650283229
+internal-921 seq1935 1.2015678381018013
+internal-919 seq1931 0.2635936894490534
+internal-902 internal-922 0.7868980225146294
+internal-922 seq2291 0.7460732768704493
+internal-922 seq2813 1.0813291500428028
+internal-899 internal-923 0.08313844253999873
+internal-923 seq1447 1.3917346490848932
+internal-923 internal-924 0.029786883018273543
+internal-924 seq3207 1.7212584398377355
+internal-924 internal-925 0.3248957962953653
+internal-925 internal-926 0.06212898932002178
+internal-926 internal-927 0.06542789423078152
+internal-927 internal-928 0.4802916404599892
+internal-928 seq2371 0.5238603260393035
+internal-928 seq2372 0.8361465876098128
+internal-927 internal-929 0.06516532371544385
+internal-929 internal-930 0.3658604426813113
+internal-930 seq2790 0.6332816960653062
+internal-930 internal-931 0.1712589508839168
+internal-931 seq2574 0.575652667439091
+internal-931 seq2576 0.4363287316083465
+internal-929 internal-932 0.46690928716163005
+internal-932 seq2667 2.0914124635937967
+internal-932 internal-933 0.2843046452200079
+internal-933 internal-934 0.2736881628163025
+internal-934 seq2605 0.38431247062187807
+internal-934 internal-935 0.10629633279431143
+internal-935 internal-936 0.07914927490335137
+internal-936 internal-937 0.06248318666623126
+internal-937 internal-938 0.01345698716059715
+internal-938 internal-939 0.018245132322462346
+internal-939 seq2613 0.2143515733419661
+internal-939 internal-940 0.06256446051621299
+internal-940 internal-941 0.040146283896509614
+internal-941 seq2593 0.22350664944318924
+internal-941 internal-942 0.0716575957317689
+internal-942 seq2677 0.39737258151504407
+internal-942 internal-943 0.074470036540462
+internal-943 seq3075 0.21456275495215932
+internal-943 seq3233 0.1878432912719301
+internal-940 seq2585 0.16959484495558486
+internal-938 seq2668 0.2321666174583011
+internal-937 internal-944 0.004134630368146887
+internal-944 internal-945 0.09392890262256984
+internal-945 seq2590 0.12992332418273997
+internal-945 seq2602 0.286420587314324
+internal-944 internal-946 0.09239045546229231
+internal-946 seq2608 0.259654110720873
+internal-946 seq2609 0.14066363435787962
+internal-936 internal-947 0.017348916976729658
+internal-947 seq2589 0.15758943111562015
+internal-947 internal-948 0.01783637707695784
+internal-948 internal-949 0.043260468148233554
+internal-949 internal-950 0.0401073759683273
+internal-950 seq2584 0.14830706424935505
+internal-950 internal-951 0.08065370512641863
+internal-951 seq2598 0.08783655986804063
+internal-951 seq2600 0.0538151086660891
+internal-949 seq2607 0.12669401914351022
+internal-948 internal-952 0.04119494296085607
+internal-952 seq2685 0.18692659496400194
+internal-952 seq2767 0.1270174025465972
+internal-935 seq2587 0.16930506849046495
+internal-933 internal-953 0.32980457123456763
+internal-953 internal-954 0.21270749437666767
+internal-954 internal-955 0.18716051053223196
+internal-955 internal-956 0.16784477318593183
+internal-956 seq3070 0.42306993608191995
+internal-956 seq3071 0.5070815150102514
+internal-955 internal-957 0.06896580870036861
+internal-957 seq3065 0.28353429064195684
+internal-957 internal-958 0.12565014907032407
+internal-958 seq3087 0.36485234054210336
+internal-958 seq3090 0.8763683153670654
+internal-954 seq3062 0.24931846279879286
+internal-953 internal-959 0.20717343959162995
+internal-959 seq3085 0.8341964102095222
+internal-959 seq3093 0.44151934802731546
+internal-926 seq2373 1.265140438757152
+internal-925 internal-960 0.4081694535857797
+internal-960 seq2572 1.380424348961862
+internal-960 internal-961 0.5145799831693024
+internal-961 internal-962 0.360104027306715
+internal-962 internal-963 0.07100856292977756
+internal-963 seq2327 0.688328423458028
+internal-963 seq2332 0.5937905589595024
+internal-962 internal-964 0.1429240761854728
+internal-964 internal-965 0.07224829764142954
+internal-965 internal-966 0.3059424292801887
+internal-966 seq2317 0.1638470735650331
+internal-966 seq2320 0.25045396270284526
+internal-965 internal-967 0.12244067899448223
+internal-967 seq2331 0.2093004706654776
+internal-967 internal-968 0.06385720013002658
+internal-968 internal-969 0.16782423222384707
+internal-969 seq2312 0.4514634556721151
+internal-969 seq2339 0.3785963751728577
+internal-968 seq2338 0.5391858637508612
+internal-964 seq2326 0.34163611039547664
+internal-961 seq2337 0.31633828409113673
+internal-898 internal-970 0.3003848535385668
+internal-970 internal-971 0.16752148778266393
+internal-971 internal-972 0.7271581857846217
+internal-972 seq2240 2.002313095056695
+internal-972 seq3045 1.5075764802597718
+internal-971 internal-973 0.8911711470434531
+internal-973 seq3054 4.999990770832763e-09
+internal-973 internal-974 0.12335179131271752
+internal-974 seq3057 0.1730008216687075
+internal-974 internal-975 0.05334230653880469
+internal-975 seq3049 0.277049628611585
+internal-975 seq3052 0.07852459505640846
+internal-970 seq2759 1.8083717740407328
+internal-117 internal-976 0.148881941188226
+internal-976 internal-977 0.30169893611298476
+internal-977 seq939 0.9855674928031992
+internal-977 internal-978 0.2631232573173944
+internal-978 seq1317 5.993088546736288
+internal-978 seq1428 0.6980542465057453
+internal-976 internal-979 0.06982277211855395
+internal-979 seq549 0.8907777357696262
+internal-979 internal-980 0.4391575523868049
+internal-980 internal-981 0.12649289251475718
+internal-981 internal-982 0.13397839069774875
+internal-982 internal-983 0.11602284284076073
+internal-983 seq1132 0.08575867670347395
+internal-983 internal-984 0.13711217491329436
+internal-984 seq1133 0.13347219763209855
+internal-984 seq1134 0.15752018124344414
+internal-982 internal-985 0.01746571376114185
+internal-985 internal-986 0.31961493704296995
+internal-986 seq1457 0.0950411045696265
+internal-986 seq1458 0.21128065001038956
+internal-985 internal-987 0.04248039058812946
+internal-987 internal-988 0.10129983901702379
+internal-988 seq544 0.170723525872224
+internal-988 seq547 0.11310690422310768
+internal-987 internal-989 0.07522107215417279
+internal-989 seq286 0.19456972785602555
+internal-989 seq543 0.19597057627028794
+internal-981 internal-990 0.12752738060526095
+internal-990 seq540 0.16003953159313442
+internal-990 internal-991 0.038533574873307365
+internal-991 seq652 0.3182801655067405
+internal-991 internal-992 0.09634088917043618
+internal-992 seq537 0.12372446262482709
+internal-992 seq539 0.12554298426813282
+internal-980 seq1493 0.43507202892801466
+internal-116 internal-993 0.14122195932730283
+internal-993 seq631 0.8767339086922398
+internal-993 internal-994 0.08546618524336547
+internal-994 internal-995 0.09415648120249691
+internal-995 internal-996 0.24500419376222965
+internal-996 seq1098 0.4422704606408841
+internal-996 internal-997 0.4078738551314062
+internal-997 seq1111 0.06438545215495953
+internal-997 seq1124 0.09902989420697157
+internal-995 internal-998 0.20836163939840693
+internal-998 seq573 0.45828887907349697
+internal-998 internal-999 0.29761549265035525
+internal-999 seq673 0.32332572319346414
+internal-999 internal-1000 0.23476539266138607
+internal-1000 seq671 0.2458009412915637
+internal-1000 seq674 0.12669622213944387
+internal-994 internal-1001 0.07307222712059014
+internal-1001 seq699 0.7028166637151002
+internal-1001 internal-1002 0.08679359279318768
+internal-1002 internal-1003 0.21340572208785322
+internal-1003 seq1180 0.5723528885299446
+internal-1003 internal-1004 0.23411885585478753
+internal-1004 seq604 0.24147398527841857
+internal-1004 seq1158 0.15436141107401852
+internal-1002 internal-1005 0.0549826685109641
+internal-1005 internal-1006 0.0790694770506452
+internal-1006 seq1156 0.36150015772968597
+internal-1006 internal-1007 0.09784118340113779
+internal-1007 internal-1008 0.05575111609253523
+internal-1008 internal-1009 0.04942728976528694
+internal-1009 internal-1010 0.03516644008848884
+internal-1010 internal-1011 0.039204734634455944
+internal-1011 seq1170 0.2547300498098861
+internal-1011 internal-1012 0.07816975671138215
+internal-1012 internal-1013 0.0864813693695012
+internal-1013 seq1161 0.1187840467440288
+internal-1013 internal-1014 0.04305469152806362
+internal-1014 seq602 0.1366460517736816
+internal-1014 seq601 0.13418505831627403
+internal-1012 internal-1015 0.07247414122455914
+internal-1015 seq606 0.12099308766649966
+internal-1015 seq607 0.2624250166062328
+internal-1010 internal-1016 0.4538531922610512
+internal-1016 seq620 0.1645114343387315
+internal-1016 seq621 0.3497924743401595
+internal-1009 internal-1017 0.11832149959781538
+internal-1017 seq1165 0.4585957495070643
+internal-1017 seq614 0.37186932858988825
+internal-1008 internal-1018 0.08032168173927963
+internal-1018 seq1154 0.22452939755536308
+internal-1018 internal-1019 0.08193153976774435
+internal-1019 seq1148 0.24905652028229602
+internal-1019 internal-1020 0.1587570519603826
+internal-1020 seq1142 0.025686066587711644
+internal-1020 internal-1021 0.05198088005177587
+internal-1021 seq1140 0.11235844260464574
+internal-1021 seq1141 0.049168279243378105
+internal-1007 internal-1022 0.15728362968007972
+internal-1022 seq1153 0.23478162263142818
+internal-1022 seq1162 0.37053738104844613
+internal-1005 seq624 0.49872449643594424
