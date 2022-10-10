@@ -173,7 +173,7 @@ The CherryML API provides extensive functionality through additional flags, whic
 
 # Reproducing all figures in our paper
 
-To reproduce all figures in our paper, proceed as described below. Please note that this will not work in the compute capsule associated with this work since memory and compute are limited in the capsule. To reproduce all figures, you will need a machine with 32 CPU cores and TODO gigs of memory. Indeed, the Pfam dataset is very large and we are in the realm of high-performance computing, which is not feasible in the capsule.
+To reproduce all figures in our paper, proceed as described below. Please note that this will not work in the compute capsule associated with this work since memory and compute are limited in the capsule. To reproduce all figures, you will need a machine with 32 CPU cores and 1 tera of storage; the Pfam dataset is large and we are in the realm of high-performance computing, which is out of reach with a compute capsule.
 
 ## Install requirements
 
