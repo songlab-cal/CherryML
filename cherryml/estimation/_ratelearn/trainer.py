@@ -139,7 +139,10 @@ def train_quantization(
         )
 
     logger.info(f"Training for {num_epochs} epochs")
-    dlb = DataLoader(quantized_dataset, batch_size=1000, shuffle=False)
+    # Full-batch training
+    dlb = DataLoader(
+        quantized_dataset, batch_size=len(quantized_dataset), shuffle=False
+    )
     start = time.time()
     df_res_tuples = []
     loss = 0.0
@@ -157,7 +160,7 @@ def train_quantization(
         # Now compute the loss
         loss = 0.0
         sample_size = 0.0
-        for datapoint in dlb:
+        for datapoint in dlb:  # Note that there is only 1 batch
             branch_length, cmat = datapoint
             branch_length = branch_length.to(device=device)
             cmat = cmat.to(device=device)

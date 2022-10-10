@@ -150,6 +150,8 @@ def lg_end_to_end_with_cherryml_optimizer(
     num_processes_optimization: int = 2,
     optimizer_initialization: str = "jtt-ipw",
     sites_subset_dir: Optional[str] = None,
+    tree_dir: Optional[str] = None,
+    site_rates_dir: Optional[str] = None,
 ) -> Dict:
     """
     LG pipeline with CherryML optimizer.
@@ -161,11 +163,24 @@ def lg_end_to_end_with_cherryml_optimizer(
     One can train a model on only a subset of the sites by specifying
     sites_subset_dir. This is a file containing the indices of the sites used
     for training. Note that ALL the sites will the used when fitting the trees.
+
+    You can provide the trees and site rates for the first round of estimation
+    with tree_dir and site_rates_dir. Otherwise, the provided tree_estimator
+    will be used to estimate trees and site rates.
     """
     if sites_subset_dir is not None and num_iterations > 1:
-        raise Exception(
+        raise ValueError(
             "You are using more than 1 iteration while learning a model only"
             "on a subset of sites. This is most certainly a usage error."
+        )
+
+    if (tree_dir is None and site_rates_dir is not None) or (
+        tree_dir is not None and site_rates_dir is None
+    ):
+        raise ValueError(
+            "tree_dir and site_rates_dir must be either both provided or none "
+            f"provided. You provided: tree_dir={tree_dir} ; "
+            f"site_rates_dir={site_rates_dir}"
         )
 
     res = {}
@@ -181,12 +196,22 @@ def lg_end_to_end_with_cherryml_optimizer(
 
     current_estimate_rate_matrix_path = initial_tree_estimator_rate_matrix_path
     for iteration in range(num_iterations):
-        tree_estimator_output_dirs = tree_estimator(
-            msa_dir=msa_dir,
-            families=families,
-            rate_matrix_path=current_estimate_rate_matrix_path,
-            num_processes=num_processes_tree_estimation,
-        )
+        if (
+            iteration == 0
+            and tree_dir is not None
+            and site_rates_dir is not None
+        ):
+            tree_estimator_output_dirs = {
+                "output_tree_dir": tree_dir,
+                "output_site_rates_dir": site_rates_dir,
+            }
+        else:
+            tree_estimator_output_dirs = tree_estimator(
+                msa_dir=msa_dir,
+                families=families,
+                rate_matrix_path=current_estimate_rate_matrix_path,
+                num_processes=num_processes_tree_estimation,
+            )
         res[
             f"tree_estimator_output_dirs_{iteration}"
         ] = tree_estimator_output_dirs
@@ -281,7 +306,7 @@ def coevolution_end_to_end_with_cherryml_optimizer(
     quantization_grid_step: float = 1.1,
     quantization_grid_num_steps: int = 64,
     use_cpp_counting_implementation: bool = True,
-    device: str = "cpu",
+    optimizer_device: str = "cpu",
     learning_rate: float = 1e-1,
     num_epochs: int = 500,
     do_adam: bool = True,
@@ -292,8 +317,8 @@ def coevolution_end_to_end_with_cherryml_optimizer(
     num_processes_counting: int = 8,
     num_processes_optimization: int = 8,
     optimizer_initialization: str = "jtt-ipw",
-    optimizer_return_best_iter: bool = True,
     use_maximal_matching: bool = True,
+    tree_dir: Optional[str] = None,
 ) -> Dict:
     """
     Cherry estimator for coevolution.
@@ -301,6 +326,9 @@ def coevolution_end_to_end_with_cherryml_optimizer(
     Returns a dictionary with the directories to the intermediate outputs. In
     particular, the learned coevolution rate matrix is indexed by
     "learned_rate_matrix_path"
+
+    You can provide the trees with tree_dir . Otherwise, the provided
+    tree_estimator will be used to estimate trees.
     """
     res = {}
 
@@ -314,14 +342,16 @@ def coevolution_end_to_end_with_cherryml_optimizer(
     res["quantization_points"] = quantization_points
 
     current_estimate_rate_matrix_path = initial_tree_estimator_rate_matrix_path
-    for iteration in range(1):  # There is no iteration in this case.
-        tree_estimator_output_dirs = tree_estimator(
-            msa_dir=msa_dir,
-            families=families,
-            rate_matrix_path=current_estimate_rate_matrix_path,
-            num_processes=num_processes_tree_estimation,
-        )
-
+    for iteration in range(1):  # There is no repeated iteration in this case.
+        if iteration == 0 and tree_dir is not None:
+            tree_estimator_output_dirs = {"output_tree_dir": tree_dir}
+        else:
+            tree_estimator_output_dirs = tree_estimator(
+                msa_dir=msa_dir,
+                families=families,
+                rate_matrix_path=current_estimate_rate_matrix_path,
+                num_processes=num_processes_tree_estimation,
+            )
         res[
             f"tree_estimator_output_dirs_{iteration}"
         ] = tree_estimator_output_dirs
@@ -382,13 +412,12 @@ def coevolution_end_to_end_with_cherryml_optimizer(
             mask_path=coevolution_mask_path,
             stationary_distribution_path=None,
             rate_matrix_parameterization="pande_reversible",
-            device=device,
+            device=optimizer_device,
             learning_rate=learning_rate,
             num_epochs=num_epochs,
             do_adam=do_adam,
             OMP_NUM_THREADS=num_processes_optimization,
             OPENBLAS_NUM_THREADS=num_processes_optimization,
-            return_best_iter=optimizer_return_best_iter,
         )["output_rate_matrix_dir"]
 
         res[f"rate_matrix_dir_{iteration}"] = rate_matrix_dir

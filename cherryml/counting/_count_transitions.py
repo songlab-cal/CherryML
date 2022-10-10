@@ -11,7 +11,12 @@ import pandas as pd
 import tqdm
 
 from cherryml import caching
-from cherryml.io import read_msa, read_site_rates, read_tree, write_count_matrices
+from cherryml.io import (
+    read_msa,
+    read_site_rates,
+    read_tree,
+    write_count_matrices,
+)
 from cherryml.utils import get_process_args, quantization_idx
 
 

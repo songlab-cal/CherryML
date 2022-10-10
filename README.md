@@ -1,6 +1,165 @@
 # CherryML: Scalable Maximum Likelihood Estimation of Phylogenetic Models
 
-To reproduce all figures in our paper, proceed as follows:
+This package implements the CherryML method as applied to:
+1. The classical LG model of amino acid evolution (involving a $20 \times 20$ rate matrix), as well as
+2. A model of co-evolution at protein contact sites (involving a $400 \times 400$ rate matrix).
+We expect that the CherryML method will be applied to enavble scalable estimation of many more models in the future.
+
+This package also enables reproduction of all results in our paper.
+
+# Demo: CherryML applied to the LG model
+
+The following command learns a rate matrix from a set of MSAs, tree, and site rates (try it out!):
+
+```
+python -m cherryml \
+    --output_path learned_rate_matrix.txt \
+    --model_name LG \
+    --msa_dir demo_data/msas \
+    --tree_dir demo_data/trees \
+    --site_rates_dir demo_data/site_rates \
+    --cache_dir _cache_demo
+```
+
+The learned rate matrix is written to the `output_path`, in this case `learned_rate_matrix.txt`. The directories `msa_dir`, `tree_dir`, `site_rates_dir` should contain one file per family, named `[family_name].txt`, where `family_name` is the name of the family. Check out the contents of these directories in `demo_data/` as a real, concrete example. This demo data is based on real data obtained from Pfam. The format of the files in these diretories is as follows:
+
+The files in `msa_dir` should list the protein sequences in each family following the format in the following toy example:
+```
+>seq1
+TTLLS
+>seq2
+TTIIS
+>seq3
+SSIIS
+```
+All sequences should have the same length.
+
+The files in `tree_dir` should list the trees for in each family following the format in the following toy example:
+```
+6 nodes
+internal-0
+internal-1
+internal-2
+seq1
+seq2
+seq3
+5 edges
+internal-0 internal-1 1.0
+internal-1 internal-2 2.0
+internal-2 seq1 3.0
+internal-2 seq2 4.0
+internal-1 seq3 5.0
+```
+This format is intended to be easier to parse than the newick format. It first lists the node in the tree, and then the edges with their length.
+
+The files in `site_rates_dir` should list the site rates for in each family following the format in the following toy example:
+```
+5 sites
+1.0 1.0 1.0 1.0 1.0
+```
+
+The `cache_dir` is used to store intermediate computations for future runs. Caching is transparent to the user. If not provided, a temporary directory will be used as the caching directory.
+
+If you have not estimated trees and site rates already, we will do that for you using FastTree. You can simply run:
+
+```
+python -m cherryml \
+    --output_path learned_rate_matrix.txt \
+    --model_name LG \
+    --msa_dir demo_data/msas \
+    --cache_dir _cache_demo
+```
+
+FastTree will be run with 20 rate categories and with the LG rate matrix. Briefly, all intermediate data, such as the trees estimated with FastTree will be saved in the `cache_dir`, and will be re-used by CherryML if they are needed in the future. Make sure to use a different `cache_dir` for different datasets.
+
+# Demo: CherryML applied to the co-evolution model
+
+To learn a coevolution model, this is just like for the LG model, but you need to set `--model_name co-evolution` and provide the directory with the contact maps:
+
+```
+python -m cherryml \
+    --output_path learned_rate_matrix.txt \
+    --model_name co-evolution \
+    --msa_dir demo_data/msas \
+    --contact_map_dir demo_data/contact_maps \
+    --tree_dir demo_data/trees \
+    --site_rates_dir demo_data/site_rates \
+    --cache_dir _cache_demo
+```
+
+The files in `contact_map_dir` should list the contact map for each family following the format in the following toy example:
+```
+5 sites
+10101
+01110
+11110
+01111
+10011
+```
+
+As before, if you have not estiamted trees and site rates already, you can omit the `tree_dir` and `site_rates_dir` and we will estimate them for you.
+
+# Advanced options
+
+The CherryML API provides extensive functionality through additional flags, which we describe below (this is shown when running `python -m cherryml --help`):
+
+```
+  -h, --help            show this help message and exit
+  --output_path OUTPUT_PATH
+                        Filepath where to write the learned rate matrix (default: None)
+  --model_name MODEL_NAME
+                        Either "LG" or "co-evolution". If "LG", a 20x20 rate matrix will be learned. If "co-evolution", a 400x400 rate matrix will be learned.
+                        (default: None)
+  --msa_dir MSA_DIR     Directory where the training multiple sequence alignments (MSAs) are stored. See README at https://github.com/songlab-cal/CherryML for
+                        the expected format of these files. (default: None)
+  --contact_map_dir CONTACT_MAP_DIR
+                        Directory where the contact maps are stored. See README at https://github.com/songlab-cal/CherryML for the expected format of these
+                        files. (default: None)
+  --tree_dir TREE_DIR   Directory where the trees are stored. See README at https://github.com/songlab-cal/CherryML for the expected format of these files. If
+                        not provided, trees will be estimated with FastTree. (default: None)
+  --site_rates_dir SITE_RATES_DIR
+                        Directory where the site rates are stored. See README at https://github.com/songlab-cal/CherryML for the expected format of these files.
+                        If not provided, site rates will be estimated with FastTree. (default: None)
+  --cache_dir CACHE_DIR
+                        Directory to use to cache intermediate computations for re-use in future runs of cherryml. Use a different cache directory for different
+                        input datasets. If not provided, a temporary directory will be used. (default: None)
+  --num_processes_tree_estimation NUM_PROCESSES_TREE_ESTIMATION
+                        Number of processes to parallelize tree estimation (with FastTree). (default: 1)
+  --num_processes_counting NUM_PROCESSES_COUNTING
+                        Number of processes to parallelize counting transitions. (default: 1)
+  --num_processes_optimization NUM_PROCESSES_OPTIMIZATION
+                        Number of processes to parallelize optimization (if using cpu). (default: 1)
+  --num_rate_categories NUM_RATE_CATEGORIES
+                        Number of rate categories to use in FastTree to estimate trees and site rates (if trees are not provided). (default: 20)
+  --initial_tree_estimator_rate_matrix_path INITIAL_TREE_ESTIMATOR_RATE_MATRIX_PATH
+                        Rate matrix to use in FastTree to estimate trees and site rates (the first time around, and only if trees and site rates are not
+                        provided) (default: data/rate_matrices/lg.txt)
+  --num_iterations NUM_ITERATIONS
+                        Number of times to iterate tree estimation and rate matrix estimation. For highly accurate rate matrix estimation this is a good idea,
+                        although tree reconstruction becomes the bottleneck. (default: 1)
+  --quantization_grid_center QUANTIZATION_GRID_CENTER
+                        The center value used for time quantization. (default: 0.03)
+  --quantization_grid_step QUANTIZATION_GRID_STEP
+                        The geometric spacing between time quantization points. (default: 1.1)
+  --quantization_grid_num_steps QUANTIZATION_GRID_NUM_STEPS
+                        The number of quantization points to the left and right of the center. (default: 64)
+  --use_cpp_counting_implementation USE_CPP_COUNTING_IMPLEMENTATION
+                        Whether to use C++ MPI implementation to count transitions. This requires mpirun to be installed. If you do not have mpirun installed,
+                        set this argument to False to use a Python implementation (but it will be much slower). (default: True)
+  --optimizer_device OPTIMIZER_DEVICE
+                        Either "cpu" or "cuda". Device to use in PyTorch. "cpu" is fast enough for applications, but if you have a GPU using "cuda" might
+                        provide faster runtime. (default: cpu)
+  --learning_rate LEARNING_RATE
+                        The learning rate in the PyTorch optimizer. (default: 0.1)
+  --num_epochs NUM_EPOCHS
+                        The number of epochs of the PyTorch optimizer. (default: 500)
+  --minimum_distance_for_nontrivial_contact MINIMUM_DISTANCE_FOR_NONTRIVIAL_CONTACT
+                        Minimum distance in primary structure used to determine if two site are in non-trivial contact. (default: 7)
+```
+
+# Reproducing all figures in our paper
+
+To reproduce all figures in our paper, proceed as described below. Please note that this will not work in the compute capsule associated with this work since memory and compute are limited in the capsule. To reproduce all figures, you will need a machine with 32 CPU cores and TODO gigs of memory. Indeed, the Pfam dataset is very large and we are in the realm of high-performance computing, which is not feasible in the capsule.
 
 ## Install requirements
 
@@ -10,7 +169,7 @@ First, install all required Python libraries:
 pip install -r requirements.txt
 ```
 
-To be able to use Historian, you must make sure to have these installed:
+To be able to use Historian (required for the results on EM), you must make sure to have these installed:
 
 On a Mac:
 ```
@@ -40,7 +199,7 @@ After downloading and untarring the data into this repository, rename the `train
 
 You do not need to worry about downloading the data from the LG paper - we will download this automatically for you.
 
-## Reproduce figures
+## Run code to reproduce figures
 
 You are now ready to reproduce all figures in our paper. Just run `main.py` to reproduce all figures in our paper. The approximate runtime needed to reproduce each figure this way is commented in `main.py`. To reproduce a specific figure, comment out the figures you do not want in `main.py`. The code is written in a functional style, so the functions can be run in any order at any time and will reproduce the results. All the intermediate computations are cached, so re-running the code will be very fast the second time around. The output figures will be found in the `images` folder.
 
