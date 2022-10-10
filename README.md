@@ -61,7 +61,7 @@ Each file in `site_rates_dir` should list the site rates for a family following 
 
 The `cache_dir` is used to store intermediate computations for future runs. Caching is transparent to the user; just make sure to use a different `cache_dir` for different datasets. If not provided, a temporary directory will be used as the caching directory (in which case all intermediate data will be lost).
 
-If you have not estimated trees and site rates already, cherryml will do that for you using FastTree. You can simply run:
+If you have not estimated trees and site rates already, CherryML will do that for you using FastTree. You can simply run:
 
 ```
 python -m cherryml \
@@ -73,7 +73,7 @@ python -m cherryml \
 
 FastTree will be run with 20 rate categories and with the LG rate matrix. Briefly, all intermediate data, such as the trees estimated with FastTree will be saved in the `cache_dir`, and will be re-used by CherryML if they are needed in the future.
 
-The cherryml API provides control over many aspects of the rate estimation process, such as the number of processes used to parallelize tree estimation, the number of rounds used to iterate tree estiation and rate estimation, among others. These options are all described below or by running `python -m cherryml --help`.
+The CherryML API provides control over many aspects of the rate estimation process, such as the number of processes used to parallelize tree estimation, the number of rounds used to iterate tree estiation and rate estimation, among others. These options are all described below or by running `python -m cherryml --help`.
 
 # Demo: CherryML applied to the co-evolution model
 
@@ -100,7 +100,7 @@ Each file in `contact_map_dir` should list the contact map for a family followin
 10011
 ```
 
-As before, if you have not estimated trees already, you can omit the `tree_dir` and cherryml will estimate these for you. (In this case, we recommend using `--num_rate_categories 1` since the coevolution model does not model site rate variation.)
+As before, if you have not estimated trees already, you can omit the `tree_dir` and CherryML will estimate these for you. (In this case, we recommend using `--num_rate_categories 1` since the coevolution model does not model site rate variation.)
 
 # Full API
 
