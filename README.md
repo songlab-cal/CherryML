@@ -53,7 +53,7 @@ internal-1 seq3 5.0
 ```
 This format is intended to be easier to parse than the newick format. It first lists the nodes in the tree, and then the edges in the tree with their lengths.
 
-Each files in `site_rates_dir` should list the site rates for a family following the format in the following toy example:
+Each file in `site_rates_dir` should list the site rates for a family following the format in the following toy example:
 ```
 5 sites
 1.0 1.0 1.0 1.0 1.0
@@ -90,7 +90,7 @@ python -m cherryml \
     --cache_dir _cache_demo
 ```
 
-Each files in `contact_map_dir` should list the contact map for a family following the format in the following toy example:
+Each file in `contact_map_dir` should list the contact map for a family following the format in the following toy example:
 ```
 5 sites
 10101
