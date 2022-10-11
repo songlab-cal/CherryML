@@ -128,10 +128,10 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--use_cpp_counting_implementation",
-        type=bool,
+        type=str,
         required=False,
-        default=True,
-        help="Whether to use C++ MPI implementation to count transitions. This requires mpirun to be installed. If you do not have mpirun installed, set this argument to False to use a Python implementation (but it will be much slower).",  # noqa
+        default="True",
+        help="Whether to use C++ MPI implementation to count transitions ('True' or 'False'). This requires mpirun to be installed. If you do not have mpirun installed, set this argument to False to use a Python implementation (but it will be much slower).",  # noqa
     )
     parser.add_argument(
         "--optimizer_device",
@@ -187,4 +187,15 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     args_dict = vars(args)
+    if args_dict["use_cpp_counting_implementation"] not in ["True", "False"]:
+        raise ValueError(
+            'use_cpp_counting_implementation should be either "True" or '
+            '"False". You provided: '
+            f'{args_dict["use_cpp_counting_implementation"]}'
+        )
+    args_dict["use_cpp_counting_implementation"] = (
+        True
+        if args_dict["use_cpp_counting_implementation"] == "True"
+        else False
+    )
     cherryml_public_api(**args_dict)
