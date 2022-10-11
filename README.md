@@ -197,10 +197,16 @@ sudo yum -y install boost-devel gsl-devel zlib
 
 (Generally, the requirements for Historian are specified in https://github.com/evoldoers/historian .)
 
-All third-party software, including FastTree, PhyML, and Historian, will be automatically installed locally into this repository by our code. Just run all tests to make sure that they are passing:
+All third-party software, including FastTree (`FastTree` program), PhyML (`phyml` program), and Historian (`historian` program), will be automatically installed locally into this repository by our code if you have not installed it already on your system. Just run all tests to make sure that they are passing; first run the fast tests:
 
 ```
 python -m pytest tests
+```
+
+The run all tests (including the slow tests, such as those for PhyML):
+
+```
+python -m pytest tests --runslow
 ```
 
 ## Download data

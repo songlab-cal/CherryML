@@ -17,10 +17,6 @@ from cherryml.utils import get_process_args, pushd
 
 from ._common import name_internal_nodes, translate_tree
 
-dir_path = os.path.dirname(os.path.realpath(__file__))
-phyml_path = os.path.join(dir_path, "phyml_github")
-phyml_bin_path = os.path.join(dir_path, "bin/phyml")
-
 
 def _init_logger():
     logger = logging.getLogger("phylogeny_estimation.phyml")
@@ -36,14 +32,34 @@ def _init_logger():
 _init_logger()
 
 
-def _install_phyml():
+def _phyml_is_installed_on_system() -> bool:
     """
-    Install PhyML
+    Check whether `phyml` program is installed on the system.
+    """
+    res = os.popen("which phyml").read()
+    if len(res) > 0:
+        # is installed
+        return True
+    else:
+        # is not installed
+        return False
 
-    See https://github.com/stephaneguindon/phyml
+
+def _install_phyml() -> str:
     """
+    Makes sure that PhyML is installed on the system, and if not, installs it.
+
+    Returns the path to the PhyML binary.
+
+    See https://github.com/stephaneguindon/phyml for installation details.
+    """
+    if _phyml_is_installed_on_system():
+        return "phyml"
     logger = logging.getLogger("phylo_correction.phyml")
     logger.info("Checking for PhyML ...")
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    phyml_path = os.path.join(dir_path, "phyml_github")
+    phyml_bin_path = os.path.join(dir_path, "bin/phyml")
     if not os.path.exists(phyml_bin_path):
         logger.info(
             f"git clone https://github.com/stephaneguindon/phyml {phyml_path}"
@@ -64,6 +80,7 @@ def _install_phyml():
             logger.info("Done!")
     if not os.path.exists(phyml_bin_path):
         raise Exception("Failed to install PhyML")
+    return phyml_bin_path
 
 
 def _to_paml_format(
@@ -146,6 +163,7 @@ def _map_func(args: List):
     output_site_rates_dir = args[5]
     output_likelihood_dir = args[6]
     extra_command_line_args = args[7]
+    phyml_bin_path = args[8]
 
     for family in families:
         st = time.time()
@@ -277,7 +295,7 @@ def phyml(
     if not os.path.exists(output_likelihood_dir):
         os.makedirs(output_likelihood_dir)
 
-    _install_phyml()
+    phyml_bin_path = _install_phyml()
 
     msa_dir = os.path.abspath(msa_dir)
     rate_matrix_path = os.path.abspath(rate_matrix_path)
@@ -295,6 +313,7 @@ def phyml(
             output_site_rates_dir,
             output_likelihood_dir,
             extra_command_line_args,
+            phyml_bin_path,
         ]
         for process_rank in range(num_processes)
     ]

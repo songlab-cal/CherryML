@@ -19,19 +19,6 @@ from cherryml.utils import get_amino_acids, get_process_args
 from ._common import name_internal_nodes, translate_tree
 
 
-def _fast_tree_is_installed_on_system() -> bool:
-    """
-    Check whether `FastTree` program is installed on the system.
-    """
-    res = os.popen("which FastTree").read()
-    if len(res) > 0:
-        # is installed
-        return True
-    else:
-        # is not installed
-        return False
-
-
 def _init_logger():
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
@@ -44,6 +31,19 @@ def _init_logger():
 
 
 _init_logger()
+
+
+def _fast_tree_is_installed_on_system() -> bool:
+    """
+    Check whether `FastTree` program is installed on the system.
+    """
+    res = os.popen("which FastTree").read()
+    if len(res) > 0:
+        # is installed
+        return True
+    else:
+        # is not installed
+        return False
 
 
 def _install_fast_tree_and_return_bin_path() -> str:
