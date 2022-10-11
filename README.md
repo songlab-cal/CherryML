@@ -115,56 +115,99 @@ The CherryML API provides extensive functionality through additional flags, whic
 ```
   -h, --help            show this help message and exit
   --output_path OUTPUT_PATH
-                        Filepath where to write the learned rate matrix (default: None)
-  --model_name MODEL_NAME
-                        Either "LG" or "co-evolution". If "LG", a 20x20 rate matrix will be learned. If "co-evolution", a 400x400 rate matrix will be learned. (default: None)
-  --msa_dir MSA_DIR     Directory where the training multiple sequence alignments (MSAs) are stored. See README at https://github.com/songlab-cal/CherryML for the expected format of these files.
+                        Filepath where to write the learned rate matrix
                         (default: None)
+  --model_name MODEL_NAME
+                        Either "LG" or "co-evolution". If "LG", a 20x20 rate
+                        matrix will be learned. If "co-evolution", a 400x400
+                        rate matrix will be learned. (default: None)
+  --msa_dir MSA_DIR     Directory where the training multiple sequence
+                        alignments (MSAs) are stored. See README at
+                        https://github.com/songlab-cal/CherryML for the
+                        expected format of these files. (default: None)
   --contact_map_dir CONTACT_MAP_DIR
-                        Directory where the contact maps are stored. See README at https://github.com/songlab-cal/CherryML for the expected format of these files. (default: None)
-  --tree_dir TREE_DIR   Directory where the trees are stored. See README at https://github.com/songlab-cal/CherryML for the expected format of these files. If not provided, trees will be
-                        estimated with FastTree. (default: None)
+                        Directory where the contact maps are stored. See
+                        README at https://github.com/songlab-cal/CherryML for
+                        the expected format of these files. (default: None)
+  --tree_dir TREE_DIR   Directory where the trees are stored. See README at
+                        https://github.com/songlab-cal/CherryML for the
+                        expected format of these files. If not provided, trees
+                        will be estimated with FastTree. (default: None)
   --site_rates_dir SITE_RATES_DIR
-                        Directory where the site rates are stored. See README at https://github.com/songlab-cal/CherryML for the expected format of these files. If not provided, site rates will
-                        be estimated with FastTree. (default: None)
+                        Directory where the site rates are stored. See README
+                        at https://github.com/songlab-cal/CherryML for the
+                        expected format of these files. If not provided, site
+                        rates will be estimated with FastTree. (default: None)
   --cache_dir CACHE_DIR
-                        Directory to use to cache intermediate computations for re-use in future runs of cherryml. Use a different cache directory for different input datasets. If not provided,
-                        a temporary directory will be used. (default: None)
+                        Directory to use to cache intermediate computations
+                        for re-use in future runs of cherryml. Use a different
+                        cache directory for different input datasets. If not
+                        provided, a temporary directory will be used.
+                        (default: None)
   --num_processes_tree_estimation NUM_PROCESSES_TREE_ESTIMATION
-                        Number of processes to parallelize tree estimation (with FastTree). (default: 1)
+                        Number of processes to parallelize tree estimation
+                        (with FastTree). (default: 1)
   --num_processes_counting NUM_PROCESSES_COUNTING
-                        Number of processes to parallelize counting transitions. (default: 1)
+                        Number of processes to parallelize counting
+                        transitions. (default: 1)
   --num_processes_optimization NUM_PROCESSES_OPTIMIZATION
-                        Number of processes to parallelize optimization (if using cpu). (default: 1)
+                        Number of processes to parallelize optimization (if
+                        using cpu). (default: 1)
   --num_rate_categories NUM_RATE_CATEGORIES
-                        Number of rate categories to use in FastTree to estimate trees and site rates (if trees are not provided). (default: 20)
+                        Number of rate categories to use in FastTree to
+                        estimate trees and site rates (if trees are not
+                        provided). (default: 20)
   --initial_tree_estimator_rate_matrix_path INITIAL_TREE_ESTIMATOR_RATE_MATRIX_PATH
-                        Rate matrix to use in FastTree to estimate trees and site rates (the first time around, and only if trees and site rates are not provided) (default:
+                        Rate matrix to use in FastTree to estimate trees and
+                        site rates (the first time around, and only if trees
+                        and site rates are not provided) (default:
                         data/rate_matrices/lg.txt)
   --num_iterations NUM_ITERATIONS
-                        Number of times to iterate tree estimation and rate matrix estimation. For highly accurate rate matrix estimation this is a good idea, although tree reconstruction
-                        becomes the bottleneck. (default: 1)
+                        Number of times to iterate tree estimation and rate
+                        matrix estimation. For highly accurate rate matrix
+                        estimation this is a good idea, although tree
+                        reconstruction becomes the bottleneck. (default: 1)
   --quantization_grid_center QUANTIZATION_GRID_CENTER
-                        The center value used for time quantization. (default: 0.03)
+                        The center value used for time quantization. (default:
+                        0.03)
   --quantization_grid_step QUANTIZATION_GRID_STEP
-                        The geometric spacing between time quantization points. (default: 1.1)
+                        The geometric spacing between time quantization
+                        points. (default: 1.1)
   --quantization_grid_num_steps QUANTIZATION_GRID_NUM_STEPS
-                        The number of quantization points to the left and right of the center. (default: 64)
+                        The number of quantization points to the left and
+                        right of the center. (default: 64)
   --use_cpp_counting_implementation USE_CPP_COUNTING_IMPLEMENTATION
-                        Whether to use C++ MPI implementation to count transitions ('True' or 'False'). This requires mpirun to be installed. If you do not have mpirun installed, set this
-                        argument to False to use a Python implementation (but it will be much slower). (default: True)
+                        Whether to use C++ MPI implementation to count
+                        transitions ('True' or 'False'). This requires mpirun
+                        to be installed. If you do not have mpirun installed,
+                        set this argument to False to use a Python
+                        implementation (but it will be much slower). (default:
+                        True)
   --optimizer_device OPTIMIZER_DEVICE
-                        Either "cpu" or "cuda". Device to use in PyTorch. "cpu" is fast enough for applications, but if you have a GPU using "cuda" might provide faster runtime. (default: cpu)
+                        Either "cpu" or "cuda". Device to use in PyTorch.
+                        "cpu" is fast enough for applications, but if you have
+                        a GPU using "cuda" might provide faster runtime.
+                        (default: cpu)
   --learning_rate LEARNING_RATE
-                        The learning rate in the PyTorch optimizer. (default: 0.1)
+                        The learning rate in the PyTorch optimizer. (default:
+                        0.1)
   --num_epochs NUM_EPOCHS
-                        The number of epochs of the PyTorch optimizer. (default: 500)
+                        The number of epochs of the PyTorch optimizer.
+                        (default: 500)
   --minimum_distance_for_nontrivial_contact MINIMUM_DISTANCE_FOR_NONTRIVIAL_CONTACT
-                        Minimum distance in primary structure used to determine if two site are in non-trivial contact. (default: 7)
-  --families FAMILIES   Subset of families on which to run rate matrix estimation. (default: None)
+                        Minimum distance in primary structure used to
+                        determine if two site are in non-trivial contact.
+                        (default: 7)
+  --families FAMILIES   Subset of families on which to run rate matrix
+                        estimation. (default: None)
   --sites_subset_dir SITES_SUBSET_DIR
-                        Directory where the subset of sites from each family used to learn the rate matrix are specified. Currently only implemented for the LG model. This enables learning e.g.
-                        domain-specific or structure-specific rate matrices. See README at https://github.com/songlab-cal/CherryML for the expected format of these files. (default: None)
+                        Directory where the subset of sites from each family
+                        used to learn the rate matrix are specified. Currently
+                        only implemented for the LG model. This enables
+                        learning e.g. domain-specific or structure-specific
+                        rate matrices. See README at
+                        https://github.com/songlab-cal/CherryML for the
+                        expected format of these files. (default: None)
 ```
 
 # Reproducing all figures in our paper
