@@ -222,35 +222,90 @@ time python reproduce_fig_1e_simplified_demo.py
 
 FastTree is faster, which is better for the demo, and the results are similar. Reproducing Fig. 1e with FastTree takes ~10 minutes. Using PhyML (as in `reproduce_all_figures.py`, and as in our paper), would take ~4 hours.
 
-## Install requirements
+## Software requirements
 
-First, install all required Python libraries:
+CherryML has been tested on an Ubuntu system (20.04) with Python (3.8.5, miniconda 4.9.2).
+
+First, install all required Python libraries, e.g.:
 
 ```
 pip install -r requirements.txt
 ```
 
-To be able to use Historian (required for the results on EM), you must make sure to have these installed:
+The following are system requirements:
+
+```
+autoconf
+automake
+gcc
+libboost-dev
+libboost-regex-dev
+libgsl-dev
+libopenmpi-dev
+mpich
+pkg-config
+wget
+zlib1g-dev
+```
+
+To be able to use Historian specifically (required for the results on EM), you must make sure to have these installed:
 
 On a Mac:
 ```
-brew install boost gsl pkg-config zlib
+$ brew install boost gsl pkg-config zlib
 ```
 
 On Linux:
 ```
-sudo yum -y install boost-devel gsl-devel zlib
+$ sudo yum -y install boost-devel gsl-devel zlib
 ```
 
 (Generally, the requirements for Historian are specified in https://github.com/evoldoers/historian .)
 
-All third-party software, including FastTree (`FastTree` program), PhyML (`phyml` program), and Historian (`historian` program), will be automatically installed locally into this repository by our code if you have not installed it already on your system. Just run all tests to make sure that they are passing; first run the fast tests:
+All third-party software, including FastTree (`FastTree` program), PhyML (`phyml` program), and Historian (`historian` program), will be automatically installed locally into this repository by our code if you have not installed it already on your system. If you would like to install these third-party tools on your system, you can do e.g.:
+
+To install FastTree (again, this is optional, we will install FastTree locally otherwise):
+```
+mkdir -p /opt/FastTree/bin/
+mkdir -p /opt/FastTree/download/
+export PATH=/opt/FastTree/bin:$PATH
+wget http://www.microbesonline.org/fasttree/FastTree.c -P /opt/FastTree/download/
+gcc -DNO_SSE -DUSE_DOUBLE -O3 -finline-functions -funroll-loops -Wall -o /opt/FastTree/bin/FastTree /opt/FastTree/download/FastTree.c -lm
+```
+
+To install PhyML (again, this is optional, we will install PhyML locally otherwise):
+```
+mkdir -p /opt/phyml/bin/
+mkdir -p /opt/phyml/download/
+export PATH=/opt/phyml/bin:$PATH
+git clone https://github.com/stephaneguindon/phyml /opt/phyml/download/phyml
+pushd /opt/phyml/download/phyml/
+bash ./autogen.sh
+./configure --enable-phyml --prefix=/opt/phyml/bin/
+make
+make install
+popd
+```
+
+To install Historian (again, this is optional, we will install Historian locally otherwise):
+```
+mkdir -p /opt/historian/bin/
+mkdir -p /opt/historian/download/
+export PATH=/opt/historian/bin:$PATH
+git clone https://github.com/evoldoers/historian /opt/historian/download/historian
+pushd /opt/historian/download/historian/
+make
+cp /opt/historian/download/historian/bin/historian /opt/historian/bin/historian
+popd
+```
+
+Once you have met all the requirements, run the fast tests to make sure they pass:
 
 ```
 python -m pytest tests
 ```
 
-The run all tests (including the slow tests, such as those for PhyML):
+The run _all_ tests (including the slow tests, such as those for PhyML), and make sure they pass:
 
 ```
 python -m pytest tests --runslow

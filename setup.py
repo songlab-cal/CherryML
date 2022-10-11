@@ -12,8 +12,10 @@ setup(
     packages=find_packages(),
     install_requires=[
         'biotite',
+        'black',
         'ete3',
         'flake8',
+        'isort',
         'matplotlib',
         'networkx',
         'numpy',
