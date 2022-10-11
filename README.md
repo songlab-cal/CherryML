@@ -220,7 +220,7 @@ Nonetheless, in the compute capsule we reproduce a simplified version of Fig. 1e
 time python reproduce_fig_1e_simplified_demo.py
 ```
 
-FastTree is faster, which is better for the demo, and the results are similar. Reproducing Fig. 1e with FastTree takes ~10 minutes. Using PhyML (as in reproduce_all_figures.py, and as in our paper), would take ~4 hours.
+FastTree is faster, which is better for the demo, and the results are similar. Reproducing Fig. 1e with FastTree takes ~10 minutes. Using PhyML (as in `reproduce_all_figures.py`, and as in our paper), would take ~4 hours.
 
 ## Install requirements
 
