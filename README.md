@@ -214,6 +214,14 @@ The CherryML API provides extensive functionality through additional flags, whic
 
 To reproduce all figures in our paper, proceed as described below. Please note that this will not work in the compute capsule associated with this work since memory and compute are limited in the capsule. To reproduce all figures, you will need a machine with 32 CPU cores and 150G of storage; the Pfam dataset is large and we are in the realm of high-performance computing, which is out of reach with a compute capsule.
 
+Nonetheless, in the compute capsule we reproduce a simplified version of Fig. 1e, using FastTree instead of PhyML to evaluate likelihoods, as follows:
+
+```
+time python reproduce_fig_1e_simplified_demo.py
+```
+
+FastTree is faster, which is better for the demo, and the results are similar. Reproducing Fig. 1e with FastTree takes ~10 minutes. Using PhyML (as in reproduce_all_figures.py, and as in our paper), would take ~4 hours.
+
 ## Install requirements
 
 First, install all required Python libraries:
