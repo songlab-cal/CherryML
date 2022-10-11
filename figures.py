@@ -757,11 +757,12 @@ def fig_lg_paper(
     ],
     baseline_rate_estimator_name: Tuple[str, str] = ("reproduced JTT", "JTT"),
     num_processes: int = 4,
+    evaluation_phylogeny_estimator_name: str = "PhyML",
+    output_image_dir: str = "images/fig_lg_paper/",
 ):
     """
     LG paper figure 4, extended with LG w/CherryML.
     """
-    output_image_dir = "images/fig_lg_paper/"
     if not os.path.exists(output_image_dir):
         os.makedirs(output_image_dir)
 
@@ -776,11 +777,25 @@ def fig_lg_paper(
     get_lg_PfamTrainingAlignments_data(LG_PFAM_TRAINING_ALIGNMENTS_DIR)
     get_lg_PfamTestingAlignments_data(LG_PFAM_TESTING_ALIGNMENTS_DIR)
 
-    phyml_partial = partial(
-        phyml,
-        num_rate_categories=num_rate_categories,
-        num_processes=num_processes,
-    )
+    if evaluation_phylogeny_estimator_name == "PhyML":
+        evaluation_phylogeny_estimator = partial(
+            phyml,
+            num_rate_categories=num_rate_categories,
+            num_processes=num_processes,
+        )
+    elif evaluation_phylogeny_estimator_name == "FastTree":
+        evaluation_phylogeny_estimator = partial(
+            fast_tree,
+            num_rate_categories=num_rate_categories,
+            num_processes=num_processes,
+            extra_command_line_args="-gamma",
+        )
+    else:
+        raise ValueError(
+            "Unknown evaluation_phylogeny_estimator_name: "
+            f"{evaluation_phylogeny_estimator_name}. Must be either 'PhyML'"
+            "or 'FastTree'."
+        )
 
     y, df, bootstraps, Qs = reproduce_lg_paper_fig_4(
         msa_train_dir=LG_PFAM_TRAINING_ALIGNMENTS_DIR,
@@ -789,7 +804,7 @@ def fig_lg_paper(
         families_test=get_families(LG_PFAM_TESTING_ALIGNMENTS_DIR),
         rate_estimator_names=rate_estimator_names[:],
         baseline_rate_estimator_name=baseline_rate_estimator_name,
-        evaluation_phylogeny_estimator=phyml_partial,
+        evaluation_phylogeny_estimator=evaluation_phylogeny_estimator,
         num_processes=num_processes,
         pfam_or_treebase="pfam",
         family_name_len=7,
