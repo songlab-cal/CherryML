@@ -1,5 +1,7 @@
 """
-Module to reproduce and extend all figures.
+Module to reproduce and extend all figures in our paper.
+
+See https://github.com/songlab-cal/CherryML for full details.
 
 trRosetta dataset: https://www.pnas.org/doi/10.1073/pnas.1914677117
 
@@ -81,6 +83,8 @@ from cherryml.markov_chain import (
 from cherryml.phylogeny_estimation import fast_tree, gt_tree_estimator, phyml
 from cherryml.types import PhylogenyEstimatorType
 from cherryml.utils import get_families, get_process_args
+
+NUM_PROCESSES_TREE_ESTIMATION = 32
 
 
 def _init_logger():
@@ -595,7 +599,7 @@ def fig_computational_and_stat_eff_cherry_vs_em():
 # Fig. 1d
 def fig_single_site_quantization_error(
     num_rate_categories: int = 4,
-    num_processes_tree_estimation: int = 32,
+    num_processes_tree_estimation: int = NUM_PROCESSES_TREE_ESTIMATION,
     num_processes_counting: int = 8,
     num_processes_optimization: int = 2,
     num_families_train: int = 15051,
@@ -1056,7 +1060,7 @@ def learn_coevolution_model_on_pfam15k(
     num_sequences: int = 1024,
     num_families_train: int = 15051,
     num_families_test: int = 1,
-    num_processes_tree_estimation: int = 32,
+    num_processes_tree_estimation: int = NUM_PROCESSES_TREE_ESTIMATION,
     num_processes_counting: int = 8,
     num_processes_optimization_single_site: int = 2,
     num_processes_optimization_coevolution: int = 8,
@@ -1361,7 +1365,7 @@ def fig_pair_site_quantization_error(
     num_rate_categories: int = 1,
     num_sequences: int = 1024,
     num_families_train: int = 15051,
-    num_processes_tree_estimation: int = 32,
+    num_processes_tree_estimation: int = NUM_PROCESSES_TREE_ESTIMATION,
     num_processes_counting: int = 8,
     num_processes_optimization: int = 8,
     angstrom_cutoff: float = 8.0,
