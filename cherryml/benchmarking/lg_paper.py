@@ -334,7 +334,8 @@ def run_rate_estimator(
             initial_tree_estimator_rate_matrix_path=get_equ_path(),
             num_iterations=int(tokens[1]),
             num_processes_tree_estimation=num_processes,
-            num_processes_counting=num_processes,
+            num_processes_counting=4,
+            num_processes_optimization=2,
         )["learned_rate_matrix_path"]
     else:
         raise ValueError(f"Unknown rate estimator name: {rate_estimator_name}")
