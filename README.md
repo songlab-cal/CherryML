@@ -8,7 +8,7 @@ We expect that the CherryML method will be applied to enable scalable estimation
 
 This package also enables seamless reproduction of all results in our paper.
 
-# Demo: CherryML applied to the LG model
+# Demo: CherryML applied to the LG model (runtime on a normal computer: 1 - 5 minutes)
 
 The following command learns a rate matrix from a set of MSAs, trees, and site rates (try it out!):
 
@@ -68,10 +68,11 @@ python -m cherryml \
     --output_path learned_rate_matrix.txt \
     --model_name LG \
     --msa_dir demo_data/msas \
-    --cache_dir _cache_demo
+    --cache_dir _cache_demo \
+    --num_processes_tree_estimation 32
 ```
 
-FastTree will by default be run with 20 rate categories and with the LG rate matrix (this can be changed by using the full API described later). The trees estimated with FastTree will be saved in the `cache_dir`, and will be re-used by CherryML if they are needed in future runs with the same data (for example when learning a rate matrix on a subset of families, as done via the `--families` argument, or when learning a rate matrix on a subset of sites, as done via the `--sites_subset_dir` argument; clearly trees do not need to be re-estimated in this case!).
+FastTree will by default be run with 20 rate categories and with the LG rate matrix (this can be changed by using the full API described later). The trees estimated with FastTree will be saved in the `cache_dir`, and will be re-used by CherryML if they are needed in future runs with the same data (for example when learning a rate matrix on a subset of families, as done via the `--families` argument, or when learning a rate matrix on a subset of sites, as done via the `--sites_subset_dir` argument; clearly trees do not need to be re-estimated in this case!). The argument `--num_processes_tree_estimation` is used to parallelize tree estimation. In the example above, 32 processes are used.
 
 To learn a rate matrix on only a subset of sites from each family (for example, when learning a domain-specific or structure-specific rate matrix), you can provide the indices of the sites used for each family with the `--sites_subset_dir` argument. Each file in `sites_subset_dir` should list the sites (0-based) for a family following the format in the following toy example:
 ```
@@ -81,7 +82,7 @@ To learn a rate matrix on only a subset of sites from each family (for example, 
 
 The CherryML API provides control over many aspects of the rate estimation process, such as the number of processes used to parallelize tree estimation, the number of rounds used to iterate between tree estimation and rate estimation, among others. These options are all described below or by running `python -m cherryml --help`.
 
-# Demo: CherryML applied to the co-evolution model
+# Demo: CherryML applied to the co-evolution model (runtime on a normal computer: 1 - 5 minutes)
 
 To learn a coevolution model, you just need to set `--model_name co-evolution` and provide the directory with the contact maps:
 
@@ -214,15 +215,17 @@ The CherryML API provides extensive functionality through additional flags, whic
 
 To reproduce all figures in our paper, proceed as described below. Please note that this will not work in the compute capsule associated with this work since memory and compute are limited in the capsule. To reproduce all figures, you will need a machine with 32 CPU cores and 150G of storage; the Pfam dataset is large and we are in the realm of high-performance computing, which is out of reach with a compute capsule.
 
+## Demo: Reproducing a simplified version of Figure 1e (runtime on a normal computer: ~10 minutes)
+
 Nonetheless, in the compute capsule we reproduce a simplified version of Fig. 1e, using FastTree instead of PhyML to evaluate likelihoods, as follows:
 
 ```
 time python reproduce_fig_1e_simplified_demo.py
 ```
 
-FastTree is faster, which is better for the demo, and the results are similar. Reproducing Fig. 1e with FastTree takes ~10 minutes. Using PhyML (as in `reproduce_all_figures.py`, and as in our paper), would take ~4 hours.
+FastTree is faster, which is better for the demo, and the results are similar. Reproducing Fig. 1e with FastTree takes ~10 minutes. Using PhyML (as in `reproduce_all_figures.py`, and as in our paper), would take ~4 hours. Note that if you have less than 32 cores available, you should change `num_processes=32` to a different value in `reproduce_fig_1e_simplified_demo.py`. In this case, it will take longer than ~10 minutes.
 
-## Software requirements
+## System requirements
 
 CherryML has been tested on an Ubuntu system (20.04) with Python (3.8.5, miniconda 4.9.2).
 
@@ -311,6 +314,8 @@ The run _all_ tests (including the slow tests, such as those for PhyML), and mak
 python -m pytest tests --runslow
 ```
 
+This should take a few minutes. If all tests pass, you are good to go. You can install the `cherryml` package for future use in other projects by running `pip install .`.
+
 ## Download data
 
 Once all tests are passing, you will need to download the data from the trRosetta paper into this repository, which is available at the following link:
@@ -321,7 +326,7 @@ After downloading and untarring the data into this repository, rename the `train
 
 You do not need to worry about downloading the data from the LG paper - we will download this automatically for you.
 
-## Run code to reproduce figures
+## Run code to reproduce all figures
 
 You are now ready to reproduce all figures in our paper. Just run `reproduce_all_figures.py` to reproduce all figures in our paper. The approximate runtime needed to reproduce each figure this way is commented in `reproduce_all_figures.py`. Note that the computational bottlenecks to reproduce all figures are (1) benchmarking EM with Historian and (2) tree estimation (as opposed to the CherryML optimizer). To reproduce a specific figure, comment out the figures you do not want in `reproduce_all_figures.py`. The code is written in a functional style, so the functions can be run in any order at any time and will reproduce the results. All the intermediate computations are cached, so re-running the code will be very fast the second time around. The output figures will be found in the `images` folder.
 
