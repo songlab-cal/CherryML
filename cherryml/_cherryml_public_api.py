@@ -76,7 +76,7 @@ def cherryml_public_api(
     specify `model_name="LG"`.
 
     To learn a 400 x 400 co-evolution rate matrix, in the simplest case, just
-    procide a `msa_dir` directory with one MSA file per family, a
+    provide a `msa_dir` directory with one MSA file per family, a
     `contact_map_dir` directory with one contact map per family, and specify
     `model_name="co-evolution"`.
 
