@@ -1,5 +1,7 @@
 """
-Module to reproduce and extend all figures.
+Module to reproduce and extend all figures in our paper.
+
+See https://github.com/songlab-cal/CherryML for full details.
 
 trRosetta dataset: https://www.pnas.org/doi/10.1073/pnas.1914677117
 
@@ -81,6 +83,8 @@ from cherryml.markov_chain import (
 from cherryml.phylogeny_estimation import fast_tree, gt_tree_estimator, phyml
 from cherryml.types import PhylogenyEstimatorType
 from cherryml.utils import get_families, get_process_args
+
+NUM_PROCESSES_TREE_ESTIMATION = 32
 
 
 def _init_logger():
@@ -595,7 +599,7 @@ def fig_computational_and_stat_eff_cherry_vs_em():
 # Fig. 1d
 def fig_single_site_quantization_error(
     num_rate_categories: int = 4,
-    num_processes_tree_estimation: int = 32,
+    num_processes_tree_estimation: int = NUM_PROCESSES_TREE_ESTIMATION,
     num_processes_counting: int = 8,
     num_processes_optimization: int = 2,
     num_families_train: int = 15051,
@@ -753,11 +757,12 @@ def fig_lg_paper(
     ],
     baseline_rate_estimator_name: Tuple[str, str] = ("reproduced JTT", "JTT"),
     num_processes: int = 4,
+    evaluation_phylogeny_estimator_name: str = "PhyML",
+    output_image_dir: str = "images/fig_lg_paper/",
 ):
     """
     LG paper figure 4, extended with LG w/CherryML.
     """
-    output_image_dir = "images/fig_lg_paper/"
     if not os.path.exists(output_image_dir):
         os.makedirs(output_image_dir)
 
@@ -772,11 +777,25 @@ def fig_lg_paper(
     get_lg_PfamTrainingAlignments_data(LG_PFAM_TRAINING_ALIGNMENTS_DIR)
     get_lg_PfamTestingAlignments_data(LG_PFAM_TESTING_ALIGNMENTS_DIR)
 
-    phyml_partial = partial(
-        phyml,
-        num_rate_categories=num_rate_categories,
-        num_processes=num_processes,
-    )
+    if evaluation_phylogeny_estimator_name == "PhyML":
+        evaluation_phylogeny_estimator = partial(
+            phyml,
+            num_rate_categories=num_rate_categories,
+            num_processes=num_processes,
+        )
+    elif evaluation_phylogeny_estimator_name == "FastTree":
+        evaluation_phylogeny_estimator = partial(
+            fast_tree,
+            num_rate_categories=num_rate_categories,
+            num_processes=num_processes,
+            extra_command_line_args="-gamma",
+        )
+    else:
+        raise ValueError(
+            "Unknown evaluation_phylogeny_estimator_name: "
+            f"{evaluation_phylogeny_estimator_name}. Must be either 'PhyML'"
+            "or 'FastTree'."
+        )
 
     y, df, bootstraps, Qs = reproduce_lg_paper_fig_4(
         msa_train_dir=LG_PFAM_TRAINING_ALIGNMENTS_DIR,
@@ -785,7 +804,7 @@ def fig_lg_paper(
         families_test=get_families(LG_PFAM_TESTING_ALIGNMENTS_DIR),
         rate_estimator_names=rate_estimator_names[:],
         baseline_rate_estimator_name=baseline_rate_estimator_name,
-        evaluation_phylogeny_estimator=phyml_partial,
+        evaluation_phylogeny_estimator=evaluation_phylogeny_estimator,
         num_processes=num_processes,
         pfam_or_treebase="pfam",
         family_name_len=7,
@@ -1056,7 +1075,7 @@ def learn_coevolution_model_on_pfam15k(
     num_sequences: int = 1024,
     num_families_train: int = 15051,
     num_families_test: int = 1,
-    num_processes_tree_estimation: int = 32,
+    num_processes_tree_estimation: int = NUM_PROCESSES_TREE_ESTIMATION,
     num_processes_counting: int = 8,
     num_processes_optimization_single_site: int = 2,
     num_processes_optimization_coevolution: int = 8,
@@ -1361,7 +1380,7 @@ def fig_pair_site_quantization_error(
     num_rate_categories: int = 1,
     num_sequences: int = 1024,
     num_families_train: int = 15051,
-    num_processes_tree_estimation: int = 32,
+    num_processes_tree_estimation: int = NUM_PROCESSES_TREE_ESTIMATION,
     num_processes_counting: int = 8,
     num_processes_optimization: int = 8,
     angstrom_cutoff: float = 8.0,

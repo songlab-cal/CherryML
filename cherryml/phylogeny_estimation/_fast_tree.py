@@ -33,7 +33,28 @@ def _init_logger():
 _init_logger()
 
 
-def _install_fast_tree():
+def _fast_tree_is_installed_on_system() -> bool:
+    """
+    Check whether `FastTree` program is installed on the system.
+    """
+    res = os.popen("which FastTree").read()
+    if len(res) > 0:
+        # is installed
+        return True
+    else:
+        # is not installed
+        return False
+
+
+def _install_fast_tree_and_return_bin_path() -> str:
+    """
+    Makes sure that FastTree is installed on the system, and if not, installs
+    it.
+
+    Returns the path to the FastTree binary.
+    """
+    if _fast_tree_is_installed_on_system():
+        return "FastTree"
     logger = logging.getLogger(__name__)
     dir_path = os.path.dirname(os.path.realpath(__file__))
     c_path = os.path.join(dir_path, "FastTree.c")
@@ -52,6 +73,7 @@ def _install_fast_tree():
         os.system(compile_command)
         if not os.path.exists(bin_path):
             raise Exception("Was not able to compile FastTree")
+    return bin_path
 
 
 def to_fast_tree_format(rate_matrix: np.array, output_path: str, pi: np.array):
@@ -152,6 +174,7 @@ def run_fast_tree_with_custom_rate_matrix(
     output_site_rates_dir: str,
     output_likelihood_dir: str,
     extra_command_line_args: str,
+    fast_tree_bin: str,
 ) -> str:
     r"""
     This wrapper deals with the fact that FastTree only accepts normalized rate
@@ -199,10 +222,9 @@ def run_fast_tree_with_custom_rate_matrix(
                 pi=pi.reshape(20),
             )
             # Run FastTree!
-            dir_path = os.path.dirname(os.path.realpath(__file__))
             outlog = os.path.join(output_tree_dir, family + ".fast_tree_log")
             command = (
-                f"{dir_path}/FastTree -quiet -trans "
+                f"{fast_tree_bin} -quiet -trans "
                 + f"{scaled_rate_matrix_filename} -log {outlog} -cat "
                 + f"{num_rate_categories} "
                 + extra_command_line_args
@@ -285,6 +307,7 @@ def _map_func(args: List):
     output_site_rates_dir = args[5]
     output_likelihood_dir = args[6]
     extra_command_line_args = args[7]
+    fast_tree_bin = args[8]
 
     for family in families:
         msa_path = os.path.join(msa_dir, family + ".txt")
@@ -297,6 +320,7 @@ def _map_func(args: List):
             output_site_rates_dir=output_site_rates_dir,
             output_likelihood_dir=output_likelihood_dir,
             extra_command_line_args=extra_command_line_args,
+            fast_tree_bin=fast_tree_bin,
         )
 
 
@@ -333,7 +357,7 @@ def fast_tree(
     if not os.path.exists(output_likelihood_dir):
         os.makedirs(output_likelihood_dir)
 
-    _install_fast_tree()
+    fast_tree_bin = _install_fast_tree_and_return_bin_path()
 
     map_args = [
         [
@@ -345,6 +369,7 @@ def fast_tree(
             output_site_rates_dir,
             output_likelihood_dir,
             extra_command_line_args,
+            fast_tree_bin,
         ]
         for process_rank in range(num_processes)
     ]

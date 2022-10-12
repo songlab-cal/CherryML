@@ -40,7 +40,28 @@ def _init_logger():
 _init_logger()
 
 
-def _install_historian():
+def _historian_is_installed_on_system() -> bool:
+    """
+    Check whether `historian` program is installed on the system.
+    """
+    res = os.popen("which historian").read()
+    if len(res) > 0:
+        # is installed
+        return True
+    else:
+        # is not installed
+        return False
+
+
+def _install_historian() -> str:
+    """
+    Makes sure that Historian is installed on the system, and if not, installs
+    it.
+
+    Returns the path to the Historian binary.
+    """
+    if _historian_is_installed_on_system():
+        return "historian"
     logger = logging.getLogger(__name__)
     dir_path = os.path.join(
         os.path.dirname(os.path.realpath(__file__)), "historian"
@@ -60,6 +81,7 @@ def _install_historian():
             os.system(compile_command)
             if not os.path.exists(bin_path):
                 raise Exception("Was not able to build Historian")
+    return bin_path
 
 
 def _translate_tree_and_msa_to_stock_format(
@@ -251,7 +273,7 @@ def em_lg(
     if not os.path.exists(output_rate_matrix_dir):
         os.makedirs(output_rate_matrix_dir)
 
-    _install_historian()
+    historian_bin = _install_historian()
     alphabet = list(read_rate_matrix(initialization_rate_matrix_path).index)
 
     with tempfile.TemporaryDirectory() as stock_dir:
@@ -279,9 +301,8 @@ def em_lg(
                 )
 
                 # Run Historian
-                dir_path = os.path.dirname(os.path.realpath(__file__))
                 historian_command = (
-                    f"{dir_path}/historian/bin/historian"
+                    f"{historian_bin}"
                     + " fit "
                     + " ".join(
                         [
