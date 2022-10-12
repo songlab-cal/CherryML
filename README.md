@@ -14,7 +14,7 @@ The following command learns a rate matrix from a set of MSAs, trees, and site r
 
 ```
 python -m cherryml \
-    --output_path learned_rate_matrix.txt \
+    --output_path learned_rate_matrix_LG.txt \
     --model_name LG \
     --msa_dir demo_data/msas \
     --tree_dir demo_data/trees \
@@ -22,7 +22,9 @@ python -m cherryml \
     --cache_dir _cache_demo
 ```
 
-The learned rate matrix is written to the `output_path`, in this case `learned_rate_matrix.txt`. The directories `msa_dir`, `tree_dir`, `site_rates_dir` should contain one file per family, named `[family_name].txt`, where `[family_name]` is the name of the family. Check out the contents of the directories in `demo_data/` for an example; this demo data is based on real data obtained from Pfam. The format of the files in these directories should be as follows:
+Expected output: `learned_rate_matrix_LG.txt` contains the learned rate matrix.
+
+Generally, the learned rate matrix is written to the `output_path`, in this case `learned_rate_matrix_LG.txt`. The directories `msa_dir`, `tree_dir`, `site_rates_dir` should contain one file per family, named `[family_name].txt`, where `[family_name]` is the name of the family. Check out the contents of the directories in `demo_data/` for an example; this demo data is based on real data obtained from Pfam. The format of the files in these directories should be as follows:
 
 Each file in `msa_dir` should list the protein sequences in a family following the format in the following toy example:
 ```
@@ -65,12 +67,14 @@ If you have _not_ estimated trees and site rates already, CherryML will do that 
 
 ```
 python -m cherryml \
-    --output_path learned_rate_matrix.txt \
+    --output_path learned_rate_matrix_LG.txt \
     --model_name LG \
     --msa_dir demo_data/msas \
     --cache_dir _cache_demo \
     --num_processes_tree_estimation 32
 ```
+
+Expected output: `learned_rate_matrix_LG.txt` contains the learned rate matrix.
 
 FastTree will by default be run with 20 rate categories and with the LG rate matrix (this can be changed by using the full API described later). The trees estimated with FastTree will be saved in the `cache_dir`, and will be re-used by CherryML if they are needed in future runs with the same data (for example when learning a rate matrix on a subset of families, as done via the `--families` argument, or when learning a rate matrix on a subset of sites, as done via the `--sites_subset_dir` argument; clearly trees do not need to be re-estimated in this case!). The argument `--num_processes_tree_estimation` is used to parallelize tree estimation. In the example above, 32 processes are used.
 
@@ -88,7 +92,7 @@ To learn a coevolution model, you just need to set `--model_name co-evolution` a
 
 ```
 python -m cherryml \
-    --output_path learned_rate_matrix.txt \
+    --output_path learned_rate_matrix_co-evolution.txt \
     --model_name co-evolution \
     --msa_dir demo_data/msas \
     --contact_map_dir demo_data/contact_maps \
@@ -96,6 +100,8 @@ python -m cherryml \
     --site_rates_dir demo_data/site_rates \
     --cache_dir _cache_demo
 ```
+
+Expected output: `learned_rate_matrix_co-evolution.txt` contains the learned rate matrix.
 
 Each file in `contact_map_dir` should list the contact map for a family following the format in the following toy example:
 ```
@@ -222,6 +228,8 @@ Nonetheless, in the compute capsule we reproduce a simplified version of Fig. 1e
 ```
 time python reproduce_fig_1e_simplified_demo.py
 ```
+
+Expected output: `fig_1e_simplified/` contains the reproduced version of Fig. 1e.
 
 FastTree is faster, which is better for the demo, and the results are similar. Reproducing Fig. 1e with FastTree takes ~10 minutes. Using PhyML (as in `reproduce_all_figures.py`, and as in our paper), would take ~4 hours. Note that if you have less than 32 cores available, you should change `num_processes=32` to a different value in `reproduce_fig_1e_simplified_demo.py`. In this case, it will take longer than ~10 minutes.
 
