@@ -322,7 +322,7 @@ The run _all_ tests (including the slow tests, such as those for PhyML), and mak
 python -m pytest tests --runslow
 ```
 
-This should take a few minutes. If all tests pass, you are good to go. You can install the `cherryml` package for future use in other projects by running `pip install .`.
+This should take a few minutes. If all tests pass, you are good to go. You can install the `cherryml` package for future use in other projects by running `pip install .`. Then you can use it with `python -m cherryml [...]` as in the demo above.
 
 ## Download data
 
