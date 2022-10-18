@@ -60,10 +60,11 @@ def _install_fast_tree_and_return_bin_path() -> str:
     c_path = os.path.join(dir_path, "FastTree.c")
     bin_path = os.path.join(dir_path, "FastTree")
     if not os.path.exists(bin_path):
-        os.system(
-            "wget http://www.microbesonline.org/fasttree/FastTree.c -P "
-            f"{dir_path}"
-        )
+        if not os.path.exists(c_path):
+            os.system(
+                "wget http://www.microbesonline.org/fasttree/FastTree.c -P "
+                f"{dir_path}"
+            )
         compile_command = (
             "gcc -DNO_SSE -DUSE_DOUBLE -O3 -finline-functions -funroll-loops"
             + f" -Wall -o {bin_path} {c_path} -lm"

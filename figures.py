@@ -759,6 +759,8 @@ def fig_lg_paper(
     num_processes: int = 4,
     evaluation_phylogeny_estimator_name: str = "PhyML",
     output_image_dir: str = "images/fig_lg_paper/",
+    lg_pfam_training_alignments_dir: str = "./lg_paper_data/lg_PfamTrainingAlignments",  # noqa
+    lg_pfam_testing_alignments_dir: str = "./lg_paper_data/lg_PfamTestingAlignments",  # noqa
 ):
     """
     LG paper figure 4, extended with LG w/CherryML.
@@ -769,13 +771,8 @@ def fig_lg_paper(
     caching.set_cache_dir("_cache_lg_paper")
     caching.set_hash_len(64)
 
-    LG_PFAM_TRAINING_ALIGNMENTS_DIR = (
-        "./lg_paper_data/lg_PfamTrainingAlignments"
-    )
-    LG_PFAM_TESTING_ALIGNMENTS_DIR = "./lg_paper_data/lg_PfamTestingAlignments"
-
-    get_lg_PfamTrainingAlignments_data(LG_PFAM_TRAINING_ALIGNMENTS_DIR)
-    get_lg_PfamTestingAlignments_data(LG_PFAM_TESTING_ALIGNMENTS_DIR)
+    get_lg_PfamTrainingAlignments_data(lg_pfam_training_alignments_dir)
+    get_lg_PfamTestingAlignments_data(lg_pfam_testing_alignments_dir)
 
     if evaluation_phylogeny_estimator_name == "PhyML":
         evaluation_phylogeny_estimator = partial(
@@ -798,10 +795,10 @@ def fig_lg_paper(
         )
 
     y, df, bootstraps, Qs = reproduce_lg_paper_fig_4(
-        msa_train_dir=LG_PFAM_TRAINING_ALIGNMENTS_DIR,
-        families_train=get_families(LG_PFAM_TRAINING_ALIGNMENTS_DIR),
-        msa_test_dir=LG_PFAM_TESTING_ALIGNMENTS_DIR,
-        families_test=get_families(LG_PFAM_TESTING_ALIGNMENTS_DIR),
+        msa_train_dir=lg_pfam_training_alignments_dir,
+        families_train=get_families(lg_pfam_training_alignments_dir),
+        msa_test_dir=lg_pfam_testing_alignments_dir,
+        families_test=get_families(lg_pfam_testing_alignments_dir),
         rate_estimator_names=rate_estimator_names[:],
         baseline_rate_estimator_name=baseline_rate_estimator_name,
         evaluation_phylogeny_estimator=evaluation_phylogeny_estimator,

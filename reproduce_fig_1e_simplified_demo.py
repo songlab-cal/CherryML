@@ -7,7 +7,9 @@ if __name__ == "__main__":
         evaluation_phylogeny_estimator_name="FastTree",
         output_image_dir="fig_1e_simplified/",
         num_processes=32,
+        lg_pfam_training_alignments_dir="data/lg_paper_data/lg_PfamTrainingAlignments",
+        lg_pfam_testing_alignments_dir="data/lg_paper_data/lg_PfamTestingAlignments",
     )  # Fig. 1e, 'fast' version with FastTree instead of PhyML.
-    # < ~ 4 hr
+    # ~ 10 min
 
     print("Creating figure 1e done!")
