@@ -98,8 +98,11 @@ python -m cherryml \
     --contact_map_dir demo_data/contact_maps \
     --tree_dir demo_data/trees \
     --site_rates_dir demo_data/site_rates \
-    --cache_dir _cache_demo
+    --cache_dir _cache_demo \
+    --num_epochs 10
 ```
+
+We use 10 epochs in this demo so that it runs faster, but in practice we use 500 epochs. The speed of training will depend on the computer architecture.
 
 Expected output: `learned_rate_matrix_co-evolution.txt` contains the learned rate matrix.
 
