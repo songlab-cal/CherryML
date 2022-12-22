@@ -175,6 +175,13 @@ if __name__ == "__main__":
         default=None,
         help="Directory where the subset of sites from each family used to learn the rate matrix are specified. Currently only implemented for the LG model. This enables learning e.g. domain-specific or structure-specific rate matrices. See README at https://github.com/songlab-cal/CherryML for the expected format of these files.",  # noqa
     )
+    parser.add_argument(
+        "--tree_estimator_name",
+        type=str,
+        required=False,
+        default="fast_tree",
+        help="Tree estimator to use. Can be either 'fast_tree' or 'phyml'.",  # noqa
+    )
 
     # Functionality not currently exposed:
     # parser.add_argument("--do_adam")

@@ -15,7 +15,7 @@ from cherryml.estimation_end_to_end import (
 )
 from cherryml.io import read_rate_matrix, write_rate_matrix
 from cherryml.markov_chain import get_lg_path
-from cherryml.phylogeny_estimation import fast_tree
+from cherryml.phylogeny_estimation import fast_tree, phyml
 
 
 def _init_logger():
@@ -64,6 +64,7 @@ def cherryml_public_api(
     coevolution_mask_path: Optional[str] = None,
     use_maximal_matching: bool = True,
     families: Optional[List[str]] = None,
+    tree_estimator_name: str = "fast_tree",
 ) -> str:
     """
     CherryML method applied to the LG model and the co-evolution model.
@@ -156,12 +157,19 @@ def cherryml_public_api(
     if families is None:
         families = utils.get_families(msa_dir)
 
+    if tree_estimator_name == "fast_tree":
+        tree_estimator = fast_tree
+    elif tree_estimator_name == "phyml":
+        tree_estimator = phyml
+    else:
+        raise ValueError(f"Unknown tree_estimator_name: {tree_estimator_name}")
+
     if model_name == "LG":
         outputs = lg_end_to_end_with_cherryml_optimizer(
             msa_dir=msa_dir,
             families=families,
             tree_estimator=partial(
-                fast_tree,
+                tree_estimator,
                 num_rate_categories=num_rate_categories,
             ),
             initial_tree_estimator_rate_matrix_path=initial_tree_estimator_rate_matrix_path,  # noqa
@@ -208,7 +216,7 @@ def cherryml_public_api(
             coevolution_mask_path=coevolution_mask_path,
             families=families,
             tree_estimator=partial(
-                fast_tree,
+                tree_estimator,
                 num_rate_categories=num_rate_categories,
             ),
             initial_tree_estimator_rate_matrix_path=initial_tree_estimator_rate_matrix_path,  # noqa
