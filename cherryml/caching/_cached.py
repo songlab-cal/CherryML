@@ -5,7 +5,8 @@ from functools import wraps
 from inspect import signature
 from typing import List, Optional
 
-from ._common import CacheUsageError, _hash_all, get_cache_dir, get_use_hash
+from ._common import (CacheUsageError, _get_mode, _hash_all, get_cache_dir,
+                      get_read_only, get_use_hash)
 
 logger = logging.getLogger("caching")
 
@@ -31,9 +32,9 @@ def cached(
             behavior when it has default values.
     """
 
-    def f_res(func):
+    def caching_decorator(func):
         @wraps(func)
-        def r_res_res(*args, **kwargs):
+        def wrapper(*args, **kwargs):
             cache_dir = get_cache_dir()
             if cache_dir is None:
                 return func(*args, **kwargs)
@@ -116,41 +117,59 @@ def cached(
                 )
             success_token_filename = os.path.join(*path) + ".success"
             filename = os.path.join(*path) + ".pickle"
-            if os.path.isfile(success_token_filename):
-                if not os.path.isfile(filename):
-                    raise Exception(
-                        "Success token is present but file is missing!: "
-                        f"{filename}"
+
+            def computed():
+                # Check that each of the output files exists
+                if not os.path.exists(filename):
+                    return False
+                # Not checking mode for backwards compatibility reasons.
+                # mode = _get_mode(filename)
+                # if mode != "444":
+                #     return False
+
+                if not os.path.exists(success_token_filename):
+                    return False
+                return True
+
+            def clear_previous_outputs():
+                if os.path.exists(filename):
+                    logger.info(f"Removing possibly corrupted {filename}")
+                    os.system(f'chmod 666 "{filename}"')
+                    os.remove(filename)
+
+                if os.path.exists(success_token_filename):
+                    logger.info(f"Removing {success_token_filename}")
+                    os.system(f'chmod 666 "{success_token_filename}"')
+                    os.remove(success_token_filename)
+
+            # Only call the function if there is any work to do at all.
+            if not computed():
+                # Now call the wrapped function
+                logger.debug(
+                    f"Calling {func.__name__} . Output location: {filename}"
+                )
+                if get_read_only():
+                    raise CacheUsageError(
+                        "Cache is in read only mode! Will not call function."
                     )
-                with open(filename, "rb") as f:
-                    try:
-                        return pickle.load(f)
-                    except Exception:
-                        raise Exception(
-                            "Corrupt cache file due to unpickling error, even "
-                            f"though success token was present!: {filename}"
-                        )
-            else:
-                if os.path.isfile(filename):
-                    assert not os.path.isfile(
-                        success_token_filename
-                    )  # Should be true because we are in the else statement
-                    logger.info(
-                        "Success token missing but pickle file is present. "
-                        "Thus pickle file is most likely corrupt. "
-                        f"Will have to recompute: {filename}"
-                    )
-                logger.debug(f"Calling {func.__name__}")
+                clear_previous_outputs()
                 res = func(*args, **kwargs)
-                os.makedirs(os.path.join(*path[:-1]), exist_ok=True)
+
+                os.umask(0)  # To ensure all collaborators can access cache
+                os.makedirs(os.path.join(*path[:-1]), exist_ok=True, mode=0o777)
                 with open(filename, "wb") as f:
                     pickle.dump(res, f)
                     f.flush()
+                os.system(f'chmod 444 "{filename}"')
+
                 with open(success_token_filename, "w") as f:
                     f.write("SUCCESS\n")
                     f.flush()
                 return res
+            else:
+                with open(filename, "rb") as f:
+                    return pickle.load(f)
 
-        return r_res_res
+        return wrapper
 
-    return f_res
+    return caching_decorator
