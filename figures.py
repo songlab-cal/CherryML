@@ -2303,3 +2303,167 @@ def fig_MSA_VI_cotransition(
                             ),
                             f"over {tot_IV_VI_II_VV} pairs",
                         )
+
+
+# Supp Fig.
+def fig_relearn_LG_on_pfam15k(
+    num_rate_categories: int = 4,
+    num_sequences: int = 1024,
+    num_families_train: int = 12000,
+    num_families_test: int = 3000,
+    num_processes_tree_estimation: int = NUM_PROCESSES_TREE_ESTIMATION,
+    num_processes_counting: int = 8,
+    num_processes_optimization: int = 2,
+) -> Dict:
+    """
+    We apply CherryML to learn an 'updated' version of the LG rate matrix,
+    using 12K of the Pfam15k alignments as training data. We then evaluate
+    held-out LL on the remaining 3K test alignments. We show the LL gain
+    over the older rate matrices.
+    """
+    output_image_dir = "images/fig_relearn_LG_on_pfam15k"
+    if not os.path.exists(output_image_dir):
+        os.makedirs(output_image_dir)
+
+    caching.set_cache_dir("_cache_benchmarking")
+    caching.set_hash_len(64)
+
+    PFAM_15K_MSA_DIR = "input_data/a3m"
+    PFAM_15K_PDB_DIR = "input_data/pdb"
+
+    train_test_split_seed = 0
+
+    families_all = get_families_pfam_15k(
+        PFAM_15K_MSA_DIR,
+    )
+    np.random.seed(train_test_split_seed)
+    np.random.shuffle(families_all)
+
+    families_train = sorted(families_all[:num_families_train])
+    if num_families_test == 0:
+        families_test = []
+    else:
+        families_test = sorted(families_all[-num_families_test:])
+
+    # Subsample the training MSAs
+    msa_dir_train = subsample_pfam_15k_msas(
+        pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
+        num_sequences=num_sequences,
+        families=families_train,
+        num_processes=num_processes_tree_estimation,
+    )["output_msa_dir"]
+
+    # Run the cherry method using FastTree tree estimator
+    cherry_path = lg_end_to_end_with_cherryml_optimizer(
+        msa_dir=msa_dir_train,
+        families=families_train,
+        tree_estimator=partial(
+            fast_tree,
+            num_rate_categories=num_rate_categories,
+        ),
+        initial_tree_estimator_rate_matrix_path=get_lg_path(),
+        num_processes_tree_estimation=num_processes_tree_estimation,
+        num_processes_optimization=num_processes_optimization,
+        num_processes_counting=num_processes_counting,
+    )["learned_rate_matrix_path"]
+
+    # Subsample the testing MSAs
+    msa_dir_test = subsample_pfam_15k_msas(
+        pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
+        num_sequences=num_sequences,
+        families=families_test,
+        num_processes=num_processes_tree_estimation,
+    )["output_msa_dir"]
+
+    log_likelihoods = []  # type: List[Tuple[str, float]]
+    single_site_rate_matrices = [
+        ("JTT", get_jtt_path()),
+        ("WAG", get_wag_path()),
+        ("LG", get_lg_path()),
+        ("Cherry", cherry_path),
+    ]
+
+    for rate_matrix_name, rate_matrix_path in single_site_rate_matrices:
+        mutation_rate = compute_mutation_rate(
+            read_rate_matrix(rate_matrix_path)
+        )
+        print(
+            f"***** Evaluating: {rate_matrix_name} at {rate_matrix_path} ({num_rate_categories} rate categories) with global mutation rate {mutation_rate} *****"  # noqa
+        )
+        ll = evaluate_single_site_model_on_held_out_msas(
+            msa_dir=msa_dir_test,
+            families=families_test,
+            rate_matrix_path=rate_matrix_path,
+            num_processes=num_processes_tree_estimation,
+            tree_estimator=partial(
+                fast_tree,
+                num_rate_categories=num_rate_categories,
+            ),
+        )
+        print(f"ll for {rate_matrix_name} = {ll}")
+        log_likelihoods.append((rate_matrix_name, ll))
+
+    def get_runtime(lg_end_to_end_with_cherryml_optimizer_res: str) -> float:
+        res = 0
+        for lg_end_to_end_with_cherryml_optimizer_output_dir in [
+            "count_matrices_dir_0",
+            "jtt_ipw_dir_0",
+            "rate_matrix_dir_0",
+        ]:
+            with open(
+                os.path.join(
+                    lg_end_to_end_with_cherryml_optimizer_res[
+                        lg_end_to_end_with_cherryml_optimizer_output_dir
+                    ],
+                    "profiling.txt",
+                ),
+                "r",
+            ) as profiling_file:
+                profiling_file_contents = profiling_file.read()
+                print(
+                    f"{lg_end_to_end_with_cherryml_optimizer_output_dir} "  # noqa
+                    f"profiling_file_contents = {profiling_file_contents}"  # noqa
+                )
+                res += float(profiling_file_contents.split()[2])
+        return res
+
+    log_likelihoods = pd.DataFrame(log_likelihoods, columns=["model", "LL"])
+    log_likelihoods.set_index(["model"], inplace=True)
+
+    for baseline in [True, False]:
+        plt.figure(figsize=(6.4, 4.8))
+        xs = list(log_likelihoods.index)
+        jtt_ll = log_likelihoods.loc["JTT", "LL"]
+        if baseline:
+            heights = log_likelihoods.LL - jtt_ll
+        else:
+            heights = -log_likelihoods.LL
+        print(f"xs = {xs}")
+        print(f"heights = {heights}")
+        plt.bar(
+            x=xs,
+            height=heights,
+        )
+        ax = plt.gca()
+        ax.yaxis.grid()
+        plt.xticks(rotation=90)
+        if baseline:
+            if TITLES:
+                plt.title(
+                    "Results on Pfam 15K data\n(held-out log-Likelihood "
+                    "improvement over JTT)"
+                )
+        else:
+            if TITLES:
+                plt.title(
+                    "Results on Pfam 15K data\n(held-out negative log-Likelihood)"
+                )
+        plt.tight_layout()
+        plt.savefig(
+            os.path.join(
+                output_image_dir,
+                f"log_likelihoods_{num_rate_categories}_{baseline}",
+            ),
+            dpi=300,
+        )
+        plt.close()
