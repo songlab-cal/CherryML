@@ -2499,11 +2499,26 @@ def fig_relearn_LG_on_pfam15k_very_num_families_train(
 
     train_test_split_seed = 0
 
-    families_all = get_families_pfam_15k(
+    families_all_stable = get_families_within_cutoff(
+        pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
+        min_num_sites=190,
+        max_num_sites=230,
+        min_num_sequences=num_sequences,
+        max_num_sequences=1000000,
+    )
+
+    families_all_wo_stable = get_families_pfam_15k(
         PFAM_15K_MSA_DIR,
     )
+    assert(len(families_all_wo_stable) == 15051)
+    families_all_wo_stable = [x for x in families_all_wo_stable if x not in set(families_all_stable)]
+    assert(len(families_all_stable) + len(families_all_wo_stable) == 15051)
+    assert(len(set(families_all_stable + families_all_wo_stable)) == 15051)
+
     np.random.seed(train_test_split_seed)
-    np.random.shuffle(families_all)
+    np.random.shuffle(families_all_stable)
+    np.random.shuffle(families_all_wo_stable)
+    families_all = families_all_stable + families_all_wo_stable
 
     cherry_paths = []
     for num_families_train in num_families_train_list:
