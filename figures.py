@@ -84,6 +84,8 @@ from cherryml.phylogeny_estimation import fast_tree, gt_tree_estimator, phyml
 from cherryml.types import PhylogenyEstimatorType
 from cherryml.utils import get_families, get_process_args
 
+caching.set_dir_levels(0)
+
 NUM_PROCESSES_TREE_ESTIMATION = 32
 
 
