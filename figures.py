@@ -2527,7 +2527,7 @@ def fig_relearn_LG_on_pfam15k_vary_num_families_train(
         """
         Total number of sites in the test families.
         """
-        family_sizes = get_family_sizes()
+        family_sizes = get_family_sizes(pfam_15k_msa_dir=PFAM_15K_MSA_DIR)
         family_sizes = family_sizes[family_sizes.family.isin(families_test)]
         tot_sites = family_sizes.num_sites.sum()
         return tot_sites
