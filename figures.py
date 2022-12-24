@@ -2532,7 +2532,7 @@ def fig_relearn_LG_on_pfam15k_vary_num_families_train(
         tot_sites = family_sizes.num_sites.sum()
         return tot_sites
 
-    tot_sites = get_tot_sites()
+    tot_sites = get_tot_sites(families_test)
 
     cherry_paths = []
     for num_families_train in num_families_train_list:
