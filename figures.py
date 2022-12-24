@@ -2488,7 +2488,7 @@ def fig_relearn_LG_on_pfam15k_vary_num_families_train(
     held-out LL on the remaining 3K test alignments. We show the LL gain
     over the older rate matrices.
     """
-    output_image_dir = "images/fig_relearn_LG_on_pfam15k_vary_num_families_train"
+    output_image_dir = f"images/fig_relearn_LG_on_pfam15k_vary_num_families_train__{num_sequences}_seqs"
     if not os.path.exists(output_image_dir):
         os.makedirs(output_image_dir)
 
