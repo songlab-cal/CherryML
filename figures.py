@@ -41,13 +41,14 @@ from cherryml.benchmarking.lg_paper import (
     get_lg_PfamTrainingAlignments_data,
     reproduce_lg_paper_fig_4,
 )
-from cherryml.benchmarking.pfam_15k import compute_contact_maps
 from cherryml.benchmarking.pfam_15k import get_families as get_families_pfam_15k
 from cherryml.benchmarking.pfam_15k import (
     get_families_within_cutoff,
     simulate_ground_truth_data_coevolution,
     simulate_ground_truth_data_single_site,
     subsample_pfam_15k_msas,
+    compute_contact_maps,
+    get_family_sizes
 )
 from cherryml.evaluation import (
     compute_log_likelihoods,
@@ -2472,10 +2473,10 @@ def fig_relearn_LG_on_pfam15k(
 
 
 # Supp Fig.
-def fig_relearn_LG_on_pfam15k_very_num_families_train(
+def fig_relearn_LG_on_pfam15k_vary_num_families_train(
     num_rate_categories: int = 4,
-    num_sequences: int = 1024,
-    num_families_train_list: List[int] = [4, 12000],
+    num_sequences: int = 128,
+    num_families_train_list: List[int] = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 12000],
     num_families_test: int = 3000,
     num_processes_tree_estimation: int = NUM_PROCESSES_TREE_ESTIMATION,
     num_processes_counting: int = 8,
@@ -2487,7 +2488,7 @@ def fig_relearn_LG_on_pfam15k_very_num_families_train(
     held-out LL on the remaining 3K test alignments. We show the LL gain
     over the older rate matrices.
     """
-    output_image_dir = "images/fig_relearn_LG_on_pfam15k_very_num_families_train"
+    output_image_dir = "images/fig_relearn_LG_on_pfam15k_vary_num_families_train"
     if not os.path.exists(output_image_dir):
         os.makedirs(output_image_dir)
 
@@ -2520,13 +2521,22 @@ def fig_relearn_LG_on_pfam15k_very_num_families_train(
     np.random.shuffle(families_all_wo_stable)
     families_all = families_all_stable + families_all_wo_stable
 
+    families_test = families_all[-num_families_test:]
+
+    def get_tot_sites(families_test: List[str]) -> int:
+        """
+        Total number of sites in the test families.
+        """
+        family_sizes = get_family_sizes()
+        family_sizes = family_sizes[family_sizes.family.isin(families_test)]
+        tot_sites = family_sizes.num_sites.sum()
+        return tot_sites
+
+    tot_sites = get_tot_sites()
+
     cherry_paths = []
     for num_families_train in num_families_train_list:
-        families_train = sorted(families_all[:num_families_train])
-        if num_families_test == 0:
-            families_test = []
-        else:
-            families_test = sorted(families_all[-num_families_test:])
+        families_train = families_all[:num_families_train]
 
         # Subsample the training MSAs
         msa_dir_train = subsample_pfam_15k_msas(
@@ -2549,7 +2559,7 @@ def fig_relearn_LG_on_pfam15k_very_num_families_train(
             num_processes_optimization=num_processes_optimization,
             num_processes_counting=num_processes_counting,
         )["learned_rate_matrix_path"]
-        cherry_paths.append((f"Cherry, {num_families_train} MSAs", cherry_path))
+        cherry_paths.append((f"LG w/CherryML (retrained),\n{num_families_train} MSAs", cherry_path))
 
     # Subsample the testing MSAs
     msa_dir_test = subsample_pfam_15k_msas(
@@ -2563,7 +2573,7 @@ def fig_relearn_LG_on_pfam15k_very_num_families_train(
     single_site_rate_matrices = [
         ("JTT", get_jtt_path()),
         ("WAG", get_wag_path()),
-        ("LG", get_lg_path()),
+        ("LG (2008)", get_lg_path()),
     ] + cherry_paths
 
     for rate_matrix_name, rate_matrix_path in single_site_rate_matrices:
@@ -2618,9 +2628,9 @@ def fig_relearn_LG_on_pfam15k_very_num_families_train(
         xs = list(log_likelihoods.index)
         jtt_ll = log_likelihoods.loc["JTT", "LL"]
         if baseline:
-            heights = log_likelihoods.LL - jtt_ll
+            heights = (log_likelihoods.LL - jtt_ll) / tot_sites
         else:
-            heights = -log_likelihoods.LL
+            heights = -log_likelihoods.LL / tot_sites
         print(f"xs = {xs}")
         print(f"heights = {heights}")
         plt.bar(
@@ -2631,16 +2641,16 @@ def fig_relearn_LG_on_pfam15k_very_num_families_train(
         ax.yaxis.grid()
         plt.xticks(rotation=90)
         if baseline:
-            if TITLES:
-                plt.title(
-                    "Results on Pfam 15K data\n(held-out log-Likelihood "
-                    "improvement over JTT)"
-                )
+            plt.ylabel(
+                "Average per-site log-likelihood\nimprovement over "
+                "JTT, in nats",
+                fontsize=fontsize,
+            )
         else:
-            if TITLES:
-                plt.title(
-                    "Results on Pfam 15K data\n(held-out negative log-Likelihood)"
-                )
+            plt.ylabel(
+                "Average per-site log-likelihood, in nats",
+                fontsize=fontsize,
+            )
         plt.tight_layout()
         plt.savefig(
             os.path.join(
