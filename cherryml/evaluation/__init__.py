@@ -8,3 +8,4 @@ from ._metrics import (
     relative_errors,
     rmse,
 )
+from ._evaluation_public_api import evaluation_public_api

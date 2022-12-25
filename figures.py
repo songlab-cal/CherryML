@@ -2476,7 +2476,7 @@ def fig_relearn_LG_on_pfam15k(
 def fig_relearn_LG_on_pfam15k_vary_num_families_train(
     num_rate_categories: int = 4,
     num_sequences: int = 128,
-    num_families_train_list: List[int] = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 12000],
+    num_families_train_list: List[int] = [4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 12000],
     num_families_test: int = 3000,
     num_processes_tree_estimation: int = NUM_PROCESSES_TREE_ESTIMATION,
     num_processes_counting: int = 8,
