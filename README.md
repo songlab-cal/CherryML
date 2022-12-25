@@ -214,8 +214,8 @@ The CherryML API provides extensive functionality through additional flags, whic
                         README at https://github.com/songlab-cal/CherryML for the
                         expected format of these files. (default: None)
   --tree_estimator_name TREE_ESTIMATOR_NAME
-                        Tree estimator to use. Can be either 'fast_tree' or
-                        'phyml'. (default: fast_tree)
+                        Tree estimator to use. Can be either 'FastTree' or
+                        'PhyML'. (default: FastTree)
 ```
 
 # Reproducing all figures in our paper

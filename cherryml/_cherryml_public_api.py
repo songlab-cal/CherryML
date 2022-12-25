@@ -64,7 +64,7 @@ def cherryml_public_api(
     coevolution_mask_path: Optional[str] = None,
     use_maximal_matching: bool = True,
     families: Optional[List[str]] = None,
-    tree_estimator_name: str = "fast_tree",
+    tree_estimator_name: str = "FastTree",
 ) -> str:
     """
     CherryML method applied to the LG model and the co-evolution model.
@@ -157,9 +157,9 @@ def cherryml_public_api(
     if families is None:
         families = utils.get_families(msa_dir)
 
-    if tree_estimator_name == "fast_tree":
+    if tree_estimator_name == "FastTree":
         tree_estimator = fast_tree
-    elif tree_estimator_name == "phyml":
+    elif tree_estimator_name == "PhyML":
         tree_estimator = phyml
     else:
         raise ValueError(f"Unknown tree_estimator_name: {tree_estimator_name}")

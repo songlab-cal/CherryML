@@ -45,14 +45,14 @@ if __name__ == "__main__":
         type=none_or_value,
         required=False,
         default=None,
-        help="Directory where the trees are stored. See README at https://github.com/songlab-cal/CherryML for the expected format of these files. If not provided, trees will be estimated with FastTree.",  # noqa
+        help="Directory where the trees are stored. See README at https://github.com/songlab-cal/CherryML for the expected format of these files. If not provided, trees will be estimated with the provided `tree_estimator_name`.",  # noqa
     )
     parser.add_argument(
         "--site_rates_dir",
         type=none_or_value,
         required=False,
         default=None,
-        help="Directory where the site rates are stored. See README at https://github.com/songlab-cal/CherryML for the expected format of these files. If not provided, site rates will be estimated with FastTree.",  # noqa
+        help="Directory where the site rates are stored. See README at https://github.com/songlab-cal/CherryML for the expected format of these files. If not provided, site rates will be estimated with the provided `tree_estimator_name`.",  # noqa
     )
     parser.add_argument(
         "--cache_dir",
@@ -179,8 +179,8 @@ if __name__ == "__main__":
         "--tree_estimator_name",
         type=str,
         required=False,
-        default="fast_tree",
-        help="Tree estimator to use. Can be either 'fast_tree' or 'phyml'.",  # noqa
+        default="FastTree",
+        help="Tree estimator to use. Can be either 'FastTree' or 'PhyML'.",  # noqa
     )
 
     # Functionality not currently exposed:
