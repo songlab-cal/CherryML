@@ -4,7 +4,7 @@ import sys
 from typing import Dict, List, Optional
 
 from cherryml.counting import count_transitions
-from cherryml.estimation import em_lg, jtt_ipw
+from cherryml.estimation import em_lg, em_lg_xrate, jtt_ipw
 from cherryml.estimation_end_to_end._cherry import _subset_data_to_sites_subset
 from cherryml.markov_chain import get_equ_path
 from cherryml.types import PhylogenyEstimatorType
@@ -43,6 +43,7 @@ def lg_end_to_end_with_em_optimizer(
     num_processes_optimization: int = 2,
     optimizer_initialization: str = "jtt-ipw",
     sites_subset_dir: Optional[str] = None,
+    em_backend: str = "historian",
 ) -> Dict:
     if sites_subset_dir is not None and num_iterations > 1:
         raise Exception(
@@ -126,7 +127,16 @@ def lg_end_to_end_with_em_optimizer(
                 f"Unknown optimizer_initialization = {optimizer_initialization}"
             )
 
-        rate_matrix_dir = em_lg(
+        if em_backend == "historian":
+            em_backend_fn = em_lg
+        elif em_backend == "xrate":
+            em_backend_fn = em_lg_xrate
+        else:
+            raise ValueError(
+                f"Unknown EM backend: {em_backend}. Allowed: 'historian', "
+                "'xrate'."
+            )
+        rate_matrix_dir = em_backend_fn(
             tree_dir=tree_estimator_output_dirs["output_tree_dir"],
             msa_dir=msa_dir,
             site_rates_dir=tree_estimator_output_dirs["output_site_rates_dir"],
