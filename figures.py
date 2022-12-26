@@ -2561,7 +2561,7 @@ def fig_relearn_LG_on_pfam15k_vary_num_families_train(
             num_processes_optimization=num_processes_optimization,
             num_processes_counting=num_processes_counting,
         )["learned_rate_matrix_path"]
-        cherry_paths.append((f"Relearned LG,\n{num_families_train} MSAs", cherry_path))
+        cherry_paths.append((f"LG w/CherryML,\n{num_families_train} MSAs", cherry_path))
 
     # Subsample the testing MSAs
     msa_dir_test = subsample_pfam_15k_msas(
