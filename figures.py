@@ -2488,7 +2488,7 @@ def fig_relearn_LG_on_pfam15k_vary_num_families_train(
     We apply CherryML to learn an 'updated' version of the LG rate matrix,
     using 12K of the Pfam15k alignments as training data. We then evaluate
     held-out LL on the remaining 3K test alignments. We show the LL gain
-    over the older rate matrices.
+    over the older rate matrices, using JTT as the baseline.
     """
     output_image_dir = f"images/fig_relearn_LG_on_pfam15k_vary_num_families_train__{num_sequences_train}_seqs_train__{num_sequences_test}_seqs_test"
     if not os.path.exists(output_image_dir):
@@ -2630,20 +2630,24 @@ def fig_relearn_LG_on_pfam15k_vary_num_families_train(
         xs = list(log_likelihoods.index)
         jtt_ll = log_likelihoods.loc["JTT", "LL"]
         if baseline:
+            colors = ["blue", "blue"] + ["red"] * len(num_families_train_list)
             heights = (log_likelihoods.LL - jtt_ll) / tot_sites
+            heights = heights[1:]
+            xs_subset = xs[1:]
         else:
+            colors = ["blue", "blue", "blue"] + ["red"] * len(num_families_train_list)
             heights = -log_likelihoods.LL / tot_sites
+            xs_subset = xs
         print(f"xs = {xs}")
         print(f"heights = {heights}")
         plt.bar(
-            x=xs,
+            x=xs_subset,
             height=heights,
         )
         ax = plt.gca()
         ax.yaxis.grid()
         plt.xticks(rotation=90)
         fontsize = 14
-        colors = ["blue", "blue"] + ["red"] * len(num_families_train_list)
         plt.legend(
             handles=[
                 mpatches.Patch(color="blue", label="Standard matrix"),
