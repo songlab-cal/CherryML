@@ -9,12 +9,7 @@ from functools import partial
 from typing import List, Optional
 
 from cherryml import caching, utils
-from cherryml.estimation_end_to_end import (
-    coevolution_end_to_end_with_cherryml_optimizer,
-    lg_end_to_end_with_cherryml_optimizer,
-)
-from cherryml.io import read_rate_matrix, write_rate_matrix, read_log_likelihood
-from cherryml.markov_chain import get_lg_path
+from cherryml.io import read_log_likelihood, read_site_rates
 from cherryml.phylogeny_estimation import fast_tree, phyml
 
 
@@ -35,6 +30,7 @@ logger = logging.getLogger(__name__)
 
 def evaluation_public_api(
     output_path: str,
+    rate_matrix_path: str,
     msa_dir: str,
     cache_dir: Optional[str] = None,
     num_processes_tree_estimation: int = 32,
@@ -68,7 +64,7 @@ def evaluation_public_api(
     `tree_estimator_name`. Tree estimation is parallelized using the number
     of processes given by `num_processes_tree_estimation`. The number of
     rate categories used is `num_rate_categories`.
-    
+
     To compute log-likelihood on only a subset of the alignments in `msa_dir`,
     provide the list of families with the `families` argument (this is useful
     for having training and testing alignments in the same directory, without
@@ -105,12 +101,12 @@ def evaluation_public_api(
             f"Unknown tree_estimator_name: {tree_estimator_name}."
             " Available tree estimators: 'FastTree', 'PhyML'."
         )
-    tree_estimator=partial(
+    tree_estimator = partial(
         tree_estimator,
         num_rate_categories=num_rate_categories,
     )
     if extra_command_line_args is not None:
-        tree_estimator=partial(
+        tree_estimator = partial(
             tree_estimator,
             extra_command_line_args=extra_command_line_args,
         )
@@ -119,7 +115,7 @@ def evaluation_public_api(
         msa_dir=msa_dir,
         families=families,
         rate_matrix_path=rate_matrix_path,
-        num_processes=num_processes,
+        num_processes=num_processes_tree_estimation,
     )
 
     tot_ll = 0.0

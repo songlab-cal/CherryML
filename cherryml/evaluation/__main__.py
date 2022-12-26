@@ -21,6 +21,12 @@ if __name__ == "__main__":
         help="Filepath where to write the log-likelihood",  # noqa
     )
     parser.add_argument(
+        "--rate_matrix_path",
+        type=str,
+        required=True,
+        help="Filepath where the rate matrix to evaluate is stored.",  # noqa
+    )
+    parser.add_argument(
         "--msa_dir",
         type=str,
         required=True,
@@ -48,6 +54,7 @@ if __name__ == "__main__":
         required=False,
         default=20,
         help="Number of rate categories to use in the tree estimator to estimate trees and site rates.",  # noqa
+    )
 
     parser.add_argument(
         "--families",
