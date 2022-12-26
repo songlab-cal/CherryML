@@ -23,8 +23,6 @@ from cherryml.io import (
 from cherryml.markov_chain import compute_stationary_distribution
 from cherryml.utils import pushd
 
-MISSING_DATA_CHARACTER = "x"
-
 
 def _init_logger():
     logger = logging.getLogger(__name__)
@@ -91,6 +89,7 @@ def _translate_tree_and_msa_to_stock_format(
     input_site_rates_dir: str,
     alphabet: List[str],
     output_stock_dir: str,
+    missing_data_character: str,
 ) -> List[str]:
     """
     Translate tree and MSA to the Stockholm format.
@@ -114,7 +113,7 @@ def _translate_tree_and_msa_to_stock_format(
             if state in alphabet_set:
                 new_seq.append(state)
             else:
-                new_seq.append(MISSING_DATA_CHARACTER)
+                new_seq.append(missing_data_character)
         return new_seq
 
     msa = {
@@ -169,6 +168,7 @@ def _translate_trees_and_msas_to_stock_format(
     output_stock_dir: str,
     alphabet: List[str],
     families: List[str],
+    missing_data_character: str,
 ) -> List[str]:
     """
     Translate trees and MSAs to the Stockholm format.
@@ -186,6 +186,7 @@ def _translate_trees_and_msas_to_stock_format(
             site_rates_dir,
             alphabet,
             output_stock_dir,
+            missing_data_character=missing_data_character,
         )
     return res
 
@@ -216,6 +217,7 @@ def _translate_rate_matrix_from_historian_format(
 def _translate_rate_matrix_to_historian_format(
     initialization_rate_matrix_path: str,
     historian_init_path: str,
+    missing_data_character: str,
 ):
     rate_matrix = read_rate_matrix(initialization_rate_matrix_path)
     alphabet = list(rate_matrix.columns)
@@ -226,7 +228,7 @@ def _translate_rate_matrix_to_historian_format(
         "insextprob": 0.0,
         "delextprob": 0.0,
         "alphabet": "".join(alphabet),
-        "wildcard": MISSING_DATA_CHARACTER,
+        "wildcard": missing_data_character,
     }
     res["rootprob"] = {state: pi[i] for (i, state) in enumerate(alphabet)}
     res["subrate"] = {}
@@ -294,10 +296,12 @@ def em_lg(
                     stock_dir,
                     alphabet,
                     families,
+                    missing_data_character="x",
                 )
                 _translate_rate_matrix_to_historian_format(
                     initialization_rate_matrix_path,
                     historian_init_path,
+                    missing_data_character="x",
                 )
 
                 # Run Historian
