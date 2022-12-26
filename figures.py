@@ -384,7 +384,7 @@ def fig_single_site_cherry(
 
 
 def fig_single_site_em(
-    extra_em_command_line_args: str = "-band 0 -fixgaprates -mininc 0.000001 -maxiter 100000000 -nolaplace",  # noqa
+    extra_em_command_line_args: str,
     num_processes: int = 4,
     num_rate_categories: int = 1,
     num_sequences: int = 128,
@@ -531,7 +531,9 @@ def fig_single_site_em(
 
 
 # Fig. 1b, 1c
-def fig_computational_and_stat_eff_cherry_vs_em():
+def fig_computational_and_stat_eff_cherry_vs_em(
+    extra_em_command_line_args: str = "-band 0 -fixgaprates -mininc 0.000001 -maxiter 100000000 -nolaplace",
+):
     fontsize = 14
 
     output_image_dir = "images/fig_computational_and_stat_eff_cherry_vs_em"
@@ -545,7 +547,9 @@ def fig_computational_and_stat_eff_cherry_vs_em():
     ) = fig_single_site_cherry()
     cherry_times = [int(x) for x in cherry_times]
     cherry_errors = [float("%.1f" % (100 * x)) for x in cherry_errors_nonpct]
-    num_families_em, em_errors_nonpct, em_times = fig_single_site_em()
+    num_families_em, em_errors_nonpct, em_times = fig_single_site_em(
+        extra_em_command_line_args=extra_em_command_line_args,
+    )
     em_times = [int(x) for x in em_times]
     em_errors = [float("%.1f" % (100 * x)) for x in em_errors_nonpct]
     assert num_families_cherry == num_families_em
