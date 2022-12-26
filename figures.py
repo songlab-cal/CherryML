@@ -23,6 +23,7 @@ from collections import defaultdict
 from functools import partial
 from typing import Dict, List, Optional, Tuple
 
+import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -2560,7 +2561,7 @@ def fig_relearn_LG_on_pfam15k_vary_num_families_train(
             num_processes_optimization=num_processes_optimization,
             num_processes_counting=num_processes_counting,
         )["learned_rate_matrix_path"]
-        cherry_paths.append((f"LG w/CherryML (retrained),\n{num_families_train} MSAs", cherry_path))
+        cherry_paths.append((f"Relearned LG,\n{num_families_train} MSAs", cherry_path))
 
     # Subsample the testing MSAs
     msa_dir_test = subsample_pfam_15k_msas(
@@ -2641,6 +2642,15 @@ def fig_relearn_LG_on_pfam15k_vary_num_families_train(
         ax = plt.gca()
         ax.yaxis.grid()
         plt.xticks(rotation=90)
+        fontsize = 14
+        colors = ["blue", "blue"] + ["red"] * len(num_families_train_list)
+        plt.legend(
+            handles=[
+                mpatches.Patch(color="blue", label="Standard matrix"),
+                mpatches.Patch(color="red", label="CherryML"),
+            ],
+            fontsize=fontsize,
+        )
         if baseline:
             plt.ylabel(
                 "Average per-site log-likelihood\nimprovement over "
