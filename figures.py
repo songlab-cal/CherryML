@@ -2475,7 +2475,8 @@ def fig_relearn_LG_on_pfam15k(
 # Supp Fig.
 def fig_relearn_LG_on_pfam15k_vary_num_families_train(
     num_rate_categories: int = 4,
-    num_sequences: int = 128,
+    num_sequences_train: int = 128,
+    num_sequences_test: int = 128,
     num_families_train_list: List[int] = [4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 12000],
     num_families_test: int = 3000,
     num_processes_tree_estimation: int = NUM_PROCESSES_TREE_ESTIMATION,
@@ -2488,7 +2489,7 @@ def fig_relearn_LG_on_pfam15k_vary_num_families_train(
     held-out LL on the remaining 3K test alignments. We show the LL gain
     over the older rate matrices.
     """
-    output_image_dir = f"images/fig_relearn_LG_on_pfam15k_vary_num_families_train__{num_sequences}_seqs"
+    output_image_dir = f"images/fig_relearn_LG_on_pfam15k_vary_num_families_train__{num_sequences_train}_seqs_train__{num_sequences_test}_seqs_test"
     if not os.path.exists(output_image_dir):
         os.makedirs(output_image_dir)
 
@@ -2504,7 +2505,7 @@ def fig_relearn_LG_on_pfam15k_vary_num_families_train(
         pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
         min_num_sites=190,
         max_num_sites=230,
-        min_num_sequences=num_sequences,
+        min_num_sequences=num_sequences_train,
         max_num_sequences=1000000,
     )
 
@@ -2541,7 +2542,7 @@ def fig_relearn_LG_on_pfam15k_vary_num_families_train(
         # Subsample the training MSAs
         msa_dir_train = subsample_pfam_15k_msas(
             pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
-            num_sequences=num_sequences,
+            num_sequences=num_sequences_train,
             families=families_train,
             num_processes=num_processes_tree_estimation,
         )["output_msa_dir"]
@@ -2564,7 +2565,7 @@ def fig_relearn_LG_on_pfam15k_vary_num_families_train(
     # Subsample the testing MSAs
     msa_dir_test = subsample_pfam_15k_msas(
         pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
-        num_sequences=num_sequences,
+        num_sequences=num_sequences_test,
         families=families_test,
         num_processes=num_processes_tree_estimation,
     )["output_msa_dir"]
