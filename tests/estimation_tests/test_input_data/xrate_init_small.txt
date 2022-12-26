@@ -1,0 +1,58 @@
+;; Grammar nullprot
+;;
+(grammar
+ (name nullprot)
+ (update-rates 1)
+ (update-rules 1)
+
+ ;; Transformation rules for grammar symbols
+
+ ;; State Start
+ ;;
+ (transform (from (Start)) (to (S0)) (prob 0.5))
+ (transform (from (Start)) (to ()) (prob 0.5))
+
+ ;; State S0
+ ;;
+ (transform (from (S0)) (to (A0 S0*)) (gaps-ok)
+  (minlen 1))
+ (transform (from (S0*)) (to ()) (prob 0.5))
+ (transform (from (S0*)) (to (S0)) (prob 0.5))
+
+ ;; Markov chain substitution models
+
+ (chain
+  (update-policy rev)
+  (terminal (A0))
+
+  ;; initial probability distribution
+  (initial (state (a)) (prob 0.07906592093407892))
+  (initial (state (r)) (prob 0.05594094405905599))
+  (initial (state (n)) (prob 0.04197695802304203))
+  (initial (state (q)) (prob 0.040766959233040724))
+
+  ;; mutation rates
+  (mutate (from (a)) (to (r)) (rate 0.023780127512999998))
+  (mutate (from (a)) (to (n)) (rate 0.011619989186))
+  (mutate (from (a)) (to (q)) (rate 0.039539668698))
+  (mutate (from (r)) (to (a)) (rate 0.033610403138))
+  (mutate (from (r)) (to (n)) (rate 0.031561582806))
+  (mutate (from (r)) (to (q)) (rate 0.11446998543599997))
+  (mutate (from (n)) (to (a)) (rate 0.021886891988))
+  (mutate (from (n)) (to (r)) (rate 0.042060807198))
+  (mutate (from (n)) (to (q)) (rate 0.069130721784))
+  (mutate (from (q)) (to (a)) (rate 0.07668563900399998))
+  (mutate (from (q)) (to (r)) (rate 0.15707718142799998))
+  (mutate (from (q)) (to (n)) (rate 0.07118258170399999))
+ )  ;; end chain A0
+
+)  ;; end grammar nullprot
+
+;; Alphabet Protein
+;;
+(alphabet
+ (name Protein)
+ (token (a r n q))
+ (wildcard *)
+)  ;; end alphabet Protein
+

@@ -116,7 +116,6 @@ def _translate_rate_matrix_to_xrate_format(
     Q_df = read_rate_matrix(initialization_rate_matrix_path)
     Q = Q_df.to_numpy()
     alphabet = list(Q_df.index)
-    assert Q.shape == (20, 20)
     res = """;; Grammar nullprot
 ;;
 (grammar
@@ -147,40 +146,12 @@ def _translate_rate_matrix_to_xrate_format(
   ;; initial probability distribution
 """
     pi = compute_stationary_distribution(Q)
-    amino_acids = [
-        "A",
-        "R",
-        "N",
-        "D",
-        "C",
-        "Q",
-        "E",
-        "G",
-        "H",
-        "I",
-        "L",
-        "K",
-        "M",
-        "F",
-        "P",
-        "S",
-        "T",
-        "W",
-        "Y",
-        "V",
-    ]
-    if amino_acids != alphabet:
-        raise ValueError(
-            "XRATE can only be run with a rate matrix corresponding to amino "
-            f"acids. Your rate matrix has alphabet: {alphabet}, whereas the "
-            f"amino acids are: {amino_acids}."
-        )
-    for i, aa in enumerate(amino_acids):
+    for i, aa in enumerate(alphabet):
         res += f"  (initial (state ({aa.lower()})) (prob {pi[i]}))\n"
     res += "\n"
     res += "  ;; mutation rates\n"
-    for i, aa1 in enumerate(amino_acids):
-        for j, aa2 in enumerate(amino_acids):
+    for i, aa1 in enumerate(alphabet):
+        for j, aa2 in enumerate(alphabet):
             if i != j:
                 res += f"  (mutate (from ({aa1.lower()})) (to ({aa2.lower()})) (rate {Q[i, j]}))\n"
     res += """ )  ;; end chain A0
@@ -191,11 +162,9 @@ def _translate_rate_matrix_to_xrate_format(
 ;;
 (alphabet
  (name Protein)
- (token (a r n d c q e g h i l k m f p s t w y v))
- (extend (to x) (from a) (from r) (from n) (from d) (from c) (from q) (from e) (from g) (from h) (from i) (from l) (from k) (from m) (from f) (from p) (from s) (from t) (from w) (from y) (from v))
- (extend (to b) (from n) (from d))
- (extend (to z) (from q) (from e))
- (wildcard *)
+"""
+    res += " (token (" + " ".join([aa1.lower() for aa1 in alphabet]) + "))\n"
+    res += """ (wildcard *)
 )  ;; end alphabet Protein
 
 """
