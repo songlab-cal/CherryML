@@ -11,3 +11,7 @@ from cherryml.estimation_end_to_end import (
 from cherryml.evaluation import compute_log_likelihoods
 from cherryml.phylogeny_estimation import fast_tree, phyml
 from cherryml.types import PhylogenyEstimatorType
+
+from . import caching
+
+caching.set_hash_len(64)
