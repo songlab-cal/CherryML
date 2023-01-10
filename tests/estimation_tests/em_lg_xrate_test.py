@@ -7,12 +7,12 @@ import unittest
 import numpy as np
 
 from cherryml.estimation import em_lg_xrate
+from cherryml.estimation._em_lg import _translate_tree_and_msa_to_stock_format
 from cherryml.estimation._em_lg_xrate import (
     _install_xrate,
     _translate_rate_matrix_from_xrate_format,
     _translate_rate_matrix_to_xrate_format,
 )
-from cherryml.estimation._em_lg import _translate_tree_and_msa_to_stock_format
 from cherryml.io import read_rate_matrix
 from cherryml.markov_chain import get_lg_path
 from cherryml.utils import get_amino_acids
@@ -72,7 +72,9 @@ class TestEMLG_XRATE(unittest.TestCase):
                 [f"fam1_{i}" for i in range(3)],
             )
             for i in range(3):
-                filepath_1 = f"{DATA_DIR}/stock_dir_trifurcation_xrate/fam1_{i}.txt"
+                filepath_1 = (
+                    f"{DATA_DIR}/stock_dir_trifurcation_xrate/fam1_{i}.txt"
+                )
                 filepath_2 = f"{stock_dir}/fam1_{i}.txt"
                 assert filecmp.cmp(filepath_1, filepath_2)
 
@@ -104,16 +106,15 @@ class TestEMLG_XRATE(unittest.TestCase):
         """
         Run XRATE from CLI
         """
-        with tempfile.NamedTemporaryFile(
-            "w"
-        ) as xrate_learned_rate_matrix_file:
-            xrate_learned_rate_matrix_path = (
-                xrate_learned_rate_matrix_file.name
-            )
+        with tempfile.NamedTemporaryFile("w") as xrate_learned_rate_matrix_file:
+            xrate_learned_rate_matrix_path = xrate_learned_rate_matrix_file.name
             command = (
                 "cherryml/estimation/xrate/bin/xrate "
                 + "".join(
-                    [f" {DATA_DIR}/stock_dir_xrate/fam1_{i}.txt" for i in range(3)]
+                    [
+                        f" {DATA_DIR}/stock_dir_xrate/fam1_{i}.txt"
+                        for i in range(3)
+                    ]
                 )
                 + f" -g {DATA_DIR}/xrate_init_small.txt"
                 + f" -t {xrate_learned_rate_matrix_path}"
@@ -123,7 +124,7 @@ class TestEMLG_XRATE(unittest.TestCase):
             os.system(command)
             with open(xrate_learned_rate_matrix_path, "r") as xrate_output_file:
                 xrate_file_contents = xrate_output_file.read()
-                assert("(mutate (from (" in xrate_file_contents)
+                assert "(mutate (from (" in xrate_file_contents
 
     def test_translate_rate_matrix_from_xrate_format(self):
         with tempfile.NamedTemporaryFile("w") as learned_rate_matrix_file:
