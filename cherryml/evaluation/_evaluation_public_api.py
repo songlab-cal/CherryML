@@ -1,5 +1,5 @@
 """
-Public API for log-likelihood evaluation, enabling for model selection.
+Public API for log-likelihood evaluation, useful for model selection.
 """
 import logging
 import os
@@ -89,6 +89,15 @@ def evaluation_public_api(
 
     caching.set_cache_dir(cache_dir)
 
+    if families is not None:
+        for family in families:
+            if not os.path.exists(os.path.join(msa_dir, family + ".txt")):
+                raise ValueError(
+                    f"MSA for family {family} not found in {msa_dir}. "
+                    f"Was expecting file {msa_dir}.txt to contain the MSA, "
+                    "but it does not exist."
+                )
+
     if families is None:
         families = utils.get_families(msa_dir)
 
@@ -118,6 +127,8 @@ def evaluation_public_api(
         num_processes=num_processes_tree_estimation,
     )
 
+    lls = []
+    num_sites = []
     tot_ll = 0.0
     tot_num_sites = 0
     for family in families:
@@ -125,14 +136,22 @@ def evaluation_public_api(
             tree_estimator_output_dirs["output_likelihood_dir"], family + ".txt"
         )
         ll, _ = read_log_likelihood(ll_path)
+        lls.append(ll)
         tot_ll += ll
 
         site_rates_path = os.path.join(
             tree_estimator_output_dirs["output_site_rates_dir"], family + ".txt"
         )
         site_rates = read_site_rates(site_rates_path)
+        num_sites.append(len(site_rates))
         tot_num_sites += len(site_rates)
 
-    res = tot_ll / tot_num_sites
     with open(output_path, "w") as outfile:
-        outfile.write(f"{res}\n")
+        outfile.write(
+            f"Total log-likelihood: {tot_ll}\n"
+            f"Total number of sites: {tot_num_sites}\n"
+            f"Average log-likelihood per site: {tot_ll/tot_num_sites}\n"
+            f"Families: {' '.join(families)}\n"
+            f"Log-likelihood per family: {' '.join(map(str, lls))}\n"
+            f"Sites per family: {' '.join(map(str, num_sites))}\n"
+        )

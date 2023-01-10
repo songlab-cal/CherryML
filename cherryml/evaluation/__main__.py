@@ -59,6 +59,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--families",
         type=none_or_value,
+        nargs="*",
         required=False,
         default=None,
         help="Subset of families for which to evaluate log likelihood. If not provided, all families in the `msa_dir` will be used.",  # noqa
@@ -76,7 +77,7 @@ if __name__ == "__main__":
         type=none_or_value,
         required=False,
         default=None,
-        help="Extra command line arguments for the tree estimator, e.g. `--gamma` for FastTree to compute Gamma likelihoods.",  # noqa
+        help="Extra command line arguments for the tree estimator, e.g. `-gamma` for FastTree to compute Gamma likelihoods.",  # noqa
     )
 
     args = parser.parse_args()
