@@ -8,6 +8,8 @@ We expect that the CherryML method will be applied to enable scalable estimation
 
 This package also enables seamless reproduction of all results in our paper.
 
+For a quick demonstration of an end-to-end application of CherryML to real data, please check out the section [End-to-end worked-out application: `QMaker`'s plant dataset](#end-to-end-worked-out-application:-`QMaker`'s-plant-dataset).
+
 # Demo: CherryML applied to the LG model (runtime on a normal computer: 1 - 5 minutes)
 
 The following command learns a rate matrix from a set of MSAs, trees, and site rates (try it out!):
@@ -217,6 +219,246 @@ The CherryML API provides extensive functionality through additional flags, whic
                         Tree estimator to use. Can be either 'FastTree' or
                         'PhyML'. (default: FastTree)
 ```
+
+# Evaluation API
+
+For the purpose of model selection, we have exposed a simple API enabling the evaluation of a rate matrix's fit to a set of MSAs. This API is a simple wrapper around the FastTree and PhyML programs. For example, to compute the fit of the LG rate matrix to the 3 MSAs under `tests/evaluation_tests/a3m_small`, you can simply run:
+
+```
+python -m cherryml.evaluation \
+    --msa_dir tests/evaluation_tests/a3m_small \
+    --rate_matrix_path data/rate_matrices/lg.txt \
+    --num_rate_categories 4 \
+    --output_path log_likelihoods.txt \
+    --cache_dir _cache_demo \
+    --num_processes_tree_estimation 3 \
+    --tree_estimator_name FastTree
+```
+
+The output - written to the file `log_likelihoods.txt` - looks like this:
+
+```
+Total log-likelihood: -700.1151
+Total number of sites: 48
+Average log-likelihood per site: -14.58573125
+Families: 1e7l_1_A 5a0l_1_A 6anz_1_B
+Log-likelihood per family: -198.2552 -216.9863 -284.8736
+Sites per family: 16 16 16
+```
+
+The first line indicates the total log-likelihood (over all families). The second line indicates the total number of sites across all the provided MSAs. The third line shows the average log-likelihood per site (which is the ratio of the two previous quantities). The fourth line lists the families which were used to compute the log-likelihood. Next, the log-likelihood for each family is shown. Finally, the number of sites in each family is shown. Note that the total log-likelihood is equal to the sum of the log-likelihoods of each family.
+
+Note that by default, FastTree computes log-likelihoods under MLE rates. To compute log-likelihoods under a Gamma model, provide this option through the `--extra_command_line_args` argument. Thus, to compute Gamma log-likelihoods, you can use:
+
+```
+python -m cherryml.evaluation \
+    --msa_dir tests/evaluation_tests/a3m_small \
+    --rate_matrix_path data/rate_matrices/lg.txt \
+    --num_rate_categories 4 \
+    --output_path log_likelihoods.txt \
+    --cache_dir _cache_demo \
+    --num_processes_tree_estimation 3 \
+    --tree_estimator_name FastTree \
+    --extra_command_line_args='-gamma'
+```
+
+In this case, the output is:
+
+```
+Total log-likelihood: -723.442
+Total number of sites: 48
+Average log-likelihood per site: -15.071708333333333
+Families: 1e7l_1_A 5a0l_1_A 6anz_1_B
+Log-likelihood per family: -205.047 -225.683 -292.712
+Sites per family: 16 16 16
+```
+
+As you can see, log-likelihoods are lower under the Gamma model because this model accounts for the possibility that the site rates could have been something else other than the MLE rates.
+
+We can also use PhyML instead of FastTree. PhyML computes likelihoods under a Gamma model by default. Generally, PhyML is slower than FastTree but more precise:
+
+```
+python -m cherryml.evaluation \
+    --msa_dir tests/evaluation_tests/a3m_small \
+    --rate_matrix_path data/rate_matrices/lg.txt \
+    --num_rate_categories 4 \
+    --output_path log_likelihoods.txt \
+    --cache_dir _cache_demo \
+    --num_processes_tree_estimation 3 \
+    --tree_estimator_name PhyML
+```
+
+The output is:
+
+```
+Total log-likelihood: -717.50699
+Total number of sites: 48
+Average log-likelihood per site: -14.948062291666666
+Families: 1e7l_1_A 5a0l_1_A 6anz_1_B
+Log-likelihood per family: -204.41537 -223.26711 -289.82451
+Sites per family: 16 16 16
+```
+
+You will note that PhyML obtained a better Gamma log-likelihood than FastTree. Unless over-ridden by the user with `--extra_command_line_args`, PhyML is being run with the extra command line arguments `--datatype aa --pinv e --r_seed 0 --bootstrap 0 -f m --alpha e --print_site_lnl`.
+
+# Full API
+
+The command line tool can be invoked with `python -m cherryml.evaluation` and accepts the following arguments:
+
+```
+  -h, --help            show this help message and exit
+  --output_path OUTPUT_PATH
+                        Filepath where to write the log-likelihood (default:
+                        None)
+  --rate_matrix_path RATE_MATRIX_PATH
+                        Filepath where the rate matrix to evaluate is stored.
+                        (default: None)
+  --msa_dir MSA_DIR     Directory where the multiple sequence alignments
+                        (MSAs) are stored. See README at
+                        https://github.com/songlab-cal/CherryML for the
+                        expected format of these files. (default: None)
+  --cache_dir CACHE_DIR
+                        Directory to use to cache intermediate computations
+                        for re-use in future runs of cherryml. Use a different
+                        cache directory for different input datasets. If not
+                        provided, a temporary directory will be used.
+                        (default: None)
+  --num_processes_tree_estimation NUM_PROCESSES_TREE_ESTIMATION
+                        Number of processes to parallelize tree estimation.
+                        (default: 32)
+  --num_rate_categories NUM_RATE_CATEGORIES
+                        Number of rate categories to use in the tree estimator
+                        to estimate trees and site rates. (default: 20)
+  --families [FAMILIES [FAMILIES ...]]
+                        Subset of families for which to evaluate log
+                        likelihood. If not provided, all families in the
+                        `msa_dir` will be used. (default: None)
+  --tree_estimator_name TREE_ESTIMATOR_NAME
+                        Tree estimator to use. Can be either 'FastTree' or
+                        'PhyML'. (default: FastTree)
+  --extra_command_line_args EXTRA_COMMAND_LINE_ARGS
+                        Extra command line arguments for the tree estimator,
+                        e.g. `-gamma` for FastTree to compute Gamma
+                        likelihoods. (default: None)
+```
+
+# End-to-end worked-out application: `QMaker`'s plant dataset
+
+We now combine the model estimation step and model selection steps to show a concrete example of applying CherryML to obtain a rate matrix superior than LG in record time. For this, we will use the plant data from the QMaker paper. The training MSAs are located at `demo_data/plant_train` and the testing MSAs are located at `demo_data/plant_test`. We start by fitting the LG model using FastTree tree estimator and the CherryML rate matrix optimizer. We start from the LG rate matrix and perform two rounds of alternating rate matrix and tree optimization (which is usually enough for convergence when adjusting the LG rate matrix to a new dataset). We will use 4 CPU cores in this example, as when running on a personal computer:
+
+```
+time python -m cherryml \
+    --output_path plant_CherryML.txt \
+    --model_name LG \
+    --msa_dir demo_data/plant_train \
+    --cache_dir _cache_plant \
+    --num_processes_tree_estimation 4 \
+    --num_processes_counting 4 \
+    --num_processes_optimization 2 \
+    --num_rate_categories 4 \
+    --initial_tree_estimator_rate_matrix_path data/rate_matrices/lg.txt \
+    --num_iterations 2 \
+    --tree_estimator_name FastTree
+```
+
+<!-- ```
+real	21m55.722s
+user	79m8.700s
+sys	1m52.647s
+``` -->
+
+End-to-end rate matrix estimation took 22 minutes wall-clock time on a MacBook Pro with the following specs:
+
+```
+Processor: 2.6 GHz 6-Core Intel Core i7
+Memory: 16 GB 2400 MHz DDR4
+```
+
+Now we proceed to evaluate model fit on held-out data. The testing MSAs are located at `demo_data/plant_test`. Thus:
+
+```
+time python -m cherryml.evaluation \
+    --msa_dir demo_data/plant_test \
+    --rate_matrix_path plant_CherryML.txt \
+    --num_rate_categories 4 \
+    --output_path log_likelihoods_plant_CherryML.txt \
+    --cache_dir _cache_plant \
+    --num_processes_tree_estimation 4 \
+    --tree_estimator_name FastTree
+```
+
+<!-- ```
+real	3m1.096s
+user	10m45.304s
+sys	0m17.869s
+``` -->
+
+Evaluation took 3 minutes wall-clock time on the same computer. The output is:
+
+```
+Total log-likelihood: -2042877.196799998
+Total number of sites: 101064
+Average log-likelihood per site: -20.21369821895035
+[...]
+```
+
+Finally, we compute the model fit of the LG rate matrix:
+
+```
+time python -m cherryml.evaluation \
+    --msa_dir demo_data/plant_test \
+    --rate_matrix_path data/rate_matrices/lg.txt \
+    --num_rate_categories 4 \
+    --output_path log_likelihoods_plant_LG.txt \
+    --cache_dir _cache_plant \
+    --num_processes_tree_estimation 4 \
+    --tree_estimator_name FastTree
+```
+
+<!-- ```
+real	3m41.567s
+user	13m19.375s
+sys	0m20.158s
+``` -->
+
+Evaluation took 4 minutes wall-clock time. The output is:
+
+```
+Total log-likelihood: -2072516.731100001
+Total number of sites: 101064
+Average log-likelihood per site: -20.50697311703476
+[...]
+```
+
+As we can see, the de-novo estimated rate matrix outperforms the LG rate matrix, with an average increase in log-likelihood per site of `0.293` (1.4%). Finally, let's evaluate the rate matrix reported in the QMaker paper. This took ~68 hours to estimate using 15 cpu cores:
+
+```
+time python -m cherryml.evaluation \
+    --msa_dir demo_data/plant_test \
+    --rate_matrix_path demo_data/Q.plant_std \
+    --num_rate_categories 4 \
+    --output_path log_likelihoods_plant_QMaker.txt \
+    --cache_dir _cache_plant \
+    --num_processes_tree_estimation 4 \
+    --tree_estimator_name FastTree
+```
+
+Evaluation took 3 minutes wall-clock time. The output is:
+
+<!-- ```
+real	2m31.117s
+user	9m8.756s
+sys	0m15.171s
+``` -->
+
+```
+Total log-likelihood: -2042014.2946999995
+Total number of sites: 101064
+Average log-likelihood per site: -20.205160044130448
+[...]
+```
+
+This represents an improvement in log-likelihood per site of barely `0.0085` (0.04%) over CherryML's rate matrix! In contrast, CherryML was estimated in less than 30 minutes on a personal computes, while QMaker's rate matrix took 68 hours on a server with 15 cpu cores.
 
 # Reproducing all figures in our paper
 
