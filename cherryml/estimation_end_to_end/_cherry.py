@@ -150,7 +150,6 @@ def _get_runtime_from_tree_estimator_profiling_file(
         return res
 
 
-# @caching.cached()
 def _get_tree_estimation_runtime(
     tree_estimator_output_dirs: str, families: List[str]
 ) -> float:
