@@ -231,6 +231,12 @@ def run_iq_tree(
     """
     rate_matrices_paths = rate_matrix_path.split(",")
     del rate_matrix_path
+    if len(rate_matrices_paths) > 1 and not use_model_finder:
+        raise ValueError(
+            "Trying to run IQTree with more than one rate matrix. This is only "
+            "allowed when using ModelFinder, i.e. use_model_finder = True. You "
+            f"provided use_model_finder = '{use_model_finder}'"
+        )
     with tempfile.TemporaryDirectory() as iq_tree_output_dir:
         with tempfile.TemporaryDirectory() as scaled_rate_matrices_dir:
             scaled_rate_matrices_filenames = [

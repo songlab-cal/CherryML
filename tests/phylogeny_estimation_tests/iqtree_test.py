@@ -99,3 +99,32 @@ class TestIQTree(unittest.TestCase):
                     )
                 )
                 assert abs(ll_1 - -200.0) < 10.0
+
+    def test_iqtree_from_python_api_multi_rate_matrix_errors_out(self):
+        with self.assertRaises(ValueError):
+            for extra_command_line_args in ["", "-fast"]:
+                with tempfile.TemporaryDirectory() as cache_dir:
+                    caching.set_cache_dir(cache_dir)
+                    output_tree_dirs = iq_tree(
+                        msa_dir="./tests/evaluation_tests/a3m_small/",
+                        families=["1e7l_1_A", "5a0l_1_A", "6anz_1_B"],
+                        rate_matrix_path=get_jtt_path()
+                        + ","
+                        + get_wag_path()
+                        + ","
+                        + get_lg_path(),
+                        rate_model="G",
+                        num_rate_categories=4,
+                        num_processes=3,
+                        extra_command_line_args=extra_command_line_args,
+                        rate_category_selector="posterior_mean",
+                        use_model_finder=False,
+                        random_seed=1,
+                    )
+                    ll_1, _ = read_log_likelihood(
+                        os.path.join(
+                            output_tree_dirs["output_likelihood_dir"],
+                            "1e7l_1_A.txt",
+                        )
+                    )
+                    assert abs(ll_1 - -200.0) < 10.0
