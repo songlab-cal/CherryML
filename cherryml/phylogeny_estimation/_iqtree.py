@@ -286,6 +286,7 @@ def run_iq_tree(
                     f" -st AA"
                     f" -wsr"  # (write site rates to *.rate file)
                     f" -nt 1"  # (1 thread)
+                    f" -quiet"  # silent!
                     f" {extra_command_line_args}"
                 )
                 st = time.time()
