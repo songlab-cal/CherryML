@@ -8,7 +8,7 @@ from parameterized import parameterized
 
 from cherryml import caching
 from cherryml.io import read_log_likelihood, read_rate_matrix
-from cherryml.markov_chain import get_lg_path
+from cherryml.markov_chain import get_jtt_path, get_lg_path, get_wag_path
 from cherryml.phylogeny_estimation import _iqtree, iq_tree
 
 
@@ -42,7 +42,8 @@ class TestIQTree(unittest.TestCase):
                 )
                 ll_1, _ = read_log_likelihood(
                     os.path.join(
-                        output_tree_dirs["output_likelihood_dir"], "1e7l_1_A.txt"
+                        output_tree_dirs["output_likelihood_dir"],
+                        "1e7l_1_A.txt",
                     )
                 )
                 assert abs(ll_1 - -200.0) < 10.0
@@ -65,7 +66,36 @@ class TestIQTree(unittest.TestCase):
                 )
                 ll_1, _ = read_log_likelihood(
                     os.path.join(
-                        output_tree_dirs["output_likelihood_dir"], "1e7l_1_A.txt"
+                        output_tree_dirs["output_likelihood_dir"],
+                        "1e7l_1_A.txt",
+                    )
+                )
+                assert abs(ll_1 - -200.0) < 10.0
+
+    def test_model_finder_from_python_api_multi_rate_matrix(self):
+        for extra_command_line_args in ["", "-fast"]:
+            with tempfile.TemporaryDirectory() as cache_dir:
+                caching.set_cache_dir(cache_dir)
+                output_tree_dirs = iq_tree(
+                    msa_dir="./tests/evaluation_tests/a3m_small/",
+                    families=["1e7l_1_A", "5a0l_1_A", "6anz_1_B"],
+                    rate_matrix_path=get_jtt_path()
+                    + ","
+                    + get_wag_path()
+                    + ","
+                    + get_lg_path(),
+                    rate_model=None,
+                    num_rate_categories=None,
+                    num_processes=3,
+                    extra_command_line_args=extra_command_line_args,
+                    rate_category_selector="posterior_mean",
+                    use_model_finder=True,
+                    random_seed=1,
+                )
+                ll_1, _ = read_log_likelihood(
+                    os.path.join(
+                        output_tree_dirs["output_likelihood_dir"],
+                        "1e7l_1_A.txt",
                     )
                 )
                 assert abs(ll_1 - -200.0) < 10.0

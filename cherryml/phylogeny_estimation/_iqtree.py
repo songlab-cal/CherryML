@@ -229,15 +229,17 @@ def run_iq_tree(
     'de-normalize' the branch lengths to put them in the same time units as the
     original rate matrix.
     """
+    rate_matrices_paths = rate_matrix_path.split(",")
+    del rate_matrix_path
     with tempfile.TemporaryDirectory() as iq_tree_output_dir:
-        with tempfile.NamedTemporaryFile("w") as scaled_tree_file:
-            scaled_tree_filename = (
-                scaled_tree_file.name
-            )  # Where FastTree will write its output.
-            with tempfile.NamedTemporaryFile("w") as scaled_rate_matrix_file:
-                scaled_rate_matrix_filename = (
-                    scaled_rate_matrix_file.name
-                )  # The rate matrix for FastTree
+        with tempfile.TemporaryDirectory() as scaled_rate_matrices_dir:
+            scaled_rate_matrices_filenames = [
+                os.path.join(scaled_rate_matrices_dir, f"rate_matrix_{i}.txt")
+                for i in range(len(rate_matrices_paths))
+            ]
+            for rate_matrix_path, scaled_rate_matrix_filename in zip(
+                rate_matrices_paths, scaled_rate_matrices_filenames
+            ):
                 Q_df = read_rate_matrix(rate_matrix_path)
                 if not (Q_df.shape == (20, 20)):
                     raise ValueError(
@@ -267,74 +269,76 @@ def run_iq_tree(
                     Q_normalized,
                     output_paml_path=scaled_rate_matrix_filename,
                 )
-                # Run IQTree!
-                command = f"{iq_tree_bin}"
-                command += f" -s {msa_path}"
-                if use_model_finder:
-                    # ModelFinder will search for the optimal site rate model.
-                    command += f" -m MF" f" -mset {scaled_rate_matrix_filename}"
-                else:
-                    # Just standard IQTree with a fixed site rate model.
-                    command += (
-                        f" -m {scaled_rate_matrix_filename}"
-                        f"+{rate_model}{num_rate_categories}"  # e.g. [...]+R4
-                    )
+            # Run IQTree!
+            command = f"{iq_tree_bin}"
+            command += f" -s {msa_path}"
+            if use_model_finder:
+                # ModelFinder will search for the optimal site rate model.
                 command += (
-                    f" -seed {random_seed}"
-                    f" -redo"
-                    f" -pre {iq_tree_output_dir}/output"  # (output prefix)
-                    f" -st AA"
-                    f" -wsr"  # (write site rates to *.rate file)
-                    f" -nt 1"  # (1 thread)
-                    f" -quiet"  # silent!
-                    f" {extra_command_line_args}"
+                    f" -m MF"
+                    f" -mset {','.join(scaled_rate_matrices_filenames)}"
                 )
-                st = time.time()
-                os.system(command)
-                et = time.time()
-                open(
-                    os.path.join(output_tree_dir, family + ".profiling"), "w"
-                ).write(f"time_iq_tree: {et - st}")
-                # De-normalize the branch lengths of the tree
-                scaled_tree_filename = os.path.join(
-                    f"{iq_tree_output_dir}/output.treefile"
+            else:
+                # Just standard IQTree with a fixed site rate model.
+                command += (
+                    f" -m {scaled_rate_matrix_filename}"
+                    f"+{rate_model}{num_rate_categories}"  # e.g. [...]+R4
                 )
-                tree_ete = TreeETE(scaled_tree_filename)
+            command += (
+                f" -seed {random_seed}"
+                f" -redo"
+                f" -pre {iq_tree_output_dir}/output"  # (output prefix)
+                f" -st AA"
+                f" -wsr"  # (write site rates to *.rate file)
+                f" -nt 1"  # (1 thread)
+                f" -quiet"  # silent!
+                f" {extra_command_line_args}"
+            )
+            st = time.time()
+            os.system(command)
+            et = time.time()
+            open(
+                os.path.join(output_tree_dir, family + ".profiling"), "w"
+            ).write(f"time_iq_tree: {et - st}")
+            # De-normalize the branch lengths of the tree
+            tree_ete = TreeETE(
+                os.path.join(f"{iq_tree_output_dir}/output.treefile")
+            )
 
-                def dfs_scale_tree(v) -> None:
-                    for u in v.get_children():
-                        u.dist = u.dist / mutation_rate
-                        dfs_scale_tree(u)
+            def dfs_scale_tree(v) -> None:
+                for u in v.get_children():
+                    u.dist = u.dist / mutation_rate
+                    dfs_scale_tree(u)
 
-                dfs_scale_tree(tree_ete)
+            dfs_scale_tree(tree_ete)
 
-                name_internal_nodes(tree_ete)
+            name_internal_nodes(tree_ete)
 
-                tree_ete.write(
-                    format=3,
-                    outfile=os.path.join(output_tree_dir, family + ".newick"),
-                )
-                open(
-                    os.path.join(output_tree_dir, family + ".command"), "w"
-                ).write(command)
+            tree_ete.write(
+                format=3,
+                outfile=os.path.join(output_tree_dir, family + ".newick"),
+            )
+            open(os.path.join(output_tree_dir, family + ".command"), "w").write(
+                command
+            )
 
-                tree = translate_tree(tree_ete)
+            tree = translate_tree(tree_ete)
 
-                write_tree(tree, os.path.join(output_tree_dir, family + ".txt"))
-                secure_parallel_output(output_tree_dir, family)
+            write_tree(tree, os.path.join(output_tree_dir, family + ".txt"))
+            secure_parallel_output(output_tree_dir, family)
 
-                translate_site_rates(
-                    iq_tree_output_dir=iq_tree_output_dir,
-                    family=family,
-                    rate_category_selector=rate_category_selector,
-                    o_site_rates_dir=output_site_rates_dir,
-                )
+            translate_site_rates(
+                iq_tree_output_dir=iq_tree_output_dir,
+                family=family,
+                rate_category_selector=rate_category_selector,
+                o_site_rates_dir=output_site_rates_dir,
+            )
 
-                extract_log_likelihood(
-                    iq_tree_output_dir=iq_tree_output_dir,
-                    family=family,
-                    o_likelihood_dir=output_likelihood_dir,
-                )
+            extract_log_likelihood(
+                iq_tree_output_dir=iq_tree_output_dir,
+                family=family,
+                o_likelihood_dir=output_likelihood_dir,
+            )
 
 
 def _map_func(args: List):
