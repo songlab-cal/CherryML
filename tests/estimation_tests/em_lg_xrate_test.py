@@ -97,7 +97,8 @@ class TestEMLG_XRATE(unittest.TestCase):
                 for token_1, token_2 in zip(tokens_1, tokens_2):
                     try:
                         np.testing.assert_almost_equal(
-                            float(token_1.strip(",")), float(token_2.strip(","))
+                            float(token_1.strip(",").replace(")", "")),
+                            float(token_2.strip(",").replace(")", "")),
                         )
                     except Exception:
                         self.assertEqual(token_1, token_2)

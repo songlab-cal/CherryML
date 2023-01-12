@@ -78,7 +78,11 @@ def lg_end_to_end_with_em_optimizer(
     if concatenate_rate_matrices_when_iterating:
         rm_concat = current_estimate_rate_matrix_path
     for iteration in range(num_iterations):
-        rate_matrix_path = current_estimate_rate_matrix_path if not concatenate_rate_matrices_when_iterating else rm_concat
+        rate_matrix_path = (
+            current_estimate_rate_matrix_path
+            if not concatenate_rate_matrices_when_iterating
+            else rm_concat
+        )
         tree_estimator_output_dirs = tree_estimator(
             msa_dir=msa_dir,
             families=families,
