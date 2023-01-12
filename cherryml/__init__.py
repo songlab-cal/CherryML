@@ -15,3 +15,4 @@ from cherryml.types import PhylogenyEstimatorType
 from . import caching
 
 caching.set_hash_len(64)
+caching.set_dir_levels(0)
