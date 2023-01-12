@@ -50,6 +50,7 @@ def lg_end_to_end_with_em_optimizer(
     optimizer_initialization: str = "jtt-ipw",
     sites_subset_dir: Optional[str] = None,
     em_backend: str = "historian",
+    concatenate_rate_matrices_when_iterating: bool = False,
 ) -> Dict:
     if sites_subset_dir is not None and num_iterations > 1:
         raise Exception(
@@ -74,11 +75,14 @@ def lg_end_to_end_with_em_optimizer(
     time_optimization = 0
 
     current_estimate_rate_matrix_path = initial_tree_estimator_rate_matrix_path
+    if concatenate_rate_matrices_when_iterating:
+        rm_concat = current_estimate_rate_matrix_path
     for iteration in range(num_iterations):
+        rate_matrix_path = current_estimate_rate_matrix_path if not concatenate_rate_matrices_when_iterating else rm_concat
         tree_estimator_output_dirs = tree_estimator(
             msa_dir=msa_dir,
             families=families,
-            rate_matrix_path=current_estimate_rate_matrix_path,
+            rate_matrix_path=rate_matrix_path,
             num_processes=num_processes_tree_estimation,
         )
         res[
@@ -177,6 +181,8 @@ def lg_end_to_end_with_em_optimizer(
         current_estimate_rate_matrix_path = os.path.join(
             rate_matrix_dir, "result.txt"
         )
+        if concatenate_rate_matrices_when_iterating:
+            rm_concat += "," + current_estimate_rate_matrix_path
 
     res["learned_rate_matrix_path"] = current_estimate_rate_matrix_path
 

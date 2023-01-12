@@ -193,6 +193,7 @@ def lg_end_to_end_with_cherryml_optimizer(
     sites_subset_dir: Optional[str] = None,
     tree_dir: Optional[str] = None,
     site_rates_dir: Optional[str] = None,
+    concatenate_rate_matrices_when_iterating: bool = False,
 ) -> Dict:
     """
     LG pipeline with CherryML optimizer.
@@ -241,6 +242,8 @@ def lg_end_to_end_with_cherryml_optimizer(
     time_optimization = 0
 
     current_estimate_rate_matrix_path = initial_tree_estimator_rate_matrix_path
+    if concatenate_rate_matrices_when_iterating:
+        rm_concat = current_estimate_rate_matrix_path
     for iteration in range(num_iterations):
         if (
             iteration == 0
@@ -252,10 +255,11 @@ def lg_end_to_end_with_cherryml_optimizer(
                 "output_site_rates_dir": site_rates_dir,
             }
         else:
+            rate_matrix_path = current_estimate_rate_matrix_path if not concatenate_rate_matrices_when_iterating else rm_concat
             tree_estimator_output_dirs = tree_estimator(
                 msa_dir=msa_dir,
                 families=families,
-                rate_matrix_path=current_estimate_rate_matrix_path,
+                rate_matrix_path=rate_matrix_path,
                 num_processes=num_processes_tree_estimation,
             )
         res[
@@ -347,6 +351,8 @@ def lg_end_to_end_with_cherryml_optimizer(
         current_estimate_rate_matrix_path = os.path.join(
             rate_matrix_dir, "result.txt"
         )
+        if concatenate_rate_matrices_when_iterating:
+            rm_concat += "," + current_estimate_rate_matrix_path
 
     res["learned_rate_matrix_path"] = current_estimate_rate_matrix_path
 
