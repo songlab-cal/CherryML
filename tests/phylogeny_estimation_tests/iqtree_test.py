@@ -7,8 +7,14 @@ import pytest
 from parameterized import parameterized
 
 from cherryml import caching
-from cherryml.io import read_log_likelihood, read_rate_matrix
-from cherryml.markov_chain import get_jtt_path, get_lg_path, get_wag_path
+from cherryml.io import read_log_likelihood, read_rate_matrix, read_tree
+from cherryml.markov_chain import (
+    get_equ_halved_path,
+    get_equ_path,
+    get_jtt_path,
+    get_lg_path,
+    get_wag_path,
+)
 from cherryml.phylogeny_estimation import _iqtree, iq_tree
 
 
@@ -128,3 +134,39 @@ class TestIQTree(unittest.TestCase):
                         )
                     )
                     assert abs(ll_1 - -200.0) < 10.0
+
+    def test_iqtree_tree_scaling(self):
+        """
+        On its own, IQTree is insensitive to scaling of the input rate matrices.
+        Here we make sure that halving the rate matrix doubles the branch
+        length.
+        """
+        trees = []
+        with tempfile.TemporaryDirectory() as cache_dir:
+            for rate_matrix_path in [get_equ_path(), get_equ_halved_path()]:
+                caching.set_cache_dir(cache_dir)
+                output_tree_dirs = iq_tree(
+                    msa_dir="./tests/evaluation_tests/a3m_small/",
+                    families=["1e7l_1_A", "5a0l_1_A", "6anz_1_B"],
+                    rate_matrix_path=rate_matrix_path,
+                    rate_model="G",
+                    num_rate_categories=4,
+                    num_processes=3,
+                    extra_command_line_args="-fast",
+                    rate_category_selector="posterior_mean",
+                    use_model_finder=False,
+                    random_seed=1,
+                )
+                tree = read_tree(
+                    os.path.join(
+                        output_tree_dirs["output_tree_dir"],
+                        "1e7l_1_A.txt",
+                    )
+                )
+                trees.append(tree)
+
+        def tree_len(tree):
+            res = sum([len for (_, _, len) in tree.edges()])
+            return res
+
+        self.assertAlmostEqual(2 * tree_len(trees[0]), tree_len(trees[1]))

@@ -5,6 +5,7 @@ from ._markov_chain import (
     compute_stationary_distribution,
     equ_matrix,
     get_aa_coevolution_mask_path,
+    get_equ_halved_path,
     get_equ_path,
     get_equ_x_equ_path,
     get_jtt_path,

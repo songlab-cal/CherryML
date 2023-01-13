@@ -255,6 +255,10 @@ def get_equ_path():
     return "data/rate_matrices/equ.txt"
 
 
+def get_equ_halved_path():
+    return "data/rate_matrices/equ_halved.txt"
+
+
 def get_jtt_path():
     return "data/rate_matrices/jtt.txt"
 
