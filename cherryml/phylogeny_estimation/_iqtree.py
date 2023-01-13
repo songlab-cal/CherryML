@@ -460,7 +460,7 @@ def iq_tree(
     num_processes: int,
     extra_command_line_args: str = "",
     rate_category_selector: str = "MAP",  # "MAP" or "posterior_mean"
-    use_model_finder: bool = "False",
+    use_model_finder: bool = False,
     random_seed: int = 1,
     output_tree_dir: Optional[str] = None,
     output_site_rates_dir: Optional[str] = None,
