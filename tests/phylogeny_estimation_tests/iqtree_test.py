@@ -15,7 +15,7 @@ from cherryml.markov_chain import (
     get_lg_path,
     get_wag_path,
 )
-from cherryml.phylogeny_estimation import _iqtree, iq_tree
+from cherryml.phylogeny_estimation import _iqtree, fast_tree, iq_tree
 
 
 class TestIQTree(unittest.TestCase):
@@ -170,3 +170,64 @@ class TestIQTree(unittest.TestCase):
             return res
 
         self.assertAlmostEqual(2 * tree_len(trees[0]), tree_len(trees[1]))
+
+    def test_iqtree_tree_scaling_vs_fast_tree(self):
+        """
+        Check that the IQTree tree is similar to FastTree
+        """
+        with tempfile.TemporaryDirectory() as cache_dir:
+            caching.set_cache_dir(cache_dir)
+            output_tree_dirs = iq_tree(
+                msa_dir="./tests/evaluation_tests/a3m_small/",
+                families=["1e7l_1_A", "5a0l_1_A", "6anz_1_B"],
+                rate_matrix_path=get_equ_halved_path(),
+                rate_model="G",
+                num_rate_categories=4,
+                num_processes=3,
+                extra_command_line_args="-fast",
+                rate_category_selector="MAP",
+                use_model_finder=False,
+                random_seed=1,
+            )
+            tree_iqtree = read_tree(
+                os.path.join(
+                    output_tree_dirs["output_tree_dir"],
+                    "1e7l_1_A.txt",
+                )
+            )
+            ll_iqtree = read_log_likelihood(
+                os.path.join(
+                    output_tree_dirs["output_likelihood_dir"],
+                    "1e7l_1_A.txt",
+                )
+            )[0]
+
+            output_tree_dirs = fast_tree(
+                msa_dir="./tests/evaluation_tests/a3m_small/",
+                families=["1e7l_1_A", "5a0l_1_A", "6anz_1_B"],
+                rate_matrix_path=get_equ_halved_path(),
+                num_rate_categories=4,
+                num_processes=3,
+                extra_command_line_args="-gamma",
+            )
+            tree_fast_tree = read_tree(
+                os.path.join(
+                    output_tree_dirs["output_tree_dir"],
+                    "1e7l_1_A.txt",
+                )
+            )
+            ll_fast_tree = read_log_likelihood(
+                os.path.join(
+                    output_tree_dirs["output_likelihood_dir"],
+                    "1e7l_1_A.txt",
+                )
+            )[0]
+
+        def tree_len(tree):
+            res = sum([len for (_, _, len) in tree.edges()])
+            return res
+
+        assert ll_iqtree / ll_fast_tree < 1.1
+        assert ll_fast_tree / ll_iqtree < 1.1
+        assert tree_len(tree_iqtree) / tree_len(tree_fast_tree) < 1.1
+        assert tree_len(tree_fast_tree) / tree_len(tree_iqtree) < 1.1

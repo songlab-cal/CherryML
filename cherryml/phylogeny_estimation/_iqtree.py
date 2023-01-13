@@ -12,6 +12,7 @@ from ete3 import Tree as TreeETE
 
 from cherryml.caching import cached_parallel_computation, secure_parallel_output
 from cherryml.io import (
+    get_msa_num_sites,
     read_rate_matrix,
     write_float,
     write_log_likelihood,
@@ -92,15 +93,15 @@ def translate_site_rates(
     family: str,
     rate_category_selector: str,
     o_site_rates_dir: str,
+    num_sites: int,
 ) -> None:
     """
     Translate IQTree site rates to our format
     """
-    lines = (
-        open(os.path.join(iq_tree_output_dir, "output.rate"), "r")
-        .read()
-        .split("\n")
-    )
+    file_contents = open(
+        os.path.join(iq_tree_output_dir, "output.rate"), "r"
+    ).read()
+    lines = file_contents.split("\n")
     lines = lines[9:]
     assert lines[-1] == ""
     lines = lines[:-1]
@@ -126,6 +127,11 @@ def translate_site_rates(
                 f"Unknown rate_category_selector: '{rate_category_selector}'."
                 f" Allowed values: 'MAP', 'posterior_mean'."
             )
+    if len(rates) != num_sites:
+        raise Exception(
+            f"Error parsing IQTree rates. Was expecting {num_sites} rates "
+            f"(sites) but found {len(rates)}. file_contents:\n*****\n{file_contents}\n*****\n"
+        )
     write_site_rates(
         rates,
         os.path.join(o_site_rates_dir, family + ".txt"),
@@ -333,11 +339,13 @@ def run_iq_tree(
             write_tree(tree, os.path.join(output_tree_dir, family + ".txt"))
             secure_parallel_output(output_tree_dir, family)
 
+            num_sites = get_msa_num_sites(msa_path=msa_path)
             translate_site_rates(
                 iq_tree_output_dir=iq_tree_output_dir,
                 family=family,
                 rate_category_selector=rate_category_selector,
                 o_site_rates_dir=output_site_rates_dir,
+                num_sites=num_sites,
             )
 
             extract_log_likelihood(
