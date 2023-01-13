@@ -6,6 +6,8 @@ import pandas as pd
 import torch
 
 import cherryml.utils
+from cherryml import caching
+from cherryml.io import read_rate_matrix, write_rate_matrix
 
 
 def compute_stationary_distribution(rate_matrix: np.array) -> np.array:
@@ -249,6 +251,23 @@ def normalized(rate_matrix: np.array) -> np.array:
     mutation_rate = compute_mutation_rate(rate_matrix)
     res = rate_matrix / mutation_rate
     return res
+
+
+@caching.cached_computation(output_dirs=["output_dir"])
+def normalized_cached(
+    rate_matrix_path: str,
+    output_dir: Optional[str],
+) -> np.array:
+    rate_matrix_df = read_rate_matrix(rate_matrix_path)
+    rate_matrix = rate_matrix_df.to_numpy()
+    states = list(rate_matrix_df.index)
+    mutation_rate = compute_mutation_rate(rate_matrix)
+    res = rate_matrix / mutation_rate
+    write_rate_matrix(
+        res,
+        states=states,
+        rate_matrix_path=os.path.join(output_dir, "result.txt"),
+    )
 
 
 def get_equ_path():

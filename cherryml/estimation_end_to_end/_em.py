@@ -6,7 +6,7 @@ from typing import Dict, List, Optional
 from cherryml.counting import count_transitions
 from cherryml.estimation import em_lg, em_lg_xrate, jtt_ipw
 from cherryml.estimation_end_to_end._cherry import _subset_data_to_sites_subset
-from cherryml.markov_chain import get_equ_path
+from cherryml.markov_chain import get_equ_path, normalized_cached
 from cherryml.types import PhylogenyEstimatorType
 from cherryml.utils import get_amino_acids
 
@@ -50,6 +50,7 @@ def lg_end_to_end_with_em_optimizer(
     sites_subset_dir: Optional[str] = None,
     em_backend: str = "historian",
     concatenate_rate_matrices_when_iterating: bool = False,
+    normalize_learned_rate_matrices: bool = False,
 ) -> Dict:
     if sites_subset_dir is not None and num_iterations > 1:
         raise Exception(
@@ -175,11 +176,15 @@ def lg_end_to_end_with_em_optimizer(
             initialization_rate_matrix_path=initialization_path,
             extra_command_line_args=extra_em_command_line_args,
         )["output_rate_matrix_dir"]
-
-        res[f"rate_matrix_dir_{iteration}"] = rate_matrix_dir
         time_optimization += _get_runtime_from_profiling_file(
             os.path.join(rate_matrix_dir, "profiling.txt")
         )
+        if normalize_learned_rate_matrices:
+            rate_matrix_dir = normalized_cached(
+                os.path.join(rate_matrix_dir, "result.txt")
+            )["output_dir"]
+
+        res[f"rate_matrix_dir_{iteration}"] = rate_matrix_dir
 
         current_estimate_rate_matrix_path = os.path.join(
             rate_matrix_dir, "result.txt"

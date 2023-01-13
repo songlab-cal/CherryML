@@ -17,7 +17,11 @@ from cherryml.io import (
     write_msa,
     write_site_rates,
 )
-from cherryml.markov_chain import get_equ_path, get_equ_x_equ_path
+from cherryml.markov_chain import (
+    get_equ_path,
+    get_equ_x_equ_path,
+    normalized_cached,
+)
 from cherryml.types import PhylogenyEstimatorType
 from cherryml.utils import get_amino_acids, get_process_args
 
@@ -194,6 +198,7 @@ def lg_end_to_end_with_cherryml_optimizer(
     tree_dir: Optional[str] = None,
     site_rates_dir: Optional[str] = None,
     concatenate_rate_matrices_when_iterating: bool = False,
+    normalize_learned_rate_matrices: bool = False,
 ) -> Dict:
     """
     LG pipeline with CherryML optimizer.
@@ -346,11 +351,15 @@ def lg_end_to_end_with_cherryml_optimizer(
             OMP_NUM_THREADS=num_processes_optimization,
             OPENBLAS_NUM_THREADS=num_processes_optimization,
         )["output_rate_matrix_dir"]
-
-        res[f"rate_matrix_dir_{iteration}"] = rate_matrix_dir
         time_optimization += _get_runtime_from_profiling_file(
             os.path.join(rate_matrix_dir, "profiling.txt")
         )
+        if normalize_learned_rate_matrices:
+            rate_matrix_dir = normalized_cached(
+                os.path.join(rate_matrix_dir, "result.txt")
+            )["output_dir"]
+
+        res[f"rate_matrix_dir_{iteration}"] = rate_matrix_dir
 
         current_estimate_rate_matrix_path = os.path.join(
             rate_matrix_dir, "result.txt"
