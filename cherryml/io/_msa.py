@@ -41,3 +41,13 @@ def write_msa(msa: Dict[str, str], msa_path: str) -> None:
     with open(msa_path, "w") as outfile:
         outfile.write(res)
         outfile.flush()
+
+
+def get_msa_num_sites(msa_path: str) -> int:
+    """
+    Quick way to get the number of sites in an MSA.
+    """
+    with open(msa_path, "r") as msa_file:
+        for (i, line) in enumerate(msa_file):
+            if i == 1:
+                return len(line.strip())
