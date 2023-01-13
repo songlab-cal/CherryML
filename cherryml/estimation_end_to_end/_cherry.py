@@ -365,7 +365,7 @@ def lg_end_to_end_with_cherryml_optimizer(
         )
         if normalize_learned_rate_matrices:
             rate_matrix_dir = normalized_cached(
-                os.path.join(rate_matrix_dir, "result.txt")
+                rate_matrix_path=os.path.join(rate_matrix_dir, "result.txt")
             )["output_dir"]
 
         res[f"rate_matrix_dir_{iteration}"] = rate_matrix_dir
