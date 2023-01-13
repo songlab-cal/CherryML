@@ -215,6 +215,15 @@ def lg_end_to_end_with_cherryml_optimizer(
     with tree_dir and site_rates_dir. Otherwise, the provided tree_estimator
     will be used to estimate trees and site rates.
     """
+    if (
+        concatenate_rate_matrices_when_iterating
+        and not normalize_learned_rate_matrices
+    ):
+        raise Exception(
+            "You are using something like ModelFinder but not normalizing the "
+            "learned rate matrices. This is not recommended!"
+        )
+
     if sites_subset_dir is not None and num_iterations > 1:
         raise ValueError(
             "You are using more than 1 iteration while learning a model only"
