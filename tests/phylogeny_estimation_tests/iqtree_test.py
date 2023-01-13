@@ -2,10 +2,6 @@ import os
 import tempfile
 import unittest
 
-import numpy as np
-import pytest
-from parameterized import parameterized
-
 from cherryml import caching
 from cherryml.io import read_log_likelihood, read_rate_matrix, read_tree
 from cherryml.markov_chain import (

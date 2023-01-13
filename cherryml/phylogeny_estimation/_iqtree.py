@@ -15,7 +15,6 @@ from cherryml.io import (
     get_msa_num_sites,
     read_rate_matrix,
     write_float,
-    write_log_likelihood,
     write_site_rates,
     write_tree,
 )
@@ -315,8 +314,8 @@ def run_iq_tree(
                 # Check that the stationary distro is correct
                 if not np.sum(np.abs(pi @ Q)) < 0.01:
                     raise ValueError(
-                        f"Custom rate matrix {rate_matrix_path} doesn't have the "
-                        "stationary distribution."
+                        f"Custom rate matrix {rate_matrix_path} doesn't have "
+                        "the stationary distribution."
                     )
                 # Compute the mutation rate.
                 mutation_rate = pi @ -np.diag(Q)

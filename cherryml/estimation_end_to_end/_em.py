@@ -12,7 +12,6 @@ from cherryml.utils import get_amino_acids
 
 from ._cherry import (
     _get_runtime_from_profiling_file,
-    _get_runtime_from_tree_estimator_profiling_file,
     _get_tree_estimation_runtime,
 )
 
@@ -210,7 +209,8 @@ def lg_end_to_end_with_em_optimizer(
     profiling_str = (
         f"CherryML runtimes:\n"
         f"time_tree_estimation: {res['time_tree_estimation']}\n"
-        f"time_tree_estimation_parallelized: {res['time_tree_estimation_parallelized']}\n"
+        f"time_tree_estimation_parallelized: "
+        f"{res['time_tree_estimation_parallelized']}\n"
         f"time_counting: {res['time_counting']}\n"
         f"time_jtt_ipw: {res['time_jtt_ipw']}\n"
         f"time_optimization: {res['time_optimization']}\n"
