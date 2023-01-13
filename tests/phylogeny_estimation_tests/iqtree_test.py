@@ -106,6 +106,29 @@ class TestIQTree(unittest.TestCase):
                 )
                 assert abs(ll_1 - -200.0) < 10.0
 
+                selected_model = (
+                    open(
+                        os.path.join(
+                            output_tree_dirs["output_likelihood_dir"],
+                            "1e7l_1_A.model",
+                        )
+                    )
+                    .read()
+                    .strip()
+                )
+                self.assertEqual(selected_model, get_lg_path())
+                selected_model_full = (
+                    open(
+                        os.path.join(
+                            output_tree_dirs["output_likelihood_dir"],
+                            "1e7l_1_A.model_full",
+                        )
+                    )
+                    .read()
+                    .strip()
+                )
+                self.assertEqual(selected_model_full, get_lg_path() + "+G4")
+
     def test_iqtree_from_python_api_multi_rate_matrix_errors_out(self):
         with self.assertRaises(ValueError):
             for extra_command_line_args in ["", "-fast"]:

@@ -128,10 +128,9 @@ def translate_site_rates(
                 f" Allowed values: 'MAP', 'posterior_mean'."
             )
     if len(rates) != num_sites:
-        raise Exception(
-            f"Error parsing IQTree rates. Was expecting {num_sites} rates "
-            f"(sites) but found {len(rates)}. file_contents:\n*****\n{file_contents}\n*****\n"
-        )
+        # Means this was a model without site rate variation (e.g. JTT instead
+        # of JTT+G4), so rates should be all 1s.
+        rates = [1.0] * num_sites
     write_site_rates(
         rates,
         os.path.join(o_site_rates_dir, family + ".txt"),
@@ -211,6 +210,53 @@ def extract_log_likelihood(
         #     )
 
     secure_parallel_output(o_likelihood_dir, family)
+
+
+def extract_model_of_substitution(
+    iq_tree_output_dir: str,
+    family: str,
+    o_likelihood_dir: str,
+    scaled_rate_matrices_filenames: List[str],
+    rate_matrices_paths: List[str],
+) -> None:
+    lines = (
+        open(os.path.join(iq_tree_output_dir, "output.iqtree"), "r")
+        .read()
+        .split("\n")
+    )
+    for line in lines:
+        if line.startswith("Model of substitution:"):
+            scaled_rate_matrix_path_w_rate_model = line.split(" ")[3]
+            scaled_rate_matrix_path = (
+                scaled_rate_matrix_path_w_rate_model.split("+")[0]
+            )
+            rate_model = scaled_rate_matrix_path_w_rate_model[
+                len(scaled_rate_matrix_path) :
+            ]
+            if scaled_rate_matrix_path not in scaled_rate_matrices_filenames:
+                raise Exception(
+                    f"Selected model is {scaled_rate_matrix_path} but is not "
+                    "present in scaled_rate_matrices_filenames="
+                    f"{scaled_rate_matrices_filenames}"
+                )
+            rate_matrix_path = None
+            for (x, y) in zip(
+                rate_matrices_paths, scaled_rate_matrices_filenames
+            ):
+                if y == scaled_rate_matrix_path:
+                    rate_matrix_path = x
+                    break
+            assert rate_matrix_path is not None
+            break
+    assert rate_matrix_path is not None
+    with open(
+        os.path.join(o_likelihood_dir, family + ".model"), "w"
+    ) as output_file:
+        output_file.write(rate_matrix_path)
+    with open(
+        os.path.join(o_likelihood_dir, family + ".model_full"), "w"
+    ) as output_file:
+        output_file.write(rate_matrix_path + rate_model)
 
 
 def run_iq_tree(
@@ -352,6 +398,14 @@ def run_iq_tree(
                 iq_tree_output_dir=iq_tree_output_dir,
                 family=family,
                 o_likelihood_dir=output_likelihood_dir,
+            )
+
+            extract_model_of_substitution(
+                iq_tree_output_dir=iq_tree_output_dir,
+                family=family,
+                o_likelihood_dir=output_likelihood_dir,
+                scaled_rate_matrices_filenames=scaled_rate_matrices_filenames,
+                rate_matrices_paths=rate_matrices_paths,
             )
 
 
