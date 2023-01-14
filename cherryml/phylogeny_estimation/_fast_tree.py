@@ -1,6 +1,8 @@
+import glob
 import logging
 import multiprocessing
 import os
+import shutil
 import sys
 import tempfile
 import time
@@ -12,7 +14,7 @@ import tqdm
 from ete3 import Tree as TreeETE
 
 from cherryml.caching import cached_parallel_computation, secure_parallel_output
-from cherryml.io import read_rate_matrix, write_tree
+from cherryml.io import read_log_likelihood, read_rate_matrix, write_tree
 from cherryml.markov_chain import compute_stationary_distribution
 from cherryml.utils import get_amino_acids, get_process_args
 
@@ -299,6 +301,48 @@ def post_process_fast_tree_log(outlog: str):
         outfile.flush()
 
 
+def _clear_and_move(curr_dir: str, best_dir: str):
+    """
+    Clear best_dir and move all files from curr_dir in there.
+    """
+    assert "/tmp" in curr_dir
+    assert "/tmp" in best_dir
+    files_curr_dir = sorted(glob.glob(f"{curr_dir}/*"))
+    files_best_dir = sorted(glob.glob(f"{best_dir}/*"))
+    file_names_curr_dir = [x.split("/")[-1] for x in files_curr_dir]
+    file_names_best_dir = [x.split("/")[-1] for x in files_best_dir]
+    assert (
+        len(file_names_best_dir) == 0
+        or file_names_curr_dir == file_names_best_dir
+    )
+    for f in files_best_dir:
+        assert "/tmp" in f
+        # print(f"***** Removing {f}")
+        try:
+            os.remove(f)
+        except OSError as e:
+            print("Error: %s : %s" % (f, e.strerror))
+    for file_name in file_names_curr_dir:
+        src = os.path.join(curr_dir, file_name)
+        tgt = os.path.join(best_dir, file_name)
+        # print(f"***** Moving {src} to {tgt}")
+        shutil.move(src, tgt)
+
+
+def _only_move(best_dir: str, dir: str):
+    """
+    Move all files from best_dir to dir.
+    """
+    assert "/tmp" in best_dir
+    files_best_dir = sorted(glob.glob(f"{best_dir}/*"))
+    file_names_best_dir = [x.split("/")[-1] for x in files_best_dir]
+    for file_name in file_names_best_dir:
+        src = os.path.join(best_dir, file_name)
+        tgt = os.path.join(dir, file_name)
+        # print(f"***** Moving {src} to {tgt}")
+        shutil.move(src, tgt)
+
+
 def _map_func(args: List):
     msa_dir = args[0]
     families = args[1]
@@ -312,17 +356,46 @@ def _map_func(args: List):
 
     for family in families:
         msa_path = os.path.join(msa_dir, family + ".txt")
-        run_fast_tree_with_custom_rate_matrix(
-            msa_path=msa_path,
-            family=family,
-            rate_matrix_path=rate_matrix_path,
-            num_rate_categories=num_rate_categories,
-            output_tree_dir=output_tree_dir,
-            output_site_rates_dir=output_site_rates_dir,
-            output_likelihood_dir=output_likelihood_dir,
-            extra_command_line_args=extra_command_line_args,
-            fast_tree_bin=fast_tree_bin,
-        )
+        # Run on each rate matrix separately, with different output dirs. Then
+        # choose the best rate matrix.
+        rate_matrices_paths = rate_matrix_path.split(",")
+        del rate_matrix_path
+        best_ll = None
+        with tempfile.TemporaryDirectory() as best_output_tree_dir, tempfile.TemporaryDirectory() as best_output_site_rates_dir, tempfile.TemporaryDirectory() as best_output_likelihood_dir:
+            for rate_matrix_path in rate_matrices_paths:
+                with tempfile.TemporaryDirectory() as curr_output_tree_dir, tempfile.TemporaryDirectory() as curr_output_site_rates_dir, tempfile.TemporaryDirectory() as curr_output_likelihood_dir:
+                    run_fast_tree_with_custom_rate_matrix(
+                        msa_path=msa_path,
+                        family=family,
+                        rate_matrix_path=rate_matrix_path,
+                        num_rate_categories=num_rate_categories,
+                        output_tree_dir=curr_output_tree_dir,
+                        output_site_rates_dir=curr_output_site_rates_dir,
+                        output_likelihood_dir=curr_output_likelihood_dir,
+                        extra_command_line_args=extra_command_line_args,
+                        fast_tree_bin=fast_tree_bin,
+                    )
+                    curr_ll = read_log_likelihood(
+                        os.path.join(
+                            curr_output_likelihood_dir, family + ".txt"
+                        )
+                    )[0]
+                    if best_ll is None or curr_ll > best_ll:
+                        best_ll = curr_ll
+                        _clear_and_move(
+                            curr_output_tree_dir, best_output_tree_dir
+                        )
+                        _clear_and_move(
+                            curr_output_site_rates_dir,
+                            best_output_site_rates_dir,
+                        )
+                        _clear_and_move(
+                            curr_output_likelihood_dir,
+                            best_output_likelihood_dir,
+                        )
+            _only_move(best_output_tree_dir, output_tree_dir)
+            _only_move(best_output_site_rates_dir, output_site_rates_dir)
+            _only_move(best_output_likelihood_dir, output_likelihood_dir)
 
 
 @cached_parallel_computation(

@@ -24,7 +24,7 @@ class TestIQTree(unittest.TestCase):
                 output_paml_path=output_file_path,
             )
         # Now try running IQTree on this rate matrix
-        # $ iqtree -s ./demo_data/plant_test/100032-100403.txt -m MF -mset LG,LG_PAML -seed 1 -redo -pre model_findel_output -st AA -wsr
+        # $ time iqtree -s ./demo_data/plant_test/100032-100403.txt -m MF -mset LG,LG_PAML -seed 1 -redo -pre model_findel_output -st AA -wsr
 
     def test_iqtree_from_python_api_with_gamma_model(self):
         for extra_command_line_args in ["", "-fast"]:
