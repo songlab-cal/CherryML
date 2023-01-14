@@ -265,6 +265,7 @@ def run_iq_tree(
     rate_model: str,
     num_rate_categories: int,
     use_model_finder: bool,
+    use_model_finder_plus: bool,
     output_tree_dir: str,
     output_site_rates_dir: str,
     output_likelihood_dir: str,
@@ -280,13 +281,18 @@ def run_iq_tree(
     'de-normalize' the branch lengths to put them in the same time units as the
     original rate matrix.
     """
+    assert not (use_model_finder and use_model_finder_plus)
     rate_matrices_paths = rate_matrix_path.split(",")
     del rate_matrix_path
-    if len(rate_matrices_paths) > 1 and not use_model_finder:
+    if len(rate_matrices_paths) > 1 and not (
+        use_model_finder or use_model_finder_plus
+    ):
         raise ValueError(
             "Trying to run IQTree with more than one rate matrix. This is only "
-            "allowed when using ModelFinder, i.e. use_model_finder = True. You "
-            f"provided use_model_finder = '{use_model_finder}'"
+            "allowed when using ModelFinder, i.e. use_model_finder = True or "
+            "use_model_finder_plus = True. You provided use_model_finder = "
+            f"'{use_model_finder}', use_model_finder_plus = "
+            f"'{use_model_finder_plus}'."
         )
     with tempfile.TemporaryDirectory() as iq_tree_output_dir:
         with tempfile.TemporaryDirectory() as scaled_rate_matrices_dir:
@@ -330,9 +336,17 @@ def run_iq_tree(
             command = f"{iq_tree_bin}"
             command += f" -s {msa_path}"
             if use_model_finder:
+                assert not use_model_finder_plus
                 # ModelFinder will search for the optimal site rate model.
                 command += (
                     f" -m MF"
+                    f" -mset {','.join(scaled_rate_matrices_filenames)}"
+                )
+            elif use_model_finder_plus:
+                # ModelFinder Plus will search for the optimal site rate model,
+                # then re-fit tree with best model.
+                command += (
+                    f" -m MFP"
                     f" -mset {','.join(scaled_rate_matrices_filenames)}"
                 )
             else:
@@ -420,8 +434,9 @@ def _map_func(args: List):
     extra_command_line_args = args[8]
     rate_category_selector = args[9]
     use_model_finder = args[10]
-    random_seed = args[11]
-    iq_tree_bin = args[12]
+    use_model_finder_plus = args[11]
+    random_seed = args[12]
+    iq_tree_bin = args[13]
 
     for family in families:
         msa_path = os.path.join(msa_dir, family + ".txt")
@@ -437,6 +452,7 @@ def _map_func(args: List):
             extra_command_line_args=extra_command_line_args,
             rate_category_selector=rate_category_selector,
             use_model_finder=use_model_finder,
+            use_model_finder_plus=use_model_finder_plus,
             random_seed=random_seed,
             iq_tree_bin=iq_tree_bin,
         )
@@ -461,6 +477,7 @@ def iq_tree(
     extra_command_line_args: str = "",
     rate_category_selector: str = "MAP",  # "MAP" or "posterior_mean"
     use_model_finder: bool = False,
+    use_model_finder_plus: bool = False,
     random_seed: int = 1,
     output_tree_dir: Optional[str] = None,
     output_site_rates_dir: Optional[str] = None,
@@ -470,7 +487,12 @@ def iq_tree(
     Run IQTree to find the best model given a rate matrix and infer the
     corresponding tree.
     """
-    if use_model_finder:
+    if use_model_finder and use_model_finder_plus:
+        raise ValueError(
+            "use_model_finder and use_model_finder_plus were both set to True, "
+            "but only one is allowed."
+        )
+    if use_model_finder or use_model_finder_plus:
         if num_rate_categories is not None:
             raise ValueError(
                 "You are attempting to run IQTree with ModelFinder. "
@@ -515,6 +537,7 @@ def iq_tree(
             extra_command_line_args,
             rate_category_selector,
             use_model_finder,
+            use_model_finder_plus,
             random_seed,
             iq_tree_bin,
         ]

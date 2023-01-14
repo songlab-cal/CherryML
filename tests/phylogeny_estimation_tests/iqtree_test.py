@@ -40,6 +40,7 @@ class TestIQTree(unittest.TestCase):
                     extra_command_line_args=extra_command_line_args,
                     rate_category_selector="posterior_mean",
                     use_model_finder=False,
+                    use_model_finder_plus=False,
                     random_seed=1,
                 )
                 ll_1, _ = read_log_likelihood(
@@ -51,7 +52,10 @@ class TestIQTree(unittest.TestCase):
                 assert abs(ll_1 - -200.0) < 10.0
 
     def test_model_finder_from_python_api(self):
-        for extra_command_line_args in ["", "-fast"]:
+        for (use_model_finder, use_model_finder_plus) in [
+            (True, False),
+            (False, True),
+        ]:
             with tempfile.TemporaryDirectory() as cache_dir:
                 caching.set_cache_dir(cache_dir)
                 output_tree_dirs = iq_tree(
@@ -61,9 +65,10 @@ class TestIQTree(unittest.TestCase):
                     rate_model=None,
                     num_rate_categories=None,
                     num_processes=3,
-                    extra_command_line_args=extra_command_line_args,
+                    extra_command_line_args="",
                     rate_category_selector="posterior_mean",
-                    use_model_finder=True,
+                    use_model_finder=use_model_finder,
+                    use_model_finder_plus=use_model_finder_plus,
                     random_seed=1,
                 )
                 ll_1, _ = read_log_likelihood(
@@ -75,7 +80,10 @@ class TestIQTree(unittest.TestCase):
                 assert abs(ll_1 - -200.0) < 10.0
 
     def test_model_finder_from_python_api_multi_rate_matrix(self):
-        for extra_command_line_args in ["", "-fast"]:
+        for (use_model_finder, use_model_finder_plus) in [
+            (True, False),
+            (False, True),
+        ]:
             with tempfile.TemporaryDirectory() as cache_dir:
                 caching.set_cache_dir(cache_dir)
                 output_tree_dirs = iq_tree(
@@ -89,9 +97,10 @@ class TestIQTree(unittest.TestCase):
                     rate_model=None,
                     num_rate_categories=None,
                     num_processes=3,
-                    extra_command_line_args=extra_command_line_args,
+                    extra_command_line_args="",
                     rate_category_selector="posterior_mean",
-                    use_model_finder=True,
+                    use_model_finder=use_model_finder,
+                    use_model_finder_plus=use_model_finder_plus,
                     random_seed=1,
                 )
                 ll_1, _ = read_log_likelihood(
@@ -144,6 +153,7 @@ class TestIQTree(unittest.TestCase):
                         extra_command_line_args=extra_command_line_args,
                         rate_category_selector="posterior_mean",
                         use_model_finder=False,
+                        use_model_finder_plus=False,
                         random_seed=1,
                     )
                     ll_1, _ = read_log_likelihood(
@@ -174,6 +184,7 @@ class TestIQTree(unittest.TestCase):
                     extra_command_line_args="-fast",
                     rate_category_selector="posterior_mean",
                     use_model_finder=False,
+                    use_model_finder_plus=False,
                     random_seed=1,
                 )
                 tree = read_tree(
@@ -206,6 +217,7 @@ class TestIQTree(unittest.TestCase):
                 extra_command_line_args="-fast",
                 rate_category_selector="MAP",
                 use_model_finder=False,
+                use_model_finder_plus=False,
                 random_seed=1,
             )
             tree_iqtree = read_tree(
