@@ -221,7 +221,7 @@ def lg_end_to_end_with_em_optimizer(
     )
 
     profiling_str = (
-        f"CherryML runtimes:\n"
+        f"EM runtimes:\n"
         f"time_tree_estimation: {res['time_tree_estimation']}\n"
         f"time_tree_estimation_parallelized: "
         f"{res['time_tree_estimation_parallelized']}\n"
