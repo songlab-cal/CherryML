@@ -360,7 +360,8 @@ def lg_end_to_end_with_cherryml_optimizer(
 
     profiling_str = (
         f"CherryML runtimes:\n"
-        f"time_tree_estimation: {res['time_tree_estimation']}\n"
+        "time_tree_estimation (without parallelization): "
+        f"{res['time_tree_estimation']}\n"
         f"time_counting: {res['time_counting']}\n"
         f"time_jtt_ipw: {res['time_jtt_ipw']}\n"
         f"time_optimization: {res['time_optimization']}\n"
