@@ -17,11 +17,7 @@ from cherryml.io import (
     write_msa,
     write_site_rates,
 )
-from cherryml.markov_chain import (
-    get_equ_path,
-    get_equ_x_equ_path,
-    normalized_cached,
-)
+from cherryml.markov_chain import get_equ_path, get_equ_x_equ_path
 from cherryml.types import PhylogenyEstimatorType
 from cherryml.utils import get_amino_acids, get_process_args
 
@@ -197,8 +193,6 @@ def lg_end_to_end_with_cherryml_optimizer(
     sites_subset_dir: Optional[str] = None,
     tree_dir: Optional[str] = None,
     site_rates_dir: Optional[str] = None,
-    concatenate_rate_matrices_when_iterating: bool = False,
-    normalize_learned_rate_matrices: bool = False,
 ) -> Dict:
     """
     LG pipeline with CherryML optimizer.
@@ -215,15 +209,6 @@ def lg_end_to_end_with_cherryml_optimizer(
     with tree_dir and site_rates_dir. Otherwise, the provided tree_estimator
     will be used to estimate trees and site rates.
     """
-    if (
-        concatenate_rate_matrices_when_iterating
-        and not normalize_learned_rate_matrices
-    ):
-        raise Exception(
-            "You are using something like ModelFinder but not normalizing the "
-            "learned rate matrices. This is not recommended!"
-        )
-
     if sites_subset_dir is not None and num_iterations > 1:
         raise ValueError(
             "You are using more than 1 iteration while learning a model only"
@@ -256,8 +241,6 @@ def lg_end_to_end_with_cherryml_optimizer(
     time_optimization = 0
 
     current_estimate_rate_matrix_path = initial_tree_estimator_rate_matrix_path
-    if concatenate_rate_matrices_when_iterating:
-        rm_concat = current_estimate_rate_matrix_path
     for iteration in range(num_iterations):
         if (
             iteration == 0
@@ -269,15 +252,10 @@ def lg_end_to_end_with_cherryml_optimizer(
                 "output_site_rates_dir": site_rates_dir,
             }
         else:
-            rate_matrix_path = (
-                current_estimate_rate_matrix_path
-                if not concatenate_rate_matrices_when_iterating
-                else rm_concat
-            )
             tree_estimator_output_dirs = tree_estimator(
                 msa_dir=msa_dir,
                 families=families,
-                rate_matrix_path=rate_matrix_path,
+                rate_matrix_path=current_estimate_rate_matrix_path,
                 num_processes=num_processes_tree_estimation,
             )
         res[
@@ -363,18 +341,12 @@ def lg_end_to_end_with_cherryml_optimizer(
         time_optimization += _get_runtime_from_profiling_file(
             os.path.join(rate_matrix_dir, "profiling.txt")
         )
-        if normalize_learned_rate_matrices:
-            rate_matrix_dir = normalized_cached(
-                rate_matrix_path=os.path.join(rate_matrix_dir, "result.txt")
-            )["output_dir"]
 
         res[f"rate_matrix_dir_{iteration}"] = rate_matrix_dir
 
         current_estimate_rate_matrix_path = os.path.join(
             rate_matrix_dir, "result.txt"
         )
-        if concatenate_rate_matrices_when_iterating:
-            rm_concat += "," + current_estimate_rate_matrix_path
 
     res["learned_rate_matrix_path"] = current_estimate_rate_matrix_path
 
