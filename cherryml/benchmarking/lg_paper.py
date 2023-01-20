@@ -17,9 +17,8 @@ import numpy as np
 import pandas as pd
 import wget
 
+from cherryml import PhylogenyEstimatorType  # caching,
 from cherryml import (
-    PhylogenyEstimatorType,
-    # caching,
     lg_end_to_end_with_cherryml_optimizer,
     lg_end_to_end_with_em_optimizer,
 )
@@ -339,7 +338,9 @@ def run_rate_estimator(
             num_processes_counting=1,
             num_processes_optimization=1,
         )
-        with open("lg_paper_fig__" + rate_estimator_name + "__profiling_str.txt", "w") as profiling_file:
+        with open(
+            "lg_paper_fig__" + rate_estimator_name + "__profiling_str.txt", "w"
+        ) as profiling_file:
             profiling_file.write(f"{res_dict['profiling_str']}")
         res = res_dict["learned_rate_matrix_path"]
         return res
@@ -362,7 +363,9 @@ def run_rate_estimator(
             extra_em_command_line_args=f"-log 6 -f 3 -mi {tokens[2]}",
         )
         res = res_dict["learned_rate_matrix_path"]
-        with open("lg_paper_fig__" + rate_estimator_name + "__profiling_str.txt", "w") as profiling_file:
+        with open(
+            "lg_paper_fig__" + rate_estimator_name + "__profiling_str.txt", "w"
+        ) as profiling_file:
             profiling_file.write(f"{res_dict['profiling_str']}")
         return res
     else:
@@ -554,9 +557,7 @@ def reproduce_lg_paper_fig_4(
             fontsize=fontsize,
         )
     else:
-        plt.ylabel(
-            "Average per-site AIC, in nats", fontsize=fontsize
-        )
+        plt.ylabel("Average per-site AIC, in nats", fontsize=fontsize)
     plt.yticks(fontsize=fontsize)
     plt.savefig(
         f"{output_image_dir}/lg_paper_figure.jpg", bbox_inches="tight", dpi=300
