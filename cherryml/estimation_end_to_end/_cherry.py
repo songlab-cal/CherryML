@@ -351,32 +351,20 @@ def lg_end_to_end_with_cherryml_optimizer(
     res["learned_rate_matrix_path"] = current_estimate_rate_matrix_path
 
     res["time_tree_estimation"] = time_tree_estimation
-    res["time_tree_estimation_parallelized"] = (
-        time_tree_estimation / num_processes_tree_estimation
-    )
     res["time_counting"] = time_counting
     res["time_jtt_ipw"] = time_jtt_ipw
     res["time_optimization"] = time_optimization
     res["total_cpu_time"] = (
         time_tree_estimation + time_counting + time_jtt_ipw + time_optimization
     )
-    res["total_parallelized_time"] = (
-        time_tree_estimation / num_processes_tree_estimation
-        + time_counting
-        + time_jtt_ipw
-        + time_optimization
-    )
 
     profiling_str = (
         f"CherryML runtimes:\n"
         f"time_tree_estimation: {res['time_tree_estimation']}\n"
-        f"time_tree_estimation_parallelized: "
-        f"{res['time_tree_estimation_parallelized']}\n"
         f"time_counting: {res['time_counting']}\n"
         f"time_jtt_ipw: {res['time_jtt_ipw']}\n"
         f"time_optimization: {res['time_optimization']}\n"
         f"total_cpu_time: {res['total_cpu_time']}\n"
-        f"total_parallelized_time: {res['total_parallelized_time']}\n"
     )
     res["profiling_str"] = profiling_str
 
