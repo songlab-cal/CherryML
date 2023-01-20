@@ -8,7 +8,7 @@ We expect that the CherryML method will be applied to enable scalable estimation
 
 This package also enables seamless reproduction of all results in our paper.
 
-For a quick demonstration of an end-to-end application of CherryML to real data, please check out the section [End-to-end worked-out application: `QMaker`'s plant dataset](#end-to-end-worked-out-application:-`QMaker`'s-plant-dataset).
+For a quick demonstration of an end-to-end application of CherryML to real data, please check out the section [End-to-end worked-out application: plant dataset](#end-to-end-worked-out-application:-plant-dataset).
 
 # Demo: CherryML applied to the LG model (runtime on a normal computer: 1 - 5 minutes)
 
@@ -342,9 +342,9 @@ The command line tool can be invoked with `python -m cherryml.evaluation` and ac
                         likelihoods. (default: None)
 ```
 
-# End-to-end worked-out application: `QMaker`'s plant dataset
+# End-to-end worked-out application: plant dataset
 
-We now combine the model estimation step and model selection steps to show a concrete example of applying CherryML to obtain a rate matrix superior than LG in record time. For this, we will use the plant data from the QMaker paper. The training MSAs are located at `demo_data/plant_train` and the testing MSAs are located at `demo_data/plant_test`. We start by fitting the LG model using FastTree tree estimator and the CherryML rate matrix optimizer. We start from the LG rate matrix and perform two rounds of alternating rate matrix and tree optimization (which is usually enough for convergence when adjusting the LG rate matrix to a new dataset). We will use 4 CPU cores in this example, as when running on a personal computer:
+We now combine the model estimation step and model selection steps to show a concrete example of applying CherryML to obtain a rate matrix superior than LG in record time. For this, we will use the plant dataset from Ran et al. (2018), `Phylogenomics resolves the deep phylogeny of seed plants and indicates partial convergent or homoplastic evolution between Gnetales and angiosperms`, with the train-test splits in the QMaker paper. The training MSAs are located at `demo_data/plant_train` and the testing MSAs are located at `demo_data/plant_test`. We start by fitting the LG model using FastTree tree estimator and the CherryML rate matrix optimizer. We start from the LG rate matrix and perform two rounds of alternating rate matrix and tree optimization (which is usually enough for convergence when adjusting the LG rate matrix to a new dataset). We will use 4 CPU cores in this example, as when running on a personal computer:
 
 ```
 time python -m cherryml \
@@ -430,7 +430,9 @@ Average log-likelihood per site: -20.50697311703476
 [...]
 ```
 
-As we can see, the de-novo estimated rate matrix outperforms the LG rate matrix, with an average increase in log-likelihood per site of `0.293` (1.4%). Finally, let's evaluate the rate matrix reported in the QMaker paper. This took ~68 hours to estimate using 15 cpu cores:
+As we can see, the de-novo estimated rate matrix outperforms the LG rate matrix, with an average increase in log-likelihood per site of `0.293` (1.4%).
+
+<!-- Finally, let's evaluate the rate matrix reported in the QMaker paper. This took ~68 hours to estimate using 15 cpu cores:
 
 ```
 time python -m cherryml.evaluation \
@@ -443,7 +445,7 @@ time python -m cherryml.evaluation \
     --tree_estimator_name FastTree
 ```
 
-Evaluation took 3 minutes wall-clock time. The output is:
+Evaluation took 3 minutes wall-clock time. The output is: -->
 
 <!-- ```
 real	2m31.117s
@@ -451,14 +453,14 @@ user	9m8.756s
 sys	0m15.171s
 ``` -->
 
-```
+<!-- ```
 Total log-likelihood: -2042014.2946999995
 Total number of sites: 101064
 Average log-likelihood per site: -20.205160044130448
 [...]
 ```
 
-This represents an improvement in log-likelihood per site of barely `0.0085` (0.04%) over CherryML's rate matrix! In contrast, CherryML was estimated in less than 30 minutes on a personal computes, while QMaker's rate matrix took 68 hours on a server with 15 cpu cores.
+This represents an improvement in log-likelihood per site of barely `0.0085` (0.04%) over CherryML's rate matrix! In contrast, CherryML was estimated in less than 30 minutes on a personal computes, while QMaker's rate matrix took 68 hours on a server with 15 cpu cores. -->
 
 # Reproducing all figures in our paper
 

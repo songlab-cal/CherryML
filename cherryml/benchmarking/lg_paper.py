@@ -19,16 +19,18 @@ import wget
 
 from cherryml import (
     PhylogenyEstimatorType,
+    caching,
     lg_end_to_end_with_cherryml_optimizer,
+    lg_end_to_end_with_em_optimizer,
 )
-from cherryml.io import read_log_likelihood
+from cherryml.io import read_float, read_log_likelihood
 from cherryml.markov_chain import (
     get_equ_path,
     get_jtt_path,
     get_lg_path,
     get_wag_path,
 )
-from cherryml.phylogeny_estimation import fast_tree
+from cherryml.phylogeny_estimation import fast_tree, iq_tree, phyml
 from cherryml.utils import pushd
 
 
@@ -303,7 +305,7 @@ def get_lg_PfamTrainingAlignments_data(
     )
 
 
-# @caching.cached()
+@caching.cached()
 def run_rate_estimator(
     rate_estimator_name: str,
     msa_train_dir: str,
@@ -321,7 +323,31 @@ def run_rate_estimator(
         res = get_wag_path()
     elif rate_estimator_name == "reproduced LG":
         res = get_lg_path()
-    elif rate_estimator_name.startswith("Cherry__"):
+    elif rate_estimator_name == "Q.LG":
+        res = "data/rate_matrices/Q.LG_std"
+    elif rate_estimator_name == "Q.pfam":
+        res = "data/rate_matrices/Q.pfam_std"
+    elif rate_estimator_name.startswith("Cherry__"):  # TODO: Make sure to remove the counting and jtt-ipw dirs bc I set this to use 1 process now. This will give a fair runtime comparisson.
+        tokens = rate_estimator_name.split("__")
+        assert len(tokens) == 2
+        res_dict = lg_end_to_end_with_cherryml_optimizer(
+            msa_dir=msa_train_dir,
+            families=families_train,
+            tree_estimator=partial(
+                fast_tree,
+                num_rate_categories=4,
+            ),
+            initial_tree_estimator_rate_matrix_path=get_equ_path(),
+            num_iterations=int(tokens[1]),
+            num_processes_tree_estimation=num_processes,
+            num_processes_counting=1,  # TODO: Make sure to remove the counting and jtt-ipw dirs bc I set this to use 1 process now. This will give a fair runtime comparisson.
+            num_processes_optimization=1,  # TODO: Make sure to remove the counting and jtt-ipw dirs bc I set this to use 1 process now. This will give a fair runtime comparisson.
+        )
+        with open("lg_paper_fig__" + rate_estimator_name + "__profiling_str.txt", "w") as profiling_file:
+            profiling_file.write(f"{res_dict['profiling_str']}")
+        res = res_dict["learned_rate_matrix_path"]
+        return res
+    elif rate_estimator_name.startswith("Cherry_from_lg__"):
         tokens = rate_estimator_name.split("__")
         assert len(tokens) == 2
         return lg_end_to_end_with_cherryml_optimizer(
@@ -329,6 +355,128 @@ def run_rate_estimator(
             families=families_train,
             tree_estimator=partial(
                 fast_tree,
+                num_rate_categories=4,
+            ),
+            initial_tree_estimator_rate_matrix_path=get_lg_path(),
+            num_iterations=int(tokens[1]),
+            num_processes_tree_estimation=num_processes,
+            num_processes_counting=4,
+            num_processes_optimization=2,
+        )["learned_rate_matrix_path"]
+    elif rate_estimator_name.startswith("Cherry_FT++jtt_wag_lg__"):
+        tokens = rate_estimator_name.split("__")
+        assert len(tokens) == 2
+        return lg_end_to_end_with_cherryml_optimizer(
+            msa_dir=msa_train_dir,
+            families=families_train,
+            tree_estimator=partial(
+                fast_tree,
+                num_rate_categories=4,
+            ),
+            initial_tree_estimator_rate_matrix_path=get_jtt_path()
+            + ","
+            + get_wag_path()
+            + ","
+            + get_lg_path(),
+            num_iterations=int(tokens[1]),
+            num_processes_tree_estimation=num_processes,
+            num_processes_counting=4,
+            num_processes_optimization=2,
+            concatenate_rate_matrices_when_iterating=True,
+            normalize_learned_rate_matrices=True,
+        )["learned_rate_matrix_path"]
+    elif rate_estimator_name.startswith(
+        "Cherry_repro_2023_01_14__"
+    ):  # Control. Should repro Cherry paper
+        tokens = rate_estimator_name.split("__")
+        assert len(tokens) == 2
+        return lg_end_to_end_with_cherryml_optimizer(
+            msa_dir=msa_train_dir,
+            families=families_train,
+            tree_estimator=partial(
+                fast_tree,
+                num_rate_categories=4,
+            ),
+            initial_tree_estimator_rate_matrix_path=get_equ_path(),
+            num_iterations=int(tokens[1]),
+            num_processes_tree_estimation=num_processes,
+            num_processes_counting=4,
+            num_processes_optimization=2,
+        )["learned_rate_matrix_path"]
+    elif rate_estimator_name.startswith("EM_FT__"):
+        tokens = rate_estimator_name.split("__")
+        assert len(tokens) == 3
+        res_dict = lg_end_to_end_with_em_optimizer(
+            msa_dir=msa_train_dir,
+            families=families_train,
+            tree_estimator=partial(
+                fast_tree,
+                num_rate_categories=4,
+            ),
+            initial_tree_estimator_rate_matrix_path=get_equ_path(),
+            num_iterations=int(tokens[1]),
+            num_processes_tree_estimation=num_processes,
+            num_processes_counting=1,
+            num_processes_optimization=1,
+            em_backend="xrate",
+            extra_em_command_line_args=f"-log 6 -f 3 -mi {tokens[2]}",
+        )
+        res = res_dict["learned_rate_matrix_path"]
+        with open("lg_paper_fig__" + rate_estimator_name + "__profiling_str.txt", "w") as profiling_file:
+            profiling_file.write(f"{res_dict['profiling_str']}")
+        return res
+    elif rate_estimator_name.startswith("Cherry_IQ__"):
+        tokens = rate_estimator_name.split("__")
+        assert len(tokens) == 5
+        return lg_end_to_end_with_cherryml_optimizer(
+            msa_dir=msa_train_dir,
+            families=families_train,
+            tree_estimator=partial(
+                iq_tree,
+                rate_model=tokens[2],
+                num_rate_categories=4,
+                rate_category_selector=tokens[3],
+                extra_command_line_args=tokens[4],
+            ),
+            initial_tree_estimator_rate_matrix_path=get_equ_path(),
+            num_iterations=int(tokens[1]),
+            num_processes_tree_estimation=num_processes,
+            num_processes_counting=4,
+            num_processes_optimization=2,
+        )["learned_rate_matrix_path"]
+    elif rate_estimator_name.startswith("Cherry_MF"):
+        tokens = rate_estimator_name.split("__")
+        assert(tokens[0] in ["Cherry_MF", "Cherry_MFP"])
+        assert len(tokens) == 3
+        return lg_end_to_end_with_cherryml_optimizer(
+            msa_dir=msa_train_dir,
+            families=families_train,
+            tree_estimator=partial(
+                iq_tree,
+                rate_model=None,
+                num_rate_categories=None,
+                use_model_finder=(tokens[0] == "Cherry_MF"),
+                use_model_finder_plus=(tokens[0] == "Cherry_MFP"),
+                rate_category_selector=tokens[2],
+                extra_command_line_args="",
+                random_seed=1,
+            ),
+            initial_tree_estimator_rate_matrix_path=get_equ_path(),
+            num_iterations=int(tokens[1]),
+            num_processes_tree_estimation=num_processes,
+            num_processes_counting=4,
+            num_processes_optimization=2,
+            concatenate_rate_matrices_when_iterating=True,
+            normalize_learned_rate_matrices=True,
+        )["learned_rate_matrix_path"]
+    elif rate_estimator_name.startswith("Cherry_P__"):
+        tokens = rate_estimator_name.split("__")
+        assert len(tokens) == 2
+        return lg_end_to_end_with_cherryml_optimizer(
+            msa_dir=msa_train_dir,
+            families=families_train,
+            tree_estimator=partial(
+                phyml,
                 num_rate_categories=4,
             ),
             initial_tree_estimator_rate_matrix_path=get_equ_path(),
@@ -386,7 +534,8 @@ def reproduce_lg_paper_fig_4(
     num_bootstraps: int = 0,
     use_colors: bool = True,
     output_image_dir: str = "./",
-    fontsize: int = 14,
+    fontsize: int = 13,
+    metric_name: str = "",
 ):
     """
     Reproduce Fig. 4 of the LG paper, extending it with the desired models.
@@ -416,9 +565,9 @@ def reproduce_lg_paper_fig_4(
         ]
 
     if baseline_rate_estimator_name is not None:
-        rate_estimator_names_w_baseline = list(
-            set(rate_estimator_names + [baseline_rate_estimator_name])
-        )
+        rate_estimator_names_w_baseline = [
+            baseline_rate_estimator_name
+        ] + rate_estimator_names
     else:
         rate_estimator_names_w_baseline = list(set(rate_estimator_names))
     for (rate_estimator_name, _) in rate_estimator_names_w_baseline:
@@ -446,9 +595,20 @@ def reproduce_lg_paper_fig_4(
                 rate_matrix_path=rate_matrix_path,
             )["output_likelihood_dir"]
             for family in families_test:
-                df.loc[family, rate_estimator_name] = read_log_likelihood(
-                    os.path.join(output_likelihood_dir, family + ".txt")
-                )[0]
+                metric = None
+                if metric_name == "ll":
+                    metric = read_log_likelihood(
+                        os.path.join(output_likelihood_dir, family + ".txt")
+                    )[0]
+                elif metric_name == "bic":
+                    metric = read_float(
+                        os.path.join(
+                            output_likelihood_dir, family + f".{metric_name}"
+                        )
+                    )
+                else:
+                    raise ValueError(f"Unknown metric_name = {metric_name}")
+                df.loc[family, rate_estimator_name] = metric
         print(
             f"Total time to evaluate {rate_estimator_name} = {time.time() - st}"
         )
@@ -458,12 +618,22 @@ def reproduce_lg_paper_fig_4(
         Given a DataFrame like the LG results table, with Name as the index,
         returns the sum of log likelihoods for each model.
         """
-        num_sites = df["num_sites"].sum()
-        log_likelihoods = 2.0 * df[model_names].sum(axis=0) / num_sites
-        if baseline_rate_estimator_name is not None:
-            log_likelihoods -= (
-                2.0 * df[baseline_rate_estimator_name[0]].sum() / num_sites
-            )
+        if metric_name == "ll":
+            num_sites = df["num_sites"].sum()
+            log_likelihoods = 2.0 * df[model_names].sum(axis=0) / num_sites
+            if baseline_rate_estimator_name is not None:
+                log_likelihoods -= (
+                    2.0 * df[baseline_rate_estimator_name[0]].sum() / num_sites
+                )
+        elif metric_name == "bic":
+            num_sites = df["num_sites"].sum()
+            log_likelihoods = -df[model_names].sum(axis=0) / num_sites
+            if baseline_rate_estimator_name is not None:
+                log_likelihoods += (
+                    df[baseline_rate_estimator_name[0]].sum() / num_sites
+                )
+        else:
+            raise ValueError(f"Unknown metric_name = {metric_name}")
         return log_likelihoods
 
     y = get_log_likelihoods(df, [x[0] for x in rate_estimator_names])
@@ -493,6 +663,8 @@ def reproduce_lg_paper_fig_4(
             colors.append("blue")
         elif "Cherry" in model_name:
             colors.append("red")
+        elif "EM" in model_name:
+            colors.append("yellow")
         else:
             colors.append("brown")
     plt.figure(figsize=figsize)
@@ -501,7 +673,7 @@ def reproduce_lg_paper_fig_4(
         height=y,
         color=colors,
     )
-    plt.xticks(rotation=0, fontsize=fontsize)
+    plt.xticks(rotation=90 if len(rate_estimator_names) > 6 else 0, fontsize=fontsize)
     ax = plt.gca()
     ax.yaxis.grid()
     if use_colors:
@@ -509,6 +681,7 @@ def reproduce_lg_paper_fig_4(
             handles=[
                 mpatches.Patch(color="blue", label="Reproduced"),
                 mpatches.Patch(color="red", label="CherryML"),
+                mpatches.Patch(color="yellow", label="EM"),
             ],
             fontsize=fontsize,
         )
@@ -517,13 +690,13 @@ def reproduce_lg_paper_fig_4(
         plt.title("Results on Pfam data from LG paper", font)
     if baseline_rate_estimator_name is not None:
         plt.ylabel(
-            "Average per-site log-likelihood\nimprovement over "
+            "Average per-site AIC\nimprovement over "
             f"{baseline_rate_estimator_name[1]}, in nats",
             fontsize=fontsize,
         )
     else:
         plt.ylabel(
-            "Average per-site log-likelihood, in nats", fontsize=fontsize
+            "Average per-site AIC, in nats", fontsize=fontsize
         )
     plt.yticks(fontsize=fontsize)
     plt.savefig(
@@ -542,3 +715,4 @@ def reproduce_lg_paper_fig_4(
         )
     else:
         return y, df, None, Qs
+# 34
