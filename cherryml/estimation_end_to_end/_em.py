@@ -6,7 +6,7 @@ from typing import Dict, List, Optional
 from cherryml.counting import count_transitions
 from cherryml.estimation import em_lg, em_lg_xrate, jtt_ipw
 from cherryml.estimation_end_to_end._cherry import _subset_data_to_sites_subset
-from cherryml.markov_chain import get_equ_path, normalized_cached
+from cherryml.markov_chain import get_equ_path
 from cherryml.types import PhylogenyEstimatorType
 from cherryml.utils import get_amino_acids
 
@@ -40,7 +40,7 @@ def lg_end_to_end_with_em_optimizer(
     quantization_grid_step: float = 1.1,
     quantization_grid_num_steps: int = 64,
     use_cpp_counting_implementation: bool = True,
-    extra_em_command_line_args: str = "-band 0 -fixgaprates -mininc 0.000001 -maxiter 100000000 -nolaplace",  # noqa
+    extra_em_command_line_args: str = "-log 6 -f 3 -mi 0.000001",
     cpp_counting_command_line_prefix: str = "",
     cpp_counting_command_line_suffix: str = "",
     num_processes_tree_estimation: int = 8,
@@ -48,19 +48,8 @@ def lg_end_to_end_with_em_optimizer(
     num_processes_optimization: int = 2,
     optimizer_initialization: str = "jtt-ipw",
     sites_subset_dir: Optional[str] = None,
-    em_backend: str = "historian",
-    concatenate_rate_matrices_when_iterating: bool = False,
-    normalize_learned_rate_matrices: bool = False,
+    em_backend: str = "xrate",
 ) -> Dict:
-    if (
-        concatenate_rate_matrices_when_iterating
-        and not normalize_learned_rate_matrices
-    ):
-        raise Exception(
-            "You are using something like ModelFinder but not normalizing the "
-            "learned rate matrices. This is not recommended!"
-        )
-
     if sites_subset_dir is not None and num_iterations > 1:
         raise Exception(
             "You are doing more than 1 iteration while learning a model only"
@@ -84,18 +73,11 @@ def lg_end_to_end_with_em_optimizer(
     time_optimization = 0
 
     current_estimate_rate_matrix_path = initial_tree_estimator_rate_matrix_path
-    if concatenate_rate_matrices_when_iterating:
-        rm_concat = current_estimate_rate_matrix_path
     for iteration in range(num_iterations):
-        rate_matrix_path = (
-            current_estimate_rate_matrix_path
-            if not concatenate_rate_matrices_when_iterating
-            else rm_concat
-        )
         tree_estimator_output_dirs = tree_estimator(
             msa_dir=msa_dir,
             families=families,
-            rate_matrix_path=rate_matrix_path,
+            rate_matrix_path=current_estimate_rate_matrix_path,
             num_processes=num_processes_tree_estimation,
         )
         res[
@@ -188,48 +170,31 @@ def lg_end_to_end_with_em_optimizer(
         time_optimization += _get_runtime_from_profiling_file(
             os.path.join(rate_matrix_dir, "profiling.txt")
         )
-        if normalize_learned_rate_matrices:
-            rate_matrix_dir = normalized_cached(
-                rate_matrix_path=os.path.join(rate_matrix_dir, "result.txt")
-            )["output_dir"]
 
         res[f"rate_matrix_dir_{iteration}"] = rate_matrix_dir
 
         current_estimate_rate_matrix_path = os.path.join(
             rate_matrix_dir, "result.txt"
         )
-        if concatenate_rate_matrices_when_iterating:
-            rm_concat += "," + current_estimate_rate_matrix_path
 
     res["learned_rate_matrix_path"] = current_estimate_rate_matrix_path
 
     res["time_tree_estimation"] = time_tree_estimation
-    res["time_tree_estimation_parallelized"] = (
-        time_tree_estimation / num_processes_tree_estimation
-    )
     res["time_counting"] = time_counting
     res["time_jtt_ipw"] = time_jtt_ipw
     res["time_optimization"] = time_optimization
     res["total_cpu_time"] = (
         time_tree_estimation + time_counting + time_jtt_ipw + time_optimization
     )
-    res["total_parallelized_time"] = (
-        time_tree_estimation / num_processes_tree_estimation
-        + time_counting
-        + time_jtt_ipw
-        + time_optimization
-    )
 
     profiling_str = (
         f"EM runtimes:\n"
-        f"time_tree_estimation: {res['time_tree_estimation']}\n"
-        f"time_tree_estimation_parallelized: "
-        f"{res['time_tree_estimation_parallelized']}\n"
+        "time_tree_estimation (without parallelization): "
+        f"{res['time_tree_estimation']}\n"
         f"time_counting: {res['time_counting']}\n"
         f"time_jtt_ipw: {res['time_jtt_ipw']}\n"
         f"time_optimization: {res['time_optimization']}\n"
         f"total_cpu_time: {res['total_cpu_time']}\n"
-        f"total_parallelized_time: {res['total_parallelized_time']}\n"
     )
     res["profiling_str"] = profiling_str
 
