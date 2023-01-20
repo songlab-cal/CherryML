@@ -7,7 +7,7 @@ from parameterized import parameterized
 
 from cherryml import caching
 from cherryml.io import read_log_likelihood
-from cherryml.markov_chain import get_equ_path, get_lg_path
+from cherryml.markov_chain import get_lg_path
 from cherryml.phylogeny_estimation import fast_tree
 
 
