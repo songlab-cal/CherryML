@@ -17,8 +17,8 @@ import numpy as np
 import pandas as pd
 import wget
 
-from cherryml import PhylogenyEstimatorType  # caching,
 from cherryml import (
+    PhylogenyEstimatorType,
     lg_end_to_end_with_cherryml_optimizer,
     lg_end_to_end_with_em_optimizer,
 )
