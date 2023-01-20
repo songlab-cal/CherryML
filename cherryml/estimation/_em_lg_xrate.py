@@ -245,7 +245,7 @@ def em_lg_xrate(
     families: List[str],
     initialization_rate_matrix_path: str,
     output_rate_matrix_dir: Optional[str] = None,
-    extra_command_line_args: str = "-log 6 -f 3 -mi 0.001",  # noqa
+    extra_command_line_args: str = "-log 6 -f 3 -mi 0.000001",  # noqa
 ):
     """
     Args:
