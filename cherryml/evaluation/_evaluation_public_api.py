@@ -33,7 +33,7 @@ def evaluation_public_api(
     rate_matrix_path: str,
     msa_dir: str,
     cache_dir: Optional[str] = None,
-    num_processes_tree_estimation: int = 32,
+    num_processes_tree_estimation: int = 4,
     num_rate_categories: int = 20,
     families: Optional[List[str]] = None,
     tree_estimator_name: str = "FastTree",
@@ -71,7 +71,7 @@ def evaluation_public_api(
     explicit separation in disk).
 
     Extra command line arguments can be provided to the tree estimator via
-    `extra_command_line_args`, for example, `--gamma` to run FastTree with the
+    `extra_command_line_args`, for example, `-gamma` to run FastTree with the
     Gamma model rather than MAP rate categories (this produces lower
     likelihoods, since it accounts for the possibility that the rate could have
     been something other than the MAP category; see FastTree documentation
