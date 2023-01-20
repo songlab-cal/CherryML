@@ -36,6 +36,6 @@ if __name__ == "__main__":
     figures.fig_qmaker(clade_name="insect")
     figures.fig_qmaker(clade_name="bird")
     figures.fig_qmaker(clade_name="mammal")
-    # ~ a couple days
+    # ~ 3 days
 
     print("Creating figures done!")
