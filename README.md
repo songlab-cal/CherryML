@@ -432,36 +432,6 @@ Average log-likelihood per site: -20.50697311703476
 
 As we can see, the de-novo estimated rate matrix outperforms the LG rate matrix, with an average increase in log-likelihood per site of `0.293` (1.4%).
 
-<!-- Finally, let's evaluate the rate matrix reported in the QMaker paper. This took ~68 hours to estimate using 15 cpu cores:
-
-```
-time python -m cherryml.evaluation \
-    --msa_dir demo_data/plant_test \
-    --rate_matrix_path demo_data/Q.plant_std \
-    --num_rate_categories 4 \
-    --output_path log_likelihoods_plant_QMaker.txt \
-    --cache_dir _cache_plant \
-    --num_processes_tree_estimation 4 \
-    --tree_estimator_name FastTree
-```
-
-Evaluation took 3 minutes wall-clock time. The output is: -->
-
-<!-- ```
-real	2m31.117s
-user	9m8.756s
-sys	0m15.171s
-``` -->
-
-<!-- ```
-Total log-likelihood: -2042014.2946999995
-Total number of sites: 101064
-Average log-likelihood per site: -20.205160044130448
-[...]
-```
-
-This represents an improvement in log-likelihood per site of barely `0.0085` (0.04%) over CherryML's rate matrix! In contrast, CherryML was estimated in less than 30 minutes on a personal computes, while QMaker's rate matrix took 68 hours on a server with 15 cpu cores. -->
-
 # Reproducing all figures in our paper
 
 To reproduce all figures in our paper, proceed as described below. Please note that this will not work in the compute capsule associated with this work since memory and compute are limited in the capsule. To reproduce all figures, you will need a machine with 32 CPU cores and 150G of storage; the Pfam dataset is large and we are in the realm of high-performance computing, which is out of reach with a compute capsule.
