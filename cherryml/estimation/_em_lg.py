@@ -1,5 +1,5 @@
 """
-Classical EM for the LG model.
+Classical EM for the LG model, using Historian.
 """
 import json
 import logging
