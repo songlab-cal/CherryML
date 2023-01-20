@@ -1,6 +1,5 @@
 from ._contact_map import read_contact_map, write_contact_map
 from ._count_matrices import read_count_matrices, write_count_matrices
-from ._float import read_float, write_float
 from ._log_likelihood import read_log_likelihood, write_log_likelihood
 from ._msa import read_msa, write_msa
 from ._rate_matrix import (
