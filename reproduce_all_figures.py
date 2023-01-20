@@ -25,8 +25,11 @@ if __name__ == "__main__":
     figures.fig_MSA_VI_cotransition()  # Comment in paragraph.
     # ~ 1 min
 
-    figures.fig_lg_paper(num_processes=8)  # Fig. 1e
+    figures.fig_lg_paper()  # Fig. 1e
     # ~ 20 hr
+
+    figures.fig_computational_and_stat_eff_cherry_vs_em()  # Fig. 1b, 1c
+    # ~ 62 hr
 
     # Supp Fig.
     figures.fig_qmaker(clade_name="plant")
