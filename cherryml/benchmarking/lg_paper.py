@@ -22,14 +22,14 @@ from cherryml import (
     lg_end_to_end_with_cherryml_optimizer,
     lg_end_to_end_with_em_optimizer,
 )
-from cherryml.io import read_float, read_log_likelihood
+from cherryml.io import read_log_likelihood
 from cherryml.markov_chain import (
     get_equ_path,
     get_jtt_path,
     get_lg_path,
     get_wag_path,
 )
-from cherryml.phylogeny_estimation import fast_tree, iq_tree, phyml
+from cherryml.phylogeny_estimation import fast_tree
 from cherryml.utils import pushd
 
 
@@ -43,8 +43,6 @@ def init_logger():
     consoleHandler.setFormatter(formatter)
     logger.addHandler(consoleHandler)
 
-
-from cherryml.global_vars import TITLES
 
 init_logger()
 logger = logging.getLogger(__name__)
@@ -548,8 +546,6 @@ def reproduce_lg_paper_fig_4(
             fontsize=fontsize,
         )
     plt.tight_layout()
-    if TITLES:
-        plt.title("Results on Pfam data from LG paper", font)
     if baseline_rate_estimator_name is not None:
         plt.ylabel(
             "Average per-site AIC\nimprovement over "
