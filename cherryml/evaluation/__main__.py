@@ -44,7 +44,7 @@ if __name__ == "__main__":
         "--num_processes_tree_estimation",
         type=int,
         required=False,
-        default=32,
+        default=4,
         help="Number of processes to parallelize tree estimation.",  # noqa
     )
 
