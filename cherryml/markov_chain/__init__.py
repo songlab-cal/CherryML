@@ -15,7 +15,6 @@ from ._markov_chain import (
     get_wag_path,
     matrix_exponential,
     normalized,
-    normalized_cached,
     wag_matrix,
     wag_stationary_distribution,
 )
