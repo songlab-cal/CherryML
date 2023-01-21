@@ -144,6 +144,8 @@ def _get_runtime_from_tree_estimator_profiling_file(
     """
     TODO: Define a serialization protocol for profiling files and move to IO
     """
+    if not os.path.exists(profiling_file_path):
+        return 0  # No profiling information was provided (e.g. GT tree dir)
     with open(profiling_file_path, "r") as profiling_file:
         profiling_file_contents = profiling_file.read()
         res = float(profiling_file_contents.split()[-1])
