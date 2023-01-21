@@ -153,7 +153,7 @@ def _translate_rate_matrix_to_xrate_format(
     for i, aa1 in enumerate(alphabet):
         for j, aa2 in enumerate(alphabet):
             if i != j:
-                res += f"  (mutate (from ({aa1.lower()})) (to ({aa2.lower()})) (rate {Q[i, j]}))\n"
+                res += f"  (mutate (from ({aa1.lower()})) (to ({aa2.lower()})) (rate {Q[i, j]}))\n"  # noqa
     res += """ )  ;; end chain A0
 
 )  ;; end grammar nullprot
@@ -205,9 +205,9 @@ def run_xrate(
             easily avoid code duplication.
             """
             if estimate_trees:
-                cmd = f"{xrate_bin_path} {' '.join(stock_filepaths)} -e {xrate_grammar} -g {xrate_grammar} -t {output_path} {extra_command_line_args}"
+                cmd = f"{xrate_bin_path} {' '.join(stock_filepaths)} -e {xrate_grammar} -g {xrate_grammar} -t {output_path} {extra_command_line_args}"  # noqa
             else:
-                cmd = f"{xrate_bin_path} {' '.join(stock_filepaths)} -g {xrate_grammar} -t {output_path} {extra_command_line_args}"
+                cmd = f"{xrate_bin_path} {' '.join(stock_filepaths)} -g {xrate_grammar} -t {output_path} {extra_command_line_args}"  # noqa
             if logfile is not None:
                 cmd += f" 2>&1 | tee {logfile}"
             return cmd
@@ -221,8 +221,10 @@ def run_xrate(
         bash_script_filepath = os.path.join(tmpdir, "run_xrate.sh")
         with open(bash_script_filepath, "w") as bash_script_file:
             bash_script_file.write(cmd_with_symlinks)
-            bash_script_file.flush()  # This is key, or else the call below will fail!
-            # We log the command w/o symlinks to be able to run it manually for debugging.
+            # This is key, or else the call below will fail!
+            bash_script_file.flush()
+            # We log the command w/o symlinks to be able to run it manually for
+            # debugging.
             logger.info(f"Original command:\n{cmd}")
             logger.info(
                 f"Running original command with symlinks:\n{cmd_with_symlinks}"
