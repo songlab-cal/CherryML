@@ -82,11 +82,7 @@ from cherryml.markov_chain import (
     matrix_exponential,
     normalized,
 )
-from cherryml.phylogeny_estimation import (
-    fast_tree,
-    gt_tree_estimator,
-    phyml,
-)
+from cherryml.phylogeny_estimation import fast_tree, gt_tree_estimator, phyml
 from cherryml.types import PhylogenyEstimatorType
 from cherryml.utils import get_families, get_process_args
 
@@ -385,22 +381,15 @@ def fig_single_site_cherry(
 
 
 def fig_single_site_em(
-    extra_em_command_line_args: str,
-    em_backend: str,
+    extra_em_command_line_args: str = "-log 6 -f 3 -mi 0.000001",
     num_processes: int = 4,
     num_rate_categories: int = 1,
     num_sequences: int = 128,
     random_seed: int = 0,
-    optimizer_initialization: str = "jtt-ipw",
-    num_processes_tree_estimation: int = 4,
 ):
     output_image_dir = (
         "images/fig_single_site_em__"
         + extra_em_command_line_args.replace(" ", "_")
-        + "__"
-        + em_backend
-        + "__"
-        + optimizer_initialization
     )
     if not os.path.exists(output_image_dir):
         os.makedirs(output_image_dir)
@@ -443,30 +432,6 @@ def fig_single_site_em(
             random_seed=random_seed,
         )
 
-        if optimizer_initialization == "cherryml":
-            lg_end_to_end_with_cherryml_optimizer_res = (
-                lg_end_to_end_with_cherryml_optimizer(
-                    msa_dir=msa_dir,
-                    families=families_train,
-                    tree_estimator=partial(
-                        gt_tree_estimator,
-                        gt_tree_dir=gt_tree_dir,
-                        gt_site_rates_dir=gt_site_rates_dir,
-                        gt_likelihood_dir=gt_likelihood_dir,
-                        num_rate_categories=num_rate_categories,
-                    ),
-                    initial_tree_estimator_rate_matrix_path=get_equ_path(),
-                    num_processes_tree_estimation=num_processes_tree_estimation,
-                    num_processes_optimization=1,
-                    num_processes_counting=1,
-                    edge_or_cherry="cherry",
-                )
-            )
-            optimizer_initialization = os.path.join(
-                lg_end_to_end_with_cherryml_optimizer_res["rate_matrix_dir_0"],
-                "result.txt",
-            )
-
         em_estimator_res = lg_end_to_end_with_em_optimizer(
             msa_dir=msa_dir,
             families=families_train,
@@ -479,8 +444,6 @@ def fig_single_site_em(
             ),
             initial_tree_estimator_rate_matrix_path=get_equ_path(),
             extra_em_command_line_args=extra_em_command_line_args,
-            em_backend=em_backend,
-            optimizer_initialization=optimizer_initialization,
         )
 
         def get_runtime(profiling_file_path: str):
@@ -499,7 +462,6 @@ def fig_single_site_em(
         )
         learned_rate_matrix = read_rate_matrix(learned_rate_matrix_path)
         learned_rate_matrix = learned_rate_matrix.to_numpy()
-        print(f"learned_rate_matrix_path = {learned_rate_matrix_path}")
 
         lg = read_rate_matrix(get_lg_path()).to_numpy()
         learned_rate_matrix_path = em_estimator_res["learned_rate_matrix_path"]
@@ -566,20 +528,11 @@ def fig_single_site_em(
 
 # Fig. 1b, 1c
 def fig_computational_and_stat_eff_cherry_vs_em(
-    extra_em_command_line_args: str = "-band 0 -fixgaprates -mininc 0.000001 -maxiter 100000000 -nolaplace",  # noqa
-    em_backend: str = "xrate",
-    em_init: str = "jtt-ipw",
+    extra_em_command_line_args: str = "-log 6 -f 3 -mi 0.000001",
 ):
     fontsize = 14
 
-    output_image_dir = (
-        "images/fig_computational_and_stat_eff_cherry_vs_em__"
-        + extra_em_command_line_args.replace(" ", "_")
-        + "__"
-        + em_backend
-        + "__"
-        + em_init
-    )
+    output_image_dir = "images/fig_computational_and_stat_eff_cherry_vs_em"
     if not os.path.exists(output_image_dir):
         os.makedirs(output_image_dir)
 
@@ -592,8 +545,6 @@ def fig_computational_and_stat_eff_cherry_vs_em(
     cherry_errors = [float("%.1f" % (100 * x)) for x in cherry_errors_nonpct]
     num_families_em, em_errors_nonpct, em_times = fig_single_site_em(
         extra_em_command_line_args=extra_em_command_line_args,
-        em_backend=em_backend,
-        optimizer_initialization=em_init,
     )
     em_times = [int(x) for x in em_times]
     em_errors = [float("%.1f" % (100 * x)) for x in em_errors_nonpct]
@@ -811,7 +762,7 @@ def fig_lg_paper(
     baseline_rate_estimator_name: Tuple[str, str] = ("reproduced JTT", "JTT"),
     num_processes: int = 4,
     evaluation_phylogeny_estimator_name: str = "PhyML",
-    output_image_dir: str = "images/fig_lg_paper",
+    output_image_dir: str = "images/fig_lg_paper/",
     lg_pfam_training_alignments_dir: str = "./lg_paper_data/lg_PfamTrainingAlignments",  # noqa
     lg_pfam_testing_alignments_dir: str = "./lg_paper_data/lg_PfamTestingAlignments",  # noqa
 ):
@@ -842,7 +793,8 @@ def fig_lg_paper(
     else:
         raise ValueError(
             "Unknown evaluation_phylogeny_estimator_name: "
-            f"{evaluation_phylogeny_estimator_name}."
+            f"{evaluation_phylogeny_estimator_name}. Must be either 'PhyML'"
+            "or 'FastTree'."
         )
 
     y, df, bootstraps, Qs = reproduce_lg_paper_fig_4(
