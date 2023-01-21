@@ -42,14 +42,13 @@ from cherryml.benchmarking.lg_paper import (
     get_lg_PfamTrainingAlignments_data,
     reproduce_lg_paper_fig_4,
 )
+from cherryml.benchmarking.pfam_15k import compute_contact_maps
 from cherryml.benchmarking.pfam_15k import get_families as get_families_pfam_15k
 from cherryml.benchmarking.pfam_15k import (
     get_families_within_cutoff,
     simulate_ground_truth_data_coevolution,
     simulate_ground_truth_data_single_site,
     subsample_pfam_15k_msas,
-    compute_contact_maps,
-    get_family_sizes
 )
 from cherryml.evaluation import (
     compute_log_likelihoods,
@@ -70,7 +69,6 @@ from cherryml.io import (
     write_probability_distribution,
     write_rate_matrix,
     write_sites_subset,
-    read_float,
 )
 from cherryml.markov_chain import (
     chain_product,
@@ -84,12 +82,13 @@ from cherryml.markov_chain import (
     matrix_exponential,
     normalized,
 )
-from cherryml.phylogeny_estimation import fast_tree, gt_tree_estimator, phyml, iq_tree
+from cherryml.phylogeny_estimation import (
+    fast_tree,
+    gt_tree_estimator,
+    phyml,
+)
 from cherryml.types import PhylogenyEstimatorType
 from cherryml.utils import get_families, get_process_args
-from cherryml.phylogeny_estimation._iqtree import convert_rate_matrix_to_paml_format
-
-caching.set_dir_levels(0)
 
 NUM_PROCESSES_TREE_ESTIMATION = 32
 
@@ -222,7 +221,7 @@ def fig_single_site_cherry(
     caching.set_cache_dir("_cache_benchmarking_em")
     caching.set_hash_len(64)
 
-    output_image_dir = f"images/fig_single_site_cherry"
+    output_image_dir = "images/fig_single_site_cherry"
     if not os.path.exists(output_image_dir):
         os.makedirs(output_image_dir)
 
@@ -398,7 +397,11 @@ def fig_single_site_em(
 ):
     output_image_dir = (
         "images/fig_single_site_em__"
-        + extra_em_command_line_args.replace(" ", "_") + "__" + em_backend + "__" + optimizer_initialization
+        + extra_em_command_line_args.replace(" ", "_")
+        + "__"
+        + em_backend
+        + "__"
+        + optimizer_initialization
     )
     if not os.path.exists(output_image_dir):
         os.makedirs(output_image_dir)
@@ -565,14 +568,20 @@ def fig_single_site_em(
 
 # Fig. 1b, 1c
 def fig_computational_and_stat_eff_cherry_vs_em(
-    extra_em_command_line_args: str = "-band 0 -fixgaprates -mininc 0.000001 -maxiter 100000000 -nolaplace",
+    extra_em_command_line_args: str = "-band 0 -fixgaprates -mininc 0.000001 -maxiter 100000000 -nolaplace",  # noqa
     em_backend: str = "xrate",
     em_init: str = "jtt-ipw",
 ):
     fontsize = 14
 
-    output_image_dir = "images/fig_computational_and_stat_eff_cherry_vs_em__" \
-        + extra_em_command_line_args.replace(" ", "_") + "__" + em_backend + "__" + em_init
+    output_image_dir = (
+        "images/fig_computational_and_stat_eff_cherry_vs_em__"
+        + extra_em_command_line_args.replace(" ", "_")
+        + "__"
+        + em_backend
+        + "__"
+        + em_init
+    )
     if not os.path.exists(output_image_dir):
         os.makedirs(output_image_dir)
 
@@ -750,7 +759,7 @@ def fig_single_site_quantization_error(
         )
         if TITLES:
             plt.title(
-                "True vs predicted rate matrix entries\nmax quantization error = "
+                "True vs predicted rate matrix entries\nmax quantization error = "  # noqa
                 "%.1f%% (%i quantization points)" % (q_errors[i], q_points[i])
             )
         plt.tight_layout()
@@ -792,103 +801,7 @@ def fig_single_site_quantization_error(
     plt.close()
 
 
-# # Fig. 1e
-# def fig_lg_paper(
-#     num_rate_categories: int = 4,
-#     figsize=(6.4, 4.8),
-#     rate_estimator_names: List[Tuple[str, str]] = [
-#         ("reproduced WAG", "WAG"),
-#         ("reproduced LG", "LG"),
-#         ("Cherry__4", "LG w/CherryML"),
-#     ],
-#     baseline_rate_estimator_name: Tuple[str, str] = ("reproduced JTT", "JTT"),
-#     num_processes: int = 4,
-#     evaluation_phylogeny_estimator_name: str = "PhyML",
-#     output_image_dir: str = "images/fig_lg_paper",
-#     lg_pfam_training_alignments_dir: str = "./lg_paper_data/lg_PfamTrainingAlignments",  # noqa
-#     lg_pfam_testing_alignments_dir: str = "./lg_paper_data/lg_PfamTestingAlignments",  # noqa
-# ):
-#     """
-#     LG paper figure 4, extended with LG w/CherryML.
-#     """
-#     output_image_dir += f"_{evaluation_phylogeny_estimator_name}"
-#     if not os.path.exists(output_image_dir):
-#         os.makedirs(output_image_dir)
-
-#     caching.set_cache_dir("_cache_lg_paper")
-#     caching.set_hash_len(64)
-
-#     get_lg_PfamTrainingAlignments_data(lg_pfam_training_alignments_dir)
-#     get_lg_PfamTestingAlignments_data(lg_pfam_testing_alignments_dir)
-
-#     if evaluation_phylogeny_estimator_name == "PhyML":
-#         metric_name = "ll"
-#         evaluation_phylogeny_estimator = partial(
-#             phyml,
-#             num_rate_categories=num_rate_categories,
-#             num_processes=num_processes,
-#         )
-#     elif evaluation_phylogeny_estimator_name == "FastTree":
-#         metric_name = "ll"
-#         evaluation_phylogeny_estimator = partial(
-#             fast_tree,
-#             num_rate_categories=num_rate_categories,
-#             num_processes=num_processes,
-#             extra_command_line_args="-gamma",
-#         )
-#     elif evaluation_phylogeny_estimator_name.startswith("IQTree"):
-#         metric_name = "ll"
-#         tokens = evaluation_phylogeny_estimator_name.split('__')
-#         evaluation_phylogeny_estimator = partial(
-#             iq_tree,
-#             rate_model=tokens[1],
-#             num_rate_categories=num_rate_categories,
-#             rate_category_selector="MAP",  # Doesn't matter bc its evaluation.
-#             use_model_finder=False,
-#             random_seed=1,
-#             num_processes=num_processes,
-#             extra_command_line_args=tokens[2],
-#         )
-#     elif evaluation_phylogeny_estimator_name in ["MF", "MFP"]:
-#         metric_name = "bic"
-#         tokens = evaluation_phylogeny_estimator_name.split('__')
-#         evaluation_phylogeny_estimator = partial(
-#             iq_tree,
-#             rate_model=None,
-#             num_rate_categories=None,
-#             rate_category_selector="MAP",  # Doesn't matter bc its evaluation.
-#             use_model_finder=(evaluation_phylogeny_estimator_name == "MF"),
-#             use_model_finder_plus=(evaluation_phylogeny_estimator_name == "MFP"),
-#             random_seed=1,
-#             num_processes=num_processes,
-#             extra_command_line_args="",
-#         )
-#     else:
-#         raise ValueError(
-#             "Unknown evaluation_phylogeny_estimator_name: "
-#             f"{evaluation_phylogeny_estimator_name}."
-#         )
-
-#     y, df, bootstraps, Qs = reproduce_lg_paper_fig_4(
-#         msa_train_dir=lg_pfam_training_alignments_dir,
-#         families_train=get_families(lg_pfam_training_alignments_dir),
-#         msa_test_dir=lg_pfam_testing_alignments_dir,
-#         families_test=get_families(lg_pfam_testing_alignments_dir),
-#         rate_estimator_names=rate_estimator_names[:],
-#         baseline_rate_estimator_name=baseline_rate_estimator_name,
-#         evaluation_phylogeny_estimator=evaluation_phylogeny_estimator,
-#         num_processes=num_processes,
-#         pfam_or_treebase="pfam",
-#         family_name_len=7,
-#         figsize=figsize,
-#         num_bootstraps=100,
-#         output_image_dir=output_image_dir,
-#         use_colors=True,
-#         metric_name=metric_name,
-#     )
-
-
-# Fig. 1e, revision
+# Fig. 1e
 def fig_lg_paper(
     num_rate_categories: int = 4,
     figsize=(6.4, 4.8),
@@ -897,7 +810,6 @@ def fig_lg_paper(
         ("reproduced LG", "LG\nrate matrix"),
         ("Cherry__4", "LG w/CherryML\n(re-estimated)"),
         ("EM_FT__4__0.000001", "LG w/EM\n(re-estimated)"),
-        # ("EM_FT__4__0.1", "LG w/EM 1 (4)"),
     ],
     baseline_rate_estimator_name: Tuple[str, str] = ("reproduced JTT", "JTT"),
     num_processes: int = 4,
@@ -918,46 +830,17 @@ def fig_lg_paper(
     get_lg_PfamTestingAlignments_data(lg_pfam_testing_alignments_dir)
 
     if evaluation_phylogeny_estimator_name == "PhyML":
-        metric_name = "ll"
         evaluation_phylogeny_estimator = partial(
             phyml,
             num_rate_categories=num_rate_categories,
             num_processes=num_processes,
         )
     elif evaluation_phylogeny_estimator_name == "FastTree":
-        metric_name = "ll"
         evaluation_phylogeny_estimator = partial(
             fast_tree,
             num_rate_categories=num_rate_categories,
             num_processes=num_processes,
             extra_command_line_args="-gamma",
-        )
-    elif evaluation_phylogeny_estimator_name.startswith("IQTree"):
-        metric_name = "ll"
-        tokens = evaluation_phylogeny_estimator_name.split('__')
-        evaluation_phylogeny_estimator = partial(
-            iq_tree,
-            rate_model=tokens[1],
-            num_rate_categories=num_rate_categories,
-            rate_category_selector="MAP",  # Doesn't matter bc its evaluation.
-            use_model_finder=False,
-            random_seed=1,
-            num_processes=num_processes,
-            extra_command_line_args=tokens[2],
-        )
-    elif evaluation_phylogeny_estimator_name in ["MF", "MFP"]:
-        metric_name = "bic"
-        tokens = evaluation_phylogeny_estimator_name.split('__')
-        evaluation_phylogeny_estimator = partial(
-            iq_tree,
-            rate_model=None,
-            num_rate_categories=None,
-            rate_category_selector="MAP",  # Doesn't matter bc its evaluation.
-            use_model_finder=(evaluation_phylogeny_estimator_name == "MF"),
-            use_model_finder_plus=(evaluation_phylogeny_estimator_name == "MFP"),
-            random_seed=1,
-            num_processes=num_processes,
-            extra_command_line_args="",
         )
     else:
         raise ValueError(
@@ -980,7 +863,6 @@ def fig_lg_paper(
         num_bootstraps=100,
         output_image_dir=output_image_dir,
         use_colors=True,
-        metric_name=metric_name,
     )
 
 
@@ -1043,13 +925,12 @@ def chain_product_cached(
     )
 
 
-def evaluate_single_site_model_on_held_out_msas_w_tree_estimator(  # TODO: Try out!
+def evaluate_single_site_model_on_held_out_msas_w_tree_estimator(
     msa_dir: str,
     families: List[str],
     rate_matrix_path: str,
     num_processes: int,
     tree_estimator: PhylogenyEstimatorType,
-    metric_name: str = "ll",
 ) -> List[float]:
     """
     Evaluate a reversible single-site model on held out msas.
@@ -1062,68 +943,11 @@ def evaluate_single_site_model_on_held_out_msas_w_tree_estimator(  # TODO: Try o
     )["output_likelihood_dir"]
     lls = []
     for family in families:
-        if metric_name == "ll":
-            ll = read_log_likelihood(
-                os.path.join(output_likelihood_dir, f"{family}.txt")
-            )[0]
-        else:
-            ll = read_float(
-                os.path.join(output_likelihood_dir, f"{family}.{metric_name}")
-            )
+        ll = read_log_likelihood(
+            os.path.join(output_likelihood_dir, f"{family}.txt")
+        )[0]
         lls.append(ll)
     return lls
-
-
-# def evaluate_single_site_model_on_held_out_msas(
-#     msa_dir: str,
-#     families: List[str],
-#     rate_matrix_path: str,
-#     num_processes: int,
-#     tree_estimator: PhylogenyEstimatorType,
-# ) -> List[float]:
-#     """
-#     Evaluate a reversible single-site model on held out msas.
-#     """
-#     # First estimate the trees
-#     tree_estimator_output_dirs = tree_estimator(
-#         msa_dir=msa_dir,
-#         families=families,
-#         rate_matrix_path=rate_matrix_path,
-#         num_processes=num_processes,
-#     )
-#     tree_dir = tree_estimator_output_dirs["output_tree_dir"]
-#     site_rates_dir = tree_estimator_output_dirs["output_site_rates_dir"]
-#     output_probability_distribution_dir = get_stationary_distribution(
-#         rate_matrix_path=rate_matrix_path,
-#     )["output_probability_distribution_dir"]
-#     pi_1_path = os.path.join(output_probability_distribution_dir, "result.txt")
-#     output_likelihood_dir = compute_log_likelihoods(
-#         tree_dir=tree_dir,
-#         msa_dir=msa_dir,
-#         site_rates_dir=site_rates_dir,
-#         contact_map_dir=None,
-#         families=families,
-#         amino_acids=utils.get_amino_acids(),
-#         pi_1_path=pi_1_path,
-#         Q_1_path=rate_matrix_path,
-#         reversible_1=True,
-#         device_1="cpu",
-#         pi_2_path=None,
-#         Q_2_path=None,
-#         reversible_2=None,
-#         device_2=None,
-#         num_processes=num_processes,
-#         use_cpp_implementation=False,
-#         OMP_NUM_THREADS=1,
-#         OPENBLAS_NUM_THREADS=1,
-#     )["output_likelihood_dir"]
-#     lls = []
-#     for family in families:
-#         ll = read_log_likelihood(
-#             os.path.join(output_likelihood_dir, f"{family}.txt")
-#         )
-#         lls.append(ll[0])
-#     return lls
 
 
 def evaluate_pair_site_model_on_held_out_msas(
@@ -1556,7 +1380,7 @@ def learn_coevolution_model_on_pfam15k(
         else:
             if TITLES:
                 plt.title(
-                    "Results on Pfam 15K data\n(held-out negative log-Likelihood)"
+                    "Results on Pfam 15K data\n(held-out negative log-Likelihood)"  # noqa
                 )
         plt.tight_layout()
         plt.savefig(
@@ -1765,7 +1589,7 @@ def fig_pair_site_quantization_error(
             )
             if TITLES:
                 plt.title(
-                    "True vs predicted rate matrix entries\nmax quantization error "
+                    "True vs predicted rate matrix entries\nmax quantization error "  # noqa
                     "= %.1f%% (%i quantization points)"
                     % (q_errors[i], q_points[i])
                 )
@@ -1813,7 +1637,7 @@ def fig_pair_site_quantization_error(
 
 # Fig. 2c, 2d
 def fig_coevolution_vs_indep():
-    output_image_dir = f"images/fig_coevolution_vs_indep"
+    output_image_dir = "images/fig_coevolution_vs_indep"
     if not os.path.exists(output_image_dir):
         os.makedirs(output_image_dir)
 
@@ -2332,24 +2156,6 @@ def fig_site_rates_vs_number_of_contacts(
         minimum_distance_for_nontrivial_contact=minimum_distance_for_nontrivial_contact,  # noqa
     )
 
-    # num_contacts_list = list(range(1, 21, 1))
-    # num_contacts_flattened = sum([len(site_rates_by_num_nontrivial_contacts[x]) * [x] for x in num_contacts_list], [])
-    # site_rates_flattened = sum([site_rates_by_num_nontrivial_contacts[x] for x in num_contacts_list], [])
-
-    # df = pd.DataFrame(
-    #     {
-    #         "Number of non-trivial contacts": num_contacts_flattened,
-    #         "Site rate": site_rates_flattened,
-    #     }
-    # )
-
-    # sns.violinplot(
-    #     x="Number of non-trivial contacts",
-    #     y="Site rate",
-    #     data=df,
-    #     inner=None,
-    # )
-
     import matplotlib.pyplot as plt
 
     fig, ax = plt.subplots()
@@ -2509,669 +2315,54 @@ def fig_MSA_VI_cotransition(
                         )
 
 
-# Supp Fig.
-def fig_relearn_LG_on_pfam15k(
-    num_rate_categories: int = 4,
-    num_sequences: int = 1024,
-    num_families_train: int = 12000,
-    num_families_test: int = 3000,
-    num_processes_tree_estimation: int = NUM_PROCESSES_TREE_ESTIMATION,
-    num_processes_counting: int = 8,
-    num_processes_optimization: int = 2,
-) -> Dict:
-    """
-    We apply CherryML to learn an 'updated' version of the LG rate matrix,
-    using 12K of the Pfam15k alignments as training data. We then evaluate
-    held-out LL on the remaining 3K test alignments. We show the LL gain
-    over the older rate matrices.
-    """
-    output_image_dir = "images/fig_relearn_LG_on_pfam15k"
-    if not os.path.exists(output_image_dir):
-        os.makedirs(output_image_dir)
-
-    caching.set_cache_dir("_cache_benchmarking")
-    caching.set_hash_len(64)
-
-    PFAM_15K_MSA_DIR = "input_data/a3m"
-    PFAM_15K_PDB_DIR = "input_data/pdb"
-
-    train_test_split_seed = 0
-
-    families_all = get_families_pfam_15k(
-        PFAM_15K_MSA_DIR,
-    )
-    np.random.seed(train_test_split_seed)
-    np.random.shuffle(families_all)
-
-    families_train = sorted(families_all[:num_families_train])
-    if num_families_test == 0:
-        families_test = []
-    else:
-        families_test = sorted(families_all[-num_families_test:])
-
-    # Subsample the training MSAs
-    msa_dir_train = subsample_pfam_15k_msas(
-        pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
-        num_sequences=num_sequences,
-        families=families_train,
-        num_processes=num_processes_tree_estimation,
-    )["output_msa_dir"]
-
-    # Run the cherry method using FastTree tree estimator
-    cherry_path = lg_end_to_end_with_cherryml_optimizer(
-        msa_dir=msa_dir_train,
-        families=families_train,
-        tree_estimator=partial(
-            fast_tree,
-            num_rate_categories=num_rate_categories,
-        ),
-        initial_tree_estimator_rate_matrix_path=get_lg_path(),
-        num_processes_tree_estimation=num_processes_tree_estimation,
-        num_processes_optimization=num_processes_optimization,
-        num_processes_counting=num_processes_counting,
-    )["learned_rate_matrix_path"]
-
-    # Subsample the testing MSAs
-    msa_dir_test = subsample_pfam_15k_msas(
-        pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
-        num_sequences=num_sequences,
-        families=families_test,
-        num_processes=num_processes_tree_estimation,
-    )["output_msa_dir"]
-
-    log_likelihoods = []  # type: List[Tuple[str, float]]
-    single_site_rate_matrices = [
-        ("JTT", get_jtt_path()),
-        ("WAG", get_wag_path()),
-        ("LG", get_lg_path()),
-        ("Cherry", cherry_path),
-    ]
-
-    for rate_matrix_name, rate_matrix_path in single_site_rate_matrices:
-        mutation_rate = compute_mutation_rate(
-            read_rate_matrix(rate_matrix_path)
-        )
-        print(
-            f"***** Evaluating: {rate_matrix_name} at {rate_matrix_path} ({num_rate_categories} rate categories) with global mutation rate {mutation_rate} *****"  # noqa
-        )
-        lls = evaluate_single_site_model_on_held_out_msas_w_tree_estimator(
-            msa_dir=msa_dir_test,
-            families=families_test,
-            rate_matrix_path=rate_matrix_path,
-            num_processes=num_processes_tree_estimation,
-            tree_estimator=partial(
-                fast_tree,
-                num_rate_categories=num_rate_categories,
-            ),
-        )
-        ll = np.sum(lls)
-        print(f"ll for {rate_matrix_name} = {ll}")
-        log_likelihoods.append((rate_matrix_name, ll))
-
-    def get_runtime(lg_end_to_end_with_cherryml_optimizer_res: str) -> float:
-        res = 0
-        for lg_end_to_end_with_cherryml_optimizer_output_dir in [
-            "count_matrices_dir_0",
-            "jtt_ipw_dir_0",
-            "rate_matrix_dir_0",
-        ]:
-            with open(
-                os.path.join(
-                    lg_end_to_end_with_cherryml_optimizer_res[
-                        lg_end_to_end_with_cherryml_optimizer_output_dir
-                    ],
-                    "profiling.txt",
-                ),
-                "r",
-            ) as profiling_file:
-                profiling_file_contents = profiling_file.read()
-                print(
-                    f"{lg_end_to_end_with_cherryml_optimizer_output_dir} "  # noqa
-                    f"profiling_file_contents = {profiling_file_contents}"  # noqa
-                )
-                res += float(profiling_file_contents.split()[2])
-        return res
-
-    log_likelihoods = pd.DataFrame(log_likelihoods, columns=["model", "LL"])
-    log_likelihoods.set_index(["model"], inplace=True)
-
-    for baseline in [True, False]:
-        plt.figure(figsize=(6.4, 4.8))
-        xs = list(log_likelihoods.index)
-        jtt_ll = log_likelihoods.loc["JTT", "LL"]
-        if baseline:
-            heights = log_likelihoods.LL - jtt_ll
-        else:
-            heights = -log_likelihoods.LL
-        print(f"xs = {xs}")
-        print(f"heights = {heights}")
-        plt.bar(
-            x=xs,
-            height=heights,
-        )
-        ax = plt.gca()
-        ax.yaxis.grid()
-        plt.xticks(rotation=90)
-        if baseline:
-            if TITLES:
-                plt.title(
-                    "Results on Pfam 15K data\n(held-out log-Likelihood "
-                    "improvement over JTT)"
-                )
-        else:
-            if TITLES:
-                plt.title(
-                    "Results on Pfam 15K data\n(held-out negative log-Likelihood)"
-                )
-        plt.tight_layout()
-        plt.savefig(
-            os.path.join(
-                output_image_dir,
-                f"log_likelihoods_{num_rate_categories}_{baseline}",
-            ),
-            dpi=300,
-        )
-        plt.close()
-
-
-# Supp Fig.
-def fig_relearn_LG_on_pfam15k_vary_num_families_train(
-    num_rate_categories: int = 4,
-    num_sequences_train: int = 128,
-    num_sequences_test: int = 128,
-    num_families_train_list: List[int] = [16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 12000],
-    num_families_test: int = 3000,
-    num_processes_tree_estimation: int = NUM_PROCESSES_TREE_ESTIMATION,
-    num_processes_counting: int = 8,
-    num_processes_optimization: int = 2,
-    use_simulated_data: bool = False,
-) -> Dict:
-    """
-    We apply CherryML to learn an 'updated' version of the LG rate matrix,
-    using 12K of the Pfam15k alignments as training data. We then evaluate
-    held-out LL on the remaining 3K test alignments. We show the LL gain
-    over the older rate matrices, using JTT as the baseline.
-    """
-    output_image_dir = f"images/fig_relearn_LG_on_pfam15k_vary_num_families_train__{num_sequences_train}_seqs_train__{num_sequences_test}_seqs_test"
-    if use_simulated_data:
-        output_image_dir += "_simulated"
-    if not os.path.exists(output_image_dir):
-        os.makedirs(output_image_dir)
-
-    caching.set_cache_dir("_cache_benchmarking")
-    caching.set_hash_len(64)
-
-    PFAM_15K_MSA_DIR = "input_data/a3m"
-    PFAM_15K_PDB_DIR = "input_data/pdb"
-
-    train_test_split_seed = 0
-
-    families_all_stable = get_families_within_cutoff(
-        pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
-        min_num_sites=190,
-        max_num_sites=230,
-        min_num_sequences=num_sequences_train,
-        max_num_sequences=1000000,
-    )
-
-    families_all_wo_stable = get_families_pfam_15k(
-        PFAM_15K_MSA_DIR,
-    )
-    assert(len(families_all_wo_stable) == 15051)
-    families_all_wo_stable = [x for x in families_all_wo_stable if x not in set(families_all_stable)]
-    assert(len(families_all_stable) + len(families_all_wo_stable) == 15051)
-    assert(len(set(families_all_stable + families_all_wo_stable)) == 15051)
-
-    np.random.seed(train_test_split_seed)
-    np.random.shuffle(families_all_stable)
-    np.random.shuffle(families_all_wo_stable)
-    families_all = families_all_stable + families_all_wo_stable
-
-    families_test = families_all[-num_families_test:]
-
-    def get_tot_sites(families_test: List[str]) -> int:
-        """
-        Total number of sites in the test families.
-        """
-        family_sizes = get_family_sizes(pfam_15k_msa_dir=PFAM_15K_MSA_DIR)
-        family_sizes = family_sizes[family_sizes.family.isin(families_test)]
-        tot_sites = family_sizes.num_sites.sum()
-        return tot_sites
-
-    tot_sites = get_tot_sites(families_test)
-
-    cherry_paths = []
-    for num_families_train in num_families_train_list:
-        families_train = families_all[:num_families_train]
-
-        # Subsample the training MSAs
-        if use_simulated_data:
-            msa_dir_train, _, _, _, _, _ = simulate_ground_truth_data_single_site(
-                pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
-                families=families_train,
-                num_sequences=num_sequences_train,
-                num_rate_categories=num_rate_categories,
-                num_processes=num_processes_tree_estimation,
-                random_seed=42,
-            )
-        else:
-            msa_dir_train = subsample_pfam_15k_msas(
-                pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
-                num_sequences=num_sequences_train,
-                families=families_train,
-                num_processes=num_processes_tree_estimation,
-            )["output_msa_dir"]
-
-        # Run the cherry method using FastTree tree estimator
-        cherry_path = lg_end_to_end_with_cherryml_optimizer(
-            msa_dir=msa_dir_train,
-            families=families_train,
-            tree_estimator=partial(
-                fast_tree,
-                num_rate_categories=num_rate_categories,
-            ),
-            initial_tree_estimator_rate_matrix_path=get_lg_path(),
-            num_processes_tree_estimation=num_processes_tree_estimation,
-            num_processes_optimization=num_processes_optimization,
-            num_processes_counting=num_processes_counting,
-        )["learned_rate_matrix_path"]
-        cherry_paths.append((f"LG w/CherryML,\n{num_families_train} MSAs", cherry_path))
-
-    # Subsample the testing MSAs
-    if use_simulated_data:
-        msa_dir_test, _, _, _, _, _ = simulate_ground_truth_data_single_site(
-            pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
-            families=families_test,
-            num_sequences=num_sequences_test,
-            num_rate_categories=num_rate_categories,
-            num_processes=num_processes_tree_estimation,
-            random_seed=42,
-        )
-    else:
-        msa_dir_test = subsample_pfam_15k_msas(
-            pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
-            num_sequences=num_sequences_test,
-            families=families_test,
-            num_processes=num_processes_tree_estimation,
-        )["output_msa_dir"]
-
-    log_likelihoods = []  # type: List[Tuple[str, float]]
-    single_site_rate_matrices = [
-        ("JTT", get_jtt_path()),
-        ("WAG", get_wag_path()),
-        ("LG (2008)", get_lg_path()),
-    ] + cherry_paths
-
-    for rate_matrix_name, rate_matrix_path in single_site_rate_matrices:
-        mutation_rate = compute_mutation_rate(
-            read_rate_matrix(rate_matrix_path)
-        )
-        print(
-            f"***** Evaluating: {rate_matrix_name} at {rate_matrix_path} ({num_rate_categories} rate categories) with global mutation rate {mutation_rate} *****"  # noqa
-        )
-        lls = evaluate_single_site_model_on_held_out_msas_w_tree_estimator(
-            msa_dir=msa_dir_test,
-            families=families_test,
-            rate_matrix_path=rate_matrix_path,
-            num_processes=num_processes_tree_estimation,
-            tree_estimator=partial(
-                fast_tree,
-                num_rate_categories=num_rate_categories,
-            ),
-        )
-        ll = np.sum(lls)
-        print(f"ll for {rate_matrix_name} = {ll}")
-        log_likelihoods.append((rate_matrix_name, ll))
-
-    def get_runtime(lg_end_to_end_with_cherryml_optimizer_res: str) -> float:
-        res = 0
-        for lg_end_to_end_with_cherryml_optimizer_output_dir in [
-            "count_matrices_dir_0",
-            "jtt_ipw_dir_0",
-            "rate_matrix_dir_0",
-        ]:
-            with open(
-                os.path.join(
-                    lg_end_to_end_with_cherryml_optimizer_res[
-                        lg_end_to_end_with_cherryml_optimizer_output_dir
-                    ],
-                    "profiling.txt",
-                ),
-                "r",
-            ) as profiling_file:
-                profiling_file_contents = profiling_file.read()
-                print(
-                    f"{lg_end_to_end_with_cherryml_optimizer_output_dir} "  # noqa
-                    f"profiling_file_contents = {profiling_file_contents}"  # noqa
-                )
-                res += float(profiling_file_contents.split()[2])
-        return res
-
-    log_likelihoods = pd.DataFrame(log_likelihoods, columns=["model", "LL"])
-    log_likelihoods.set_index(["model"], inplace=True)
-
-    for baseline in [True, False]:
-        plt.figure(figsize=(6.4, 4.8))
-        xs = list(log_likelihoods.index)
-        jtt_ll = log_likelihoods.loc["JTT", "LL"]
-        if baseline:
-            colors = ["blue", "blue"] + ["red"] * len(num_families_train_list)
-            heights = (log_likelihoods.LL - jtt_ll) / tot_sites
-            heights = heights[1:]
-            xs_subset = xs[1:]
-        else:
-            colors = ["blue", "blue", "blue"] + ["red"] * len(num_families_train_list)
-            heights = -log_likelihoods.LL / tot_sites
-            xs_subset = xs
-        print(f"xs = {xs}")
-        print(f"heights = {heights}")
-        plt.bar(
-            x=xs_subset,
-            height=heights,
-            color=colors,
-        )
-        ax = plt.gca()
-        ax.yaxis.grid()
-        plt.xticks(rotation=90)
-        fontsize = 14
-        plt.legend(
-            handles=[
-                mpatches.Patch(color="blue", label="Standard matrix"),
-                mpatches.Patch(color="red", label="CherryML"),
-            ],
-            fontsize=fontsize,
-        )
-        if baseline:
-            plt.ylabel(
-                "Average per-site log-likelihood\nimprovement over "
-                "JTT, in nats",
-                fontsize=fontsize,
-            )
-        else:
-            plt.ylabel(
-                "Average per-site log-likelihood, in nats",
-                fontsize=fontsize,
-            )
-        plt.tight_layout()
-        plt.savefig(
-            os.path.join(
-                output_image_dir,
-                f"log_likelihoods_{num_rate_categories}_{baseline}",
-            ),
-            dpi=300,
-        )
-        plt.close()
-
-
-# Supp Fig.
-def fig_relearn_LG_on_pfam15k_vary_num_families_train__em(
-    extra_em_command_line_args: str,
-    em_backend: str,
-    num_rate_categories: int = 4,
-    num_sequences_train: int = 128,
-    num_sequences_test: int = 128,
-    num_families_train_list: List[int] = [4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 12000],
-    num_families_test: int = 3000,
-    num_processes_tree_estimation: int = NUM_PROCESSES_TREE_ESTIMATION,
-    num_processes_counting: int = 8,
-    num_processes_optimization: int = 2,
-    use_simulated_data: bool = False,
-) -> Dict:
-    """
-    We apply EM to learn an 'updated' version of the LG rate matrix,
-    using 12K of the Pfam15k alignments as training data. We then evaluate
-    held-out LL on the remaining 3K test alignments. We show the LL gain
-    over the older rate matrices, using JTT as the baseline.
-    """
-    output_image_dir = f"images/fig_relearn_LG_on_pfam15k_vary_num_families_train__{num_sequences_train}_seqs_train__{num_sequences_test}_seqs_test__em"
-    if use_simulated_data:
-        output_image_dir += "_simulated"
-    if not os.path.exists(output_image_dir):
-        os.makedirs(output_image_dir)
-
-    caching.set_cache_dir("_cache_benchmarking")
-    caching.set_hash_len(64)
-
-    PFAM_15K_MSA_DIR = "input_data/a3m"
-    PFAM_15K_PDB_DIR = "input_data/pdb"
-
-    train_test_split_seed = 0
-
-    families_all_stable = get_families_within_cutoff(
-        pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
-        min_num_sites=190,
-        max_num_sites=230,
-        min_num_sequences=num_sequences_train,
-        max_num_sequences=1000000,
-    )
-
-    families_all_wo_stable = get_families_pfam_15k(
-        PFAM_15K_MSA_DIR,
-    )
-    assert(len(families_all_wo_stable) == 15051)
-    families_all_wo_stable = [x for x in families_all_wo_stable if x not in set(families_all_stable)]
-    assert(len(families_all_stable) + len(families_all_wo_stable) == 15051)
-    assert(len(set(families_all_stable + families_all_wo_stable)) == 15051)
-
-    np.random.seed(train_test_split_seed)
-    np.random.shuffle(families_all_stable)
-    np.random.shuffle(families_all_wo_stable)
-    families_all = families_all_stable + families_all_wo_stable
-
-    families_test = families_all[-num_families_test:]
-
-    def get_tot_sites(families_test: List[str]) -> int:
-        """
-        Total number of sites in the test families.
-        """
-        family_sizes = get_family_sizes(pfam_15k_msa_dir=PFAM_15K_MSA_DIR)
-        family_sizes = family_sizes[family_sizes.family.isin(families_test)]
-        tot_sites = family_sizes.num_sites.sum()
-        return tot_sites
-
-    tot_sites = get_tot_sites(families_test)
-
-    cherry_paths = []
-    for num_families_train in num_families_train_list:
-        families_train = families_all[:num_families_train]
-
-        # Subsample the training MSAs
-        if use_simulated_data:
-            msa_dir_train, _, _, _, _, _ = simulate_ground_truth_data_single_site(
-                pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
-                families=families_train,
-                num_sequences=num_sequences_train,
-                num_rate_categories=num_rate_categories,
-                num_processes=num_processes_tree_estimation,
-                random_seed=42,
-            )
-        else:
-            msa_dir_train = subsample_pfam_15k_msas(
-                pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
-                num_sequences=num_sequences_train,
-                families=families_train,
-                num_processes=num_processes_tree_estimation,
-            )["output_msa_dir"]
-
-        # Run the EM method using FastTree tree estimator
-        cherry_path = lg_end_to_end_with_em_optimizer(
-            msa_dir=msa_dir_train,
-            families=families_train,
-            tree_estimator=partial(
-                fast_tree,
-                num_rate_categories=num_rate_categories,
-            ),
-            initial_tree_estimator_rate_matrix_path=get_lg_path(),
-            extra_em_command_line_args=extra_em_command_line_args,
-            em_backend=em_backend,
-        )["learned_rate_matrix_path"]
-        cherry_paths.append((f"LG w/EM,\n{num_families_train} MSAs", cherry_path))
-
-    # Subsample the testing MSAs
-    if use_simulated_data:
-        msa_dir_test, _, _, _, _, _ = simulate_ground_truth_data_single_site(
-            pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
-            families=families_test,
-            num_sequences=num_sequences_test,
-            num_rate_categories=num_rate_categories,
-            num_processes=num_processes_tree_estimation,
-            random_seed=42,
-        )
-    else:
-        msa_dir_test = subsample_pfam_15k_msas(
-            pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
-            num_sequences=num_sequences_test,
-            families=families_test,
-            num_processes=num_processes_tree_estimation,
-        )["output_msa_dir"]
-
-    log_likelihoods = []  # type: List[Tuple[str, float]]
-    single_site_rate_matrices = [
-        ("JTT", get_jtt_path()),
-        ("WAG", get_wag_path()),
-        ("LG (2008)", get_lg_path()),
-    ] + cherry_paths
-
-    for rate_matrix_name, rate_matrix_path in single_site_rate_matrices:
-        mutation_rate = compute_mutation_rate(
-            read_rate_matrix(rate_matrix_path)
-        )
-        print(
-            f"***** Evaluating: {rate_matrix_name} at {rate_matrix_path} ({num_rate_categories} rate categories) with global mutation rate {mutation_rate} *****"  # noqa
-        )
-        lls = evaluate_single_site_model_on_held_out_msas_w_tree_estimator(
-            msa_dir=msa_dir_test,
-            families=families_test,
-            rate_matrix_path=rate_matrix_path,
-            num_processes=num_processes_tree_estimation,
-            tree_estimator=partial(
-                fast_tree,
-                num_rate_categories=num_rate_categories,
-            ),
-        )
-        ll = np.sum(lls)
-        print(f"ll for {rate_matrix_name} = {ll}")
-        log_likelihoods.append((rate_matrix_name, ll))
-
-    def get_runtime(lg_end_to_end_with_cherryml_optimizer_res: str) -> float:
-        res = 0
-        for lg_end_to_end_with_cherryml_optimizer_output_dir in [
-            "count_matrices_dir_0",
-            "jtt_ipw_dir_0",
-            "rate_matrix_dir_0",
-        ]:
-            with open(
-                os.path.join(
-                    lg_end_to_end_with_cherryml_optimizer_res[
-                        lg_end_to_end_with_cherryml_optimizer_output_dir
-                    ],
-                    "profiling.txt",
-                ),
-                "r",
-            ) as profiling_file:
-                profiling_file_contents = profiling_file.read()
-                print(
-                    f"{lg_end_to_end_with_cherryml_optimizer_output_dir} "  # noqa
-                    f"profiling_file_contents = {profiling_file_contents}"  # noqa
-                )
-                res += float(profiling_file_contents.split()[2])
-        return res
-
-    log_likelihoods = pd.DataFrame(log_likelihoods, columns=["model", "LL"])
-    log_likelihoods.set_index(["model"], inplace=True)
-
-    for baseline in [True, False]:
-        plt.figure(figsize=(6.4, 4.8))
-        xs = list(log_likelihoods.index)
-        jtt_ll = log_likelihoods.loc["JTT", "LL"]
-        if baseline:
-            colors = ["blue", "blue"] + ["red"] * len(num_families_train_list)
-            heights = (log_likelihoods.LL - jtt_ll) / tot_sites
-            heights = heights[1:]
-            xs_subset = xs[1:]
-        else:
-            colors = ["blue", "blue", "blue"] + ["red"] * len(num_families_train_list)
-            heights = -log_likelihoods.LL / tot_sites
-            xs_subset = xs
-        print(f"xs = {xs}")
-        print(f"heights = {heights}")
-        plt.bar(
-            x=xs_subset,
-            height=heights,
-            alpha=1.0,
-        )
-        ax = plt.gca()
-        ax.yaxis.grid()
-        plt.xticks(rotation=90)
-        fontsize = 14
-        plt.legend(
-            handles=[
-                mpatches.Patch(color="blue", label="Standard matrix"),
-                mpatches.Patch(color="red", label="CherryML"),
-            ],
-            fontsize=fontsize,
-        )
-        if baseline:
-            plt.ylabel(
-                "Average per-site log-likelihood\nimprovement over "
-                "JTT, in nats",
-                fontsize=fontsize,
-            )
-        else:
-            plt.ylabel(
-                "Average per-site log-likelihood, in nats",
-                fontsize=fontsize,
-            )
-        plt.tight_layout()
-        plt.savefig(
-            os.path.join(
-                output_image_dir,
-                f"log_likelihoods_{num_rate_categories}_{baseline}",
-            ),
-            dpi=300,
-        )
-        plt.close()
-
-
 def _get_qmaker_msa_dirs() -> Dict[str, str]:
     """
     Downloads the QMaker data (MSAs), converting them to our format in the
     process. Returns the paths to the directories containing the MSAs.
     """
     import zipfile
+
     import wget
 
     def download_qmaker_data():
         if not os.path.exists("qmaker_paper_data"):
-            print(f"Creating qmaker_paper_data directory ...")
+            print("Creating qmaker_paper_data directory ...")
             os.makedirs("qmaker_paper_data")
         else:
-            print(f"qmaker_paper_data directory already exists, not creating.")
+            print("qmaker_paper_data directory already exists, not creating.")
 
         if not os.path.exists("qmaker_paper_data/Pfam_datasets"):
             if not os.path.exists("qmaker_paper_data/Pfam_datasets.zip"):
-                print(f"Going to download QMaker data Pfam_datasets.zip ...")
+                print("Going to download QMaker data Pfam_datasets.zip ...")
                 wget.download(
                     "https://figshare.com/ndownloader/files/23922563",
-                    "qmaker_paper_data/Pfam_datasets.zip"
+                    "qmaker_paper_data/Pfam_datasets.zip",
                 )
             else:
-                print("qmaker_paper_data/Pfam_datasets.zip already exists, not downloading again.")
-            with zipfile.ZipFile("qmaker_paper_data/Pfam_datasets.zip", 'r') as zip_ref:
+                print(
+                    "qmaker_paper_data/Pfam_datasets.zip already exists, not downloading again."  # noqa
+                )
+            with zipfile.ZipFile(
+                "qmaker_paper_data/Pfam_datasets.zip", "r"
+            ) as zip_ref:
                 print("Going to unzip Pfam_datasets.zip ...")
                 zip_ref.extractall("qmaker_paper_data/")
         else:
             print("Will not download QMaker data Pfam_datasets again!")
 
         if not os.path.exists("qmaker_paper_data/Pfam_datasets/test.pfam"):
-            with zipfile.ZipFile("qmaker_paper_data/Pfam_datasets/test.pfam.zip", 'r') as zip_ref:
+            with zipfile.ZipFile(
+                "qmaker_paper_data/Pfam_datasets/test.pfam.zip", "r"
+            ) as zip_ref:
                 print("Going to unzip test.pfam.zip ...")
                 zip_ref.extractall("qmaker_paper_data/Pfam_datasets/")
         else:
             print("Will not unzip test.pfam.zip again!")
 
         if not os.path.exists("qmaker_paper_data/Pfam_datasets/train_pfam"):
-            with zipfile.ZipFile("qmaker_paper_data/Pfam_datasets/train_pfam.zip", 'r') as zip_ref:
+            with zipfile.ZipFile(
+                "qmaker_paper_data/Pfam_datasets/train_pfam.zip", "r"
+            ) as zip_ref:
                 print("Going to unzip train_pfam.zip ...")
                 zip_ref.extractall("qmaker_paper_data/Pfam_datasets/")
         else:
@@ -3181,6 +2372,7 @@ def _get_qmaker_msa_dirs() -> Dict[str, str]:
         """
         Converts the QMaker data into our MSA format.
         """
+
         def process_qmaker_pfam_msa(
             input_path: str,
             output_path: str,
@@ -3188,86 +2380,76 @@ def _get_qmaker_msa_dirs() -> Dict[str, str]:
             """
             Simply convert a QMaker PFAM MSA into our format.
             """
+
             def read_qmaker_pfam_msa(input_path: str) -> Dict[str, str]:
                 msa = {}
                 with open(input_path, "r") as input_file:
-                    contents = input_file.read().split('\n')
+                    contents = input_file.read().split("\n")
                     num_seqs, num_sites = map(int, contents[0].split())
-                    assert(len(contents[1:-1]) == num_seqs)
+                    assert len(contents[1:-1]) == num_seqs
                     for line in contents[1:-1]:
                         protein_name, protein_seq = line.split()
-                        protein_seq = protein_seq.replace('.', '-')
-                        assert(len(protein_seq) == num_sites)
+                        protein_seq = protein_seq.replace(".", "-")
+                        assert len(protein_seq) == num_sites
                         msa[protein_name] = protein_seq
                 return msa
+
             msa = read_qmaker_pfam_msa(input_path)
             write_msa(msa, output_path)
 
         def convert_qmaker_data__train_pfam():
-            if not os.path.exists("qmaker_paper_data/Pfam_datasets/train_pfam_processed"):
+            if not os.path.exists(
+                "qmaker_paper_data/Pfam_datasets/train_pfam_processed"
+            ):
                 print("Going to convert train_pfam into our MSA format ...")
-                os.makedirs("qmaker_paper_data/Pfam_datasets/train_pfam_processed")
-                pfam_train_families = sorted(list(os.listdir("qmaker_paper_data/Pfam_datasets/train_pfam")))
+                os.makedirs(
+                    "qmaker_paper_data/Pfam_datasets/train_pfam_processed"
+                )
+                pfam_train_families = sorted(
+                    list(
+                        os.listdir("qmaker_paper_data/Pfam_datasets/train_pfam")
+                    )
+                )
                 for protein_family_name in pfam_train_families:
                     process_qmaker_pfam_msa(
-                        input_path=f"qmaker_paper_data/Pfam_datasets/train_pfam/{protein_family_name}",
-                        output_path=f"qmaker_paper_data/Pfam_datasets/train_pfam_processed/{protein_family_name}.txt"
+                        input_path=f"qmaker_paper_data/Pfam_datasets/train_pfam/{protein_family_name}",  # noqa
+                        output_path=f"qmaker_paper_data/Pfam_datasets/train_pfam_processed/{protein_family_name}.txt",  # noqa
                     )
             else:
                 print("Will not create train_pfam_processed again!")
+
         convert_qmaker_data__train_pfam()
 
         def convert_qmaker_data__test_pfam():
-            if not os.path.exists("qmaker_paper_data/Pfam_datasets/test.pfam_processed"):
+            if not os.path.exists(
+                "qmaker_paper_data/Pfam_datasets/test.pfam_processed"
+            ):
                 print("Going to convert test.pfam into our MSA format ...")
-                os.makedirs("qmaker_paper_data/Pfam_datasets/test.pfam_processed")
-                pfam_test_families = sorted(list(os.listdir("qmaker_paper_data/Pfam_datasets/test.pfam")))
+                os.makedirs(
+                    "qmaker_paper_data/Pfam_datasets/test.pfam_processed"
+                )
+                pfam_test_families = sorted(
+                    list(
+                        os.listdir("qmaker_paper_data/Pfam_datasets/test.pfam")
+                    )
+                )
                 for protein_family_name in pfam_test_families:
                     process_qmaker_pfam_msa(
-                        input_path=f"qmaker_paper_data/Pfam_datasets/test.pfam/{protein_family_name}",
-                        output_path=f"qmaker_paper_data/Pfam_datasets/test.pfam_processed/{protein_family_name}.txt"
+                        input_path=f"qmaker_paper_data/Pfam_datasets/test.pfam/{protein_family_name}",  # noqa
+                        output_path=f"qmaker_paper_data/Pfam_datasets/test.pfam_processed/{protein_family_name}.txt",  # noqa
                     )
             else:
                 print("Will not create test.pfam_processed again!")
+
         convert_qmaker_data__test_pfam()
 
     download_qmaker_data()
     convert_qmaker_data()
     res = {
-        'pfam_train': 'qmaker_paper_data/Pfam_datasets/train_pfam_processed/',
-        'pfam_test': 'qmaker_paper_data/Pfam_datasets/test.pfam_processed/',
+        "pfam_train": "qmaker_paper_data/Pfam_datasets/train_pfam_processed/",
+        "pfam_test": "qmaker_paper_data/Pfam_datasets/test.pfam_processed/",
     }
     return res
-
-
-# def _rate_matrix_to_paml(  # Already have this in the _iqtree module
-#     rate_matrix_path: str,
-#     output_paml_path: str,
-# ) -> None:
-#     """
-#     Convert a rate matrix in standard format to PAML format.
-#     """
-#     rate_matrix_df = read_rate_matrix(rate_matrix_path)
-#     assert(list(rate_matrix_df.index) == utils.amino_acids)
-#     Q = rate_matrix_df.to_numpy()
-#     pi = compute_stationary_distribution(Q)
-#     exchangeabilities = np.zeros(shape=(20, 20))
-#     res = ""
-#     for i in range(20):
-#         for j in range(20):
-#             if i < j:
-#                 exchangeabilities[i, j] = Q[i, j] / pi[j]
-#                 if j:
-#                     res += " "
-#                 res += str(exchangeabilities[i, j])
-#         res += "\n"
-#     for i in range(20):
-#         if i:
-#             res += " "
-#         res += pi[i]
-#     res += "\n"
-#     with open(output_paml_path, "w") as output_file:
-#         output_file.write(res)
 
 
 def _paml_to_rate_matrix(
@@ -3280,9 +2462,9 @@ def _paml_to_rate_matrix(
     exchangeabilities = np.zeros(shape=(20, 20))
     pi = np.zeros(shape=(1, 20))
     with open(paml_path, "r") as paml_file:
-        lines = paml_file.read().split('\n')
+        lines = paml_file.read().split("\n")
         lines = [] + lines
-        assert(len(lines) == 22)
+        assert len(lines) == 22
         for i in range(20):
             exchangeabilities_i = list(map(float, lines[i].split()))
             for j in range(i):
@@ -3303,51 +2485,46 @@ def _paml_to_rate_matrix(
 
 
 def _get_qmaker_rate_matrix_names():
-    return ["Q.bird", "Q.insect", "Q.LG", "Q.mammal", "Q.pfam", "Q.plant", "Q.yeast"]
-
-
-def _get_qmaker_rate_matrix_path(rate_matrix_name: str):
-    if rate_matrix_name not in _get_qmaker_rate_matrix_names():
-        raise ValueError(
-            f"Unknown QMaker rate matrix name: {rate_matrix_name}. "
-            f"Available rate matrices: {_get_qmaker_rate_matrix_names()}"
-        )
-    return f"qmaker_paper_data/Matrices-normalized/{rate_matrix_name}_std"
+    return [
+        "Q.bird",
+        "Q.insect",
+        "Q.LG",
+        "Q.mammal",
+        "Q.pfam",
+        "Q.plant",
+        "Q.yeast",
+    ]
 
 
 def _get_qmaker_matrices():
     import zipfile
+
     import wget
 
     if not os.path.exists("qmaker_paper_data"):
-        print(f"Creating qmaker_paper_data directory ...")
+        print("Creating qmaker_paper_data directory ...")
         os.makedirs("qmaker_paper_data")
     else:
-        print(f"qmaker_paper_data directory already exists, not creating.")
+        print("qmaker_paper_data directory already exists, not creating.")
 
     if not os.path.exists("qmaker_paper_data/Matrices-normalized"):
         if not os.path.exists("qmaker_paper_data/Matrices-normalized.zip"):
-            print(f"Going to download QMaker data Matrices-normalized.zip ...")
+            print("Going to download QMaker data Matrices-normalized.zip ...")
             wget.download(
                 "https://figshare.com/ndownloader/files/25875906",
-                "qmaker_paper_data/Matrices-normalized.zip"
+                "qmaker_paper_data/Matrices-normalized.zip",
             )
         else:
-            print("qmaker_paper_data/Matrices-normalized.zip already exists, not downloading again.")
-        with zipfile.ZipFile("qmaker_paper_data/Matrices-normalized.zip", 'r') as zip_ref:
+            print(
+                "qmaker_paper_data/Matrices-normalized.zip already exists, not downloading again."  # noqa
+            )
+        with zipfile.ZipFile(
+            "qmaker_paper_data/Matrices-normalized.zip", "r"
+        ) as zip_ref:
             print("Going to unzip Matrices-normalized.zip ...")
             zip_ref.extractall("qmaker_paper_data/")
     else:
         print("Will not download QMaker data Matrices-normalized again!")
-    
-    for rate_matrix_name in _get_qmaker_rate_matrix_names():
-        paml_path = f"qmaker_paper_data/Matrices-normalized/{rate_matrix_name}"
-        output_rate_matrix_path = _get_qmaker_rate_matrix_path(rate_matrix_name)
-        if not os.path.exists(output_rate_matrix_path):
-            _paml_to_rate_matrix(
-                paml_path=paml_path,
-                output_rate_matrix_path=output_rate_matrix_path,
-            )
 
 
 def _fig_standard_benchmark(
@@ -3372,19 +2549,11 @@ def _fig_standard_benchmark(
     evaluator_name: str = "",
     extra_evaluator_command_line_args: str = "",
     initial_tree_estimator_rate_matrix_path: str = "",
-    figsize = (6.4, 4.8),
+    figsize=(6.4, 4.8),
 ):
     tree_estimator_plot_name = {
         "FastTree": "FT",
-        "IQTree-G-MAP": "IQG",
-        "IQTree-G-posterior_mean": "IQG",
-        "IQTree-R-MAP": "IQR",
-        "IQTree-R-posterior_mean": "IQR",
-        "ModelFinder-MAP": "MF",
-        "ModelFinder-posterior_mean": "MF",
-        "ModelFinderPlus-MAP": "MFP",
-        "ModelFinderPlus-posterior_mean": "MFP",
-        "PhyML": "P"
+        "PhyML": "P",
     }
     if tree_estimator_name not in tree_estimator_plot_name.keys():
         raise ValueError(
@@ -3404,7 +2573,6 @@ def _fig_standard_benchmark(
 
     if add_cherryml:
         # Run the CherryML method using tree_estimator_name tree estimator
-        print(f"Going to run CherryML. initial_tree_estimator_rate_matrix_path = {initial_tree_estimator_rate_matrix_path}")
         @caching.cached(
             exclude=[
                 "num_processes_tree_estimation",
@@ -3430,47 +2598,21 @@ def _fig_standard_benchmark(
             unhashable tree_estimator via hardcoding.
             """
             if tree_estimator_name == "FastTree":
-                concatenate_rate_matrices_when_iterating = False
                 tree_estimator = partial(
                     fast_tree,
                     num_rate_categories=num_rate_categories,
-                    extra_command_line_args=extra_tree_estimator_command_line_args,
-                )
-            elif tree_estimator_name.startswith("IQTree"):
-                concatenate_rate_matrices_when_iterating = False
-                tree_estimator_name, rate_model, rate_category_selector = tree_estimator_name.split("-")
-                tree_estimator = partial(
-                    iq_tree,
-                    rate_model=rate_model,
-                    num_rate_categories=num_rate_categories,
-                    use_model_finder=False,
-                    random_seed=1,
-                    rate_category_selector=rate_category_selector,
-                    extra_command_line_args=extra_tree_estimator_command_line_args,
-                )
-            elif tree_estimator_name.startswith("ModelFinder"):
-                concatenate_rate_matrices_when_iterating = True
-                mf_version, rate_category_selector = tree_estimator_name.split("-")
-                assert(mf_version in ["ModelFinder", "ModelFinderPlus"])
-                tree_estimator = partial(
-                    iq_tree,
-                    rate_model=None,
-                    num_rate_categories=None,
-                    use_model_finder=(mf_version == "ModelFinder"),
-                    use_model_finder_plus=(mf_version == "ModelFinderPlus"),
-                    random_seed=1,
-                    rate_category_selector=rate_category_selector,
-                    extra_command_line_args=extra_tree_estimator_command_line_args,
+                    extra_command_line_args=extra_tree_estimator_command_line_args,  # noqa
                 )
             elif tree_estimator_name == "PhyML":
-                concatenate_rate_matrices_when_iterating = False
-                assert(extra_tree_estimator_command_line_args == "")
+                assert extra_tree_estimator_command_line_args == ""
                 tree_estimator = partial(
                     phyml,
                     num_rate_categories=num_rate_categories,
                 )
             else:
-                raise ValueError(f"Unknown tree_estimator_name = '{tree_estimator_name}'")
+                raise ValueError(
+                    f"Unknown tree_estimator_name = '{tree_estimator_name}'"
+                )
 
             return lg_end_to_end_with_cherryml_optimizer(
                 msa_dir=msa_dir,
@@ -3481,37 +2623,32 @@ def _fig_standard_benchmark(
                 num_processes_optimization=num_processes_optimization,
                 num_processes_counting=num_processes_counting,
                 num_iterations=num_iterations,
-                concatenate_rate_matrices_when_iterating=concatenate_rate_matrices_when_iterating,
-                normalize_learned_rate_matrices=concatenate_rate_matrices_when_iterating,  # This makes most sense.
             )
 
-        cherry_res_dict = _fig_standard_benchmark__lg_end_to_end_with_cherryml_optimizer(
+        cherry_res_dict = _fig_standard_benchmark__lg_end_to_end_with_cherryml_optimizer(  # noqa
             msa_dir=msa_dir_train,
             families=families_train,
             num_rate_categories=num_rate_categories,
-            initial_tree_estimator_rate_matrix_path=initial_tree_estimator_rate_matrix_path,
+            initial_tree_estimator_rate_matrix_path=initial_tree_estimator_rate_matrix_path,  # noqa
             num_processes_tree_estimation=num_processes_tree_estimation,
             num_processes_optimization=num_processes_optimization,
             num_processes_counting=num_processes_counting,
             num_iterations=num_iterations,
             tree_estimator_name=tree_estimator_name,
-            extra_tree_estimator_command_line_args=extra_tree_estimator_command_line_args,
+            extra_tree_estimator_command_line_args=extra_tree_estimator_command_line_args,  # noqa
         )
         cherry_path = cherry_res_dict["learned_rate_matrix_path"]
-        print(f"Done running CherryML. initial_tree_estimator_rate_matrix_path = {initial_tree_estimator_rate_matrix_path}")
 
         with open(
             os.path.join(
                 output_image_dir,
                 "cherryml_profiling.txt",
             ),
-            "w"
+            "w",
         ) as profiling_file:
             profiling_file.write(cherry_res_dict["profiling_str"])
-        single_site_rate_matrices.append(("LG w/CherryML\n(re-estimated)", cherry_path))
-        convert_rate_matrix_to_paml_format(
-            read_rate_matrix(cherry_path).to_numpy(),
-            "fig_qmaker_revision__" + clade_name + "__CherryML_PAML.txt"
+        single_site_rate_matrices.append(
+            ("LG w/CherryML\n(re-estimated)", cherry_path)
         )
 
     if add_em:
@@ -3520,7 +2657,7 @@ def _fig_standard_benchmark(
             exclude=[
                 "num_processes_tree_estimation",
                 "num_processes_optimization",
-                "num_processes_counting"
+                "num_processes_counting",
             ]
         )
         def _fig_standard_benchmark__lg_end_to_end_with_em_optimizer(
@@ -3543,47 +2680,21 @@ def _fig_standard_benchmark(
             unhashable tree_estimator via hardcoding.
             """
             if tree_estimator_name == "FastTree":
-                concatenate_rate_matrices_when_iterating = False
                 tree_estimator = partial(
                     fast_tree,
                     num_rate_categories=num_rate_categories,
-                    extra_command_line_args=extra_tree_estimator_command_line_args,
-                )
-            elif tree_estimator_name.startswith("IQTree"):
-                concatenate_rate_matrices_when_iterating = False
-                tree_estimator_name, rate_model, rate_category_selector = tree_estimator_name.split("-")
-                tree_estimator = partial(
-                    iq_tree,
-                    rate_model=rate_model,
-                    num_rate_categories=num_rate_categories,
-                    use_model_finder=False,
-                    random_seed=1,
-                    rate_category_selector=rate_category_selector,
-                    extra_command_line_args=extra_tree_estimator_command_line_args,
-                )
-            elif tree_estimator_name.startswith("ModelFinder"):
-                concatenate_rate_matrices_when_iterating = True
-                mf_version, rate_category_selector = tree_estimator_name.split("-")
-                assert(mf_version in ["ModelFinder", "ModelFinderPlus"])
-                tree_estimator = partial(
-                    iq_tree,
-                    rate_model=None,
-                    num_rate_categories=None,
-                    use_model_finder=(mf_version == "ModelFinder"),
-                    use_model_finder_plus=(mf_version == "ModelFinderPlus"),
-                    random_seed=1,
-                    rate_category_selector=rate_category_selector,
-                    extra_command_line_args=extra_tree_estimator_command_line_args,
+                    extra_command_line_args=extra_tree_estimator_command_line_args,  # noqa
                 )
             elif tree_estimator_name == "PhyML":
-                concatenate_rate_matrices_when_iterating = False
-                assert(extra_tree_estimator_command_line_args == "")
+                assert extra_tree_estimator_command_line_args == ""
                 tree_estimator = partial(
                     phyml,
                     num_rate_categories=num_rate_categories,
                 )
             else:
-                raise ValueError(f"Unknown tree_estimator_name = '{tree_estimator_name}'")
+                raise ValueError(
+                    f"Unknown tree_estimator_name = '{tree_estimator_name}'"
+                )
 
             return lg_end_to_end_with_em_optimizer(
                 msa_dir=msa_dir,
@@ -3596,15 +2707,13 @@ def _fig_standard_benchmark(
                 num_iterations=num_iterations,
                 em_backend=em_backend,
                 extra_em_command_line_args=extra_em_command_line_args,
-                concatenate_rate_matrices_when_iterating=concatenate_rate_matrices_when_iterating,
-                normalize_learned_rate_matrices=concatenate_rate_matrices_when_iterating,  # This makes most sense.
             )
 
         em_res_dict = _fig_standard_benchmark__lg_end_to_end_with_em_optimizer(
             msa_dir=msa_dir_train,
             families=families_train,
             num_rate_categories=num_rate_categories,
-            initial_tree_estimator_rate_matrix_path=initial_tree_estimator_rate_matrix_path,
+            initial_tree_estimator_rate_matrix_path=initial_tree_estimator_rate_matrix_path,  # noqa
             num_processes_tree_estimation=num_processes_tree_estimation,
             num_processes_optimization=num_processes_optimization,
             num_processes_counting=num_processes_counting,
@@ -3612,23 +2721,19 @@ def _fig_standard_benchmark(
             em_backend="xrate",
             extra_em_command_line_args=extra_em_command_line_args,
             tree_estimator_name=tree_estimator_name,
-            extra_tree_estimator_command_line_args=extra_tree_estimator_command_line_args,
+            extra_tree_estimator_command_line_args=extra_tree_estimator_command_line_args,  # noqa
         )
         em_path = em_res_dict["learned_rate_matrix_path"]
 
         with open(
             os.path.join(
                 output_image_dir,
-                f"em_profiling_{extra_em_command_line_args.replace(' ', '_')}.txt",
+                f"em_profiling_{extra_em_command_line_args.replace(' ', '_')}.txt",  # noqa
             ),
-            "w"
+            "w",
         ) as profiling_file:
             profiling_file.write(em_res_dict["profiling_str"])
         single_site_rate_matrices.append(("LG w/EM\n(re-estimated)", em_path))
-        convert_rate_matrix_to_paml_format(
-            read_rate_matrix(cherry_path).to_numpy(),
-            "fig_qmaker_revision__" + clade_name + "__EM_PAML.txt"
-        )
 
     log_likelihoods = []  # type: List[Tuple[str, float]]
 
@@ -3644,7 +2749,7 @@ def _fig_standard_benchmark(
         @caching.cached(
             exclude=["num_processes"],
         )
-        def _fig_standard_benchmark__evaluate_single_site_model_on_held_out_msas_w_tree_estimator(
+        def _fig_standard_benchmark__evaluate_single_site_model_on_held_out_msas_w_tree_estimator(  # noqa
             msa_dir: str,
             families: List[str],
             rate_matrix_path: str,
@@ -3664,44 +2769,20 @@ def _fig_standard_benchmark(
                     num_rate_categories=num_rate_categories,
                     extra_command_line_args=extra_evaluator_command_line_args,
                 )
-                metric_name = "ll"
-            elif evaluator_name.startswith("IQTree"):
-                tree_estimator_name, rate_model = evaluator_name.split("-")
-                tree_estimator = partial(
-                    iq_tree,
-                    rate_model=rate_model,
-                    num_rate_categories=num_rate_categories,
-                    use_model_finder=False,
-                    random_seed=1,
-                    rate_category_selector="posterior_mean",
-                    extra_command_line_args=extra_evaluator_command_line_args,
-                )
-                metric_name = "ll"
-            elif evaluator_name in ["ModelFinder", "ModelFinderPlus"]:
-                tree_estimator = partial(
-                    iq_tree,
-                    rate_model=None,
-                    num_rate_categories=None,
-                    use_model_finder=(evaluator_name == "ModelFinder"),
-                    use_model_finder_plus=(evaluator_name == "ModelFinderPlus"),
-                    random_seed=1,
-                    rate_category_selector="posterior_mean",
-                    extra_command_line_args=extra_evaluator_command_line_args,
-                )
-                metric_name = "bic"
             else:
-                raise ValueError(f"Unknown tree_estimator_name = '{tree_estimator_name}'")
+                raise ValueError(
+                    f"Unknown tree_estimator_name = '{tree_estimator_name}'"
+                )
             lls = evaluate_single_site_model_on_held_out_msas_w_tree_estimator(
                 msa_dir=msa_dir,
                 families=families,
                 rate_matrix_path=rate_matrix_path,
                 num_processes=num_processes,
                 tree_estimator=tree_estimator,
-                metric_name=metric_name,
             )
             return lls
 
-        lls = _fig_standard_benchmark__evaluate_single_site_model_on_held_out_msas_w_tree_estimator(
+        lls = _fig_standard_benchmark__evaluate_single_site_model_on_held_out_msas_w_tree_estimator(  # noqa
             msa_dir=msa_dir_test,
             families=families_test,
             rate_matrix_path=rate_matrix_path,
@@ -3712,44 +2793,36 @@ def _fig_standard_benchmark(
         )
         ll = np.sum(lls)
 
-        print(f"ll for {rate_matrix_name} = {ll}")
         log_likelihoods.append((rate_matrix_name, ll))
         per_family_lls.append((rate_matrix_name, lls))
 
-    def get_pct_wins(per_family_lls: List[Tuple[str, List[float]]], rate_matrix_name: str, metric_name: str) -> float:
+    def get_pct_wins(
+        per_family_lls: List[Tuple[str, List[float]]],
+        rate_matrix_name: str,
+    ) -> float:
         res = 0
         num_families = len(per_family_lls[0][1])
         num_models = len(per_family_lls)
-        this_models_index = [j for j in range(num_models) if per_family_lls[j][0] == rate_matrix_name]
-        assert(len(this_models_index) == 1)
+        this_models_index = [
+            j
+            for j in range(num_models)
+            if per_family_lls[j][0] == rate_matrix_name
+        ]
+        assert len(this_models_index) == 1
         this_models_index = this_models_index[0]
-        function = None
-        if metric_name == "ll":
-            function = max
-        elif metric_name == "bic":
-            function = min
-        else:
-            raise Exception(f"Unknown metric_name = {metric_name}")
         for i in range(num_families):
             model_lls = [per_family_lls[j][1][i] for j in range(num_models)]
-            if function(model_lls) == per_family_lls[this_models_index][1][i]:
+            if max(model_lls) == per_family_lls[this_models_index][1][i]:
                 res += 1
         return res / num_families
-
-    metric_name = None
-    if evaluator_name == "FastTree":
-        metric_name = "ll"
-    elif evaluator_name.startswith("IQTree"):
-        metric_name = "ll"
-    elif evaluator_name in ["ModelFinder", "ModelFinderPlus"]:
-        metric_name = "bic"
-    else:
-        raise Exception(f"Unknown evaluator_name = {evaluator_name}")
 
     def make_plot_qmaker_fig_2a():
         plt.figure(figsize=figsize)
         xs = [x[0] for x in single_site_rate_matrices]
-        heights = [get_pct_wins(per_family_lls, rate_matrix_name, metric_name) for rate_matrix_name in xs]
+        heights = [
+            get_pct_wins(per_family_lls, rate_matrix_name)
+            for rate_matrix_name in xs
+        ]
         print(f"win_pcts = {heights}")
         colors = ["blue"] * len(xs)
         if add_cherryml:
@@ -3780,15 +2853,13 @@ def _fig_standard_benchmark(
             fontsize=fontsize,
         )
         if TITLES:
-            plt.title(
-                "Percentage of test datasets best fit by each model."
-            )
+            plt.title("Percentage of test datasets best fit by each model.")
         plt.tight_layout()
         img_path = f"pct_best_{num_rate_categories}_CherryML_{add_cherryml}"
         if add_cherryml:
             img_path += f"_num_iterations_{num_iterations}"
         if add_em:
-            img_path += f"_EM" + "_" + extra_em_command_line_args.split('.')[-1]
+            img_path += "_EM" + "_" + extra_em_command_line_args.split(".")[-1]
         plt.savefig(
             os.path.join(
                 output_image_dir,
@@ -3797,6 +2868,7 @@ def _fig_standard_benchmark(
             dpi=300,
         )
         plt.close()
+
     make_plot_qmaker_fig_2a()
 
     def get_runtime(lg_end_to_end_with_cherryml_optimizer_res: str) -> float:
@@ -3828,27 +2900,23 @@ def _fig_standard_benchmark(
 
     @caching.cached()
     def _fig_standard_benchmark__get_tot_sites(
-        msa_dir: str,
-        families: List[str]
+        msa_dir: str, families: List[str]
     ):
         """
         Get total number of sites in testing data.
         """
         res = 0
         for family in families:
-            msa_path = os.path.join(
-                msa_dir,
-                family + ".txt"
-            )
+            msa_path = os.path.join(msa_dir, family + ".txt")
             msa = read_msa(msa_path)
             res += len(list(msa.values())[0])
         return res
+
     tot_sites = _fig_standard_benchmark__get_tot_sites(
         msa_dir=msa_dir_test,
         families=families_test,
     )
 
-    # for baseline in [True, False]:
     for baseline in [True]:
         plt.figure(figsize=figsize)
         xs = list(log_likelihoods.index)
@@ -3860,8 +2928,6 @@ def _fig_standard_benchmark(
             xs_to_plot = xs[1:]
         else:
             heights = -log_likelihoods.LL / tot_sites
-        if metric_name == "bic":
-            heights = -heights
         print(f"xs = {xs}")
         print(f"heights = {heights}")
         colors = ["blue"] * len(xs_to_plot)
@@ -3885,14 +2951,14 @@ def _fig_standard_benchmark(
         )
         ax = plt.gca()
         ax.yaxis.grid()
-        plt.xticks(rotation=90 if len(xs) > 5 else 0, fontsize=fontsize)
-        # plt.ylabel("Average per-site log-likelihood\nimprovement over JTT, in nats")
+        plt.xticks(rotation=0, fontsize=fontsize)
+        # plt.ylabel("Average per-site log-likelihood\nimprovement over JTT, in nats")  # noqa
         plt.tight_layout()
-        img_path = f"log_likelihoods_{num_rate_categories}_{baseline}_CherryML_{add_cherryml}"
+        img_path = f"log_likelihoods_{num_rate_categories}_{baseline}_CherryML_{add_cherryml}"  # noqa
         if add_cherryml:
             img_path += f"_num_iterations_{num_iterations}"
         if add_em:
-            img_path += f"_EM" + "_" + extra_em_command_line_args.split('.')[-1]
+            img_path += "_EM" + "_" + extra_em_command_line_args.split(".")[-1]
         plt.savefig(
             os.path.join(
                 output_image_dir,
@@ -3902,99 +2968,12 @@ def _fig_standard_benchmark(
         )
         plt.close()
 
-    # Plot QMaker's matrix vs CherryML vs LG
-    if add_cherryml and f"Q.{clade_name}" in [x[0] for x in single_site_rate_matrices]:
-        print(f"single_site_rate_matrices = {single_site_rate_matrices}")
-        rate_matrices_to_plot_against_each_other = [
-            "LG",
-            "LG w/CherryML",
-            f"Q.{clade_name}"
-        ]
-        for rm1_name in rate_matrices_to_plot_against_each_other:
-            for rm2_name in rate_matrices_to_plot_against_each_other:
-                if rm1_name < rm2_name:
-                    rm1_path = [y for (x, y) in single_site_rate_matrices if x == rm1_name][0]
-                    rm2_path = [y for (x, y) in single_site_rate_matrices if x == rm2_name][0]
-                    rm1 = read_rate_matrix(rm1_path).to_numpy()
-                    rm2 = read_rate_matrix(rm2_path).to_numpy()
-                    plot_rate_matrix_predictions(
-                        rm1,
-                        rm2,
-                        mask_matrix=None,
-                        density_plot=False
-                    )
-                    plt.xlabel(rm1_name)
-                    plt.ylabel(rm2_name)
-                    plt.tight_layout()
-                    img_path = rm1_name.replace(' ', '_').replace('/','_') + "__vs__" + rm2_name.replace(' ', '_').replace('/','_') + ".png"
-                    plt.savefig(
-                        os.path.join(
-                            output_image_dir,
-                            img_path,
-                        ),
-                        dpi=300,
-                    )
-                    plt.close()
-
-
-def fig_qmaker_pfam(
-    num_families_test: Optional[int] = None,
-    add_cherryml: bool = False,
-    add_em: bool = False,
-    extra_em_command_line_args: str = "-log 6 -f 3 -mi 0.000001",
-    num_iterations: int = 1,
-    tree_estimator_name: str = "FastTree",
-    extra_tree_estimator_command_line_args: str = "",
-    evaluator_name: str = "FastTree",
-    extra_evaluator_command_line_args: str = "",
-    initial_tree_estimator_rate_matrix_path: str = "",
-):
-    """
-    Reproduce Fig. 2a from QMaker paper.
-    """
-    _get_qmaker_matrices()
-
-    qmaker_data_dirs = _get_qmaker_msa_dirs()
-    msa_dir_train = qmaker_data_dirs['pfam_train']
-    msa_dir_test = qmaker_data_dirs['pfam_test']
-    del qmaker_data_dirs
-
-    _fig_standard_benchmark(
-        msa_dir_train=msa_dir_train,
-        msa_dir_test=msa_dir_test,
-        output_image_dir="images/fig_QMaker/pfam",
-        cache_dir="_cache_benchmarking_qmaker",
-        single_site_rate_matrices=[
-            ("JTT", get_jtt_path()),
-            ("WAG", get_wag_path()),
-            ("LG", get_lg_path()),
-        ] + [
-            (f"Q.pfam", _get_qmaker_rate_matrix_path(f"Q.pfam"))
-        ] + [
-            (f"Q.{x}", _get_qmaker_rate_matrix_path(f"Q.{x}"))
-            for x in _get_qmaker_5_clades_names()
-        ],
-        num_families_test=num_families_test,
-        add_cherryml=add_cherryml,
-        add_em=add_em,
-        extra_em_command_line_args=extra_em_command_line_args,
-        num_iterations=num_iterations,
-        clade_name="pfam",
-        tree_estimator_name=tree_estimator_name,
-        extra_tree_estimator_command_line_args=extra_tree_estimator_command_line_args,
-        evaluator_name=evaluator_name,
-        extra_evaluator_command_line_args=extra_evaluator_command_line_args,
-        initial_tree_estimator_rate_matrix_path=initial_tree_estimator_rate_matrix_path,
-    )
-
 
 def _get_qmaker_5_clades_names():
     return ["plant", "bird", "mammal", "insect", "yeast"]
 
 
-def _read_msa_nexus(
-    nexus_path: str
-) -> Dict[str, str]:
+def _read_msa_nexus(nexus_path: str) -> Dict[str, str]:
     """
     Read a Nexus MSA (e.g. 'alignment.nex')
     """
@@ -4005,29 +2984,29 @@ def _read_msa_nexus(
                 continue
             line = line.strip()
             if i == 2:
-                assert(line.startswith("dimensions"))
-                num_seqs = int(line.split(' ')[1].split('=')[1])
-                num_sites = int(line.split(' ')[2][:-1].split('=')[1])
+                assert line.startswith("dimensions")
+                num_seqs = int(line.split(" ")[1].split("=")[1])
+                num_sites = int(line.split(" ")[2][:-1].split("=")[1])
                 continue
             if i == 3:
-                assert(line.strip() == "format datatype=protein missing=X gap=-;")
+                assert (
+                    line.strip() == "format datatype=protein missing=X gap=-;"
+                )
                 continue
             if i == 4:
-                assert(line.strip() == "matrix")
+                assert line.strip() == "matrix"
                 continue
             if len(res) == num_seqs:
-                assert(line == ";" or line == "")
+                assert line == ";" or line == ""
                 break
             seq_name, seq = line.split()
-            assert(len(seq) == num_sites)
+            assert len(seq) == num_sites
             res[seq_name] = seq
     return res
 
 
 def _create_qmaker_msa_dir(
-    msa: Dict[str, str],
-    partition_nexus_path: str,
-    output_dir: str
+    msa: Dict[str, str], partition_nexus_path: str, output_dir: str
 ):
     """
     Given the MSA and partition_nexus_path, create 1 MSA per
@@ -4035,21 +3014,22 @@ def _create_qmaker_msa_dir(
     """
     loci = []
     with open(partition_nexus_path, "r") as partition_nexus_file:
-        lines = partition_nexus_file.read().split('\n')
-        assert(lines[0].strip().lower() == "#nexus")
-        assert(lines[1].strip() == "begin sets;")
-        assert(lines[-1].strip() == '')
+        lines = partition_nexus_file.read().split("\n")
+        assert lines[0].strip().lower() == "#nexus"
+        assert lines[1].strip() == "begin sets;"
+        assert lines[-1].strip() == ""
         lines = lines[:-1]
-        assert(lines[-1].strip() == "end;")
+        assert lines[-1].strip() == "end;"
         for line in lines[2:-1]:
-            tokens = line.strip().split(' ')
-            start, end = int(tokens[-1].split('-')[0]), int(tokens[-1].split('-')[1][:-1])
-            assert(start <= end)
+            tokens = line.strip().split(" ")
+            start, end = int(tokens[-1].split("-")[0]), int(
+                tokens[-1].split("-")[1][:-1]
+            )
+            assert start <= end
             loci.append((start, end))
     for (start, end) in loci:
         msa_locus = {
-            seq_name: seq[start - 1: end]
-            for (seq_name, seq) in msa.items()
+            seq_name: seq[start - 1 : end] for (seq_name, seq) in msa.items()
         }
         write_msa(
             msa_locus,
@@ -4059,12 +3039,17 @@ def _create_qmaker_msa_dir(
 
 def _convert_qmaker_clade_msas(clade_name: str) -> Dict[str, str]:
     import zipfile
-    if not os.path.exists(f"qmaker_paper_data/05_clades/{clade_name}/alignment.nex"):
+
+    if not os.path.exists(
+        f"qmaker_paper_data/05_clades/{clade_name}/alignment.nex"
+    ):
         if clade_name == "insect":
             os.system(
-                f"mv qmaker_paper_data/05_clades/{clade_name}/alignment.zip qmaker_paper_data/05_clades/{clade_name}/alignment.nex.zip"
+                f"mv qmaker_paper_data/05_clades/{clade_name}/alignment.zip qmaker_paper_data/05_clades/{clade_name}/alignment.nex.zip"  # noqa
             )
-        with zipfile.ZipFile(f"qmaker_paper_data/05_clades/{clade_name}/alignment.nex.zip", 'r') as zip_ref:
+        with zipfile.ZipFile(
+            f"qmaker_paper_data/05_clades/{clade_name}/alignment.nex.zip", "r"
+        ) as zip_ref:
             print(f"Going to unzip {clade_name}/alignment.nex.zip ...")
             zip_ref.extractall(f"qmaker_paper_data/05_clades/{clade_name}/")
     if not os.path.exists(f"qmaker_paper_data/05_clades/{clade_name}_train/"):
@@ -4075,16 +3060,16 @@ def _convert_qmaker_clade_msas(clade_name: str) -> Dict[str, str]:
         )
         _create_qmaker_msa_dir(
             msa=msa,
-            partition_nexus_path=f"qmaker_paper_data/05_clades/{clade_name}/train.nex",
+            partition_nexus_path=f"qmaker_paper_data/05_clades/{clade_name}/train.nex",  # noqa
             output_dir=f"qmaker_paper_data/05_clades/{clade_name}_train/",
         )
         _create_qmaker_msa_dir(
             msa=msa,
-            partition_nexus_path=f"qmaker_paper_data/05_clades/{clade_name}/test.nex",
+            partition_nexus_path=f"qmaker_paper_data/05_clades/{clade_name}/test.nex",  # noqa
             output_dir=f"qmaker_paper_data/05_clades/{clade_name}_test/",
         )
     return {
-        f"{clade_name}_train": f"qmaker_paper_data/05_clades/{clade_name}_train/",
+        f"{clade_name}_train": f"qmaker_paper_data/05_clades/{clade_name}_train/",  # noqa
         f"{clade_name}_test": f"qmaker_paper_data/05_clades/{clade_name}_test/",
     }
 
@@ -4094,24 +3079,27 @@ def _get_qmaker_5_clades_msa_dirs() -> Dict[str, str]:
     Downloads and converts the clade MSAs into our MSA format.
     """
     import zipfile
+
     import wget
 
     if not os.path.exists("qmaker_paper_data"):
-        print(f"Creating qmaker_paper_data directory ...")
+        print("Creating qmaker_paper_data directory ...")
         os.makedirs("qmaker_paper_data")
     else:
-        print(f"qmaker_paper_data directory already exists, not creating.")
+        print("qmaker_paper_data directory already exists, not creating.")
 
     if not os.path.exists("qmaker_paper_data/05_clades"):
         if not os.path.exists("qmaker_paper_data/05_clades.zip"):
-            print(f"Going to download QMaker data 05_clades.zip ...")
+            print("Going to download QMaker data 05_clades.zip ...")
             wget.download(
                 "https://figshare.com/ndownloader/files/25872621",
-                "qmaker_paper_data/05_clades.zip"
+                "qmaker_paper_data/05_clades.zip",
             )
         else:
-            print("qmaker_paper_data/05_clades.zip already exists, not downloading again.")
-        with zipfile.ZipFile("qmaker_paper_data/05_clades.zip", 'r') as zip_ref:
+            print(
+                "qmaker_paper_data/05_clades.zip already exists, not downloading again."  # noqa
+            )
+        with zipfile.ZipFile("qmaker_paper_data/05_clades.zip", "r") as zip_ref:
             print("Going to unzip 05_clades.zip ...")
             zip_ref.extractall("qmaker_paper_data/")
     else:
@@ -4121,218 +3109,6 @@ def _get_qmaker_5_clades_msa_dirs() -> Dict[str, str]:
     for clade_name in _get_qmaker_5_clades_names():
         res.update(_convert_qmaker_clade_msas(clade_name))
     return res
-
-
-def fig_qmaker_clade(
-    clade_name: str,
-    num_families_test: Optional[int] = None,
-    add_cherryml: bool = False,
-    add_em: bool = False,
-    extra_em_command_line_args: str = "-log 6 -f 3 -mi 0.000001",
-    num_iterations: int = 1,
-    tree_estimator_name: str = "FastTree",
-    extra_tree_estimator_command_line_args: str = "",
-    evaluator_name: str = "FastTree",
-    extra_evaluator_command_line_args: str = "",
-    initial_tree_estimator_rate_matrix_path: str = "",
-):
-    """
-    Reproduce Fig. 2x from QMaker paper, for the given clade_name
-    """
-    _get_qmaker_matrices()
-
-    qmaker_data_dirs = _get_qmaker_5_clades_msa_dirs()
-    msa_dir_train = qmaker_data_dirs[f'{clade_name}_train']
-    msa_dir_test = qmaker_data_dirs[f'{clade_name}_test']
-    del qmaker_data_dirs
-
-    _fig_standard_benchmark(
-        msa_dir_train=msa_dir_train,
-        msa_dir_test=msa_dir_test,
-        output_image_dir=f"images/fig_QMaker_{evaluator_name}/{clade_name}",
-        cache_dir="_cache_benchmarking_qmaker",
-        single_site_rate_matrices=[
-            ("JTT", get_jtt_path()),
-            ("WAG", get_wag_path()),
-            ("LG", get_lg_path()),
-        ] + [
-            (f"Q.pfam", _get_qmaker_rate_matrix_path(f"Q.pfam"))
-        ] + [
-            (f"Q.{x}", _get_qmaker_rate_matrix_path(f"Q.{x}"))
-            for x in _get_qmaker_5_clades_names()
-        ],
-        num_families_test=num_families_test,
-        add_cherryml=add_cherryml,
-        add_em=add_em,
-        extra_em_command_line_args=extra_em_command_line_args,
-        num_iterations=num_iterations,
-        clade_name=clade_name,
-        tree_estimator_name=tree_estimator_name,
-        extra_tree_estimator_command_line_args=extra_tree_estimator_command_line_args,
-        evaluator_name=evaluator_name,
-        extra_evaluator_command_line_args=extra_evaluator_command_line_args,
-        initial_tree_estimator_rate_matrix_path=initial_tree_estimator_rate_matrix_path,
-    )
-
-
-def fig_qmaker_plant_deprecated(): # Deprecated because used MF, not MFP
-    """
-    Reproduce QMaker's Plant figure as reported in QMaker paper.
-
-    This gives the same results as calling:
-    figures.fig_qmaker_clade(
-        clade_name="plant",
-        evaluator_name="ModelFinder",
-    )
-    which shows that running ModelFinder on all rate matrices separately and
-    then manually determining the best model with BIC gives the exact same
-    results. Thus, there is no need to run ModelFinder on all matrices together
-    for the purposes of evaluation. For caching purposes, it is better to
-    evaluate each rate matrix separately.
-
-    # Results from this function:
-    win_pcts = {
-        'data/rate_matrices/jtt.txt': 0,
-        'data/rate_matrices/wag.txt': 0.006493506493506494,
-        'data/rate_matrices/lg.txt': 0.00974025974025974,
-        'qmaker_paper_data/Matrices-normalized/Q.pfam_std': 0,
-        'qmaker_paper_data/Matrices-normalized/Q.plant_std': 0.9188311688311706,
-        'qmaker_paper_data/Matrices-normalized/Q.bird_std': 0,
-        'qmaker_paper_data/Matrices-normalized/Q.mammal_std': 0.02597402597402598,
-        'qmaker_paper_data/Matrices-normalized/Q.insect_std': 0.029220779220779227,
-        'qmaker_paper_data/Matrices-normalized/Q.yeast_std': 0.00974025974025974
-    }
-    # Results from figures.fig_qmaker_clade(clade_name="plant", evaluator_name="ModelFinder"):
-    win_pcts = [
-        0.0,
-        0.006493506493506494,
-        0.00974025974025974,
-        0.0,
-        0.9188311688311688,
-        0.0,
-        0.025974025974025976,
-        0.02922077922077922,
-        0.00974025974025974
-    ]
-    """
-    caching.set_cache_dir("_cache_benchmarking_qmaker_plant")
-
-    _get_qmaker_matrices()
-
-    msa_dir = "demo_data/plant_test"
-    families = get_families(msa_dir)
-    rate_matrices_list = [
-        get_jtt_path(),
-        get_wag_path(),
-        get_lg_path(),
-        _get_qmaker_rate_matrix_path("Q.pfam"),
-        _get_qmaker_rate_matrix_path("Q.plant"),
-        _get_qmaker_rate_matrix_path("Q.bird"),
-        _get_qmaker_rate_matrix_path("Q.mammal"),
-        _get_qmaker_rate_matrix_path("Q.insect"),
-        _get_qmaker_rate_matrix_path("Q.yeast")
-    ]
-
-    iq_tree_dict = iq_tree(
-        msa_dir=msa_dir,
-        families=families,
-        rate_matrix_path=",".join(
-            rate_matrices_list
-        ),
-        rate_model=None,
-        num_rate_categories=None,
-        num_processes=NUM_PROCESSES_TREE_ESTIMATION,
-        extra_command_line_args="",
-        rate_category_selector="MAP",
-        use_model_finder=True,
-        random_seed=1,
-    )
-    win_pcts = {x: 0 for x in rate_matrices_list}
-    for family in families:
-        model = open(os.path.join(iq_tree_dict["output_likelihood_dir"], family + ".model")).read().strip()
-        assert model in rate_matrices_list
-        win_pcts[model] += 1 / len(families)
-    print(f"win_pcts = {win_pcts}")
-
-
-def fig_qmaker_plant():
-    """
-    Reproduce QMaker's Plant figure as reported in QMaker paper.
-
-    This gives the same results as calling:
-    figures.fig_qmaker_clade(
-        clade_name="plant",
-        evaluator_name="ModelFinderPlus",
-    )
-    which shows that running ModelFinderPlus on all rate matrices separately and
-    then manually determining the best model with BIC gives the exact same
-    results. Thus, there is no need to run ModelFinderPlus on all matrices
-    together for the purposes of evaluation. For caching purposes, it is better
-    to evaluate each rate matrix separately.
-
-    # Results from this function:
-    win_pcts = {
-        'data/rate_matrices/jtt.txt': 0,
-        'data/rate_matrices/wag.txt': 0.006493506493506494,
-        'data/rate_matrices/lg.txt': 0.00974025974025974,
-        'qmaker_paper_data/Matrices-normalized/Q.pfam_std': 0,
-        'qmaker_paper_data/Matrices-normalized/Q.plant_std': 0.9188311688311706,
-        'qmaker_paper_data/Matrices-normalized/Q.bird_std': 0,
-        'qmaker_paper_data/Matrices-normalized/Q.mammal_std': 0.02597402597402598,
-        'qmaker_paper_data/Matrices-normalized/Q.insect_std': 0.029220779220779227,
-        'qmaker_paper_data/Matrices-normalized/Q.yeast_std': 0.00974025974025974
-    }
-    # Results from figures.fig_qmaker_clade(clade_name="plant", evaluator_name="ModelFinderPlus"):
-    win_pcts = [
-        0.0,
-        0.006493506493506494,
-        0.003246753246753247,
-        0.0,
-        0.935064935064935,
-        0.0,
-        0.025974025974025976,
-        0.02922077922077922,
-        0.0
-    ]
-    """
-    caching.set_cache_dir("_cache_benchmarking_qmaker_plant")
-
-    _get_qmaker_matrices()
-
-    msa_dir = "demo_data/plant_test"
-    families = get_families(msa_dir)
-    rate_matrices_list = [
-        get_jtt_path(),
-        get_wag_path(),
-        get_lg_path(),
-        _get_qmaker_rate_matrix_path("Q.pfam"),
-        _get_qmaker_rate_matrix_path("Q.plant"),
-        _get_qmaker_rate_matrix_path("Q.bird"),
-        _get_qmaker_rate_matrix_path("Q.mammal"),
-        _get_qmaker_rate_matrix_path("Q.insect"),
-        _get_qmaker_rate_matrix_path("Q.yeast")
-    ]
-
-    iq_tree_dict = iq_tree(
-        msa_dir=msa_dir,
-        families=families,
-        rate_matrix_path=",".join(
-            rate_matrices_list
-        ),
-        rate_model=None,
-        num_rate_categories=None,
-        num_processes=NUM_PROCESSES_TREE_ESTIMATION,
-        extra_command_line_args="",
-        rate_category_selector="MAP",
-        use_model_finder_plus=True,
-        random_seed=1,
-    )
-    win_pcts = {x: 0 for x in rate_matrices_list}
-    for family in families:
-        model = open(os.path.join(iq_tree_dict["output_likelihood_dir"], family + ".model")).read().strip()
-        assert model in rate_matrices_list
-        win_pcts[model] += 1 / len(families)
-    print(f"win_pcts = {win_pcts}")
 
 
 # Supp. Fig.
@@ -4348,7 +3124,6 @@ def fig_qmaker(
     evaluator_name: str = "FastTree",
     extra_evaluator_command_line_args: str = "",
     initial_tree_estimator_rate_matrix_path: str = get_lg_path(),
-    include_qmaker_matrices: bool = False,
     num_processes_tree_estimation: int = NUM_PROCESSES_TREE_ESTIMATION,
 ):
     """
@@ -4358,21 +3133,15 @@ def fig_qmaker(
     _get_qmaker_matrices()
 
     qmaker_data_dirs = _get_qmaker_5_clades_msa_dirs()
-    msa_dir_train = qmaker_data_dirs[f'{clade_name}_train']
-    msa_dir_test = qmaker_data_dirs[f'{clade_name}_test']
+    msa_dir_train = qmaker_data_dirs[f"{clade_name}_train"]
+    msa_dir_test = qmaker_data_dirs[f"{clade_name}_test"]
     del qmaker_data_dirs
 
-    single_site_rate_matrices=[
+    single_site_rate_matrices = [
         ("JTT", get_jtt_path()),
         ("WAG\nrate matrix", get_wag_path()),
         ("LG\nrate matrix", get_lg_path()),
     ]
-
-    if include_qmaker_matrices:
-        single_site_rate_matrices += [
-            (f"Q.{x}", _get_qmaker_rate_matrix_path(f"Q.{x}"))
-            for x in _get_qmaker_5_clades_names()
-        ]
 
     _fig_standard_benchmark(
         msa_dir_train=msa_dir_train,
@@ -4387,84 +3156,10 @@ def fig_qmaker(
         num_iterations=num_iterations,
         clade_name=clade_name,
         tree_estimator_name=tree_estimator_name,
-        extra_tree_estimator_command_line_args=extra_tree_estimator_command_line_args,
+        extra_tree_estimator_command_line_args=extra_tree_estimator_command_line_args,  # noqa
         evaluator_name=evaluator_name,
         extra_evaluator_command_line_args=extra_evaluator_command_line_args,
-        initial_tree_estimator_rate_matrix_path=initial_tree_estimator_rate_matrix_path,
-        figsize=(6.4, 4.8) if not include_qmaker_matrices else (8.4, 6.8),
+        initial_tree_estimator_rate_matrix_path=initial_tree_estimator_rate_matrix_path,  # noqa
+        figsize=(6.4, 4.8),
         num_processes_tree_estimation=num_processes_tree_estimation,
     )
-
-
-def hardcoded_figure(
-    xs: List[str],
-    heights: List[float],
-    colors: List[str],
-    output_fig_path: str,
-    handles_list_of_tuples: Optional,
-    figsize: Tuple[float, float] = (6.4, 4.8),
-    rotation: int = 0,
-    fontsize: int = 14,
-):
-    """
-    Like LG paper Fig. 4 and QMaker Fig but hardcoded
-    """
-    if figsize:
-        plt.figure(figsize=figsize)
-    plt.bar(
-        x=xs,
-        height=heights,
-        color=colors,
-    )
-    ax = plt.gca()
-    ax.yaxis.grid()
-    plt.xticks(rotation=rotation, fontsize=fontsize)
-    plt.tight_layout()
-    if handles_list_of_tuples is not None:
-        plt.legend(
-            handles=[
-                mpatches.Patch(color=c, label=l)
-                for (c, l) in handles_list_of_tuples
-            ],
-            fontsize=fontsize,
-        )
-    plt.savefig(
-        os.path.join(
-            output_fig_path
-        ),
-        dpi=300,
-    )
-    plt.close()
-
-
-def fig_qmaker_hardcoded(clade_name: str):
-    xs = ["JTT", "WAG", "LG", "Q.pfam", "Q.plant", "Q.bird", "Q.mammal", "Q.insect", "Q.yeast", "LG w/CherryML", "LG w/EM"]
-    _xs = ["JTT", "WAG", "LG", "Q.pfam", "Q.plant", "Q.bird", "Q.mammal", "Q.insect", "Q.yeast", "Q.CherryML", "Q.EM"]
-    colors = ["blue", "blue", "blue", "black", "black", "black", "black", "black", "black", "red", "yellow"]
-    heights = []
-    for x in _xs:
-        with open(f"model_finder_outputs/model_findel_output_{clade_name}_repro_{x}.iqtree", "r") as model_finder_file:
-            for line in model_finder_file:
-                if line.startswith("Bayesian information criterion (BIC) score:"):
-                    heights.append(float(line.split()[-1]))
-    xs = xs[1:]
-    heights = [heights[0] - x for x in heights][1:]
-    colors = colors[1:]
-    assert(len(xs) == len(heights))
-    assert(len(xs) == len(colors))
-    handles_list_of_tuples = [
-        ("blue", "Standard rate matrix"),
-        ("black", "QMaker matrix"),
-        ("red", "CherryML"),
-        ("yellow", "EM"),
-    ]
-    hardcoded_figure(
-        xs=xs,
-        heights=heights,
-        colors=colors,
-        output_fig_path=f"qmaker_{clade_name}_fig",
-        handles_list_of_tuples=handles_list_of_tuples,
-        rotation=90,
-        figsize=(8.4, 6.8),
-    )
-# 212
