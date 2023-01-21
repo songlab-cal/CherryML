@@ -219,7 +219,6 @@ def fig_single_site_cherry(
     random_seed: int = 0,
 ):
     caching.set_cache_dir("_cache_benchmarking_em")
-    caching.set_hash_len(64)
 
     output_image_dir = "images/fig_single_site_cherry"
     if not os.path.exists(output_image_dir):
@@ -407,7 +406,6 @@ def fig_single_site_em(
         os.makedirs(output_image_dir)
 
     caching.set_cache_dir("_cache_benchmarking_em")
-    caching.set_hash_len(64)
 
     num_families_train_list = [4, 8, 16, 32, 64, 128, 256, 512, 1024]
 
@@ -666,7 +664,6 @@ def fig_single_site_quantization_error(
     enough.
     """
     caching.set_cache_dir("_cache_benchmarking")
-    caching.set_hash_len(64)
 
     output_image_dir = "images/fig_single_site_quantization_error"
     if not os.path.exists(output_image_dir):
@@ -1116,7 +1113,6 @@ def learn_coevolution_model_on_pfam15k(
         os.makedirs(output_image_dir)
 
     caching.set_cache_dir("_cache_benchmarking")
-    caching.set_hash_len(64)
 
     PFAM_15K_MSA_DIR = "input_data/a3m"
     PFAM_15K_PDB_DIR = "input_data/pdb"
@@ -1419,7 +1415,6 @@ def fig_pair_site_quantization_error(
         os.makedirs(output_image_dir)
 
     caching.set_cache_dir("_cache_benchmarking")
-    caching.set_hash_len(64)
 
     qs = [
         (0.03, 1.1, 64),
@@ -2108,7 +2103,6 @@ def fig_site_rates_vs_number_of_contacts(
         os.makedirs(output_image_dir)
 
     caching.set_cache_dir("_cache_benchmarking")
-    caching.set_hash_len(64)
 
     PFAM_15K_MSA_DIR = "input_data/a3m"
     PFAM_15K_PDB_DIR = "input_data/pdb"
@@ -2230,7 +2224,6 @@ def fig_MSA_VI_cotransition(
         os.makedirs(output_image_dir)
 
     caching.set_cache_dir("_cache_benchmarking")
-    caching.set_hash_len(64)
 
     PFAM_15K_MSA_DIR = "input_data/a3m"
 
@@ -2315,218 +2308,6 @@ def fig_MSA_VI_cotransition(
                         )
 
 
-def _get_qmaker_msa_dirs() -> Dict[str, str]:
-    """
-    Downloads the QMaker data (MSAs), converting them to our format in the
-    process. Returns the paths to the directories containing the MSAs.
-    """
-    import zipfile
-
-    import wget
-
-    def download_qmaker_data():
-        if not os.path.exists("qmaker_paper_data"):
-            print("Creating qmaker_paper_data directory ...")
-            os.makedirs("qmaker_paper_data")
-        else:
-            print("qmaker_paper_data directory already exists, not creating.")
-
-        if not os.path.exists("qmaker_paper_data/Pfam_datasets"):
-            if not os.path.exists("qmaker_paper_data/Pfam_datasets.zip"):
-                print("Going to download QMaker data Pfam_datasets.zip ...")
-                wget.download(
-                    "https://figshare.com/ndownloader/files/23922563",
-                    "qmaker_paper_data/Pfam_datasets.zip",
-                )
-            else:
-                print(
-                    "qmaker_paper_data/Pfam_datasets.zip already exists, not downloading again."  # noqa
-                )
-            with zipfile.ZipFile(
-                "qmaker_paper_data/Pfam_datasets.zip", "r"
-            ) as zip_ref:
-                print("Going to unzip Pfam_datasets.zip ...")
-                zip_ref.extractall("qmaker_paper_data/")
-        else:
-            print("Will not download QMaker data Pfam_datasets again!")
-
-        if not os.path.exists("qmaker_paper_data/Pfam_datasets/test.pfam"):
-            with zipfile.ZipFile(
-                "qmaker_paper_data/Pfam_datasets/test.pfam.zip", "r"
-            ) as zip_ref:
-                print("Going to unzip test.pfam.zip ...")
-                zip_ref.extractall("qmaker_paper_data/Pfam_datasets/")
-        else:
-            print("Will not unzip test.pfam.zip again!")
-
-        if not os.path.exists("qmaker_paper_data/Pfam_datasets/train_pfam"):
-            with zipfile.ZipFile(
-                "qmaker_paper_data/Pfam_datasets/train_pfam.zip", "r"
-            ) as zip_ref:
-                print("Going to unzip train_pfam.zip ...")
-                zip_ref.extractall("qmaker_paper_data/Pfam_datasets/")
-        else:
-            print("Will not unzip train_pfam.zip again!")
-
-    def convert_qmaker_data():
-        """
-        Converts the QMaker data into our MSA format.
-        """
-
-        def process_qmaker_pfam_msa(
-            input_path: str,
-            output_path: str,
-        ) -> None:
-            """
-            Simply convert a QMaker PFAM MSA into our format.
-            """
-
-            def read_qmaker_pfam_msa(input_path: str) -> Dict[str, str]:
-                msa = {}
-                with open(input_path, "r") as input_file:
-                    contents = input_file.read().split("\n")
-                    num_seqs, num_sites = map(int, contents[0].split())
-                    assert len(contents[1:-1]) == num_seqs
-                    for line in contents[1:-1]:
-                        protein_name, protein_seq = line.split()
-                        protein_seq = protein_seq.replace(".", "-")
-                        assert len(protein_seq) == num_sites
-                        msa[protein_name] = protein_seq
-                return msa
-
-            msa = read_qmaker_pfam_msa(input_path)
-            write_msa(msa, output_path)
-
-        def convert_qmaker_data__train_pfam():
-            if not os.path.exists(
-                "qmaker_paper_data/Pfam_datasets/train_pfam_processed"
-            ):
-                print("Going to convert train_pfam into our MSA format ...")
-                os.makedirs(
-                    "qmaker_paper_data/Pfam_datasets/train_pfam_processed"
-                )
-                pfam_train_families = sorted(
-                    list(
-                        os.listdir("qmaker_paper_data/Pfam_datasets/train_pfam")
-                    )
-                )
-                for protein_family_name in pfam_train_families:
-                    process_qmaker_pfam_msa(
-                        input_path=f"qmaker_paper_data/Pfam_datasets/train_pfam/{protein_family_name}",  # noqa
-                        output_path=f"qmaker_paper_data/Pfam_datasets/train_pfam_processed/{protein_family_name}.txt",  # noqa
-                    )
-            else:
-                print("Will not create train_pfam_processed again!")
-
-        convert_qmaker_data__train_pfam()
-
-        def convert_qmaker_data__test_pfam():
-            if not os.path.exists(
-                "qmaker_paper_data/Pfam_datasets/test.pfam_processed"
-            ):
-                print("Going to convert test.pfam into our MSA format ...")
-                os.makedirs(
-                    "qmaker_paper_data/Pfam_datasets/test.pfam_processed"
-                )
-                pfam_test_families = sorted(
-                    list(
-                        os.listdir("qmaker_paper_data/Pfam_datasets/test.pfam")
-                    )
-                )
-                for protein_family_name in pfam_test_families:
-                    process_qmaker_pfam_msa(
-                        input_path=f"qmaker_paper_data/Pfam_datasets/test.pfam/{protein_family_name}",  # noqa
-                        output_path=f"qmaker_paper_data/Pfam_datasets/test.pfam_processed/{protein_family_name}.txt",  # noqa
-                    )
-            else:
-                print("Will not create test.pfam_processed again!")
-
-        convert_qmaker_data__test_pfam()
-
-    download_qmaker_data()
-    convert_qmaker_data()
-    res = {
-        "pfam_train": "qmaker_paper_data/Pfam_datasets/train_pfam_processed/",
-        "pfam_test": "qmaker_paper_data/Pfam_datasets/test.pfam_processed/",
-    }
-    return res
-
-
-def _paml_to_rate_matrix(
-    paml_path: str,
-    output_rate_matrix_path: str,
-) -> None:
-    """
-    Convert a rate matrix in PAML format to the standard rate matrix format.
-    """
-    exchangeabilities = np.zeros(shape=(20, 20))
-    pi = np.zeros(shape=(1, 20))
-    with open(paml_path, "r") as paml_file:
-        lines = paml_file.read().split("\n")
-        lines = [] + lines
-        assert len(lines) == 22
-        for i in range(20):
-            exchangeabilities_i = list(map(float, lines[i].split()))
-            for j in range(i):
-                exchangeabilities[i, j] = exchangeabilities_i[j]
-                exchangeabilities[j, i] = exchangeabilities_i[j]
-        pi[0, :] = list(map(float, lines[-1].split()))
-    Q = np.zeros(shape=(20, 20))
-    for i in range(20):
-        for j in range(20):
-            if i != j:
-                Q[i, j] = pi[0, j] * exchangeabilities[i, j]
-            else:
-                Q[i, j] = 0
-    for i in range(20):
-        Q[i, i] = -sum(Q[i, :])
-    # Q = normalized(Q)
-    write_rate_matrix(Q, utils.amino_acids, output_rate_matrix_path)
-
-
-def _get_qmaker_rate_matrix_names():
-    return [
-        "Q.bird",
-        "Q.insect",
-        "Q.LG",
-        "Q.mammal",
-        "Q.pfam",
-        "Q.plant",
-        "Q.yeast",
-    ]
-
-
-def _get_qmaker_matrices():
-    import zipfile
-
-    import wget
-
-    if not os.path.exists("qmaker_paper_data"):
-        print("Creating qmaker_paper_data directory ...")
-        os.makedirs("qmaker_paper_data")
-    else:
-        print("qmaker_paper_data directory already exists, not creating.")
-
-    if not os.path.exists("qmaker_paper_data/Matrices-normalized"):
-        if not os.path.exists("qmaker_paper_data/Matrices-normalized.zip"):
-            print("Going to download QMaker data Matrices-normalized.zip ...")
-            wget.download(
-                "https://figshare.com/ndownloader/files/25875906",
-                "qmaker_paper_data/Matrices-normalized.zip",
-            )
-        else:
-            print(
-                "qmaker_paper_data/Matrices-normalized.zip already exists, not downloading again."  # noqa
-            )
-        with zipfile.ZipFile(
-            "qmaker_paper_data/Matrices-normalized.zip", "r"
-        ) as zip_ref:
-            print("Going to unzip Matrices-normalized.zip ...")
-            zip_ref.extractall("qmaker_paper_data/")
-    else:
-        print("Will not download QMaker data Matrices-normalized again!")
-
-
 def _fig_standard_benchmark(
     msa_dir_train: str,
     msa_dir_test: str,
@@ -2551,11 +2332,7 @@ def _fig_standard_benchmark(
     initial_tree_estimator_rate_matrix_path: str = "",
     figsize=(6.4, 4.8),
 ):
-    tree_estimator_plot_name = {
-        "FastTree": "FT",
-        "PhyML": "P",
-    }
-    if tree_estimator_name not in tree_estimator_plot_name.keys():
+    if tree_estimator_name not in ["FastTree", "PhyML"]:
         raise ValueError(
             f"Unknown tree_estimator_name: '{tree_estimator_name}'"
         )
@@ -2564,7 +2341,6 @@ def _fig_standard_benchmark(
         os.makedirs(output_image_dir)
 
     caching.set_cache_dir(cache_dir)
-    caching.set_hash_len(64)
 
     families_train = get_families(msa_dir_train)
     families_test = get_families(msa_dir_test)
@@ -2795,105 +2571,6 @@ def _fig_standard_benchmark(
 
         log_likelihoods.append((rate_matrix_name, ll))
         per_family_lls.append((rate_matrix_name, lls))
-
-    def get_pct_wins(
-        per_family_lls: List[Tuple[str, List[float]]],
-        rate_matrix_name: str,
-    ) -> float:
-        res = 0
-        num_families = len(per_family_lls[0][1])
-        num_models = len(per_family_lls)
-        this_models_index = [
-            j
-            for j in range(num_models)
-            if per_family_lls[j][0] == rate_matrix_name
-        ]
-        assert len(this_models_index) == 1
-        this_models_index = this_models_index[0]
-        for i in range(num_families):
-            model_lls = [per_family_lls[j][1][i] for j in range(num_models)]
-            if max(model_lls) == per_family_lls[this_models_index][1][i]:
-                res += 1
-        return res / num_families
-
-    def make_plot_qmaker_fig_2a():
-        plt.figure(figsize=figsize)
-        xs = [x[0] for x in single_site_rate_matrices]
-        heights = [
-            get_pct_wins(per_family_lls, rate_matrix_name)
-            for rate_matrix_name in xs
-        ]
-        print(f"win_pcts = {heights}")
-        colors = ["blue"] * len(xs)
-        if add_cherryml:
-            colors = colors[1:] + ["red"]
-        if add_em:
-            colors = colors[1:] + ["yellow"]
-            plt.legend(
-                handles=[
-                    mpatches.Patch(color="blue", label="Standard rate matrix"),
-                    mpatches.Patch(color="red", label="CherryML"),
-                    mpatches.Patch(color="yellow", label="EM"),
-                ],
-                fontsize=fontsize,
-            )
-        plt.bar(
-            x=xs,
-            height=heights,
-            color=colors,
-            alpha=1.0,
-        )
-        ax = plt.gca()
-        ax.yaxis.grid()
-        plt.xticks(rotation=90 if len(xs) > 5 else 0, fontsize=fontsize)
-        plt.ylim((0, 1))
-        plt.yticks(
-            ticks=[0, 0.25, 0.50, 0.75, 1.00],
-            labels=["0%", "25%", "50%", "75%", "100%"],
-            fontsize=fontsize,
-        )
-        if TITLES:
-            plt.title("Percentage of test datasets best fit by each model.")
-        plt.tight_layout()
-        img_path = f"pct_best_{num_rate_categories}_CherryML_{add_cherryml}"
-        if add_cherryml:
-            img_path += f"_num_iterations_{num_iterations}"
-        if add_em:
-            img_path += "_EM" + "_" + extra_em_command_line_args.split(".")[-1]
-        plt.savefig(
-            os.path.join(
-                output_image_dir,
-                img_path,
-            ),
-            dpi=300,
-        )
-        plt.close()
-
-    make_plot_qmaker_fig_2a()
-
-    def get_runtime(lg_end_to_end_with_cherryml_optimizer_res: str) -> float:
-        res = 0
-        for lg_end_to_end_with_cherryml_optimizer_output_dir in [
-            "count_matrices_dir_0",
-            "jtt_ipw_dir_0",
-            "rate_matrix_dir_0",
-        ]:
-            with open(
-                os.path.join(
-                    lg_end_to_end_with_cherryml_optimizer_res[
-                        lg_end_to_end_with_cherryml_optimizer_output_dir
-                    ],
-                    "profiling.txt",
-                ),
-                "r",
-            ) as profiling_file:
-                profiling_file_contents = profiling_file.read()
-                print(
-                    f"{lg_end_to_end_with_cherryml_optimizer_output_dir} "  # noqa
-                    f"profiling_file_contents = {profiling_file_contents}"  # noqa
-                )
-                res += float(profiling_file_contents.split()[2])
-        return res
 
     log_likelihoods = pd.DataFrame(log_likelihoods, columns=["model", "LL"])
     log_likelihoods.set_index(["model"], inplace=True)
@@ -3130,7 +2807,6 @@ def fig_qmaker(
     We show on the clades datasets that CherryML performs comparatively to EM
     while being faster, even when taking into account tree estimation.
     """
-    _get_qmaker_matrices()
 
     qmaker_data_dirs = _get_qmaker_5_clades_msa_dirs()
     msa_dir_train = qmaker_data_dirs[f"{clade_name}_train"]
