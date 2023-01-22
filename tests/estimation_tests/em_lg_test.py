@@ -39,6 +39,7 @@ class TestEMLG(unittest.TestCase):
                 f"{DATA_DIR}/site_rates_dir",
                 get_amino_acids(),
                 stock_dir,
+                missing_data_character="x",
             )
             self.assertEqual(
                 res,
@@ -57,7 +58,6 @@ class TestEMLG(unittest.TestCase):
         ./test_input_data/stock_dir_trifurcation/fam1_{i}.txt
         """
         with tempfile.TemporaryDirectory() as stock_dir:
-            stock_dir = "stock_dir"
             res = _translate_tree_and_msa_to_stock_format(
                 "fam1",
                 f"{DATA_DIR}/tree_dir_trifurcation",
@@ -65,6 +65,7 @@ class TestEMLG(unittest.TestCase):
                 f"{DATA_DIR}/site_rates_dir",
                 get_amino_acids(),
                 stock_dir,
+                missing_data_character="x",
             )
             self.assertEqual(
                 res,
@@ -81,10 +82,10 @@ class TestEMLG(unittest.TestCase):
         """
         with tempfile.NamedTemporaryFile("w") as historian_init_file:
             historian_init_path = historian_init_file.name
-            historian_init_path = "historian_init_path"
             _translate_rate_matrix_to_historian_format(
                 initialization_rate_matrix_path=get_lg_path(),
                 historian_init_path=historian_init_path,
+                missing_data_character="x",
             )
             filepath_1 = f"{DATA_DIR}/historian_init.json"
             filepath_2 = historian_init_path

@@ -26,9 +26,16 @@ if __name__ == "__main__":
     # ~ 1 min
 
     figures.fig_lg_paper()  # Fig. 1e
-    # ~ 4 hr
+    # ~ 20 hr
 
     figures.fig_computational_and_stat_eff_cherry_vs_em()  # Fig. 1b, 1c
     # ~ 62 hr
+
+    # Supp Fig.
+    figures.fig_qmaker(clade_name="plant")
+    figures.fig_qmaker(clade_name="insect")
+    figures.fig_qmaker(clade_name="bird")
+    figures.fig_qmaker(clade_name="mammal")
+    # ~ 3 days
 
     print("Creating figures done!")

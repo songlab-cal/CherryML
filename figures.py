@@ -23,6 +23,7 @@ from collections import defaultdict
 from functools import partial
 from typing import Dict, List, Optional, Tuple
 
+import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -64,6 +65,7 @@ from cherryml.io import (
     read_rate_matrix,
     read_site_rates,
     write_count_matrices,
+    write_msa,
     write_probability_distribution,
     write_rate_matrix,
     write_sites_subset,
@@ -213,9 +215,8 @@ def fig_single_site_cherry(
     random_seed: int = 0,
 ):
     caching.set_cache_dir("_cache_benchmarking_em")
-    caching.set_hash_len(64)
 
-    output_image_dir = f"images/fig_single_site_cherry"
+    output_image_dir = "images/fig_single_site_cherry"
     if not os.path.exists(output_image_dir):
         os.makedirs(output_image_dir)
 
@@ -380,7 +381,7 @@ def fig_single_site_cherry(
 
 
 def fig_single_site_em(
-    extra_em_command_line_args: str = "-band 0 -fixgaprates -mininc 0.000001 -maxiter 100000000 -nolaplace",  # noqa
+    extra_em_command_line_args: str = "-log 6 -f 3 -mi 0.000001",
     num_processes: int = 4,
     num_rate_categories: int = 1,
     num_sequences: int = 128,
@@ -394,7 +395,6 @@ def fig_single_site_em(
         os.makedirs(output_image_dir)
 
     caching.set_cache_dir("_cache_benchmarking_em")
-    caching.set_hash_len(64)
 
     num_families_train_list = [4, 8, 16, 32, 64, 128, 256, 512, 1024]
 
@@ -527,7 +527,9 @@ def fig_single_site_em(
 
 
 # Fig. 1b, 1c
-def fig_computational_and_stat_eff_cherry_vs_em():
+def fig_computational_and_stat_eff_cherry_vs_em(
+    extra_em_command_line_args: str = "-log 6 -f 3 -mi 0.000001",
+):
     fontsize = 14
 
     output_image_dir = "images/fig_computational_and_stat_eff_cherry_vs_em"
@@ -541,7 +543,9 @@ def fig_computational_and_stat_eff_cherry_vs_em():
     ) = fig_single_site_cherry()
     cherry_times = [int(x) for x in cherry_times]
     cherry_errors = [float("%.1f" % (100 * x)) for x in cherry_errors_nonpct]
-    num_families_em, em_errors_nonpct, em_times = fig_single_site_em()
+    num_families_em, em_errors_nonpct, em_times = fig_single_site_em(
+        extra_em_command_line_args=extra_em_command_line_args,
+    )
     em_times = [int(x) for x in em_times]
     em_errors = [float("%.1f" % (100 * x)) for x in em_errors_nonpct]
     assert num_families_cherry == num_families_em
@@ -611,7 +615,6 @@ def fig_single_site_quantization_error(
     enough.
     """
     caching.set_cache_dir("_cache_benchmarking")
-    caching.set_hash_len(64)
 
     output_image_dir = "images/fig_single_site_quantization_error"
     if not os.path.exists(output_image_dir):
@@ -704,7 +707,7 @@ def fig_single_site_quantization_error(
         )
         if TITLES:
             plt.title(
-                "True vs predicted rate matrix entries\nmax quantization error = "
+                "True vs predicted rate matrix entries\nmax quantization error = "  # noqa
                 "%.1f%% (%i quantization points)" % (q_errors[i], q_points[i])
             )
         plt.tight_layout()
@@ -751,9 +754,10 @@ def fig_lg_paper(
     num_rate_categories: int = 4,
     figsize=(6.4, 4.8),
     rate_estimator_names: List[Tuple[str, str]] = [
-        ("reproduced WAG", "WAG"),
-        ("reproduced LG", "LG"),
-        ("Cherry__4", "LG w/CherryML"),
+        ("reproduced WAG", "WAG\nrate matrix"),
+        ("reproduced LG", "LG\nrate matrix"),
+        ("Cherry__4", "LG w/CherryML\n(re-estimated)"),
+        ("EM_FT__4__0.000001", "LG w/EM\n(re-estimated)"),
     ],
     baseline_rate_estimator_name: Tuple[str, str] = ("reproduced JTT", "JTT"),
     num_processes: int = 4,
@@ -769,7 +773,6 @@ def fig_lg_paper(
         os.makedirs(output_image_dir)
 
     caching.set_cache_dir("_cache_lg_paper")
-    caching.set_hash_len(64)
 
     get_lg_PfamTrainingAlignments_data(lg_pfam_training_alignments_dir)
     get_lg_PfamTestingAlignments_data(lg_pfam_testing_alignments_dir)
@@ -871,56 +874,29 @@ def chain_product_cached(
     )
 
 
-def evaluate_single_site_model_on_held_out_msas(
+def evaluate_single_site_model_on_held_out_msas_w_tree_estimator(
     msa_dir: str,
     families: List[str],
     rate_matrix_path: str,
     num_processes: int,
     tree_estimator: PhylogenyEstimatorType,
-):
+) -> List[float]:
     """
     Evaluate a reversible single-site model on held out msas.
     """
-    # First estimate the trees
-    tree_estimator_output_dirs = tree_estimator(
+    output_likelihood_dir = tree_estimator(
         msa_dir=msa_dir,
         families=families,
         rate_matrix_path=rate_matrix_path,
         num_processes=num_processes,
-    )
-    tree_dir = tree_estimator_output_dirs["output_tree_dir"]
-    site_rates_dir = tree_estimator_output_dirs["output_site_rates_dir"]
-    output_probability_distribution_dir = get_stationary_distribution(
-        rate_matrix_path=rate_matrix_path,
-    )["output_probability_distribution_dir"]
-    pi_1_path = os.path.join(output_probability_distribution_dir, "result.txt")
-    output_likelihood_dir = compute_log_likelihoods(
-        tree_dir=tree_dir,
-        msa_dir=msa_dir,
-        site_rates_dir=site_rates_dir,
-        contact_map_dir=None,
-        families=families,
-        amino_acids=utils.get_amino_acids(),
-        pi_1_path=pi_1_path,
-        Q_1_path=rate_matrix_path,
-        reversible_1=True,
-        device_1="cpu",
-        pi_2_path=None,
-        Q_2_path=None,
-        reversible_2=None,
-        device_2=None,
-        num_processes=num_processes,
-        use_cpp_implementation=False,
-        OMP_NUM_THREADS=1,
-        OPENBLAS_NUM_THREADS=1,
     )["output_likelihood_dir"]
     lls = []
     for family in families:
         ll = read_log_likelihood(
             os.path.join(output_likelihood_dir, f"{family}.txt")
-        )
-        lls.append(ll[0])
-    return np.sum(lls)
+        )[0]
+        lls.append(ll)
+    return lls
 
 
 def evaluate_pair_site_model_on_held_out_msas(
@@ -931,7 +907,7 @@ def evaluate_pair_site_model_on_held_out_msas(
     rate_matrix_2_path: str,
     num_processes: int,
     tree_estimator: PhylogenyEstimatorType,
-):
+) -> float:
     """
     Evaluate a reversible single-site model and coevolution model on held out
     msas.
@@ -1089,7 +1065,6 @@ def learn_coevolution_model_on_pfam15k(
         os.makedirs(output_image_dir)
 
     caching.set_cache_dir("_cache_benchmarking")
-    caching.set_hash_len(64)
 
     PFAM_15K_MSA_DIR = "input_data/a3m"
     PFAM_15K_PDB_DIR = "input_data/pdb"
@@ -1158,7 +1133,7 @@ def learn_coevolution_model_on_pfam15k(
         print(
             f"***** Evaluating: {rate_matrix_name} at {rate_matrix_path} ({num_rate_categories} rate categories) with global mutation rate {mutation_rate} *****"  # noqa
         )
-        ll = evaluate_single_site_model_on_held_out_msas(
+        lls = evaluate_single_site_model_on_held_out_msas_w_tree_estimator(
             msa_dir=msa_dir_test,
             families=families_test,
             rate_matrix_path=rate_matrix_path,
@@ -1168,6 +1143,7 @@ def learn_coevolution_model_on_pfam15k(
                 num_rate_categories=num_rate_categories,
             ),
         )
+        ll = np.sum(lls)
         print(f"ll for {rate_matrix_name} = {ll}")
         log_likelihoods.append((rate_matrix_name, ll))
 
@@ -1352,7 +1328,7 @@ def learn_coevolution_model_on_pfam15k(
         else:
             if TITLES:
                 plt.title(
-                    "Results on Pfam 15K data\n(held-out negative log-Likelihood)"
+                    "Results on Pfam 15K data\n(held-out negative log-Likelihood)"  # noqa
                 )
         plt.tight_layout()
         plt.savefig(
@@ -1391,7 +1367,6 @@ def fig_pair_site_quantization_error(
         os.makedirs(output_image_dir)
 
     caching.set_cache_dir("_cache_benchmarking")
-    caching.set_hash_len(64)
 
     qs = [
         (0.03, 1.1, 64),
@@ -1561,7 +1536,7 @@ def fig_pair_site_quantization_error(
             )
             if TITLES:
                 plt.title(
-                    "True vs predicted rate matrix entries\nmax quantization error "
+                    "True vs predicted rate matrix entries\nmax quantization error "  # noqa
                     "= %.1f%% (%i quantization points)"
                     % (q_errors[i], q_points[i])
                 )
@@ -1609,7 +1584,7 @@ def fig_pair_site_quantization_error(
 
 # Fig. 2c, 2d
 def fig_coevolution_vs_indep():
-    output_image_dir = f"images/fig_coevolution_vs_indep"
+    output_image_dir = "images/fig_coevolution_vs_indep"
     if not os.path.exists(output_image_dir):
         os.makedirs(output_image_dir)
 
@@ -2080,7 +2055,6 @@ def fig_site_rates_vs_number_of_contacts(
         os.makedirs(output_image_dir)
 
     caching.set_cache_dir("_cache_benchmarking")
-    caching.set_hash_len(64)
 
     PFAM_15K_MSA_DIR = "input_data/a3m"
     PFAM_15K_PDB_DIR = "input_data/pdb"
@@ -2127,24 +2101,6 @@ def fig_site_rates_vs_number_of_contacts(
         families=families,
         minimum_distance_for_nontrivial_contact=minimum_distance_for_nontrivial_contact,  # noqa
     )
-
-    # num_contacts_list = list(range(1, 21, 1))
-    # num_contacts_flattened = sum([len(site_rates_by_num_nontrivial_contacts[x]) * [x] for x in num_contacts_list], [])
-    # site_rates_flattened = sum([site_rates_by_num_nontrivial_contacts[x] for x in num_contacts_list], [])
-
-    # df = pd.DataFrame(
-    #     {
-    #         "Number of non-trivial contacts": num_contacts_flattened,
-    #         "Site rate": site_rates_flattened,
-    #     }
-    # )
-
-    # sns.violinplot(
-    #     x="Number of non-trivial contacts",
-    #     y="Site rate",
-    #     data=df,
-    #     inner=None,
-    # )
 
     import matplotlib.pyplot as plt
 
@@ -2220,7 +2176,6 @@ def fig_MSA_VI_cotransition(
         os.makedirs(output_image_dir)
 
     caching.set_cache_dir("_cache_benchmarking")
-    caching.set_hash_len(64)
 
     PFAM_15K_MSA_DIR = "input_data/a3m"
 
@@ -2303,3 +2258,536 @@ def fig_MSA_VI_cotransition(
                             ),
                             f"over {tot_IV_VI_II_VV} pairs",
                         )
+
+
+def _fig_standard_benchmark(
+    msa_dir_train: str,
+    msa_dir_test: str,
+    output_image_dir: str,
+    cache_dir: str,
+    single_site_rate_matrices: List[Tuple[str, str]],
+    num_rate_categories: int = 4,
+    num_processes_tree_estimation: int = NUM_PROCESSES_TREE_ESTIMATION,
+    num_processes_counting: int = 1,
+    num_processes_optimization: int = 1,
+    add_cherryml: bool = False,
+    add_em: bool = False,
+    extra_em_command_line_args: str = "-log 6 -f 3 -mi 0.000001",
+    num_families_test: Optional[int] = None,
+    num_iterations: int = 1,
+    clade_name: str = "",
+    fontsize: int = 13,
+    tree_estimator_name: str = "",
+    extra_tree_estimator_command_line_args: str = "",
+    evaluator_name: str = "",
+    extra_evaluator_command_line_args: str = "",
+    initial_tree_estimator_rate_matrix_path: str = "",
+    figsize=(6.4, 4.8),
+):
+    if tree_estimator_name not in ["FastTree", "PhyML"]:
+        raise ValueError(
+            f"Unknown tree_estimator_name: '{tree_estimator_name}'"
+        )
+
+    if not os.path.exists(output_image_dir):
+        os.makedirs(output_image_dir)
+
+    caching.set_cache_dir(cache_dir)
+
+    families_train = get_families(msa_dir_train)
+    families_test = get_families(msa_dir_test)
+    if num_families_test is not None:
+        families_test = sorted(families_test)[:num_families_test]
+
+    if add_cherryml:
+        # Run the CherryML method using tree_estimator_name tree estimator
+        @caching.cached(
+            exclude=[
+                "num_processes_tree_estimation",
+                "num_processes_optimization",
+                "num_processes_counting",
+            ]
+        )
+        def _fig_standard_benchmark__lg_end_to_end_with_cherryml_optimizer(
+            msa_dir: str,
+            families: List[str],
+            num_rate_categories: str,
+            initial_tree_estimator_rate_matrix_path: str,
+            num_processes_tree_estimation: int,
+            num_processes_optimization: int,
+            num_processes_counting: int,
+            num_iterations: int,
+            tree_estimator_name: str,
+            extra_tree_estimator_command_line_args: str,
+        ) -> Dict:
+            """
+            Wrapper around lg_end_to_end_with_cherryml_optimizer to speed
+            up checking a bunch of files during caching. Gets rid of the
+            unhashable tree_estimator via hardcoding.
+            """
+            if tree_estimator_name == "FastTree":
+                tree_estimator = partial(
+                    fast_tree,
+                    num_rate_categories=num_rate_categories,
+                    extra_command_line_args=extra_tree_estimator_command_line_args,  # noqa
+                )
+            elif tree_estimator_name == "PhyML":
+                assert extra_tree_estimator_command_line_args == ""
+                tree_estimator = partial(
+                    phyml,
+                    num_rate_categories=num_rate_categories,
+                )
+            else:
+                raise ValueError(
+                    f"Unknown tree_estimator_name = '{tree_estimator_name}'"
+                )
+
+            return lg_end_to_end_with_cherryml_optimizer(
+                msa_dir=msa_dir,
+                families=families,
+                tree_estimator=tree_estimator,
+                initial_tree_estimator_rate_matrix_path=initial_tree_estimator_rate_matrix_path,  # noqa
+                num_processes_tree_estimation=num_processes_tree_estimation,
+                num_processes_optimization=num_processes_optimization,
+                num_processes_counting=num_processes_counting,
+                num_iterations=num_iterations,
+            )
+
+        cherry_res_dict = _fig_standard_benchmark__lg_end_to_end_with_cherryml_optimizer(  # noqa
+            msa_dir=msa_dir_train,
+            families=families_train,
+            num_rate_categories=num_rate_categories,
+            initial_tree_estimator_rate_matrix_path=initial_tree_estimator_rate_matrix_path,  # noqa
+            num_processes_tree_estimation=num_processes_tree_estimation,
+            num_processes_optimization=num_processes_optimization,
+            num_processes_counting=num_processes_counting,
+            num_iterations=num_iterations,
+            tree_estimator_name=tree_estimator_name,
+            extra_tree_estimator_command_line_args=extra_tree_estimator_command_line_args,  # noqa
+        )
+        cherry_path = cherry_res_dict["learned_rate_matrix_path"]
+
+        with open(
+            os.path.join(
+                output_image_dir,
+                "cherryml_profiling.txt",
+            ),
+            "w",
+        ) as profiling_file:
+            profiling_file.write(cherry_res_dict["profiling_str"])
+        single_site_rate_matrices.append(
+            ("LG w/CherryML\n(re-estimated)", cherry_path)
+        )
+
+    if add_em:
+        # Run the EM method using FastTree tree estimator
+        @caching.cached(
+            exclude=[
+                "num_processes_tree_estimation",
+                "num_processes_optimization",
+                "num_processes_counting",
+            ]
+        )
+        def _fig_standard_benchmark__lg_end_to_end_with_em_optimizer(
+            msa_dir: str,
+            families: List[str],
+            num_rate_categories: int,
+            initial_tree_estimator_rate_matrix_path: str,
+            num_processes_tree_estimation: int,
+            num_processes_optimization: int,
+            num_processes_counting: int,
+            num_iterations: int,
+            em_backend: str,
+            extra_em_command_line_args: str,
+            tree_estimator_name: str,
+            extra_tree_estimator_command_line_args: str,
+        ) -> Dict:
+            """
+            Wrapper around lg_end_to_end_with_em_optimizer to speed
+            up checking a bunch of files during caching. Gets rid of the
+            unhashable tree_estimator via hardcoding.
+            """
+            if tree_estimator_name == "FastTree":
+                tree_estimator = partial(
+                    fast_tree,
+                    num_rate_categories=num_rate_categories,
+                    extra_command_line_args=extra_tree_estimator_command_line_args,  # noqa
+                )
+            elif tree_estimator_name == "PhyML":
+                assert extra_tree_estimator_command_line_args == ""
+                tree_estimator = partial(
+                    phyml,
+                    num_rate_categories=num_rate_categories,
+                )
+            else:
+                raise ValueError(
+                    f"Unknown tree_estimator_name = '{tree_estimator_name}'"
+                )
+
+            return lg_end_to_end_with_em_optimizer(
+                msa_dir=msa_dir,
+                families=families,
+                tree_estimator=tree_estimator,
+                initial_tree_estimator_rate_matrix_path=initial_tree_estimator_rate_matrix_path,  # noqa
+                num_processes_tree_estimation=num_processes_tree_estimation,
+                num_processes_optimization=num_processes_optimization,
+                num_processes_counting=num_processes_counting,
+                num_iterations=num_iterations,
+                em_backend=em_backend,
+                extra_em_command_line_args=extra_em_command_line_args,
+            )
+
+        em_res_dict = _fig_standard_benchmark__lg_end_to_end_with_em_optimizer(
+            msa_dir=msa_dir_train,
+            families=families_train,
+            num_rate_categories=num_rate_categories,
+            initial_tree_estimator_rate_matrix_path=initial_tree_estimator_rate_matrix_path,  # noqa
+            num_processes_tree_estimation=num_processes_tree_estimation,
+            num_processes_optimization=num_processes_optimization,
+            num_processes_counting=num_processes_counting,
+            num_iterations=num_iterations,
+            em_backend="xrate",
+            extra_em_command_line_args=extra_em_command_line_args,
+            tree_estimator_name=tree_estimator_name,
+            extra_tree_estimator_command_line_args=extra_tree_estimator_command_line_args,  # noqa
+        )
+        em_path = em_res_dict["learned_rate_matrix_path"]
+
+        with open(
+            os.path.join(
+                output_image_dir,
+                f"em_profiling_{extra_em_command_line_args.replace(' ', '_')}.txt",  # noqa
+            ),
+            "w",
+        ) as profiling_file:
+            profiling_file.write(em_res_dict["profiling_str"])
+        single_site_rate_matrices.append(("LG w/EM\n(re-estimated)", em_path))
+
+    log_likelihoods = []  # type: List[Tuple[str, float]]
+
+    per_family_lls = []
+    for rate_matrix_name, rate_matrix_path in single_site_rate_matrices:
+        mutation_rate = compute_mutation_rate(
+            read_rate_matrix(rate_matrix_path)
+        )
+        print(
+            f"***** Evaluating: {rate_matrix_name} at {rate_matrix_path} ({num_rate_categories} rate categories) with global mutation rate {mutation_rate} *****"  # noqa
+        )
+
+        @caching.cached(
+            exclude=["num_processes"],
+        )
+        def _fig_standard_benchmark__evaluate_single_site_model_on_held_out_msas_w_tree_estimator(  # noqa
+            msa_dir: str,
+            families: List[str],
+            rate_matrix_path: str,
+            num_processes: int,
+            num_rate_categories: int,
+            evaluator_name: str,
+            extra_evaluator_command_line_args: str,
+        ) -> List[float]:
+            """
+            Wrapper to avoid checking that many files exists.
+            Gets rid of the un-cacheable tree_estimator argument
+            via hardcoding.
+            """
+            if evaluator_name == "FastTree":
+                tree_estimator = partial(
+                    fast_tree,
+                    num_rate_categories=num_rate_categories,
+                    extra_command_line_args=extra_evaluator_command_line_args,
+                )
+            else:
+                raise ValueError(
+                    f"Unknown tree_estimator_name = '{tree_estimator_name}'"
+                )
+            lls = evaluate_single_site_model_on_held_out_msas_w_tree_estimator(
+                msa_dir=msa_dir,
+                families=families,
+                rate_matrix_path=rate_matrix_path,
+                num_processes=num_processes,
+                tree_estimator=tree_estimator,
+            )
+            return lls
+
+        lls = _fig_standard_benchmark__evaluate_single_site_model_on_held_out_msas_w_tree_estimator(  # noqa
+            msa_dir=msa_dir_test,
+            families=families_test,
+            rate_matrix_path=rate_matrix_path,
+            num_processes=num_processes_tree_estimation,
+            num_rate_categories=num_rate_categories,
+            evaluator_name=evaluator_name,
+            extra_evaluator_command_line_args=extra_evaluator_command_line_args,
+        )
+        ll = np.sum(lls)
+
+        log_likelihoods.append((rate_matrix_name, ll))
+        per_family_lls.append((rate_matrix_name, lls))
+
+    log_likelihoods = pd.DataFrame(log_likelihoods, columns=["model", "LL"])
+    log_likelihoods.set_index(["model"], inplace=True)
+
+    @caching.cached()
+    def _fig_standard_benchmark__get_tot_sites(
+        msa_dir: str, families: List[str]
+    ):
+        """
+        Get total number of sites in testing data.
+        """
+        res = 0
+        for family in families:
+            msa_path = os.path.join(msa_dir, family + ".txt")
+            msa = read_msa(msa_path)
+            res += len(list(msa.values())[0])
+        return res
+
+    tot_sites = _fig_standard_benchmark__get_tot_sites(
+        msa_dir=msa_dir_test,
+        families=families_test,
+    )
+
+    for baseline in [True]:
+        plt.figure(figsize=figsize)
+        xs = list(log_likelihoods.index)
+        jtt_ll = log_likelihoods.loc["JTT", "LL"]
+        xs_to_plot = xs
+        if baseline:
+            heights = (log_likelihoods.LL - jtt_ll) / tot_sites
+            heights = heights[1:]
+            xs_to_plot = xs[1:]
+        else:
+            heights = -log_likelihoods.LL / tot_sites
+        print(f"xs = {xs}")
+        print(f"heights = {heights}")
+        colors = ["blue"] * len(xs_to_plot)
+        if add_cherryml:
+            colors = colors[1:] + ["red"]
+        if add_em:
+            colors = colors[1:] + ["yellow"]
+            plt.legend(
+                handles=[
+                    mpatches.Patch(color="blue", label="Standard rate matrix"),
+                    mpatches.Patch(color="red", label="CherryML"),
+                    mpatches.Patch(color="yellow", label="EM"),
+                ],
+                fontsize=fontsize,
+            )
+        plt.bar(
+            x=xs_to_plot,
+            height=heights,
+            color=colors,
+            alpha=1.0,
+        )
+        ax = plt.gca()
+        ax.yaxis.grid()
+        plt.xticks(rotation=0, fontsize=fontsize)
+        # plt.ylabel("Average per-site log-likelihood\nimprovement over JTT, in nats")  # noqa
+        plt.tight_layout()
+        img_path = f"log_likelihoods_{num_rate_categories}_{baseline}_CherryML_{add_cherryml}"  # noqa
+        if add_cherryml:
+            img_path += f"_num_iterations_{num_iterations}"
+        if add_em:
+            img_path += "_EM" + "_" + extra_em_command_line_args.split(".")[-1]
+        plt.savefig(
+            os.path.join(
+                output_image_dir,
+                img_path,
+            ),
+            dpi=300,
+        )
+        plt.close()
+
+
+def _get_qmaker_5_clades_names():
+    return ["plant", "bird", "mammal", "insect", "yeast"]
+
+
+def _read_msa_nexus(nexus_path: str) -> Dict[str, str]:
+    """
+    Read a Nexus MSA (e.g. 'alignment.nex')
+    """
+    res = {}
+    with open(nexus_path, "r") as nexus_file:
+        for i, line in enumerate(nexus_file):
+            if i < 2:
+                continue
+            line = line.strip()
+            if i == 2:
+                assert line.startswith("dimensions")
+                num_seqs = int(line.split(" ")[1].split("=")[1])
+                num_sites = int(line.split(" ")[2][:-1].split("=")[1])
+                continue
+            if i == 3:
+                assert (
+                    line.strip() == "format datatype=protein missing=X gap=-;"
+                )
+                continue
+            if i == 4:
+                assert line.strip() == "matrix"
+                continue
+            if len(res) == num_seqs:
+                assert line == ";" or line == ""
+                break
+            seq_name, seq = line.split()
+            assert len(seq) == num_sites
+            res[seq_name] = seq
+    return res
+
+
+def _create_qmaker_msa_dir(
+    msa: Dict[str, str], partition_nexus_path: str, output_dir: str
+):
+    """
+    Given the MSA and partition_nexus_path, create 1 MSA per
+    locus, writing the MSAs to output_dir (in our MSA format).
+    """
+    loci = []
+    with open(partition_nexus_path, "r") as partition_nexus_file:
+        lines = partition_nexus_file.read().split("\n")
+        assert lines[0].strip().lower() == "#nexus"
+        assert lines[1].strip() == "begin sets;"
+        assert lines[-1].strip() == ""
+        lines = lines[:-1]
+        assert lines[-1].strip() == "end;"
+        for line in lines[2:-1]:
+            tokens = line.strip().split(" ")
+            start, end = int(tokens[-1].split("-")[0]), int(
+                tokens[-1].split("-")[1][:-1]
+            )
+            assert start <= end
+            loci.append((start, end))
+    for (start, end) in loci:
+        msa_locus = {
+            seq_name: seq[start - 1 : end] for (seq_name, seq) in msa.items()
+        }
+        write_msa(
+            msa_locus,
+            os.path.join(output_dir, f"{start}-{end}.txt"),
+        )
+
+
+def _convert_qmaker_clade_msas(clade_name: str) -> Dict[str, str]:
+    import zipfile
+
+    if not os.path.exists(
+        f"qmaker_paper_data/05_clades/{clade_name}/alignment.nex"
+    ):
+        if clade_name == "insect":
+            os.system(
+                f"mv qmaker_paper_data/05_clades/{clade_name}/alignment.zip qmaker_paper_data/05_clades/{clade_name}/alignment.nex.zip"  # noqa
+            )
+        with zipfile.ZipFile(
+            f"qmaker_paper_data/05_clades/{clade_name}/alignment.nex.zip", "r"
+        ) as zip_ref:
+            print(f"Going to unzip {clade_name}/alignment.nex.zip ...")
+            zip_ref.extractall(f"qmaker_paper_data/05_clades/{clade_name}/")
+    if not os.path.exists(f"qmaker_paper_data/05_clades/{clade_name}_train/"):
+        os.makedirs(f"qmaker_paper_data/05_clades/{clade_name}_train/")
+        os.makedirs(f"qmaker_paper_data/05_clades/{clade_name}_test/")
+        msa = _read_msa_nexus(
+            f"qmaker_paper_data/05_clades/{clade_name}/alignment.nex"
+        )
+        _create_qmaker_msa_dir(
+            msa=msa,
+            partition_nexus_path=f"qmaker_paper_data/05_clades/{clade_name}/train.nex",  # noqa
+            output_dir=f"qmaker_paper_data/05_clades/{clade_name}_train/",
+        )
+        _create_qmaker_msa_dir(
+            msa=msa,
+            partition_nexus_path=f"qmaker_paper_data/05_clades/{clade_name}/test.nex",  # noqa
+            output_dir=f"qmaker_paper_data/05_clades/{clade_name}_test/",
+        )
+    return {
+        f"{clade_name}_train": f"qmaker_paper_data/05_clades/{clade_name}_train/",  # noqa
+        f"{clade_name}_test": f"qmaker_paper_data/05_clades/{clade_name}_test/",
+    }
+
+
+def _get_qmaker_5_clades_msa_dirs() -> Dict[str, str]:
+    """
+    Downloads and converts the clade MSAs into our MSA format.
+    """
+    import zipfile
+
+    import wget
+
+    if not os.path.exists("qmaker_paper_data"):
+        print("Creating qmaker_paper_data directory ...")
+        os.makedirs("qmaker_paper_data")
+    else:
+        print("qmaker_paper_data directory already exists, not creating.")
+
+    if not os.path.exists("qmaker_paper_data/05_clades"):
+        if not os.path.exists("qmaker_paper_data/05_clades.zip"):
+            print("Going to download QMaker data 05_clades.zip ...")
+            wget.download(
+                "https://figshare.com/ndownloader/files/25872621",
+                "qmaker_paper_data/05_clades.zip",
+            )
+        else:
+            print(
+                "qmaker_paper_data/05_clades.zip already exists, not downloading again."  # noqa
+            )
+        with zipfile.ZipFile("qmaker_paper_data/05_clades.zip", "r") as zip_ref:
+            print("Going to unzip 05_clades.zip ...")
+            zip_ref.extractall("qmaker_paper_data/")
+    else:
+        print("Will not download QMaker data 05_clades again!")
+
+    res = {}
+    for clade_name in _get_qmaker_5_clades_names():
+        res.update(_convert_qmaker_clade_msas(clade_name))
+    return res
+
+
+# Supp. Fig.
+def fig_qmaker(
+    clade_name: str,
+    num_families_test: Optional[int] = None,
+    add_cherryml: bool = True,
+    add_em: bool = True,
+    extra_em_command_line_args: str = "-log 6 -f 3 -mi 0.000001",
+    num_iterations: int = 2,
+    tree_estimator_name: str = "FastTree",
+    extra_tree_estimator_command_line_args: str = "",
+    evaluator_name: str = "FastTree",
+    extra_evaluator_command_line_args: str = "",
+    initial_tree_estimator_rate_matrix_path: str = get_lg_path(),
+    num_processes_tree_estimation: int = NUM_PROCESSES_TREE_ESTIMATION,
+):
+    """
+    We show on the clades datasets that CherryML performs comparatively to EM
+    while being faster, even when taking into account tree estimation.
+    """
+
+    qmaker_data_dirs = _get_qmaker_5_clades_msa_dirs()
+    msa_dir_train = qmaker_data_dirs[f"{clade_name}_train"]
+    msa_dir_test = qmaker_data_dirs[f"{clade_name}_test"]
+    del qmaker_data_dirs
+
+    single_site_rate_matrices = [
+        ("JTT", get_jtt_path()),
+        ("WAG\nrate matrix", get_wag_path()),
+        ("LG\nrate matrix", get_lg_path()),
+    ]
+
+    _fig_standard_benchmark(
+        msa_dir_train=msa_dir_train,
+        msa_dir_test=msa_dir_test,
+        output_image_dir=f"images/fig_qmaker/{clade_name}",
+        cache_dir="_cache_benchmarking_qmaker",
+        single_site_rate_matrices=single_site_rate_matrices,
+        num_families_test=num_families_test,
+        add_cherryml=add_cherryml,
+        add_em=add_em,
+        extra_em_command_line_args=extra_em_command_line_args,
+        num_iterations=num_iterations,
+        clade_name=clade_name,
+        tree_estimator_name=tree_estimator_name,
+        extra_tree_estimator_command_line_args=extra_tree_estimator_command_line_args,  # noqa
+        evaluator_name=evaluator_name,
+        extra_evaluator_command_line_args=extra_evaluator_command_line_args,
+        initial_tree_estimator_rate_matrix_path=initial_tree_estimator_rate_matrix_path,  # noqa
+        figsize=(6.4, 4.8),
+        num_processes_tree_estimation=num_processes_tree_estimation,
+    )

@@ -128,6 +128,49 @@ def _subset_data_to_sites_subset(
     logger.info("Subsetting data to sites subset done!")
 
 
+def _get_runtime_from_profiling_file(profiling_file_path: str) -> float:
+    """
+    TODO: Define a serialization protocol for profiling files and move to IO
+    """
+    with open(profiling_file_path, "r") as profiling_file:
+        profiling_file_contents = profiling_file.read()
+        res = float(profiling_file_contents.split()[2])
+        return res
+
+
+def _get_runtime_from_tree_estimator_profiling_file(
+    profiling_file_path: str,
+) -> float:
+    """
+    TODO: Define a serialization protocol for profiling files and move to IO
+    """
+    if not os.path.exists(profiling_file_path):
+        return 0  # No profiling information was provided (e.g. GT tree dir)
+    with open(profiling_file_path, "r") as profiling_file:
+        profiling_file_contents = profiling_file.read()
+        res = float(profiling_file_contents.split()[-1])
+        return res
+
+
+def _get_tree_estimation_runtime(
+    tree_estimator_output_dirs: str, families: List[str]
+) -> float:
+    """
+    Total runtime used to estimate trees
+    TODO: Define a serialization protocol for profiling files and move to IO
+    """
+    res = 0
+    for family in families:
+        profiling_file_path = os.path.join(
+            tree_estimator_output_dirs["output_tree_dir"],
+            family + ".profiling",
+        )
+        res += _get_runtime_from_tree_estimator_profiling_file(
+            profiling_file_path
+        )
+    return res
+
+
 def lg_end_to_end_with_cherryml_optimizer(
     msa_dir: str,
     families: List[str],
@@ -194,6 +237,11 @@ def lg_end_to_end_with_cherryml_optimizer(
 
     res["quantization_points"] = quantization_points
 
+    time_tree_estimation = 0
+    time_counting = 0
+    time_jtt_ipw = 0
+    time_optimization = 0
+
     current_estimate_rate_matrix_path = initial_tree_estimator_rate_matrix_path
     for iteration in range(num_iterations):
         if (
@@ -215,6 +263,10 @@ def lg_end_to_end_with_cherryml_optimizer(
         res[
             f"tree_estimator_output_dirs_{iteration}"
         ] = tree_estimator_output_dirs
+
+        time_tree_estimation += _get_tree_estimation_runtime(
+            tree_estimator_output_dirs, families
+        )
 
         if sites_subset_dir is not None:
             res_dict = _subset_data_to_sites_subset(
@@ -247,6 +299,9 @@ def lg_end_to_end_with_cherryml_optimizer(
         )["output_count_matrices_dir"]
 
         res[f"count_matrices_dir_{iteration}"] = count_matrices_dir
+        time_counting += _get_runtime_from_profiling_file(
+            os.path.join(count_matrices_dir, "profiling.txt")
+        )
 
         jtt_ipw_dir = jtt_ipw(
             count_matrices_path=os.path.join(count_matrices_dir, "result.txt"),
@@ -256,6 +311,9 @@ def lg_end_to_end_with_cherryml_optimizer(
         )["output_rate_matrix_dir"]
 
         res[f"jtt_ipw_dir_{iteration}"] = jtt_ipw_dir
+        time_jtt_ipw += _get_runtime_from_profiling_file(
+            os.path.join(jtt_ipw_dir, "profiling.txt")
+        )
 
         initialization_path = None
         if optimizer_initialization == "jtt-ipw":
@@ -282,6 +340,9 @@ def lg_end_to_end_with_cherryml_optimizer(
             OMP_NUM_THREADS=num_processes_optimization,
             OPENBLAS_NUM_THREADS=num_processes_optimization,
         )["output_rate_matrix_dir"]
+        time_optimization += _get_runtime_from_profiling_file(
+            os.path.join(rate_matrix_dir, "profiling.txt")
+        )
 
         res[f"rate_matrix_dir_{iteration}"] = rate_matrix_dir
 
@@ -290,6 +351,25 @@ def lg_end_to_end_with_cherryml_optimizer(
         )
 
     res["learned_rate_matrix_path"] = current_estimate_rate_matrix_path
+
+    res["time_tree_estimation"] = time_tree_estimation
+    res["time_counting"] = time_counting
+    res["time_jtt_ipw"] = time_jtt_ipw
+    res["time_optimization"] = time_optimization
+    res["total_cpu_time"] = (
+        time_tree_estimation + time_counting + time_jtt_ipw + time_optimization
+    )
+
+    profiling_str = (
+        f"CherryML runtimes:\n"
+        "time_tree_estimation (without parallelization): "
+        f"{res['time_tree_estimation']}\n"
+        f"time_counting: {res['time_counting']}\n"
+        f"time_jtt_ipw: {res['time_jtt_ipw']}\n"
+        f"time_optimization: {res['time_optimization']}\n"
+        f"total_cpu_time: {res['total_cpu_time']}\n"
+    )
+    res["profiling_str"] = profiling_str
 
     return res
 

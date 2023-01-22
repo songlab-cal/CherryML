@@ -5,14 +5,9 @@ from functools import wraps
 from inspect import signature
 from typing import List
 
-from ._common import (
-    CacheUsageError,
-    _get_func_caching_dir,
-    _get_mode,
-    _validate_decorator_args,
-    get_cache_dir,
-    get_use_hash,
-)
+from ._common import (CacheUsageError, _get_func_caching_dir, _get_mode,
+                      _validate_decorator_args, get_cache_dir, get_read_only,
+                      get_use_hash)
 
 logger = logging.getLogger("caching")
 
@@ -60,7 +55,11 @@ def _get_parallel_func_caching_dir_aux(
     kwargs = deepcopy(kwargs)
 
     # To bind the parallel func call, we need to have all arguments specified.
-    # Since the output dirs can be omitted, we just assign them None.
+    # Since the output dirs can be omitted, we just hackily assign them None.
+    # TODO: If the output dirs are passed as args, this fails due to a
+    # `TypeError: multiple values for argument`. The good news is that it fails
+    # noisily, instead of causing a silent bug. So really not critical to
+    # address right now.
     for output_dir in output_dirs:
         kwargs[output_dir] = None
 
@@ -83,6 +82,7 @@ def _maybe_write_usefull_stuff_cached_parallel_computation(
     kwargs,
     cache_dir,
     output_dir,
+    write_extra_log_files,
 ):
     """
     Creates the logfiles _unhashed_output_dir.log and
@@ -93,6 +93,9 @@ def _maybe_write_usefull_stuff_cached_parallel_computation(
     The files are written if they already exist or their mode
     is not 444.
     """
+    if not write_extra_log_files:
+        return
+
     unhashed_func_caching_dir = _get_parallel_func_caching_dir_aux(
         func,
         exclude_args,
@@ -140,6 +143,7 @@ def cached_parallel_computation(
     parallel_arg: str,
     exclude_args: List = [],
     output_dirs: List = [],
+    write_extra_log_files: bool = False,
 ):
     """
     Cache a parallel function's outputs.
@@ -204,6 +208,10 @@ def cached_parallel_computation(
         output_dirs: The list of output directories of the wrapped function.
             Each value in the argument specified by parallel_arg creates one
             output in each directory specified by output_dirs.
+        write_extra_log_files: If to write extra log files indicating e.g. the
+            full function call. For functions that are called many times (e.g.
+            metrics) with many arguments, the extra log files can clog up space,
+            so it if useful to set this argument to `False`.
 
     Returns:
         The concrete caching decorator.
@@ -228,7 +236,9 @@ def cached_parallel_computation(
 
         @wraps(func)
         def wrapper(*args, **kwargs):
-            # Only allow calling the function with kwargs for simplicity.
+            # Only allow calling the function with kwargs for simplicity. TODO:
+            # If I find a way to put all the args into kwargs, I can remove
+            # this restriction from the user.
             if len(args) > 0:
                 raise CacheUsageError(
                     f"Please call {func.__name__} with keyword arguments only. "
@@ -278,9 +288,10 @@ def cached_parallel_computation(
                     if not os.path.exists(output_filepath):
                         return False
 
-                    mode = _get_mode(output_filepath)
-                    if mode != "444":
-                        return False
+                    # COMMENTED OUT: Don't be so picky about the file mode.
+                    # mode = _get_mode(output_filepath)
+                    # if mode != "444":
+                    #     return False
 
                     output_success_token_filepath = os.path.join(
                         kwargs[output_dir], parallel_arg_value + ".success"
@@ -295,19 +306,19 @@ def cached_parallel_computation(
                         kwargs[output_dir], parallel_arg_value + ".txt"
                     )
                     if os.path.exists(output_filepath):
-                        os.system(f'chmod 664 "{output_filepath}"')
                         logger.info(
                             f"Removing possibly corrupted {output_filepath}"
                         )
+                        os.system(f'chmod 666 "{output_filepath}"')
                         os.remove(output_filepath)
 
                     output_success_token_filepath = os.path.join(
                         kwargs[output_dir], parallel_arg_value + ".success"
                     )
                     if os.path.exists(output_success_token_filepath):
-                        logger.info(
-                            "Removing possibly corrupted "
-                            f"{output_success_token_filepath}"
+                        logger.info(f"Removing {output_success_token_filepath}")
+                        os.system(
+                            f'chmod 666 "{output_success_token_filepath}"'
                         )
                         os.remove(output_success_token_filepath)
 
@@ -317,15 +328,14 @@ def cached_parallel_computation(
             for parallel_arg_value in kwargs[parallel_arg]:
                 if not computed(parallel_arg_value):
                     new_parallel_args.append(parallel_arg_value)
-                    # Need to clear up all the previous partial outputs!
-                    clear_previous_outputs(parallel_arg_value)
             # Replace the parallel_arg by the new_parallel_args
             kwargs[parallel_arg] = new_parallel_args
 
             # Make sure that all the output directories exist.
             for output_dir in output_dirs:
                 if not os.path.exists(kwargs[output_dir]):
-                    os.makedirs(kwargs[output_dir])
+                    os.umask(0)  # To ensure all collaborators can access cache
+                    os.makedirs(kwargs[output_dir], mode=0o777)
                     # Let's write some useful stuff to the directory
                 _maybe_write_usefull_stuff_cached_parallel_computation(
                     func,
@@ -336,12 +346,22 @@ def cached_parallel_computation(
                     kwargs,
                     cache_dir,
                     output_dir,
+                    write_extra_log_files,
                 )
 
             # Only call the function if there is any work to do at all.
             if len(new_parallel_args):
                 # Now call the wrapped function
-                logger.debug(f"Calling {func.__name__}")
+                logger.debug(
+                    f"Calling {func.__name__} . Output location: {func_caching_dir}"
+                )
+                if get_read_only():
+                    raise CacheUsageError(
+                        "Cache is in read only mode! Will not call function."
+                    )
+                for parallel_arg_value in new_parallel_args:
+                    # Need to clear up all the previous partial outputs!
+                    clear_previous_outputs(parallel_arg_value)
                 func(*args, **kwargs)
 
                 # Now verify that all outputs are there.

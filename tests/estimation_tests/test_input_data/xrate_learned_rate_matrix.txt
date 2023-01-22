@@ -1,0 +1,91 @@
+;; Grammar nullprot
+;;
+(grammar
+ (name nullprot)
+ (transient-meta
+  (training-info (unix-time 1672080682) (final-bits -17.9556) (alignment-filename ./tests/estimation_tests/test_input_data/stock_dir_xrate/fam1_0.txt ./tests/estimation_tests/test_input_data/stock_dir_xrate/fam1_1.txt ./tests/estimation_tests/test_input_data/stock_dir_xrate/fam1_2.txt)))
+ (update-rates 1)
+ (update-rules 1)
+
+ ;; Nonterminal declarations and modifiers
+
+ (nonterm (name Start))
+ (nonterm (name S0))
+
+ ;; Transformation rules for grammar symbols
+
+ ;; Nonterminal Start
+ ;;
+ (transform (from (Start)) (to (S0)) (prob 1))
+
+ ;; Nonterminal S0
+ ;;
+ (transform (from (S0)) (to (A0 S0*)) (gaps-ok))
+ (transform (from (S0*)) (to ()) (prob 0.750019))
+ (transform (from (S0*)) (to (S0)) (prob 0.25))
+
+ ;; Expected counts and wait times for probability and rate parameters
+
+ (expected-counts
+  )  ;; end expected-counts
+
+ ;; Expected counts and wait time for Markov chain substitution models
+
+ (expected-chain-counts
+  ((term (A0))
+   (initial (state (a)) (count 0.919373))
+   (initial (state (r)) (count 1.04364))
+   (initial (state (n)) (count 0.9564))
+   (initial (state (q)) (count 1.08093))
+   (wait (state (a)) (time 6.72425))
+   (mutate (from (a)) (to (r)) (count 0))
+   (mutate (from (a)) (to (n)) (count 0))
+   (mutate (from (a)) (to (q)) (count 1.79425))
+   (wait (state (r)) (time 20.2541))
+   (mutate (from (r)) (to (a)) (count 0))
+   (mutate (from (r)) (to (n)) (count 2.38613))
+   (mutate (from (r)) (to (q)) (count 7.14687e-06))
+   (wait (state (n)) (time 21.747))
+   (mutate (from (n)) (to (a)) (count 0))
+   (mutate (from (n)) (to (r)) (count 2.38613))
+   (mutate (from (n)) (to (q)) (count 4.59148e-06))
+   (wait (state (q)) (time 7.27751))
+   (mutate (from (q)) (to (a)) (count 1.79425))
+   (mutate (from (q)) (to (r)) (count 7.14687e-06))
+   (mutate (from (q)) (to (n)) (count 4.59148e-06))
+  )  ;; end chain A0
+ )  ;; end expected-chain-counts
+
+ ;; Markov chain substitution models
+
+ (chain
+  (update-policy rev)
+  (term (A0))
+
+  ;; initial probability distribution
+  (initial (state (a)) (prob 0.12007))
+  (initial (state (r)) (prob 0.361661))
+  (initial (state (n)) (prob 0.38832))
+  (initial (state (q)) (prob 0.129949))
+
+  ;; mutation rates
+  (mutate (from (a)) (to (q)) (rate 0.266832))
+  (mutate (from (r)) (to (n)) (rate 0.11781))
+  (mutate (from (r)) (to (q)) (rate 3.52861e-07))
+  (mutate (from (n)) (to (r)) (rate 0.109722))
+  (mutate (from (n)) (to (q)) (rate 2.11131e-07))
+  (mutate (from (q)) (to (a)) (rate 0.246547))
+  (mutate (from (q)) (to (r)) (rate 9.82049e-07))
+  (mutate (from (q)) (to (n)) (rate 6.30914e-07))
+ )  ;; end chain A0
+
+)  ;; end grammar nullprot
+
+;; Alphabet Protein
+;;
+(alphabet
+ (name Protein)
+ (token (a r n q))
+ (wildcard *)
+)  ;; end alphabet Protein
+

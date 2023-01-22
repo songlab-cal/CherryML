@@ -22,7 +22,9 @@ logger = logging.getLogger("caching")
 
 _CACHE_DIR = None
 _USE_HASH = True
-_HASH_LEN = None
+_HASH_LEN = 128
+_DIR_LEVELS = 3
+_READ_ONLY = False
 
 
 def set_cache_dir(cache_dir: str):
@@ -68,18 +70,50 @@ def get_hash_len():
     return _HASH_LEN
 
 
+def set_dir_levels(dir_levels: int):
+    logger.info(f"Setting cache to use {dir_levels} directory levels.")
+    global _DIR_LEVELS
+    _DIR_LEVELS = dir_levels
+
+
+def get_dir_levels():
+    global _DIR_LEVELS
+    return _DIR_LEVELS
+
+
+def set_read_only(read_only: bool):
+    logger.info(f"Setting cache to read only mode = {read_only}")
+    global _READ_ONLY
+    _READ_ONLY = read_only
+
+
+def get_read_only():
+    global _READ_ONLY
+    return _READ_ONLY
+
+
 class CacheUsageError(Exception):
     pass
 
 
 def _hash_all(xs: List[str]) -> str:
-    hash_len = get_hash_len()
     hashes = [hashlib.sha512(x.encode("utf-8")).hexdigest() for x in xs]
     res = hashlib.sha512("".join(hashes).encode("utf-8")).hexdigest()
-    if hash_len is None:
-        return res
-    else:
-        return res[:hash_len]
+
+    hash_len = get_hash_len()
+    if hash_len is not None:
+        res = res[:hash_len]
+
+    dir_levels = get_dir_levels()
+    if dir_levels is not None:
+        new_res = ""
+        for i in range(dir_levels):
+            new_res += res[i] + "/"
+        new_res += res[dir_levels:]
+        assert len(new_res) == len(res) + dir_levels
+        res = new_res
+
+    return res
 
 
 def _get_func_caching_dir(
@@ -97,6 +131,8 @@ def _get_func_caching_dir(
 
     # Compute the cache key
     if not use_hash:
+        # TODO: use the function name _and_ the module name? (To avoid function
+        # name collision with other modules that use the caching decorator)
         path = (
             [cache_dir]
             + [f"{func.__name__}"]
@@ -107,6 +143,8 @@ def _get_func_caching_dir(
             ]
         )
     else:
+        # TODO: use the function name _and_ the module name? (To avoid function
+        # name collision with other modules that use the caching decorator)
         path = (
             [cache_dir]
             + [f"{func.__name__}"]
@@ -158,6 +196,6 @@ def _validate_decorator_args(
 
 def _get_mode(path):
     """
-    Get mode of a file (e.g. '664', '555')
+    Get mode of a file (e.g. '666', '444')
     """
     return oct(os.stat(path).st_mode)[-3:]

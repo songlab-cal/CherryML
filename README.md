@@ -8,6 +8,8 @@ We expect that the CherryML method will be applied to enable scalable estimation
 
 This package also enables seamless reproduction of all results in our paper.
 
+For a quick demonstration of an end-to-end application of CherryML to real data, please check out the section [End-to-end worked-out application: plant dataset](#end-to-end-worked-out-application:-plant-dataset).
+
 # Demo: CherryML applied to the LG model (runtime on a normal computer: 1 - 5 minutes)
 
 The following command learns a rate matrix from a set of MSAs, trees, and site rates (try it out!):
@@ -125,52 +127,51 @@ The CherryML API provides extensive functionality through additional flags, whic
 ```
   -h, --help            show this help message and exit
   --output_path OUTPUT_PATH
-                        Filepath where to write the learned rate matrix
-                        (default: None)
+                        Filepath where to write the learned rate matrix (default:
+                        None)
   --model_name MODEL_NAME
                         Either "LG" or "co-evolution". If "LG", a 20x20 rate
-                        matrix will be learned. If "co-evolution", a 400x400
-                        rate matrix will be learned. (default: None)
-  --msa_dir MSA_DIR     Directory where the training multiple sequence
-                        alignments (MSAs) are stored. See README at
-                        https://github.com/songlab-cal/CherryML for the
-                        expected format of these files. (default: None)
+                        matrix will be learned. If "co-evolution", a 400x400 rate
+                        matrix will be learned. (default: None)
+  --msa_dir MSA_DIR     Directory where the training multiple sequence alignments
+                        (MSAs) are stored. See README at
+                        https://github.com/songlab-cal/CherryML for the expected
+                        format of these files. (default: None)
   --contact_map_dir CONTACT_MAP_DIR
-                        Directory where the contact maps are stored. See
-                        README at https://github.com/songlab-cal/CherryML for
-                        the expected format of these files. (default: None)
-  --tree_dir TREE_DIR   Directory where the trees are stored. See README at
-                        https://github.com/songlab-cal/CherryML for the
-                        expected format of these files. If not provided, trees
-                        will be estimated with FastTree. (default: None)
-  --site_rates_dir SITE_RATES_DIR
-                        Directory where the site rates are stored. See README
+                        Directory where the contact maps are stored. See README
                         at https://github.com/songlab-cal/CherryML for the
-                        expected format of these files. If not provided, site
-                        rates will be estimated with FastTree. (default: None)
+                        expected format of these files. (default: None)
+  --tree_dir TREE_DIR   Directory where the trees are stored. See README at
+                        https://github.com/songlab-cal/CherryML for the expected
+                        format of these files. If not provided, trees will be
+                        estimated with FastTree. (default: None)
+  --site_rates_dir SITE_RATES_DIR
+                        Directory where the site rates are stored. See README at
+                        https://github.com/songlab-cal/CherryML for the expected
+                        format of these files. If not provided, site rates will
+                        be estimated with FastTree. (default: None)
   --cache_dir CACHE_DIR
-                        Directory to use to cache intermediate computations
-                        for re-use in future runs of cherryml. Use a different
-                        cache directory for different input datasets. If not
-                        provided, a temporary directory will be used.
-                        (default: None)
+                        Directory to use to cache intermediate computations for
+                        re-use in future runs of cherryml. Use a different cache
+                        directory for different input datasets. If not provided,
+                        a temporary directory will be used. (default: None)
   --num_processes_tree_estimation NUM_PROCESSES_TREE_ESTIMATION
-                        Number of processes to parallelize tree estimation
-                        (with FastTree). (default: 1)
+                        Number of processes to parallelize tree estimation (with
+                        FastTree). (default: 32)
   --num_processes_counting NUM_PROCESSES_COUNTING
-                        Number of processes to parallelize counting
-                        transitions. (default: 1)
+                        Number of processes to parallelize counting transitions.
+                        (default: 1)
   --num_processes_optimization NUM_PROCESSES_OPTIMIZATION
-                        Number of processes to parallelize optimization (if
-                        using cpu). (default: 1)
+                        Number of processes to parallelize optimization (if using
+                        cpu). (default: 1)
   --num_rate_categories NUM_RATE_CATEGORIES
-                        Number of rate categories to use in FastTree to
-                        estimate trees and site rates (if trees are not
-                        provided). (default: 20)
+                        Number of rate categories to use in FastTree to estimate
+                        trees and site rates (if trees are not provided).
+                        (default: 20)
   --initial_tree_estimator_rate_matrix_path INITIAL_TREE_ESTIMATOR_RATE_MATRIX_PATH
-                        Rate matrix to use in FastTree to estimate trees and
-                        site rates (the first time around, and only if trees
-                        and site rates are not provided) (default:
+                        Rate matrix to use in FastTree to estimate trees and site
+                        rates (the first time around, and only if trees and site
+                        rates are not provided) (default:
                         data/rate_matrices/lg.txt)
   --num_iterations NUM_ITERATIONS
                         Number of times to iterate tree estimation and rate
@@ -181,44 +182,255 @@ The CherryML API provides extensive functionality through additional flags, whic
                         The center value used for time quantization. (default:
                         0.03)
   --quantization_grid_step QUANTIZATION_GRID_STEP
-                        The geometric spacing between time quantization
-                        points. (default: 1.1)
+                        The geometric spacing between time quantization points.
+                        (default: 1.1)
   --quantization_grid_num_steps QUANTIZATION_GRID_NUM_STEPS
-                        The number of quantization points to the left and
-                        right of the center. (default: 64)
+                        The number of quantization points to the left and right
+                        of the center. (default: 64)
   --use_cpp_counting_implementation USE_CPP_COUNTING_IMPLEMENTATION
                         Whether to use C++ MPI implementation to count
-                        transitions ('True' or 'False'). This requires mpirun
-                        to be installed. If you do not have mpirun installed,
-                        set this argument to False to use a Python
-                        implementation (but it will be much slower). (default:
-                        True)
+                        transitions ('True' or 'False'). This requires mpirun to
+                        be installed. If you do not have mpirun installed, set
+                        this argument to False to use a Python implementation
+                        (but it will be much slower). (default: True)
   --optimizer_device OPTIMIZER_DEVICE
-                        Either "cpu" or "cuda". Device to use in PyTorch.
-                        "cpu" is fast enough for applications, but if you have
-                        a GPU using "cuda" might provide faster runtime.
-                        (default: cpu)
+                        Either "cpu" or "cuda". Device to use in PyTorch. "cpu"
+                        is fast enough for applications, but if you have a GPU
+                        using "cuda" might provide faster runtime. (default: cpu)
   --learning_rate LEARNING_RATE
                         The learning rate in the PyTorch optimizer. (default:
                         0.1)
   --num_epochs NUM_EPOCHS
-                        The number of epochs of the PyTorch optimizer.
-                        (default: 500)
+                        The number of epochs of the PyTorch optimizer. (default:
+                        500)
   --minimum_distance_for_nontrivial_contact MINIMUM_DISTANCE_FOR_NONTRIVIAL_CONTACT
-                        Minimum distance in primary structure used to
-                        determine if two site are in non-trivial contact.
-                        (default: 7)
+                        Minimum distance in primary structure used to determine
+                        if two site are in non-trivial contact. (default: 7)
   --families FAMILIES   Subset of families on which to run rate matrix
                         estimation. (default: None)
   --sites_subset_dir SITES_SUBSET_DIR
-                        Directory where the subset of sites from each family
-                        used to learn the rate matrix are specified. Currently
-                        only implemented for the LG model. This enables
-                        learning e.g. domain-specific or structure-specific
-                        rate matrices. See README at
+                        Directory where the subset of sites from each family used
+                        to learn the rate matrix are specified. Currently only
+                        implemented for the LG model. This enables learning e.g.
+                        domain-specific or structure-specific rate matrices. See
+                        README at https://github.com/songlab-cal/CherryML for the
+                        expected format of these files. (default: None)
+  --tree_estimator_name TREE_ESTIMATOR_NAME
+                        Tree estimator to use. Can be either 'FastTree' or
+                        'PhyML'. (default: FastTree)
+```
+
+# Evaluation API
+
+For the purpose of model selection, we have exposed a simple API enabling the evaluation of a rate matrix's fit to a set of MSAs. This API is a simple wrapper around the FastTree and PhyML programs. For example, to compute the fit of the LG rate matrix to the 3 MSAs under `tests/evaluation_tests/a3m_small`, you can simply run:
+
+```
+python -m cherryml.evaluation \
+    --msa_dir tests/evaluation_tests/a3m_small \
+    --rate_matrix_path data/rate_matrices/lg.txt \
+    --num_rate_categories 4 \
+    --output_path log_likelihoods.txt \
+    --cache_dir _cache_demo \
+    --num_processes_tree_estimation 3 \
+    --tree_estimator_name FastTree
+```
+
+The output - written to the file `log_likelihoods.txt` - looks like this:
+
+```
+Total log-likelihood: -700.1151
+Total number of sites: 48
+Average log-likelihood per site: -14.58573125
+Families: 1e7l_1_A 5a0l_1_A 6anz_1_B
+Log-likelihood per family: -198.2552 -216.9863 -284.8736
+Sites per family: 16 16 16
+```
+
+The first line indicates the total log-likelihood (over all families). The second line indicates the total number of sites across all the provided MSAs. The third line shows the average log-likelihood per site (which is the ratio of the two previous quantities). The fourth line lists the families which were used to compute the log-likelihood. Next, the log-likelihood for each family is shown. Finally, the number of sites in each family is shown. Note that the total log-likelihood is equal to the sum of the log-likelihoods of each family.
+
+Note that by default, FastTree computes log-likelihoods under MLE rates. To compute log-likelihoods under a Gamma model, provide this option through the `--extra_command_line_args` argument. Thus, to compute Gamma log-likelihoods, you can use:
+
+```
+python -m cherryml.evaluation \
+    --msa_dir tests/evaluation_tests/a3m_small \
+    --rate_matrix_path data/rate_matrices/lg.txt \
+    --num_rate_categories 4 \
+    --output_path log_likelihoods.txt \
+    --cache_dir _cache_demo \
+    --num_processes_tree_estimation 3 \
+    --tree_estimator_name FastTree \
+    --extra_command_line_args='-gamma'
+```
+
+In this case, the output is:
+
+```
+Total log-likelihood: -723.442
+Total number of sites: 48
+Average log-likelihood per site: -15.071708333333333
+Families: 1e7l_1_A 5a0l_1_A 6anz_1_B
+Log-likelihood per family: -205.047 -225.683 -292.712
+Sites per family: 16 16 16
+```
+
+As you can see, log-likelihoods are lower under the Gamma model because this model accounts for the possibility that the site rates could have been something else other than the MLE rates.
+
+We can also use PhyML instead of FastTree. PhyML computes likelihoods under a Gamma model by default. Generally, PhyML is slower than FastTree but more precise:
+
+```
+python -m cherryml.evaluation \
+    --msa_dir tests/evaluation_tests/a3m_small \
+    --rate_matrix_path data/rate_matrices/lg.txt \
+    --num_rate_categories 4 \
+    --output_path log_likelihoods.txt \
+    --cache_dir _cache_demo \
+    --num_processes_tree_estimation 3 \
+    --tree_estimator_name PhyML
+```
+
+The output is:
+
+```
+Total log-likelihood: -717.50699
+Total number of sites: 48
+Average log-likelihood per site: -14.948062291666666
+Families: 1e7l_1_A 5a0l_1_A 6anz_1_B
+Log-likelihood per family: -204.41537 -223.26711 -289.82451
+Sites per family: 16 16 16
+```
+
+You will note that PhyML obtained a better Gamma log-likelihood than FastTree. Unless over-ridden by the user with `--extra_command_line_args`, PhyML is being run with the extra command line arguments `--datatype aa --pinv e --r_seed 0 --bootstrap 0 -f m --alpha e --print_site_lnl`.
+
+# Full API
+
+The command line tool can be invoked with `python -m cherryml.evaluation` and accepts the following arguments:
+
+```
+  -h, --help            show this help message and exit
+  --output_path OUTPUT_PATH
+                        Filepath where to write the log-likelihood (default:
+                        None)
+  --rate_matrix_path RATE_MATRIX_PATH
+                        Filepath where the rate matrix to evaluate is stored.
+                        (default: None)
+  --msa_dir MSA_DIR     Directory where the multiple sequence alignments
+                        (MSAs) are stored. See README at
                         https://github.com/songlab-cal/CherryML for the
                         expected format of these files. (default: None)
+  --cache_dir CACHE_DIR
+                        Directory to use to cache intermediate computations
+                        for re-use in future runs of cherryml. Use a different
+                        cache directory for different input datasets. If not
+                        provided, a temporary directory will be used.
+                        (default: None)
+  --num_processes_tree_estimation NUM_PROCESSES_TREE_ESTIMATION
+                        Number of processes to parallelize tree estimation.
+                        (default: 32)
+  --num_rate_categories NUM_RATE_CATEGORIES
+                        Number of rate categories to use in the tree estimator
+                        to estimate trees and site rates. (default: 20)
+  --families [FAMILIES [FAMILIES ...]]
+                        Subset of families for which to evaluate log
+                        likelihood. If not provided, all families in the
+                        `msa_dir` will be used. (default: None)
+  --tree_estimator_name TREE_ESTIMATOR_NAME
+                        Tree estimator to use. Can be either 'FastTree' or
+                        'PhyML'. (default: FastTree)
+  --extra_command_line_args EXTRA_COMMAND_LINE_ARGS
+                        Extra command line arguments for the tree estimator,
+                        e.g. `-gamma` for FastTree to compute Gamma
+                        likelihoods. (default: None)
 ```
+
+# End-to-end worked-out application: plant dataset
+
+We now combine the model estimation step and model selection steps to show a concrete example of applying CherryML to obtain a rate matrix superior than LG in record time. For this, we will use the plant dataset from Ran et al. (2018), `Phylogenomics resolves the deep phylogeny of seed plants and indicates partial convergent or homoplastic evolution between Gnetales and angiosperms`, with the train-test splits in the QMaker paper. The training MSAs are located at `demo_data/plant_train` and the testing MSAs are located at `demo_data/plant_test`. We start by fitting the LG model using FastTree tree estimator and the CherryML rate matrix optimizer. We start from the LG rate matrix and perform two rounds of alternating rate matrix and tree optimization (which is usually enough for convergence when adjusting the LG rate matrix to a new dataset). We will use 4 CPU cores in this example, as when running on a personal computer:
+
+```
+time python -m cherryml \
+    --output_path plant_CherryML.txt \
+    --model_name LG \
+    --msa_dir demo_data/plant_train \
+    --cache_dir _cache_plant \
+    --num_processes_tree_estimation 4 \
+    --num_processes_counting 4 \
+    --num_processes_optimization 2 \
+    --num_rate_categories 4 \
+    --initial_tree_estimator_rate_matrix_path data/rate_matrices/lg.txt \
+    --num_iterations 2 \
+    --tree_estimator_name FastTree
+```
+
+<!-- ```
+real	21m55.722s
+user	79m8.700s
+sys	1m52.647s
+``` -->
+
+End-to-end rate matrix estimation took 22 minutes wall-clock time on a MacBook Pro with the following specs:
+
+```
+Processor: 2.6 GHz 6-Core Intel Core i7
+Memory: 16 GB 2400 MHz DDR4
+```
+
+Now we proceed to evaluate model fit on held-out data. The testing MSAs are located at `demo_data/plant_test`. Thus:
+
+```
+time python -m cherryml.evaluation \
+    --msa_dir demo_data/plant_test \
+    --rate_matrix_path plant_CherryML.txt \
+    --num_rate_categories 4 \
+    --output_path log_likelihoods_plant_CherryML.txt \
+    --cache_dir _cache_plant \
+    --num_processes_tree_estimation 4 \
+    --tree_estimator_name FastTree
+```
+
+<!-- ```
+real	3m1.096s
+user	10m45.304s
+sys	0m17.869s
+``` -->
+
+Evaluation took 3 minutes wall-clock time on the same computer. The output is:
+
+```
+Total log-likelihood: -2042877.196799998
+Total number of sites: 101064
+Average log-likelihood per site: -20.21369821895035
+[...]
+```
+
+Finally, we compute the model fit of the LG rate matrix:
+
+```
+time python -m cherryml.evaluation \
+    --msa_dir demo_data/plant_test \
+    --rate_matrix_path data/rate_matrices/lg.txt \
+    --num_rate_categories 4 \
+    --output_path log_likelihoods_plant_LG.txt \
+    --cache_dir _cache_plant \
+    --num_processes_tree_estimation 4 \
+    --tree_estimator_name FastTree
+```
+
+<!-- ```
+real	3m41.567s
+user	13m19.375s
+sys	0m20.158s
+``` -->
+
+Evaluation took 4 minutes wall-clock time. The output is:
+
+```
+Total log-likelihood: -2072516.731100001
+Total number of sites: 101064
+Average log-likelihood per site: -20.50697311703476
+[...]
+```
+
+As we can see, the de-novo estimated rate matrix outperforms the LG rate matrix, with an average increase in log-likelihood per site of `0.293` (1.4%).
 
 # Reproducing all figures in our paper
 
@@ -226,15 +438,15 @@ To reproduce all figures in our paper, proceed as described below. Please note t
 
 ## Demo: Reproducing a simplified version of Figure 1e (runtime on a normal computer: ~10 minutes)
 
-Nonetheless, in the compute capsule we reproduce a simplified version of Fig. 1e, using FastTree instead of PhyML to evaluate likelihoods, as follows:
+Nonetheless, in the compute capsule we reproduce a simplified version of Fig. 1e, using FastTree instead of PhyML to evaluate likelihoods - and excluding EM since it is very slow (takes ~12 hours to train) - as follows:
 
 ```
 time python reproduce_fig_1e_simplified_demo.py
 ```
 
-Expected output: `fig_1e_simplified/` contains the reproduced version of Fig. 1e.
+Expected output: `fig_1e_simplified/` contains the reproduced version of Fig. 1e (without EM).
 
-FastTree is faster, which is better for the demo, and the results are similar. Reproducing Fig. 1e with FastTree takes ~10 minutes. Using PhyML (as in `reproduce_all_figures.py`, and as in our paper), would take ~4 hours. Note that if you have less than 32 cores available, you should change `num_processes=32` to a different value in `reproduce_fig_1e_simplified_demo.py`. In this case, it will take longer than ~10 minutes.
+FastTree is faster, which is better for the demo, and the results are similar. Reproducing Fig. 1e (excluding EM) with FastTree takes ~10 minutes. Using PhyML (as in `reproduce_all_figures.py`, and as in our paper), would take ~4 hours. Note that if you have less than 32 cores available, you should change `num_processes=32` to a different value in `reproduce_fig_1e_simplified_demo.py`. In this case, it will take longer than ~10 minutes.
 
 ## System requirements
 
@@ -262,21 +474,7 @@ wget
 zlib1g-dev
 ```
 
-To be able to use Historian specifically (required for the results on EM), you must make sure to have these installed:
-
-On a Mac:
-```
-$ brew install boost gsl pkg-config zlib
-```
-
-On Linux:
-```
-$ sudo yum -y install boost-devel gsl-devel zlib
-```
-
-(Generally, the requirements for Historian are specified in https://github.com/evoldoers/historian .)
-
-All third-party software, including FastTree (`FastTree` program), PhyML (`phyml` program), and Historian (`historian` program), will be automatically installed locally into this repository by our code if you have not installed it already on your system. If you would like to install these third-party tools on your system, you can do e.g.:
+All third-party software, including FastTree (`FastTree` program), PhyML (`phyml` program), and XRATE (`xrate` program), will be automatically installed locally into this repository by our code if you have not installed it already on your system. If you would like to install these third-party tools on your system, you can do e.g.:
 
 To install FastTree (again, this is optional, we will install FastTree locally otherwise):
 ```
@@ -301,15 +499,16 @@ make install
 popd
 ```
 
-To install Historian (again, this is optional, we will install Historian locally otherwise):
+To install XRATE (again, this is optional, we will install XRATE locally otherwise):
 ```
-mkdir -p /opt/historian/bin/
-mkdir -p /opt/historian/download/
-export PATH=/opt/historian/bin:$PATH
-git clone https://github.com/evoldoers/historian /opt/historian/download/historian
-pushd /opt/historian/download/historian/
-make
-cp /opt/historian/download/historian/bin/historian /opt/historian/bin/historian
+mkdir -p /opt/xrate/bin/
+mkdir -p /opt/xrate/download/
+export PATH=/opt/xrate/bin:$PATH
+git clone https://github.com/ihh/dart /opt/xrate/download/xrate
+pushd /opt/xrate/download/xrate/
+./configure --without-guile
+make xrate
+cp /opt/xrate/download/xrate/bin/xrate /opt/xrate/bin/xrate
 popd
 ```
 
@@ -339,6 +538,6 @@ You do not need to worry about downloading the data from the LG paper - we will 
 
 ## Run code to reproduce all figures
 
-You are now ready to reproduce all figures in our paper. Just run `reproduce_all_figures.py` to reproduce all figures in our paper. The approximate runtime needed to reproduce each figure this way is commented in `reproduce_all_figures.py`. Note that the computational bottlenecks to reproduce all figures are (1) benchmarking EM with Historian and (2) tree estimation (as opposed to the CherryML optimizer). To reproduce a specific figure, comment out the figures you do not want in `reproduce_all_figures.py`. The code is written in a functional style, so the functions can be run in any order at any time and will reproduce the results. All the intermediate computations are cached, so re-running the code will be very fast the second time around. The output figures will be found in the `images` folder.
+You are now ready to reproduce all figures in our paper. Just run `reproduce_all_figures.py` to reproduce all figures in our paper. The approximate runtime needed to reproduce each figure this way is commented in `reproduce_all_figures.py`. Note that the computational bottlenecks to reproduce all figures are (1) benchmarking EM with XRATE and (2) tree estimation (as opposed to the CherryML optimizer). To reproduce a specific figure, comment out the figures you do not want in `reproduce_all_figures.py`. The code is written in a functional style, so the functions can be run in any order at any time and will reproduce the results. All the intermediate computations are cached, so re-running the code will be very fast the second time around. The output figures will be found in the `images` folder.
 
-Tree estimation is parallelized, so by default you will need a machine with at least 32 cores. If you would like to use more (or less) cores, modify the value of `NUM_PROCESSES_TREE_ESTIMATION` at the top of the `figures.py` module. (However, note that the bottleneck when reproducing all figures is not tree estimation but performing EM with Historian (Fig. 1b), which will take around 60 hours regardless.)
+Tree estimation is parallelized, so by default you will need a machine with at least 32 cores. If you would like to use more (or less) cores, modify the value of `NUM_PROCESSES_TREE_ESTIMATION` at the top of the `figures.py` module. (However, note that the bottleneck when reproducing all figures is not tree estimation but performing EM with XRATE (Fig. 1b and Supp Fig. 1), which will take around 3-4 days regardless.)

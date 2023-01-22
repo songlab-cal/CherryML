@@ -5,6 +5,9 @@ import unittest
 from ete3 import Tree as TreeETE
 from parameterized import parameterized
 
+from cherryml import caching
+from cherryml.io import read_log_likelihood
+from cherryml.markov_chain import get_lg_path
 from cherryml.phylogeny_estimation import fast_tree
 
 
@@ -185,3 +188,21 @@ class TestFastTree(unittest.TestCase):
                             output_likelihood_dir=output_likelihood_dir,
                             num_processes=num_processes,
                         )
+
+    def test_fast_tree_from_python_api_with_gamma_model(self):
+        with tempfile.TemporaryDirectory() as cache_dir:
+            caching.set_cache_dir(cache_dir)
+            output_tree_dirs = fast_tree(
+                msa_dir="./tests/evaluation_tests/a3m_small/",
+                families=["1e7l_1_A", "5a0l_1_A", "6anz_1_B"],
+                rate_matrix_path=get_lg_path(),
+                num_rate_categories=4,
+                num_processes=3,
+                extra_command_line_args="-gamma",
+            )
+            ll_1, _ = read_log_likelihood(
+                os.path.join(
+                    output_tree_dirs["output_likelihood_dir"], "1e7l_1_A.txt"
+                )
+            )
+            assert abs(ll_1 - -200.0) < 10.0

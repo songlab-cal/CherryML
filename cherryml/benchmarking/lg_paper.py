@@ -20,6 +20,7 @@ import wget
 from cherryml import (
     PhylogenyEstimatorType,
     lg_end_to_end_with_cherryml_optimizer,
+    lg_end_to_end_with_em_optimizer,
 )
 from cherryml.io import read_log_likelihood
 from cherryml.markov_chain import (
@@ -42,8 +43,6 @@ def init_logger():
     consoleHandler.setFormatter(formatter)
     logger.addHandler(consoleHandler)
 
-
-from cherryml.global_vars import TITLES
 
 init_logger()
 logger = logging.getLogger(__name__)
@@ -324,7 +323,7 @@ def run_rate_estimator(
     elif rate_estimator_name.startswith("Cherry__"):
         tokens = rate_estimator_name.split("__")
         assert len(tokens) == 2
-        return lg_end_to_end_with_cherryml_optimizer(
+        res_dict = lg_end_to_end_with_cherryml_optimizer(
             msa_dir=msa_train_dir,
             families=families_train,
             tree_estimator=partial(
@@ -334,9 +333,39 @@ def run_rate_estimator(
             initial_tree_estimator_rate_matrix_path=get_equ_path(),
             num_iterations=int(tokens[1]),
             num_processes_tree_estimation=num_processes,
-            num_processes_counting=4,
-            num_processes_optimization=2,
-        )["learned_rate_matrix_path"]
+            num_processes_counting=1,
+            num_processes_optimization=1,
+        )
+        with open(
+            "lg_paper_fig__" + rate_estimator_name + "__profiling_str.txt", "w"
+        ) as profiling_file:
+            profiling_file.write(f"{res_dict['profiling_str']}")
+        res = res_dict["learned_rate_matrix_path"]
+        return res
+    elif rate_estimator_name.startswith("EM_FT__"):
+        tokens = rate_estimator_name.split("__")
+        assert len(tokens) == 3
+        res_dict = lg_end_to_end_with_em_optimizer(
+            msa_dir=msa_train_dir,
+            families=families_train,
+            tree_estimator=partial(
+                fast_tree,
+                num_rate_categories=4,
+            ),
+            initial_tree_estimator_rate_matrix_path=get_equ_path(),
+            num_iterations=int(tokens[1]),
+            num_processes_tree_estimation=num_processes,
+            num_processes_counting=1,
+            num_processes_optimization=1,
+            em_backend="xrate",
+            extra_em_command_line_args=f"-log 6 -f 3 -mi {tokens[2]}",
+        )
+        res = res_dict["learned_rate_matrix_path"]
+        with open(
+            "lg_paper_fig__" + rate_estimator_name + "__profiling_str.txt", "w"
+        ) as profiling_file:
+            profiling_file.write(f"{res_dict['profiling_str']}")
+        return res
     else:
         raise ValueError(f"Unknown rate estimator name: {rate_estimator_name}")
     return res
@@ -386,7 +415,7 @@ def reproduce_lg_paper_fig_4(
     num_bootstraps: int = 0,
     use_colors: bool = True,
     output_image_dir: str = "./",
-    fontsize: int = 14,
+    fontsize: int = 13,
 ):
     """
     Reproduce Fig. 4 of the LG paper, extending it with the desired models.
@@ -416,9 +445,9 @@ def reproduce_lg_paper_fig_4(
         ]
 
     if baseline_rate_estimator_name is not None:
-        rate_estimator_names_w_baseline = list(
-            set(rate_estimator_names + [baseline_rate_estimator_name])
-        )
+        rate_estimator_names_w_baseline = [
+            baseline_rate_estimator_name
+        ] + rate_estimator_names
     else:
         rate_estimator_names_w_baseline = list(set(rate_estimator_names))
     for (rate_estimator_name, _) in rate_estimator_names_w_baseline:
@@ -446,9 +475,10 @@ def reproduce_lg_paper_fig_4(
                 rate_matrix_path=rate_matrix_path,
             )["output_likelihood_dir"]
             for family in families_test:
-                df.loc[family, rate_estimator_name] = read_log_likelihood(
+                metric = read_log_likelihood(
                     os.path.join(output_likelihood_dir, family + ".txt")
                 )[0]
+                df.loc[family, rate_estimator_name] = metric
         print(
             f"Total time to evaluate {rate_estimator_name} = {time.time() - st}"
         )
@@ -466,7 +496,8 @@ def reproduce_lg_paper_fig_4(
             )
         return log_likelihoods
 
-    y = get_log_likelihoods(df, [x[0] for x in rate_estimator_names])
+    model_names = [x[0] for x in rate_estimator_names]
+    y = get_log_likelihoods(df, model_names)
     if num_bootstraps > 0:
         np.random.seed(0)
         y_bootstraps = []
@@ -486,13 +517,15 @@ def reproduce_lg_paper_fig_4(
         assert y_bootstraps.shape == (num_bootstraps, len(rate_estimator_names))
 
     colors = []
-    for model_name in [x[0] for x in rate_estimator_names]:
+    for model_name in model_names:
         if not use_colors:
             colors.append("black")
         elif "reproduced" in model_name:
             colors.append("blue")
         elif "Cherry" in model_name:
             colors.append("red")
+        elif "EM" in model_name:
+            colors.append("yellow")
         else:
             colors.append("brown")
     plt.figure(figsize=figsize)
@@ -504,27 +537,26 @@ def reproduce_lg_paper_fig_4(
     plt.xticks(rotation=0, fontsize=fontsize)
     ax = plt.gca()
     ax.yaxis.grid()
+    handles = [
+        mpatches.Patch(color="blue", label="Reproduced"),
+        mpatches.Patch(color="red", label="CherryML"),
+    ]
+    if any(["EM" in model_name for model_name in model_names]):
+        handles.append(mpatches.Patch(color="yellow", label="EM"))
     if use_colors:
         plt.legend(
-            handles=[
-                mpatches.Patch(color="blue", label="Reproduced"),
-                mpatches.Patch(color="red", label="CherryML"),
-            ],
+            handles=handles,
             fontsize=fontsize,
         )
     plt.tight_layout()
-    if TITLES:
-        plt.title("Results on Pfam data from LG paper", font)
     if baseline_rate_estimator_name is not None:
         plt.ylabel(
-            "Average per-site log-likelihood\nimprovement over "
+            "Average per-site AIC\nimprovement over "
             f"{baseline_rate_estimator_name[1]}, in nats",
             fontsize=fontsize,
         )
     else:
-        plt.ylabel(
-            "Average per-site log-likelihood, in nats", fontsize=fontsize
-        )
+        plt.ylabel("Average per-site AIC, in nats", fontsize=fontsize)
     plt.yticks(fontsize=fontsize)
     plt.savefig(
         f"{output_image_dir}/lg_paper_figure.jpg", bbox_inches="tight", dpi=300
