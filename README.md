@@ -438,15 +438,15 @@ To reproduce all figures in our paper, proceed as described below. Please note t
 
 ## Demo: Reproducing a simplified version of Figure 1e (runtime on a normal computer: ~10 minutes)
 
-Nonetheless, in the compute capsule we reproduce a simplified version of Fig. 1e, using FastTree instead of PhyML to evaluate likelihoods, as follows:
+Nonetheless, in the compute capsule we reproduce a simplified version of Fig. 1e, using FastTree instead of PhyML to evaluate likelihoods - and excluding EM since it is very slow (takes ~12 hours to train) - as follows:
 
 ```
 time python reproduce_fig_1e_simplified_demo.py
 ```
 
-Expected output: `fig_1e_simplified/` contains the reproduced version of Fig. 1e.
+Expected output: `fig_1e_simplified/` contains the reproduced version of Fig. 1e (without EM).
 
-FastTree is faster, which is better for the demo, and the results are similar. Reproducing Fig. 1e with FastTree takes ~10 minutes. Using PhyML (as in `reproduce_all_figures.py`, and as in our paper), would take ~4 hours. Note that if you have less than 32 cores available, you should change `num_processes=32` to a different value in `reproduce_fig_1e_simplified_demo.py`. In this case, it will take longer than ~10 minutes.
+FastTree is faster, which is better for the demo, and the results are similar. Reproducing Fig. 1e (excluding EM) with FastTree takes ~10 minutes. Using PhyML (as in `reproduce_all_figures.py`, and as in our paper), would take ~4 hours. Note that if you have less than 32 cores available, you should change `num_processes=32` to a different value in `reproduce_fig_1e_simplified_demo.py`. In this case, it will take longer than ~10 minutes.
 
 ## System requirements
 
