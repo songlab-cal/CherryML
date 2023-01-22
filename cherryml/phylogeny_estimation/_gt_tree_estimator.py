@@ -62,9 +62,9 @@ def _map_func(args: List):
         )
         secure_parallel_output(output_likelihood_dir, family)
 
-        open(
-            os.path.join(output_tree_dir, family + ".profiling"), "w"
-        ).write(f"time_gt_tree_estimator: {0}")
+        open(os.path.join(output_tree_dir, family + ".profiling"), "w").write(
+            f"time_gt_tree_estimator: {0}"
+        )
 
 
 @cached_parallel_computation(

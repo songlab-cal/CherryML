@@ -496,7 +496,8 @@ def reproduce_lg_paper_fig_4(
             )
         return log_likelihoods
 
-    y = get_log_likelihoods(df, [x[0] for x in rate_estimator_names])
+    model_names = [x[0] for x in rate_estimator_names]
+    y = get_log_likelihoods(df, model_names)
     if num_bootstraps > 0:
         np.random.seed(0)
         y_bootstraps = []
@@ -516,7 +517,7 @@ def reproduce_lg_paper_fig_4(
         assert y_bootstraps.shape == (num_bootstraps, len(rate_estimator_names))
 
     colors = []
-    for model_name in [x[0] for x in rate_estimator_names]:
+    for model_name in model_names:
         if not use_colors:
             colors.append("black")
         elif "reproduced" in model_name:
@@ -536,13 +537,15 @@ def reproduce_lg_paper_fig_4(
     plt.xticks(rotation=0, fontsize=fontsize)
     ax = plt.gca()
     ax.yaxis.grid()
+    handles = [
+        mpatches.Patch(color="blue", label="Reproduced"),
+        mpatches.Patch(color="red", label="CherryML"),
+    ]
+    if any(["EM" in model_name for model_name in model_names]):
+        handles.append(mpatches.Patch(color="yellow", label="EM"))
     if use_colors:
         plt.legend(
-            handles=[
-                mpatches.Patch(color="blue", label="Reproduced"),
-                mpatches.Patch(color="red", label="CherryML"),
-                mpatches.Patch(color="yellow", label="EM"),
-            ],
+            handles=handles,
             fontsize=fontsize,
         )
     plt.tight_layout()
