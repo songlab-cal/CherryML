@@ -474,21 +474,7 @@ wget
 zlib1g-dev
 ```
 
-To be able to use Historian specifically (required for the results on EM), you must make sure to have these installed:
-
-On a Mac:
-```
-$ brew install boost gsl pkg-config zlib
-```
-
-On Linux:
-```
-$ sudo yum -y install boost-devel gsl-devel zlib
-```
-
-(Generally, the requirements for Historian are specified in https://github.com/evoldoers/historian .)
-
-All third-party software, including FastTree (`FastTree` program), PhyML (`phyml` program), and Historian (`historian` program), will be automatically installed locally into this repository by our code if you have not installed it already on your system. If you would like to install these third-party tools on your system, you can do e.g.:
+All third-party software, including FastTree (`FastTree` program), PhyML (`phyml` program), and XRATE (`xrate` program), will be automatically installed locally into this repository by our code if you have not installed it already on your system. If you would like to install these third-party tools on your system, you can do e.g.:
 
 To install FastTree (again, this is optional, we will install FastTree locally otherwise):
 ```
@@ -513,15 +499,16 @@ make install
 popd
 ```
 
-To install Historian (again, this is optional, we will install Historian locally otherwise):
+To install XRATE (again, this is optional, we will install XRATE locally otherwise):
 ```
-mkdir -p /opt/historian/bin/
-mkdir -p /opt/historian/download/
-export PATH=/opt/historian/bin:$PATH
-git clone https://github.com/evoldoers/historian /opt/historian/download/historian
-pushd /opt/historian/download/historian/
-make
-cp /opt/historian/download/historian/bin/historian /opt/historian/bin/historian
+mkdir -p /opt/xrate/bin/
+mkdir -p /opt/xrate/download/
+export PATH=/opt/xrate/bin:$PATH
+git clone https://github.com/ihh/dart /opt/xrate/download/xrate
+pushd /opt/xrate/download/xrate/
+./configure --without-guile
+make xrate
+cp /opt/xrate/download/xrate/bin/xrate /opt/xrate/bin/xrate
 popd
 ```
 
@@ -551,6 +538,6 @@ You do not need to worry about downloading the data from the LG paper - we will 
 
 ## Run code to reproduce all figures
 
-You are now ready to reproduce all figures in our paper. Just run `reproduce_all_figures.py` to reproduce all figures in our paper. The approximate runtime needed to reproduce each figure this way is commented in `reproduce_all_figures.py`. Note that the computational bottlenecks to reproduce all figures are (1) benchmarking EM with Historian and (2) tree estimation (as opposed to the CherryML optimizer). To reproduce a specific figure, comment out the figures you do not want in `reproduce_all_figures.py`. The code is written in a functional style, so the functions can be run in any order at any time and will reproduce the results. All the intermediate computations are cached, so re-running the code will be very fast the second time around. The output figures will be found in the `images` folder.
+You are now ready to reproduce all figures in our paper. Just run `reproduce_all_figures.py` to reproduce all figures in our paper. The approximate runtime needed to reproduce each figure this way is commented in `reproduce_all_figures.py`. Note that the computational bottlenecks to reproduce all figures are (1) benchmarking EM with XRATE and (2) tree estimation (as opposed to the CherryML optimizer). To reproduce a specific figure, comment out the figures you do not want in `reproduce_all_figures.py`. The code is written in a functional style, so the functions can be run in any order at any time and will reproduce the results. All the intermediate computations are cached, so re-running the code will be very fast the second time around. The output figures will be found in the `images` folder.
 
-Tree estimation is parallelized, so by default you will need a machine with at least 32 cores. If you would like to use more (or less) cores, modify the value of `NUM_PROCESSES_TREE_ESTIMATION` at the top of the `figures.py` module. (However, note that the bottleneck when reproducing all figures is not tree estimation but performing EM with Historian (Fig. 1b), which will take around 60 hours regardless.)
+Tree estimation is parallelized, so by default you will need a machine with at least 32 cores. If you would like to use more (or less) cores, modify the value of `NUM_PROCESSES_TREE_ESTIMATION` at the top of the `figures.py` module. (However, note that the bottleneck when reproducing all figures is not tree estimation but performing EM with XRATE (Fig. 1b and Supp Fig. 1), which will take around 3-4 days regardless.)
