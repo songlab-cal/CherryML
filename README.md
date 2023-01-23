@@ -8,7 +8,7 @@ We expect that the CherryML method will be applied to enable scalable estimation
 
 This package also enables seamless reproduction of all results in our paper.
 
-For a quick demonstration of an end-to-end application of CherryML to real data, please check out the section [End-to-end worked-out application: plant dataset](#end-to-end-worked-out-application:-plant-dataset).
+For a quick demonstration of an end-to-end application of CherryML to real data, please check out the section "[End-to-end worked-out application: plant dataset](#end-to-end-worked-out-application:-plant-dataset)".
 
 # Demo: CherryML applied to the LG model (runtime on a normal computer: 1 - 5 minutes)
 
