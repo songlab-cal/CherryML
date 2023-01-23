@@ -482,7 +482,8 @@ mkdir -p /opt/FastTree/bin/
 mkdir -p /opt/FastTree/download/
 export PATH=/opt/FastTree/bin:$PATH
 wget http://www.microbesonline.org/fasttree/FastTree.c -P /opt/FastTree/download/
-gcc -DNO_SSE -DUSE_DOUBLE -O3 -finline-functions -funroll-loops -Wall -o /opt/FastTree/bin/FastTree /opt/FastTree/download/FastTree.c -lm
+gcc -DNO_SSE -DUSE_DOUBLE -O3 -finline-functions -funroll-loops -Wall \
+    -o /opt/FastTree/bin/FastTree /opt/FastTree/download/FastTree.c -lm
 ```
 
 To install PhyML (again, this is optional, we will install PhyML locally otherwise):
@@ -534,7 +535,7 @@ https://files.ipd.uw.edu/pub/trRosetta/training_set.tar.gz
 
 After downloading and untarring the data into this repository, rename the `training_set` directory to `input_data`.
 
-You do not need to worry about downloading the data from the LG paper - we will download this automatically for you.
+You do not need to worry about downloading the data from the LG paper - we will download this automatically for you. Similarly, we will download the QMaker datasets.
 
 ## Run code to reproduce all figures
 
