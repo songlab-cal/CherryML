@@ -1,8 +1,10 @@
 # CherryML: Scalable Maximum Likelihood Estimation of Phylogenetic Models
 
 This package implements the CherryML method as applied to:
-1. The classical LG model of amino acid evolution (involving a $20 \times 20$ rate matrix), as well as
+1. The classical LG model of amino acid evolution with site rate variation [Le and Gascuel 2008] (involving a $20 \times 20$ rate matrix), as well as
 2. A model of co-evolution at protein contact sites (involving a $400 \times 400$ rate matrix).
+
+Note that (1) is NOT the LG rate matrix but the LG _model_; the LG rate matrix [Le and Gascuel 2008] was estimated under the LG model using a specific dataset (a version of Pfam from 2008).
 
 We expect that the CherryML method will be applied to enable scalable estimation of many models in the future.
 
@@ -474,7 +476,7 @@ wget
 zlib1g-dev
 ```
 
-All third-party software, including FastTree (`FastTree` program), PhyML (`phyml` program), and XRATE (`xrate` program), will be automatically installed locally into this repository by our code if you have not installed it already on your system. If you would like to install these third-party tools on your system, you can do e.g.:
+All third-party software, including FastTree [Price et al. 2010] (`FastTree` program), PhyML [Guindon et al. 2010] (`phyml` program), and XRATE [Klosterman et al. 2006] (`xrate` program), will be automatically installed locally into this repository by our code if you have not installed it already on your system. If you would like to install these third-party tools on your system, you can do e.g.:
 
 To install FastTree (again, this is optional, we will install FastTree locally otherwise):
 ```
