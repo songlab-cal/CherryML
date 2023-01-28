@@ -164,6 +164,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--families",
         type=none_or_value,
+        nargs="*",
         required=False,
         default=None,
         help="Subset of families on which to run rate matrix estimation.",  # noqa

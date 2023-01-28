@@ -208,7 +208,8 @@ The CherryML API provides extensive functionality through additional flags, whic
   --minimum_distance_for_nontrivial_contact MINIMUM_DISTANCE_FOR_NONTRIVIAL_CONTACT
                         Minimum distance in primary structure used to determine
                         if two site are in non-trivial contact. (default: 7)
-  --families FAMILIES   Subset of families on which to run rate matrix
+  --families [FAMILIES [FAMILIES ...]]
+                        Subset of families on which to run rate matrix
                         estimation. (default: None)
   --sites_subset_dir SITES_SUBSET_DIR
                         Directory where the subset of sites from each family used
