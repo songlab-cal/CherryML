@@ -211,8 +211,7 @@ The CherryML API provides extensive functionality through additional flags, whic
   --families [FAMILIES [FAMILIES ...]]
                         Subset of families on which to run rate matrix
                         estimation. If not provided, all families in the
-                        `msa_dir` will be used. (default: None) (default:
-                        None)
+                        `msa_dir` will be used. (default: None)
   --sites_subset_dir SITES_SUBSET_DIR
                         Directory where the subset of sites from each family used
                         to learn the rate matrix are specified. Currently only
