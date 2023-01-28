@@ -167,7 +167,7 @@ if __name__ == "__main__":
         nargs="*",
         required=False,
         default=None,
-        help="Subset of families on which to run rate matrix estimation.",  # noqa
+        help="Subset of families on which to run rate matrix estimation. If not provided, all families in the `msa_dir` will be used. (default: None)",  # noqa
     )
     parser.add_argument(
         "--sites_subset_dir",
