@@ -69,7 +69,6 @@ def _map_func(args) -> List[Tuple[float, pd.DataFrame]]:
                 Return a single unpaired leaf and its distance, it such exists.
                 """
                 if tree.is_leaf(node):
-                    print(f"Propagating {(node, 0.0)}")
                     return (node, 0.0)
                 unmatched_leaves_under = []
                 distances_under = []
@@ -93,9 +92,6 @@ def _map_func(args) -> List[Tuple[float, pd.DataFrame]]:
                     )
                     # NOTE: Copy-pasta from below ("cherry" case)...
                     leaf_seq_1, leaf_seq_2 = msa[leaf_1], msa[leaf_2]
-                    print(
-                        f"Pairnig up {leaf_seq_1} and {leaf_seq_2} at distance {branch_length_1 + branch_length_2}"
-                    )
                     msa_length = len(leaf_seq_1)
                     for amino_acid_idx in range(msa_length):
                         site_rate = site_rates[amino_acid_idx]
@@ -124,14 +120,8 @@ def _map_func(args) -> List[Tuple[float, pd.DataFrame]]:
                 if len(unmatched_leaves_under) % 2 == 0:
                     return (None, None)
                 else:
-                    print(
-                        f"Propagating {(unmatched_leaves_under[-1], distances_under[-1])}"
-                    )
                     return (unmatched_leaves_under[-1], distances_under[-1])
-
-            print(f"Starting!")
             dfs(tree.root())
-            print(f"Done!")
             assert len(total_pairs) == int(len(tree.leaves()) / 2)
         else:
             for node in tree.nodes():
