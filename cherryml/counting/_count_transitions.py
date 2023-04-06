@@ -309,6 +309,7 @@ def count_transitions(
                 f"Going to run C++ implementation on {len(families)} families "
                 f"using {num_processes} processes"
             )
+            # logger.info(f"command = {command}")
             os.system(command)
 
             # Remove auxiliary files

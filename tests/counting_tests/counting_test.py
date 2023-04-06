@@ -169,7 +169,6 @@ class TestCountTransitionsTiny(unittest.TestCase):
                 edge_or_cherry="cherry++",
                 output_count_matrices_dir=outdir,
                 num_processes=num_processes,
-                use_cpp_implementation=False,
             )
             count_matrices = read_count_matrices(
                 os.path.join(outdir, "result.txt")
@@ -205,7 +204,6 @@ class TestCountTransitionsTiny(unittest.TestCase):
                 edge_or_cherry="cherry++",
                 output_count_matrices_dir=outdir,
                 num_processes=num_processes,
-                use_cpp_implementation=False,
             )
             count_matrices = read_count_matrices(
                 os.path.join(outdir, "result.txt")
@@ -301,7 +299,6 @@ class TestCountTransitionsTiny(unittest.TestCase):
                 minimum_distance_for_nontrivial_contact=2,
                 output_count_matrices_dir=outdir,
                 num_processes=num_processes,
-                use_cpp_implementation=False,
             )
             count_matrices = read_count_matrices(
                 os.path.join(outdir, "result.txt")
@@ -340,7 +337,6 @@ class TestCountTransitionsTiny(unittest.TestCase):
                 minimum_distance_for_nontrivial_contact=2,
                 output_count_matrices_dir=outdir,
                 num_processes=num_processes,
-                use_cpp_implementation=False,
             )
             count_matrices = read_count_matrices(
                 os.path.join(outdir, "result.txt")

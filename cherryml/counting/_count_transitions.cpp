@@ -348,7 +348,6 @@ pair<string, float> _dfs(
         string maybe_unmatched_leaf = maybe_unmatched_leaf_and_distance.first;
         float maybe_distance = maybe_unmatched_leaf_and_distance.second;
         if(maybe_distance >= -0.5){
-            assert(maybe_unmatched_leaf != "");
             unmatched_leaves_under.push_back(maybe_unmatched_leaf);
             distances_under.push_back(maybe_distance + branch_length);
         }
