@@ -121,6 +121,7 @@ def _map_func(args) -> List[Tuple[float, pd.DataFrame]]:
                     return (None, None)
                 else:
                     return (unmatched_leaves_under[-1], distances_under[-1])
+
             dfs(tree.root())
             assert len(total_pairs) == int(len(tree.leaves()) / 2)
         else:

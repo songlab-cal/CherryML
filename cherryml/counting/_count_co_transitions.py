@@ -77,41 +77,38 @@ def _map_func(args) -> List[Tuple[float, pd.DataFrame]]:
             for (i, j) in contacting_pairs
             if abs(i - j) >= minimum_distance_for_nontrivial_contact and i < j
         ]
-        for node in tree.nodes():
-            if edge_or_cherry == "edge":
-                node_seq = msa[node]
-                # Extract all transitions on edges starting at 'node'
-                for (child, branch_length) in tree.children(node):
-                    child_seq = msa[child]
-                    q_idx = quantization_idx(branch_length, quantization_points)
-                    if q_idx is not None:
-                        for (i, j) in contacting_pairs:
-                            start_state = node_seq[i] + node_seq[j]
-                            end_state = child_seq[i] + child_seq[j]
-                            if (
-                                node_seq[i] in amino_acids
-                                and node_seq[j] in amino_acids
-                                and child_seq[i] in amino_acids
-                                and child_seq[j] in amino_acids
-                            ):
-                                for (s, e) in [
-                                    (start_state, end_state),
-                                    (start_state[::-1], end_state[::-1]),
-                                ]:
-                                    s_idx = aa_pair_to_int[s]
-                                    e_idx = aa_pair_to_int[e]
-                                    count_matrices_numpy[
-                                        q_idx, s_idx, e_idx
-                                    ] += 0.5
-            elif edge_or_cherry == "cherry":
-                children = tree.children(node)
-                if len(children) == 2 and all(
-                    [tree.is_leaf(child) for (child, _) in children]
-                ):
+        if edge_or_cherry == "cherry++":
+            total_pairs = []
+
+            def dfs(node) -> Optional[Tuple[int, float]]:
+                """
+                Pair up leaves under me.
+
+                Return a single unpaired leaf and its distance, it such exists.
+                """
+                if tree.is_leaf(node):
+                    return (node, 0.0)
+                unmatched_leaves_under = []
+                distances_under = []
+                for child, branch_length in tree.children(node):
+                    maybe_unmatched_leaf, maybe_distance = dfs(child)
+                    if maybe_unmatched_leaf is not None:
+                        assert maybe_distance is not None
+                        unmatched_leaves_under.append(maybe_unmatched_leaf)
+                        distances_under.append(maybe_distance + branch_length)
+                assert len(unmatched_leaves_under) == len(distances_under)
+                index = 0
+
+                while index + 1 <= len(unmatched_leaves_under) - 1:
+                    total_pairs.append(1)
                     (leaf_1, branch_length_1), (leaf_2, branch_length_2) = (
-                        children[0],
-                        children[1],
+                        (unmatched_leaves_under[index], distances_under[index]),
+                        (
+                            unmatched_leaves_under[index + 1],
+                            distances_under[index + 1],
+                        ),
                     )
+                    # NOTE: Copy-pasta from below ("cherry" case)...
                     leaf_seq_1, leaf_seq_2 = msa[leaf_1], msa[leaf_2]
                     branch_length_total = branch_length_1 + branch_length_2
                     q_idx = quantization_idx(
@@ -139,6 +136,80 @@ def _map_func(args) -> List[Tuple[float, pd.DataFrame]]:
                                     count_matrices_numpy[
                                         q_idx, s_idx, e_idx
                                     ] += 0.25
+
+                    index += 2
+                if len(unmatched_leaves_under) % 2 == 0:
+                    return (None, None)
+                else:
+                    return (unmatched_leaves_under[-1], distances_under[-1])
+
+            dfs(tree.root())
+            assert len(total_pairs) == int(len(tree.leaves()) / 2)
+        else:
+            for node in tree.nodes():
+                if edge_or_cherry == "edge":
+                    node_seq = msa[node]
+                    # Extract all transitions on edges starting at 'node'
+                    for (child, branch_length) in tree.children(node):
+                        child_seq = msa[child]
+                        q_idx = quantization_idx(
+                            branch_length, quantization_points
+                        )
+                        if q_idx is not None:
+                            for (i, j) in contacting_pairs:
+                                start_state = node_seq[i] + node_seq[j]
+                                end_state = child_seq[i] + child_seq[j]
+                                if (
+                                    node_seq[i] in amino_acids
+                                    and node_seq[j] in amino_acids
+                                    and child_seq[i] in amino_acids
+                                    and child_seq[j] in amino_acids
+                                ):
+                                    for (s, e) in [
+                                        (start_state, end_state),
+                                        (start_state[::-1], end_state[::-1]),
+                                    ]:
+                                        s_idx = aa_pair_to_int[s]
+                                        e_idx = aa_pair_to_int[e]
+                                        count_matrices_numpy[
+                                            q_idx, s_idx, e_idx
+                                        ] += 0.5
+                elif edge_or_cherry == "cherry":
+                    children = tree.children(node)
+                    if len(children) == 2 and all(
+                        [tree.is_leaf(child) for (child, _) in children]
+                    ):
+                        (leaf_1, branch_length_1), (leaf_2, branch_length_2) = (
+                            children[0],
+                            children[1],
+                        )
+                        leaf_seq_1, leaf_seq_2 = msa[leaf_1], msa[leaf_2]
+                        branch_length_total = branch_length_1 + branch_length_2
+                        q_idx = quantization_idx(
+                            branch_length_total, quantization_points
+                        )
+                        if q_idx is not None:
+                            for (i, j) in contacting_pairs:
+                                # We accumulate the transitions in both directions
+                                state_1 = leaf_seq_1[i] + leaf_seq_1[j]
+                                state_2 = leaf_seq_2[i] + leaf_seq_2[j]
+                                if (
+                                    leaf_seq_1[i] in amino_acids
+                                    and leaf_seq_1[j] in amino_acids
+                                    and leaf_seq_2[i] in amino_acids
+                                    and leaf_seq_2[j] in amino_acids
+                                ):
+                                    for (s, e) in [
+                                        (state_1, state_2),
+                                        (state_1[::-1], state_2[::-1]),
+                                        (state_2, state_1),
+                                        (state_2[::-1], state_1[::-1]),
+                                    ]:
+                                        s_idx = aa_pair_to_int[s]
+                                        e_idx = aa_pair_to_int[e]
+                                        count_matrices_numpy[
+                                            q_idx, s_idx, e_idx
+                                        ] += 0.25
     count_matrices = [
         [
             q,
