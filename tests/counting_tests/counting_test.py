@@ -150,6 +150,75 @@ class TestCountTransitionsTiny(unittest.TestCase):
     @parameterized.expand(
         [("3 processes", 3), ("2 processes", 2), ("serial", 1)]
     )
+    def test_count_transitions_cherries_plus_plus(self, name, num_processes):
+        """
+        Not a very interesting test, since there are no more cherries to pop
+        except the original onces. Thus, just check that cherry++ works under
+        this border case.
+        """
+        with tempfile.TemporaryDirectory() as root_dir:
+            # root_dir = "test_output/"
+            outdir = os.path.join(root_dir, "count_matrices_dir_cherries")
+            count_transitions(
+                tree_dir=f"{DATA_DIR}/tiny/tree_dir",
+                msa_dir=f"{DATA_DIR}/tiny/msa_dir",
+                site_rates_dir=f"{DATA_DIR}/tiny/site_rates_dir",
+                families=["fam1", "fam2", "fam3"],
+                amino_acids=["I", "L", "S", "T"],
+                quantization_points=[1.99, 10.01],
+                edge_or_cherry="cherry++",
+                output_count_matrices_dir=outdir,
+                num_processes=num_processes,
+                use_cpp_implementation=False,
+            )
+            count_matrices = read_count_matrices(
+                os.path.join(outdir, "result.txt")
+            )
+            expected_count_matrices = read_count_matrices(
+                f"{DATA_DIR}/tiny/count_matrices_dir_cherries/result.txt"
+            )
+            check_count_matrices_are_equal(
+                expected_count_matrices,
+                count_matrices,
+            )
+
+    @parameterized.expand(
+        [("3 processes", 3), ("2 processes", 2), ("serial", 1)]
+    )
+    def test_count_transitions_cherries_plus_plus_v2(self, name, num_processes):
+        """
+        Basically I just took the original test for cherries and "doubled" each
+        cherry. The output count matrices should thus just double.
+        """
+        with tempfile.TemporaryDirectory() as root_dir:
+            # root_dir = "test_output/"
+            outdir = os.path.join(root_dir, "count_matrices_dir_co_cherries")
+            count_transitions(
+                tree_dir=f"{DATA_DIR}/tiny_2/tree_dir",
+                msa_dir=f"{DATA_DIR}/tiny_2/msa_dir",
+                site_rates_dir=f"{DATA_DIR}/tiny_2/site_rates_dir",
+                families=["fam1", "fam2", "fam3"],
+                amino_acids=["I", "L", "S", "T"],
+                quantization_points=[1.99, 10.01],
+                edge_or_cherry="cherry++",
+                output_count_matrices_dir=outdir,
+                num_processes=num_processes,
+                use_cpp_implementation=False,
+            )
+            count_matrices = read_count_matrices(
+                os.path.join(outdir, "result.txt")
+            )
+            expected_count_matrices = read_count_matrices(
+                f"{DATA_DIR}/tiny_2/count_matrices_dir_co_cherries/result.txt"
+            )
+            check_count_matrices_are_equal(
+                expected_count_matrices,
+                count_matrices,
+            )
+
+    @parameterized.expand(
+        [("3 processes", 3), ("2 processes", 2), ("serial", 1)]
+    )
     def test_count_co_transitions_edges(self, name, num_processes):
         with tempfile.TemporaryDirectory() as root_dir:
             # root_dir = "test_output/"

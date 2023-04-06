@@ -1,0 +1,17 @@
+8 nodes
+internal-0
+internal-1
+internal-2
+internal-3
+seq1
+seq2
+seq3
+seq4
+7 edges
+internal-0 internal-1 1.0
+internal-1 internal-2 0.01
+internal-2 internal-3 0.01
+internal-1 seq1 3.0
+internal-2 seq2 4.0
+internal-3 seq3 3.0
+internal-3 seq4 4.0
