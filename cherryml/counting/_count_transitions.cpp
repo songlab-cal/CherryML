@@ -386,7 +386,7 @@ pair<string, float> _dfs(
     if(unmatched_leaves_under.size() % 2 == 0){
         return make_pair("", -1.0);
     } else {
-        return make_pair(unmatched_leaves_under[-1], distances_under[-1]);
+        return make_pair(unmatched_leaves_under[int(unmatched_leaves_under.size())-1], distances_under[int(distances_under.size())-1]);
     }
 }
 
