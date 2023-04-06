@@ -213,10 +213,11 @@ def fig_single_site_cherry(
     num_processes_tree_estimation: int = 4,
     num_sequences: int = 128,
     random_seed: int = 0,
+    cherry_type: str = "cherry",
 ):
     caching.set_cache_dir("_cache_benchmarking_em")
 
-    output_image_dir = "images/fig_single_site_cherry"
+    output_image_dir = f"images/fig_single_site_{cherry_type}"
     if not os.path.exists(output_image_dir):
         os.makedirs(output_image_dir)
 
@@ -272,7 +273,7 @@ def fig_single_site_cherry(
                 num_processes_tree_estimation=num_processes_tree_estimation,
                 num_processes_optimization=1,
                 num_processes_counting=1,
-                edge_or_cherry="cherry",
+                edge_or_cherry=cherry_type,
             )
         )
 
@@ -540,9 +541,18 @@ def fig_computational_and_stat_eff_cherry_vs_em(
         num_families_cherry,
         cherry_errors_nonpct,
         cherry_times,
-    ) = fig_single_site_cherry()
+    ) = fig_single_site_cherry(cherry_type="cherry")
     cherry_times = [int(x) for x in cherry_times]
     cherry_errors = [float("%.1f" % (100 * x)) for x in cherry_errors_nonpct]
+
+    (
+        num_families_cherry_plus_plus,
+        cherry_plus_plus_errors_nonpct,
+        cherry_plus_plus_times,
+    ) = fig_single_site_cherry(cherry_type="cherry++__2023_04_06_test_1")
+    cherry_plus_plus_times = [int(x) for x in cherry_plus_plus_times]
+    cherry_plus_plus_errors = [float("%.1f" % (100 * x)) for x in cherry_plus_plus_errors_nonpct]
+
     num_families_em, em_errors_nonpct, em_times = fig_single_site_em(
         extra_em_command_line_args=extra_em_command_line_args,
     )
@@ -552,6 +562,8 @@ def fig_computational_and_stat_eff_cherry_vs_em(
 
     print(f"cherry_errors_nonpct = {cherry_errors_nonpct}")
     print(f"cherry_times = {cherry_times}")
+    print(f"cherry_plus_plus_errors_nonpct = {cherry_plus_plus_errors_nonpct}")
+    print(f"cherry_plus_plus_times = {cherry_plus_plus_times}")
     print(f"em_errors_nonpct = {em_errors_nonpct}")
     print(f"em_times = {em_times}")
 
@@ -560,6 +572,9 @@ def fig_computational_and_stat_eff_cherry_vs_em(
     plt.figure(dpi=300)
     plt.plot(
         indices, 100 * np.array(cherry_errors_nonpct), "o-", label="CherryML"
+    )
+    plt.plot(
+        indices, 100 * np.array(cherry_plus_plus_errors_nonpct), "o-", label="CherryML++"
     )
     plt.plot(indices, 100 * np.array(em_errors_nonpct), "o-", label="EM")
     plt.ylim((0.5, 200))
@@ -574,6 +589,8 @@ def fig_computational_and_stat_eff_cherry_vs_em(
         plt.text(a - 0.35, b / 1.5, str(b) + "%", fontsize=fontsize)
     for a, b in zip(indices, cherry_errors):
         plt.text(a - 0.3, 1.2 * b, str(b) + "%", fontsize=fontsize)
+    for a, b in zip(indices, cherry_plus_plus_errors):
+        plt.text(a - 0.3, 1.2 * b, str(b) + "%", fontsize=fontsize)
     plt.tight_layout()
     plt.savefig(os.path.join(output_image_dir, "errors"))
     plt.close()
@@ -582,6 +599,7 @@ def fig_computational_and_stat_eff_cherry_vs_em(
     indices = [i for i in range(len(num_families))]
     plt.figure(dpi=300)
     plt.plot(indices, cherry_times, "o-", label="CherryML")
+    plt.plot(indices, cherry_plus_plus_times, "o-", label="CherryML++")
     plt.plot(indices, em_times, "o-", label="EM")
     plt.ylim((5, 5e5))
     plt.xticks(indices, num_families, fontsize=fontsize)
@@ -594,6 +612,8 @@ def fig_computational_and_stat_eff_cherry_vs_em(
     for a, b in zip(indices, em_times):
         plt.text(a - 0.35, b * 1.5, str(b) + "s", fontsize=fontsize)
     for a, b in zip(indices, cherry_times):
+        plt.text(a - 0.3, b * 1.5, str(b) + "s", fontsize=fontsize)
+    for a, b in zip(indices, cherry_plus_plus_times):
         plt.text(a - 0.3, b * 1.5, str(b) + "s", fontsize=fontsize)
     plt.tight_layout()
     plt.savefig(os.path.join(output_image_dir, "times"))
