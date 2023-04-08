@@ -260,8 +260,7 @@ def _fig_single_site_cherry(
                 random_seed=random_seed,
             )
 
-            logger = logging.getLogger(__name__)
-            logger.info(
+            logging_str = (
                 "Fig. 1bc simulated_data_dirs are:\n"
                 f"msa_dir = {msa_dir}\n"
                 # f"contact_map_dir = {contact_map_dir}\n"
@@ -272,6 +271,9 @@ def _fig_single_site_cherry(
                 f"families_all are:\n"
                 f"{' '.join(families_all)}"
             )
+            if not os.path.exists("fig_1bc_simulated_data_dirs.txt"):
+                with open("fig_1bc_simulated_data_dirs.txt", "w") as out_file:
+                    out_file.write(logging_str)
         else:
             families_all = (
                 open(simulated_data_dirs["families_all.txt"], "r")
@@ -763,10 +765,22 @@ def fig_single_site_quantization_error(
                 num_processes=num_processes_tree_estimation,
                 random_seed=random_seed,
             )
+            logging_str = (
+                "Fig. 1d simulated_data_dirs are:\n"
+                f"msa_dir = {msa_dir}\n"
+                # f"contact_map_dir = {contact_map_dir}\n"
+                # f"gt_msa_dir = {gt_msa_dir}\n"
+                f"gt_tree_dir = {gt_tree_dir}\n"
+                f"gt_site_rates_dir = {gt_site_rates_dir}\n"
+                f"gt_likelihood_dir = {gt_likelihood_dir}\n"
+            )
+            if not os.path.exists("fig_1d_simulated_data_dirs.txt"):
+                with open("fig_1d_simulated_data_dirs.txt", "w") as out_file:
+                    out_file.write(logging_str)
         else:
             msa_dir = simulated_data_dirs["msa_dir"]
-            contact_map_dir = simulated_data_dirs["contact_map_dir"]
-            gt_msa_dir = simulated_data_dirs["gt_msa_dir"]
+            # contact_map_dir = simulated_data_dirs["contact_map_dir"]
+            # gt_msa_dir = simulated_data_dirs["gt_msa_dir"]
             gt_tree_dir = simulated_data_dirs["gt_tree_dir"]
             gt_site_rates_dir = simulated_data_dirs["gt_site_rates_dir"]
             gt_likelihood_dir = simulated_data_dirs["gt_likelihood_dir"]
@@ -1592,8 +1606,7 @@ def fig_pair_site_quantization_error(
                 use_cpp_simulation_implementation=True,
             )
 
-            logger = logging.getLogger(__name__)
-            logger.info(
+            logging_str = (
                 "Fig. 2ab simulated_data_dirs are:\n"
                 f"msa_dir = {msa_dir}\n"
                 f"contact_map_dir = {contact_map_dir}\n"
@@ -1602,6 +1615,9 @@ def fig_pair_site_quantization_error(
                 f"gt_site_rates_dir = {gt_site_rates_dir}\n"
                 f"gt_likelihood_dir = {gt_likelihood_dir}\n"
             )
+            if not os.path.exists("fig_2ab_simulated_data_dirs.txt"):
+                with open("fig_2ab_simulated_data_dirs.txt", "w") as out_file:
+                    out_file.write(logging_str)
         else:
             msa_dir = simulated_data_dirs["msa_dir"]
             contact_map_dir = simulated_data_dirs["contact_map_dir"]
