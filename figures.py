@@ -208,12 +208,13 @@ def create_synthetic_count_matrices(
     )
 
 
-def fig_single_site_cherry(
+def _fig_single_site_cherry(
     num_rate_categories: int = 1,
     num_processes_tree_estimation: int = 4,
     num_sequences: int = 128,
     random_seed: int = 0,
     cherry_type: str = "cherry",
+    simulated_data_dirs: Optional[Dict[str, str]] = None,
 ):
     caching.set_cache_dir("_cache_benchmarking_em")
 
@@ -232,30 +233,57 @@ def fig_single_site_cherry(
         print(msg)
         print("*" * len(msg))
 
-        families_all = get_families_within_cutoff(
-            pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
-            min_num_sites=190,
-            max_num_sites=230,
-            min_num_sequences=num_sequences,
-            max_num_sequences=1000000,
-        )
-        families_train = families_all[:num_families_train]
+        if simulated_data_dirs is None:
+            families_all = get_families_within_cutoff(
+                pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
+                min_num_sites=190,
+                max_num_sites=230,
+                min_num_sequences=num_sequences,
+                max_num_sequences=1000000,
+            )
+            families_train = families_all[:num_families_train]
 
-        (
-            msa_dir,
-            contact_map_dir,
-            gt_msa_dir,
-            gt_tree_dir,
-            gt_site_rates_dir,
-            gt_likelihood_dir,
-        ) = simulate_ground_truth_data_single_site(
-            pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
-            num_sequences=num_sequences,
-            families=families_all,
-            num_rate_categories=num_rate_categories,
-            num_processes=num_processes_tree_estimation,
-            random_seed=random_seed,
-        )
+            (
+                msa_dir,
+                contact_map_dir,
+                gt_msa_dir,
+                gt_tree_dir,
+                gt_site_rates_dir,
+                gt_likelihood_dir,
+            ) = simulate_ground_truth_data_single_site(
+                pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
+                num_sequences=num_sequences,
+                families=families_all,
+                num_rate_categories=num_rate_categories,
+                num_processes=num_processes_tree_estimation,
+                random_seed=random_seed,
+            )
+
+            logger = logging.getLogger(__name__)
+            logger.info(
+                "Fig. 1bc simulated_data_dirs are:\n"
+                f"msa_dir = {msa_dir}\n"
+                # f"contact_map_dir = {contact_map_dir}\n"
+                # f"gt_msa_dir = {gt_msa_dir}\n"
+                f"gt_tree_dir = {gt_tree_dir}\n"
+                f"gt_site_rates_dir = {gt_site_rates_dir}\n"
+                f"gt_likelihood_dir = {gt_likelihood_dir}\n"
+                f"families_all are:\n"
+                f"{families_all.join(' ')}"
+            )
+        else:
+            families_all = (
+                open(simulated_data_dirs["families_all.txt"], "r")
+                .read()
+                .strip()
+                .split()
+            )
+            msa_dir = simulated_data_dirs["msa_dir"]
+            # contact_map_dir = simulated_data_dirs["contact_map_dir"]
+            # gt_msa_dir = simulated_data_dirs["gt_msa_dir"]
+            gt_tree_dir = simulated_data_dirs["gt_tree_dir"]
+            gt_site_rates_dir = simulated_data_dirs["gt_site_rates_dir"]
+            gt_likelihood_dir = simulated_data_dirs["gt_likelihood_dir"]
 
         # Now run the cherryml method.
         lg_end_to_end_with_cherryml_optimizer_res = (
@@ -381,12 +409,13 @@ def fig_single_site_cherry(
     return num_families_train_list, ys_relative_errors, runtimes
 
 
-def fig_single_site_em(
+def _fig_single_site_em(
     extra_em_command_line_args: str = "-log 6 -f 3 -mi 0.000001",
     num_processes: int = 4,
     num_rate_categories: int = 1,
     num_sequences: int = 128,
     random_seed: int = 0,
+    simulated_data_dirs: Optional[Dict[str, str]] = None,
 ):
     output_image_dir = (
         "images/fig_single_site_em__"
@@ -408,30 +437,44 @@ def fig_single_site_em(
         print(msg)
         print("*" * len(msg))
 
-        families_all = get_families_within_cutoff(
-            pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
-            min_num_sites=190,
-            max_num_sites=230,
-            min_num_sequences=num_sequences,
-            max_num_sequences=1000000,
-        )
-        families_train = families_all[:num_families_train]
+        if simulated_data_dirs is None:
+            families_all = get_families_within_cutoff(
+                pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
+                min_num_sites=190,
+                max_num_sites=230,
+                min_num_sequences=num_sequences,
+                max_num_sequences=1000000,
+            )
+            families_train = families_all[:num_families_train]
 
-        (
-            msa_dir,
-            contact_map_dir,
-            gt_msa_dir,
-            gt_tree_dir,
-            gt_site_rates_dir,
-            gt_likelihood_dir,
-        ) = simulate_ground_truth_data_single_site(
-            pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
-            num_sequences=num_sequences,
-            families=families_all,
-            num_rate_categories=num_rate_categories,
-            num_processes=num_processes,
-            random_seed=random_seed,
-        )
+            (
+                msa_dir,
+                contact_map_dir,
+                gt_msa_dir,
+                gt_tree_dir,
+                gt_site_rates_dir,
+                gt_likelihood_dir,
+            ) = simulate_ground_truth_data_single_site(
+                pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
+                num_sequences=num_sequences,
+                families=families_all,
+                num_rate_categories=num_rate_categories,
+                num_processes=num_processes,
+                random_seed=random_seed,
+            )
+        else:
+            families_all = (
+                open(simulated_data_dirs["families_all.txt"], "r")
+                .read()
+                .strip()
+                .split()
+            )
+            msa_dir = simulated_data_dirs["msa_dir"]
+            # contact_map_dir = simulated_data_dirs["contact_map_dir"]
+            # gt_msa_dir = simulated_data_dirs["gt_msa_dir"]
+            gt_tree_dir = simulated_data_dirs["gt_tree_dir"]
+            gt_site_rates_dir = simulated_data_dirs["gt_site_rates_dir"]
+            gt_likelihood_dir = simulated_data_dirs["gt_likelihood_dir"]
 
         em_estimator_res = lg_end_to_end_with_em_optimizer(
             msa_dir=msa_dir,
@@ -530,7 +573,15 @@ def fig_single_site_em(
 # Fig. 1b, 1c
 def fig_computational_and_stat_eff_cherry_vs_em(
     extra_em_command_line_args: str = "-log 6 -f 3 -mi 0.000001",
+    include_cherry_plus_plus: bool = False,
+    simulated_data_dirs: Optional[Dict[str, str]] = None,
 ):
+    """
+    We show that CherryML retains a high statistical efficiency compared to EM.
+
+    If `simulated_data_dirs` is provided, then the data simulation step will be
+    skipped.
+    """
     fontsize = 14
 
     output_image_dir = "images/fig_computational_and_stat_eff_cherry_vs_em"
@@ -541,20 +592,29 @@ def fig_computational_and_stat_eff_cherry_vs_em(
         num_families_cherry,
         cherry_errors_nonpct,
         cherry_times,
-    ) = fig_single_site_cherry(cherry_type="cherry")
+    ) = _fig_single_site_cherry(
+        cherry_type="cherry", simulated_data_dirs=simulated_data_dirs
+    )
     cherry_times = [int(x) for x in cherry_times]
     cherry_errors = [float("%.1f" % (100 * x)) for x in cherry_errors_nonpct]
 
-    (
-        num_families_cherry_plus_plus,
-        cherry_plus_plus_errors_nonpct,
-        cherry_plus_plus_times,
-    ) = fig_single_site_cherry(cherry_type="cherry++__2023_04_06_test_1")
-    cherry_plus_plus_times = [int(x) for x in cherry_plus_plus_times]
-    cherry_plus_plus_errors = [float("%.1f" % (100 * x)) for x in cherry_plus_plus_errors_nonpct]
+    if include_cherry_plus_plus:
+        (
+            num_families_cherry_plus_plus,
+            cherry_plus_plus_errors_nonpct,
+            cherry_plus_plus_times,
+        ) = _fig_single_site_cherry(
+            cherry_type="cherry++__2023_04_06_test_1",
+            simulated_data_dirs=simulated_data_dirs,
+        )
+        cherry_plus_plus_times = [int(x) for x in cherry_plus_plus_times]
+        cherry_plus_plus_errors = [
+            float("%.1f" % (100 * x)) for x in cherry_plus_plus_errors_nonpct
+        ]
 
-    num_families_em, em_errors_nonpct, em_times = fig_single_site_em(
+    num_families_em, em_errors_nonpct, em_times = _fig_single_site_em(
         extra_em_command_line_args=extra_em_command_line_args,
+        simulated_data_dirs=simulated_data_dirs,
     )
     em_times = [int(x) for x in em_times]
     em_errors = [float("%.1f" % (100 * x)) for x in em_errors_nonpct]
@@ -562,8 +622,11 @@ def fig_computational_and_stat_eff_cherry_vs_em(
 
     print(f"cherry_errors_nonpct = {cherry_errors_nonpct}")
     print(f"cherry_times = {cherry_times}")
-    print(f"cherry_plus_plus_errors_nonpct = {cherry_plus_plus_errors_nonpct}")
-    print(f"cherry_plus_plus_times = {cherry_plus_plus_times}")
+    if include_cherry_plus_plus:
+        print(
+            f"cherry_plus_plus_errors_nonpct = {cherry_plus_plus_errors_nonpct}"
+        )
+        print(f"cherry_plus_plus_times = {cherry_plus_plus_times}")
     print(f"em_errors_nonpct = {em_errors_nonpct}")
     print(f"em_times = {em_times}")
 
@@ -573,9 +636,13 @@ def fig_computational_and_stat_eff_cherry_vs_em(
     plt.plot(
         indices, 100 * np.array(cherry_errors_nonpct), "o-", label="CherryML"
     )
-    plt.plot(
-        indices, 100 * np.array(cherry_plus_plus_errors_nonpct), "o-", label="CherryML++"
-    )
+    if include_cherry_plus_plus:
+        plt.plot(
+            indices,
+            100 * np.array(cherry_plus_plus_errors_nonpct),
+            "o-",
+            label="CherryML++",
+        )
     plt.plot(indices, 100 * np.array(em_errors_nonpct), "o-", label="EM")
     plt.ylim((0.5, 200))
     plt.xticks(indices, num_families, fontsize=fontsize)
@@ -589,8 +656,9 @@ def fig_computational_and_stat_eff_cherry_vs_em(
         plt.text(a - 0.35, b / 1.5, str(b) + "%", fontsize=fontsize)
     for a, b in zip(indices, cherry_errors):
         plt.text(a - 0.3, 1.2 * b, str(b) + "%", fontsize=fontsize)
-    for a, b in zip(indices, cherry_plus_plus_errors):
-        plt.text(a - 0.3, 1.2 * b, str(b) + "%", fontsize=fontsize)
+    if include_cherry_plus_plus:
+        for a, b in zip(indices, cherry_plus_plus_errors):
+            plt.text(a - 0.3, 1.2 * b, str(b) + "%", fontsize=fontsize)
     plt.tight_layout()
     plt.savefig(os.path.join(output_image_dir, "errors"))
     plt.close()
@@ -599,7 +667,8 @@ def fig_computational_and_stat_eff_cherry_vs_em(
     indices = [i for i in range(len(num_families))]
     plt.figure(dpi=300)
     plt.plot(indices, cherry_times, "o-", label="CherryML")
-    plt.plot(indices, cherry_plus_plus_times, "o-", label="CherryML++")
+    if include_cherry_plus_plus:
+        plt.plot(indices, cherry_plus_plus_times, "o-", label="CherryML++")
     plt.plot(indices, em_times, "o-", label="EM")
     plt.ylim((5, 5e5))
     plt.xticks(indices, num_families, fontsize=fontsize)
@@ -613,8 +682,9 @@ def fig_computational_and_stat_eff_cherry_vs_em(
         plt.text(a - 0.35, b * 1.5, str(b) + "s", fontsize=fontsize)
     for a, b in zip(indices, cherry_times):
         plt.text(a - 0.3, b * 1.5, str(b) + "s", fontsize=fontsize)
-    for a, b in zip(indices, cherry_plus_plus_times):
-        plt.text(a - 0.3, b * 1.5, str(b) + "s", fontsize=fontsize)
+    if include_cherry_plus_plus:
+        for a, b in zip(indices, cherry_plus_plus_times):
+            plt.text(a - 0.3, b * 1.5, str(b) + "s", fontsize=fontsize)
     plt.tight_layout()
     plt.savefig(os.path.join(output_image_dir, "times"))
     plt.close()
@@ -629,10 +699,14 @@ def fig_single_site_quantization_error(
     num_families_train: int = 15051,
     num_sequences: int = 1024,
     random_seed: int = 0,
+    simulated_data_dirs: Optional[Dict[str, str]] = None,
 ):
     """
     We show that ~100 quantization points (geometric increments of 10%) is
     enough.
+
+    If `simulated_data_dirs` is provided, then the data simulation step will be
+    skipped.
     """
     caching.set_cache_dir("_cache_benchmarking")
 
@@ -672,21 +746,29 @@ def fig_single_site_quantization_error(
             pfam_15k_msa_dir=PFAM_15K_MSA_DIR
         )
 
-        (
-            msa_dir,
-            contact_map_dir,
-            gt_msa_dir,
-            gt_tree_dir,
-            gt_site_rates_dir,
-            gt_likelihood_dir,
-        ) = simulate_ground_truth_data_single_site(
-            pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
-            num_sequences=num_sequences,
-            families=families_train,
-            num_rate_categories=num_rate_categories,
-            num_processes=num_processes_tree_estimation,
-            random_seed=random_seed,
-        )
+        if simulated_data_dirs is None:
+            (
+                msa_dir,
+                contact_map_dir,
+                gt_msa_dir,
+                gt_tree_dir,
+                gt_site_rates_dir,
+                gt_likelihood_dir,
+            ) = simulate_ground_truth_data_single_site(
+                pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
+                num_sequences=num_sequences,
+                families=families_train,
+                num_rate_categories=num_rate_categories,
+                num_processes=num_processes_tree_estimation,
+                random_seed=random_seed,
+            )
+        else:
+            msa_dir = simulated_data_dirs["msa_dir"]
+            contact_map_dir = simulated_data_dirs["contact_map_dir"]
+            gt_msa_dir = simulated_data_dirs["gt_msa_dir"]
+            gt_tree_dir = simulated_data_dirs["gt_tree_dir"]
+            gt_site_rates_dir = simulated_data_dirs["gt_site_rates_dir"]
+            gt_likelihood_dir = simulated_data_dirs["gt_likelihood_dir"]
 
         lg_end_to_end_with_cherryml_optimizer_res = (
             lg_end_to_end_with_cherryml_optimizer(
@@ -1379,7 +1461,15 @@ def fig_pair_site_quantization_error(
     angstrom_cutoff: float = 8.0,
     minimum_distance_for_nontrivial_contact: int = 7,
     random_seed_simulation: int = 0,
+    simulated_data_dirs: Optional[Dict[str, str]] = None,
 ):
+    """
+    We show that for the coevolutionary model, we can estimate co-transition
+    rates accurately.
+
+    If `simulated_data_dirs` is provided, then the data simulation step will be
+    skipped.
+    """
     output_image_dir = (
         f"images/fig_pair_site_quantization_error__Q_2_name__{Q_2_name}"
     )
@@ -1478,27 +1568,46 @@ def fig_pair_site_quantization_error(
                 )
                 assert mask_matrix.sum().sum() == 400 * 19 * 2
 
-        (
-            msa_dir,
-            contact_map_dir,
-            gt_msa_dir,
-            gt_tree_dir,
-            gt_site_rates_dir,
-            gt_likelihood_dir,
-        ) = simulate_ground_truth_data_coevolution(
-            pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
-            pfam_15k_pdb_dir=PFAM_15K_PDB_DIR,
-            minimum_distance_for_nontrivial_contact=mdnc,
-            angstrom_cutoff=angstrom_cutoff,
-            num_sequences=num_sequences,
-            families=families_all,
-            num_rate_categories=num_rate_categories,
-            num_processes=num_processes_tree_estimation,
-            random_seed=random_seed_simulation,
-            pi_2_path=pi_2_path,
-            Q_2_path=Q_2_path,
-            use_cpp_simulation_implementation=True,
-        )
+        if simulated_data_dirs is None:
+            (
+                msa_dir,
+                contact_map_dir,
+                gt_msa_dir,
+                gt_tree_dir,
+                gt_site_rates_dir,
+                gt_likelihood_dir,
+            ) = simulate_ground_truth_data_coevolution(
+                pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
+                pfam_15k_pdb_dir=PFAM_15K_PDB_DIR,
+                minimum_distance_for_nontrivial_contact=mdnc,
+                angstrom_cutoff=angstrom_cutoff,
+                num_sequences=num_sequences,
+                families=families_all,
+                num_rate_categories=num_rate_categories,
+                num_processes=num_processes_tree_estimation,
+                random_seed=random_seed_simulation,
+                pi_2_path=pi_2_path,
+                Q_2_path=Q_2_path,
+                use_cpp_simulation_implementation=True,
+            )
+
+            logger = logging.getLogger(__name__)
+            logger.info(
+                "Fig. 2ab simulated_data_dirs are:\n"
+                f"msa_dir = {msa_dir}\n"
+                f"contact_map_dir = {contact_map_dir}\n"
+                # f"gt_msa_dir = {gt_msa_dir}\n"
+                f"gt_tree_dir = {gt_tree_dir}\n"
+                f"gt_site_rates_dir = {gt_site_rates_dir}\n"
+                f"gt_likelihood_dir = {gt_likelihood_dir}\n"
+            )
+        else:
+            msa_dir = simulated_data_dirs["msa_dir"]
+            contact_map_dir = simulated_data_dirs["contact_map_dir"]
+            # gt_msa_dir = simulated_data_dirs["gt_msa_dir"]
+            gt_tree_dir = simulated_data_dirs["gt_tree_dir"]
+            gt_site_rates_dir = simulated_data_dirs["gt_site_rates_dir"]
+            gt_likelihood_dir = simulated_data_dirs["gt_likelihood_dir"]
 
         res_dict = coevolution_end_to_end_with_cherryml_optimizer(
             msa_dir=msa_dir,
