@@ -477,6 +477,8 @@ def _fig_single_site_em(
                 .strip()
                 .split()
             )
+            families_train = families_all[:num_families_train]
+
             msa_dir = simulated_data_dirs["msa_dir"]
             # contact_map_dir = simulated_data_dirs["contact_map_dir"]
             # gt_msa_dir = simulated_data_dirs["gt_msa_dir"]
