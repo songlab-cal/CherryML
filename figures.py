@@ -37,6 +37,7 @@ from cherryml import (
     lg_end_to_end_with_cherryml_optimizer,
     lg_end_to_end_with_em_optimizer,
 )
+from cherryml.benchmarking.globals import IMG_EXTENSION
 from cherryml.benchmarking.lg_paper import (
     get_lg_PfamTestingAlignments_data,
     get_lg_PfamTrainingAlignments_data,
@@ -368,7 +369,7 @@ def _fig_single_site_cherry(
             )
         plt.tight_layout()
         plt.savefig(
-            f"{output_image_dir}/log_log_plot_{i}",
+            f"{output_image_dir}/log_log_plot_{i}{IMG_EXTENSION}",
             dpi=300,
         )
         plt.close()
@@ -400,7 +401,7 @@ def _fig_single_site_cherry(
         runtimes=runtimes,
     )
     plt.savefig(
-        f"{output_image_dir}/violin_plot",
+        f"{output_image_dir}/violin_plot{IMG_EXTENSION}",
         dpi=300,
     )
     plt.close()
@@ -529,7 +530,7 @@ def _fig_single_site_em(
             )
         plt.tight_layout()
         plt.savefig(
-            f"{output_image_dir}/log_log_plot_{i}",
+            f"{output_image_dir}/log_log_plot_{i}{IMG_EXTENSION}",
             dpi=300,
         )
         plt.close()
@@ -561,7 +562,7 @@ def _fig_single_site_em(
         runtimes=runtimes,
     )
     plt.savefig(
-        f"{output_image_dir}/violin_plot",
+        f"{output_image_dir}/violin_plot{IMG_EXTENSION}",
         dpi=300,
     )
     plt.close()
@@ -660,7 +661,7 @@ def fig_computational_and_stat_eff_cherry_vs_em(
         for a, b in zip(indices, cherry_plus_plus_errors):
             plt.text(a - 0.3, 1.2 * b, str(b) + "%", fontsize=fontsize)
     plt.tight_layout()
-    plt.savefig(os.path.join(output_image_dir, "errors"))
+    plt.savefig(os.path.join(output_image_dir, f"errors{IMG_EXTENSION}"))
     plt.close()
 
     num_families = num_families_cherry
@@ -686,7 +687,7 @@ def fig_computational_and_stat_eff_cherry_vs_em(
         for a, b in zip(indices, cherry_plus_plus_times):
             plt.text(a - 0.3, b * 1.5, str(b) + "s", fontsize=fontsize)
     plt.tight_layout()
-    plt.savefig(os.path.join(output_image_dir, "times"))
+    plt.savefig(os.path.join(output_image_dir, f"times{IMG_EXTENSION}"))
     plt.close()
 
 
@@ -814,7 +815,7 @@ def fig_single_site_quantization_error(
             )
         plt.tight_layout()
         plt.savefig(
-            f"{output_image_dir}/log_log_plot_{i}",
+            f"{output_image_dir}/log_log_plot_{i}{IMG_EXTENSION}",
             dpi=300,
         )
         plt.close()
@@ -845,7 +846,7 @@ def fig_single_site_quantization_error(
         xlabel="Quantization points",
     )
     plt.savefig(
-        f"{output_image_dir}/violin_plot",
+        f"{output_image_dir}/violin_plot{IMG_EXTENSION}",
         dpi=300,
     )
     plt.close()
@@ -1436,7 +1437,7 @@ def learn_coevolution_model_on_pfam15k(
         plt.savefig(
             os.path.join(
                 output_image_dir,
-                f"log_likelihoods_{num_rate_categories}_{baseline}",
+                f"log_likelihoods_{num_rate_categories}_{baseline}{IMG_EXTENSION}",
             ),
             dpi=300,
         )
@@ -1671,7 +1672,7 @@ def fig_pair_site_quantization_error(
                 )
             plt.tight_layout()
             plt.savefig(
-                f"{output_image_dir}/log_log_plot_{i}_density_{density_plot}",
+                f"{output_image_dir}/log_log_plot_{i}_density_{density_plot}{IMG_EXTENSION}",
                 dpi=300,
             )
             plt.close()
@@ -1705,7 +1706,7 @@ def fig_pair_site_quantization_error(
     )
 
     plt.savefig(
-        f"{output_image_dir}/violin_plot",
+        f"{output_image_dir}/violin_plot{IMG_EXTENSION}",
         dpi=300,
     )
     plt.close()
@@ -1772,7 +1773,7 @@ def fig_coevolution_vs_indep():
             ax.set_title(title, fontsize=14)
         fig.tight_layout()
         if len(plot_file) > 0:
-            plt.savefig(plot_file, dpi=300)
+            plt.savefig(plot_file + f"{IMG_EXTENSION}", dpi=300)
         plt.show()
 
     def heatmap(
@@ -2273,7 +2274,7 @@ def fig_site_rates_vs_number_of_contacts(
     plt.legend(fontsize=fontsize)
 
     plt.savefig(
-        f"{output_image_dir}/site_rate_vs_num_contacts",
+        f"{output_image_dir}/site_rate_vs_num_contacts{IMG_EXTENSION}",
         dpi=300,
     )
     plt.close()
@@ -2286,7 +2287,7 @@ def fig_site_rates_vs_number_of_contacts(
     # plt.ylabel("number of sites")
     # plt.plot(xs, number_of_sites)
     # plt.savefig(
-    #     f"{output_image_dir}/num_contacts_distribution",
+    #     f"{output_image_dir}/num_contacts_distribution{IMG_EXTENSION}",
     #     dpi=300,
     # )
     # plt.close()
@@ -2720,7 +2721,7 @@ def _fig_standard_benchmark(
         plt.savefig(
             os.path.join(
                 output_image_dir,
-                img_path,
+                img_path + f"{IMG_EXTENSION}",
             ),
             dpi=300,
         )

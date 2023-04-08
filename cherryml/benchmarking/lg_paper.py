@@ -32,6 +32,8 @@ from cherryml.markov_chain import (
 from cherryml.phylogeny_estimation import fast_tree
 from cherryml.utils import pushd
 
+from .globals import IMG_EXTENSION
+
 
 def init_logger():
     logger = logging.getLogger(__name__)
@@ -559,7 +561,9 @@ def reproduce_lg_paper_fig_4(
         plt.ylabel("Average per-site AIC, in nats", fontsize=fontsize)
     plt.yticks(fontsize=fontsize)
     plt.savefig(
-        f"{output_image_dir}/lg_paper_figure.jpg", bbox_inches="tight", dpi=300
+        f"{output_image_dir}/lg_paper_figure{IMG_EXTENSION}",
+        bbox_inches="tight",
+        dpi=300,
     )
     plt.close()
 
