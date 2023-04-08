@@ -270,7 +270,7 @@ def _fig_single_site_cherry(
                 f"gt_site_rates_dir = {gt_site_rates_dir}\n"
                 f"gt_likelihood_dir = {gt_likelihood_dir}\n"
                 f"families_all are:\n"
-                f"{families_all.join(' ')}"
+                f"{' '.join(families_all)}"
             )
         else:
             families_all = (
