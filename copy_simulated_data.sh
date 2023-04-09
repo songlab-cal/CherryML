@@ -20,20 +20,20 @@ mkdir /global/scratch/users/sprillo/cherryml_simulated_data/fig_2ab/contact_map_
 
 mkdir /global/scratch/users/sprillo/cherryml_simulated_data/fig_2ab/gt_tree_dir && time cp -r _cache_benchmarking/fast_tree/37c5828031a53e44ec03f5ace1d09ec4d959b41cd80a2479f17e2328dc9f923b/output_tree_dir/*.txt /global/scratch/users/sprillo/cherryml_simulated_data/fig_2ab/gt_tree_dir/
 
-# mkdir /global/scratch/users/sprillo/cherryml_simulated_data/fig_2ab/gt_site_rates_dir && time cp -r _cache_benchmarking/fast_tree/37c5828031a53e44ec03f5ace1d09ec4d959b41cd80a2479f17e2328dc9f923b/output_site_rates_dir/*.txt /global/scratch/users/sprillo/cherryml_simulated_data/fig_2ab/gt_site_rates_dir/
+mkdir /global/scratch/users/sprillo/cherryml_simulated_data/fig_2ab/gt_site_rates_dir && time cp -r _cache_benchmarking/fast_tree/37c5828031a53e44ec03f5ace1d09ec4d959b41cd80a2479f17e2328dc9f923b/output_site_rates_dir/*.txt /global/scratch/users/sprillo/cherryml_simulated_data/fig_2ab/gt_site_rates_dir/
 
-# mkdir /global/scratch/users/sprillo/cherryml_simulated_data/fig_2ab/gt_likelihood_dir && time cp -r _cache_benchmarking/fast_tree/37c5828031a53e44ec03f5ace1d09ec4d959b41cd80a2479f17e2328dc9f923b/output_likelihood_dir/*.txt /global/scratch/users/sprillo/cherryml_simulated_data/fig_2ab/gt_likelihood_dir/
+mkdir /global/scratch/users/sprillo/cherryml_simulated_data/fig_2ab/gt_likelihood_dir && time cp -r _cache_benchmarking/fast_tree/37c5828031a53e44ec03f5ace1d09ec4d959b41cd80a2479f17e2328dc9f923b/output_likelihood_dir/*.txt /global/scratch/users/sprillo/cherryml_simulated_data/fig_2ab/gt_likelihood_dir/
 
 
 
-# mkdir /global/scratch/users/sprillo/cherryml_simulated_data/fig_1bc/
+mkdir /global/scratch/users/sprillo/cherryml_simulated_data/fig_1bc/
 
-# mkdir /global/scratch/users/sprillo/cherryml_simulated_data/fig_1bc/msa_dir && time cp -r _cache_benchmarking_em/subset_msa_to_leaf_nodes/da6ef3b0d58b16b6b9f5ad5628ffe750fc41b6b444a12b32f4f5d904a220facf/output_msa_dir/*.txt /global/scratch/users/sprillo/cherryml_simulated_data/fig_1bc/msa_dir/  # 7m49s
+mkdir /global/scratch/users/sprillo/cherryml_simulated_data/fig_1bc/msa_dir && time cp -r _cache_benchmarking_em/subset_msa_to_leaf_nodes/da6ef3b0d58b16b6b9f5ad5628ffe750fc41b6b444a12b32f4f5d904a220facf/output_msa_dir/*.txt /global/scratch/users/sprillo/cherryml_simulated_data/fig_1bc/msa_dir/  # 7m49s
 
-# mkdir /global/scratch/users/sprillo/cherryml_simulated_data/fig_1bc/gt_tree_dir && time cp -r _cache_benchmarking_em/fast_tree/eecc0e2b9e570733bd4817b6bc57abd38ef31652f30cc17612d66147203398a2/output_tree_dir/*.txt /global/scratch/users/sprillo/cherryml_simulated_data/fig_1bc/gt_tree_dir/  # 0m33s
+mkdir /global/scratch/users/sprillo/cherryml_simulated_data/fig_1bc/gt_tree_dir && time cp -r _cache_benchmarking_em/fast_tree/eecc0e2b9e570733bd4817b6bc57abd38ef31652f30cc17612d66147203398a2/output_tree_dir/*.txt /global/scratch/users/sprillo/cherryml_simulated_data/fig_1bc/gt_tree_dir/  # 0m33s
 
-# mkdir /global/scratch/users/sprillo/cherryml_simulated_data/fig_1bc/gt_site_rates_dir && time cp -r _cache_benchmarking_em/fast_tree/eecc0e2b9e570733bd4817b6bc57abd38ef31652f30cc17612d66147203398a2/output_site_rates_dir/*.txt /global/scratch/users/sprillo/cherryml_simulated_data/fig_1bc/gt_site_rates_dir/  # 0m25s
+mkdir /global/scratch/users/sprillo/cherryml_simulated_data/fig_1bc/gt_site_rates_dir && time cp -r _cache_benchmarking_em/fast_tree/eecc0e2b9e570733bd4817b6bc57abd38ef31652f30cc17612d66147203398a2/output_site_rates_dir/*.txt /global/scratch/users/sprillo/cherryml_simulated_data/fig_1bc/gt_site_rates_dir/  # 0m25s
 
-# mkdir /global/scratch/users/sprillo/cherryml_simulated_data/fig_1bc/gt_likelihood_dir && time cp -r _cache_benchmarking_em/fast_tree/eecc0e2b9e570733bd4817b6bc57abd38ef31652f30cc17612d66147203398a2/output_likelihood_dir/*.txt /global/scratch/users/sprillo/cherryml_simulated_data/fig_1bc/gt_likelihood_dir/  # 0m50s
+mkdir /global/scratch/users/sprillo/cherryml_simulated_data/fig_1bc/gt_likelihood_dir && time cp -r _cache_benchmarking_em/fast_tree/eecc0e2b9e570733bd4817b6bc57abd38ef31652f30cc17612d66147203398a2/output_likelihood_dir/*.txt /global/scratch/users/sprillo/cherryml_simulated_data/fig_1bc/gt_likelihood_dir/  # 0m50s
 
-# time cp -r fig_1bc_simulated_data_families_all.txt /global/scratch/users/sprillo/cherryml_simulated_data/fig_1bc/  # 0s
+time cp -r fig_1bc_simulated_data_families_all.txt /global/scratch/users/sprillo/cherryml_simulated_data/fig_1bc/  # 0s
