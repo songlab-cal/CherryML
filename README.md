@@ -541,6 +541,10 @@ After downloading and untarring the data into this repository, rename the `train
 
 You do not need to worry about downloading the data from the LG paper - we will download this automatically for you. Similarly, we will download the QMaker datasets.
 
+## Optional: Download simulated datasets
+
+Our simulated datasets are available on Zenodo at https://zenodo.org/record/7814723#.ZDSUDyZlBXk . If you do not download them, they will be simulated again (not a big  deal at all). If you _do_ download them and want to use them, make sure to change the variables in `reproduce_all_figures.py` at the top (specifically, `simulated_data_dirs_fig_1d`, `simulated_data_dirs_fig_2ab`, `simulated_data_dirs_fig_1bc`) to point to the downloaded data. We think these datasets might be of independent interest (beyond our specific benchmarks), which is why we make them available on Zenodo.
+
 ## Run code to reproduce all figures
 
 You are now ready to reproduce all figures in our paper. Just run `reproduce_all_figures.py` to reproduce all figures in our paper. The approximate runtime needed to reproduce each figure this way is commented in `reproduce_all_figures.py`. Note that the computational bottlenecks to reproduce all figures are (1) benchmarking EM with XRATE and (2) tree estimation (as opposed to the CherryML optimizer). To reproduce a specific figure, comment out the figures you do not want in `reproduce_all_figures.py`. The code is written in a functional style, so the functions can be run in any order at any time and will reproduce the results. All the intermediate computations are cached, so re-running the code will be very fast the second time around. The output figures will be found in the `images` folder.
