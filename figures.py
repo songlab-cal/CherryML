@@ -1573,6 +1573,7 @@ def fig_pair_site_quantization_error(
                 ],
                 "result.txt",
             )
+            print(f"unmasked Q2_path: {Q_2_path}")
             coevolution_mask_path = None
             if Q_2_name == "unmasked-all-transitions":
                 mask_matrix = get_nondiag_mask_matrix(
