@@ -2893,6 +2893,7 @@ def _get_qmaker_5_clades_msa_dirs() -> Dict[str, str]:
     return res
 
 
+@caching.cached()
 def report_dataset_statistics_str(families: List[str], msa_dir: str) -> str:
     """
     Reports statistics on the training data:
