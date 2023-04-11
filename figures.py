@@ -2894,7 +2894,7 @@ def _get_qmaker_5_clades_msa_dirs() -> Dict[str, str]:
 
 
 @caching.cached()
-def report_dataset_statistics_str(families: List[str], msa_dir: str) -> str:
+def report_dataset_statistics_str(msa_dir: str, families: Optional[List[str]] = None) -> str:
     """
     Reports statistics on the training data:
     - Total number of MSAs
@@ -2902,6 +2902,8 @@ def report_dataset_statistics_str(families: List[str], msa_dir: str) -> str:
     - Number of sites per MSA.
     - Total number of residues.
     """
+    if families is None:
+        families = get_families(msa_dir)
     number_of_sequences_list = []
     number_of_sites_list = []
     number_of_residues_list = (
@@ -2953,10 +2955,13 @@ def fig_qmaker(
 
     # Print dataset statistics
     dataset_statistics = report_dataset_statistics_str(
-        families=get_families(msa_dir_train),
         msa_dir=msa_dir_train,
     )
-    print(f"Dataset statistics for {clade_name}:\n{dataset_statistics}")
+    print(f"Dataset statistics for {clade_name}, TRAIN:\n{dataset_statistics}")
+    dataset_statistics = report_dataset_statistics_str(
+        msa_dir=msa_dir_test,
+    )
+    print(f"Dataset statistics for {clade_name}, TEST:\n{dataset_statistics}")
 
     single_site_rate_matrices = [
         ("JTT", get_jtt_path()),
