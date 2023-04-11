@@ -2920,6 +2920,7 @@ def report_dataset_statistics_str(families: List[str], msa_dir: str) -> str:
         f"Number of MSAs = {len(number_of_sequences_list)}\n"
         f"Number of sequences per MSA = {np.mean(number_of_sequences_list)}\n"
         f"Number of sites per MSA = {np.mean(number_of_sites_list)}\n"
+        f"Total number of sites = {np.sum(number_of_sites_list)}\n"
         f"Total number of residues = {np.sum(number_of_residues_list)}\n"
     )
     return res
