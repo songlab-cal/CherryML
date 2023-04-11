@@ -1,7 +1,4 @@
 import figures
-from cherryml import caching
-
-caching.set_read_only(True)
 
 ################################################################################
 ##### Optional: set these to the locations of the provided simulated data ######
