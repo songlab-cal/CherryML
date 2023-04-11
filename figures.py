@@ -2950,7 +2950,10 @@ def fig_qmaker(
     del qmaker_data_dirs
 
     # Print dataset statistics
-    dataset_statistics = report_dataset_statistics_str(msa_dir=msa_dir_train)
+    dataset_statistics = report_dataset_statistics_str(
+        families=get_families(msa_dir_train),
+        msa_dir=msa_dir_train,
+    )
     print(f"Dataset statistics for {clade_name}:\n{dataset_statistics}")
 
     single_site_rate_matrices = [
