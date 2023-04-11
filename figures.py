@@ -228,7 +228,7 @@ def _fig_single_site_cherry(
     runtimes = []
     yss_relative_errors = []
     Qs = []
-    for (i, num_families_train) in enumerate(num_families_train_list):
+    for i, num_families_train in enumerate(num_families_train_list):
         msg = f"***** num_families_train = {num_families_train} *****"
         print("*" * len(msg))
         print(msg)
@@ -439,7 +439,7 @@ def _fig_single_site_em(
     yss_relative_errors = []
     runtimes = []
     Qs = []
-    for (i, num_families_train) in enumerate(num_families_train_list):
+    for i, num_families_train in enumerate(num_families_train_list):
         msg = f"***** num_families_train = {num_families_train} *****"
         print("*" * len(msg))
         print(msg)
@@ -1762,7 +1762,6 @@ def fig_coevolution_vs_indep():
         round=2,
         **kwargs,
     ):
-
         fig, ax = plt.subplots(figsize=figsize)
         im = ax.imshow(inputMat, **kwargs)
         # show ticks and label them
@@ -2810,7 +2809,7 @@ def _create_qmaker_msa_dir(
             )
             assert start <= end
             loci.append((start, end))
-    for (start, end) in loci:
+    for start, end in loci:
         msa_locus = {
             seq_name: seq[start - 1 : end] for (seq_name, seq) in msa.items()
         }
@@ -2894,6 +2893,37 @@ def _get_qmaker_5_clades_msa_dirs() -> Dict[str, str]:
     return res
 
 
+def report_dataset_statistics_str(families: List[str], msa_dir: str) -> str:
+    """
+    Reports statistics on the training data:
+    - Total number of MSAs
+    - Number of sequences per MSA.
+    - Number of sites per MSA.
+    - Total number of residues.
+    """
+    number_of_sequences_list = []
+    number_of_sites_list = []
+    number_of_residues_list = (
+        []
+    )  # The product of the number of sequences times the number of sites.
+    for family in families:
+        msa_path = os.path.join(msa_dir, family + ".txt")
+        msa = read_msa(msa_path)
+        number_of_sequences = len(msa)
+        number_of_sequences_list.append(number_of_sequences)
+        number_of_sites = len(list(msa.values())[0])
+        number_of_sites_list.append(number_of_sites)
+        number_of_residues = number_of_sequences * number_of_sites
+        number_of_residues_list.append(number_of_residues)
+    res = (
+        f"Number of MSAs = {len(number_of_sequences_list)}\n"
+        f"Number of sequences per MSA = {np.mean(number_of_sequences_list)}\n"
+        f"Number of sites per MSA = {np.mean(number_of_sites_list)}\n"
+        f"Total number of residues = {np.sum(number_of_residues_list)}\n"
+    )
+    return res
+
+
 # Supp. Fig.
 def fig_qmaker(
     clade_name: str,
@@ -2918,6 +2948,10 @@ def fig_qmaker(
     msa_dir_train = qmaker_data_dirs[f"{clade_name}_train"]
     msa_dir_test = qmaker_data_dirs[f"{clade_name}_test"]
     del qmaker_data_dirs
+
+    # Print dataset statistics
+    dataset_statistics = report_dataset_statistics_str(msa_dir=msa_dir_train)
+    print(f"Dataset statistics for {clade_name}:\n{dataset_statistics}")
 
     single_site_rate_matrices = [
         ("JTT", get_jtt_path()),

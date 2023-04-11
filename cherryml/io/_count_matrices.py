@@ -73,7 +73,7 @@ def write_count_matrices(
     num_states = len(count_matrices[0][1])
     with open(count_matrices_path, "w") as out_file:
         out_file.write(f"{num_matrices} matrices\n{num_states} states\n")
-    for (q, count_matrix) in count_matrices:
+    for q, count_matrix in count_matrices:
         with open(count_matrices_path, "a") as out_file:
             out_file.write(f"{q}\n")
         count_matrix.to_csv(

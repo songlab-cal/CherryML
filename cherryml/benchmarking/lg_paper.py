@@ -452,7 +452,7 @@ def reproduce_lg_paper_fig_4(
         ] + rate_estimator_names
     else:
         rate_estimator_names_w_baseline = list(set(rate_estimator_names))
-    for (rate_estimator_name, _) in rate_estimator_names_w_baseline:
+    for rate_estimator_name, _ in rate_estimator_names_w_baseline:
         print(f"Evaluating rate_estimator_name: {rate_estimator_name}")
         st = time.time()
         if rate_estimator_name.startswith("reported"):

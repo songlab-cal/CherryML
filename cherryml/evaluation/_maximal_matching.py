@@ -40,7 +40,6 @@ def create_maximal_matching_contact_map(
     num_processes: int,
     o_contact_map_dir: Optional[str] = None,
 ) -> None:
-
     map_args = [
         [
             i_contact_map_dir,
@@ -86,7 +85,7 @@ def _map_func(args: List):
         topology.add_edges_from(contacting_pairs)
         match = nx.maximal_matching(topology)
         res = np.zeros(shape=contact_map.shape)
-        for (u, v) in match:
+        for u, v in match:
             res[u, v] = res[v, u] = 1
         o_contact_map_path = os.path.join(o_contact_map_dir, family + ".txt")
         write_contact_map(res, o_contact_map_path)

@@ -115,7 +115,7 @@ def _map_func(args) -> List[Tuple[float, pd.DataFrame]]:
                         branch_length_total, quantization_points
                     )
                     if q_idx is not None:
-                        for (i, j) in contacting_pairs:
+                        for i, j in contacting_pairs:
                             # We accumulate the transitions in both directions
                             state_1 = leaf_seq_1[i] + leaf_seq_1[j]
                             state_2 = leaf_seq_2[i] + leaf_seq_2[j]
@@ -125,7 +125,7 @@ def _map_func(args) -> List[Tuple[float, pd.DataFrame]]:
                                 and leaf_seq_2[i] in amino_acids
                                 and leaf_seq_2[j] in amino_acids
                             ):
-                                for (s, e) in [
+                                for s, e in [
                                     (state_1, state_2),
                                     (state_1[::-1], state_2[::-1]),
                                     (state_2, state_1),
@@ -150,13 +150,13 @@ def _map_func(args) -> List[Tuple[float, pd.DataFrame]]:
                 if edge_or_cherry == "edge":
                     node_seq = msa[node]
                     # Extract all transitions on edges starting at 'node'
-                    for (child, branch_length) in tree.children(node):
+                    for child, branch_length in tree.children(node):
                         child_seq = msa[child]
                         q_idx = quantization_idx(
                             branch_length, quantization_points
                         )
                         if q_idx is not None:
-                            for (i, j) in contacting_pairs:
+                            for i, j in contacting_pairs:
                                 start_state = node_seq[i] + node_seq[j]
                                 end_state = child_seq[i] + child_seq[j]
                                 if (
@@ -165,7 +165,7 @@ def _map_func(args) -> List[Tuple[float, pd.DataFrame]]:
                                     and child_seq[i] in amino_acids
                                     and child_seq[j] in amino_acids
                                 ):
-                                    for (s, e) in [
+                                    for s, e in [
                                         (start_state, end_state),
                                         (start_state[::-1], end_state[::-1]),
                                     ]:
@@ -189,7 +189,7 @@ def _map_func(args) -> List[Tuple[float, pd.DataFrame]]:
                             branch_length_total, quantization_points
                         )
                         if q_idx is not None:
-                            for (i, j) in contacting_pairs:
+                            for i, j in contacting_pairs:
                                 # We accumulate the transitions in both directions
                                 state_1 = leaf_seq_1[i] + leaf_seq_1[j]
                                 state_2 = leaf_seq_2[i] + leaf_seq_2[j]
@@ -199,7 +199,7 @@ def _map_func(args) -> List[Tuple[float, pd.DataFrame]]:
                                     and leaf_seq_2[i] in amino_acids
                                     and leaf_seq_2[j] in amino_acids
                                 ):
-                                    for (s, e) in [
+                                    for s, e in [
                                         (state_1, state_2),
                                         (state_1[::-1], state_2[::-1]),
                                         (state_2, state_1),

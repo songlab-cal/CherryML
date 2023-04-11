@@ -130,7 +130,7 @@ def _map_func(args) -> List[Tuple[float, pd.DataFrame]]:
                     node_seq = msa[node]
                     msa_length = len(node_seq)
                     # Extract all transitions on edges starting at 'node'
-                    for (child, branch_length) in tree.children(node):
+                    for child, branch_length in tree.children(node):
                         child_seq = msa[child]
                         for amino_acid_idx in range(msa_length):
                             site_rate = site_rates[amino_acid_idx]

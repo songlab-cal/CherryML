@@ -40,7 +40,7 @@ class Tree:
         self._num_edges += 1
 
     def add_edges(self, edges: List[Tuple[str, str, float]]) -> None:
-        for (u, v, length) in edges:
+        for u, v, length in edges:
             self.add_edge(u, v, length)
 
     def edges(self) -> List[Tuple[str, str, float]]:
@@ -62,7 +62,7 @@ class Tree:
         res = ""
         res += f"Tree with {self._num_nodes} nodes, and {self._m} edges:\n"
         for u in self._adj_list.keys():
-            for (v, length) in self._adj_list[u]:
+            for v, length in self._adj_list[u]:
                 res += f"{u} -> {v}: {length}\n"
         return res
 
@@ -86,7 +86,7 @@ class Tree:
 
         def dfs(v: str):
             res.append(v)
-            for (u, _) in self.children(v):
+            for u, _ in self.children(v):
                 dfs(u)
 
         dfs(self.root())
@@ -96,7 +96,7 @@ class Tree:
         res = []
 
         def dfs(v: str):
-            for (u, _) in self.children(v):
+            for u, _ in self.children(v):
                 dfs(u)
             res.append(v)
 
@@ -136,7 +136,7 @@ class Tree:
         ete3_node_dict = {}
         ete3_node_dict[self.root()] = tree_ete
         for node in self.preorder_traversal():
-            for (child, dist) in self.children(node):
+            for child, dist in self.children(node):
                 ete3_node_dict[child] = ete3_node_dict[node].add_child(
                     name=child, dist=dist
                 )
@@ -166,7 +166,7 @@ class Tree:
         ].add_child(name=self.root(), dist=dist / 2)
 
         for node in self.preorder_traversal():
-            for (i, (child, dist)) in enumerate(self.children(node)):
+            for i, (child, dist) in enumerate(self.children(node)):
                 if i == 0 and self.is_root(node):
                     # This edge was split into two manually above
                     continue
@@ -201,7 +201,7 @@ def write_tree(
     for node in tree.nodes():
         res += f"{node_name_prefix + node}\n"
     res += f"{tree.num_edges()} edges\n"
-    for (u, v, d) in tree.edges():
+    for u, v, d in tree.edges():
         res += (
             f"{node_name_prefix + u} {node_name_prefix + v} "
             f"{d * scaling_factor}\n"

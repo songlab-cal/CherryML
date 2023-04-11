@@ -73,7 +73,7 @@ class TestEvaluationPublicAPI(unittest.TestCase):
                 sum(ll_fam_i_with_gamma), ll_all_fams_with_gamma
             )
             # Gamma likelihoods should be smaller than w/o Gamma.
-            for (ll_wo_gamma, ll_w_gamma) in zip(ll_fam_i, ll_fam_i_with_gamma):
+            for ll_wo_gamma, ll_w_gamma in zip(ll_fam_i, ll_fam_i_with_gamma):
                 self.assertGreater(ll_wo_gamma, ll_w_gamma)
 
     def test_with_phyml_from_CLI(self):

@@ -22,7 +22,7 @@ def create_synthetic_contact_map(
         (sites_in_contact[2 * i], sites_in_contact[2 * i + 1])
         for i in range(num_contacting_pairs)
     ]
-    for (i, j) in contacting_pairs:
+    for i, j in contacting_pairs:
         contact_map[i, j] = contact_map[j, i] = 1
     for i in range(num_sites):
         contact_map[i, i] = 1

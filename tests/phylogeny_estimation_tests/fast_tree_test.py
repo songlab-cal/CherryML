@@ -17,7 +17,7 @@ def branch_length_l1_error(tree_true_path, tree_inferred_path) -> float:
 
     def dfs_branch_length_l1_error(v1, v2) -> float:
         l1_error = 0
-        for (u1, u2) in zip(v1.children, v2.children):
+        for u1, u2 in zip(v1.children, v2.children):
             l1_error += abs(u1.dist - u2.dist)
             l1_error += dfs_branch_length_l1_error(u1, u2)
         return l1_error
