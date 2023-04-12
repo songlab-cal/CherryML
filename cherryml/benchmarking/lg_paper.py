@@ -344,6 +344,29 @@ def run_rate_estimator(
             profiling_file.write(f"{res_dict['profiling_str']}")
         res = res_dict["learned_rate_matrix_path"]
         return res
+    elif rate_estimator_name.startswith("Cherry++__"):
+        tokens = rate_estimator_name.split("__")
+        assert len(tokens) == 2
+        res_dict = lg_end_to_end_with_cherryml_optimizer(
+            msa_dir=msa_train_dir,
+            families=families_train,
+            tree_estimator=partial(
+                fast_tree,
+                num_rate_categories=4,
+            ),
+            initial_tree_estimator_rate_matrix_path=get_equ_path(),
+            num_iterations=int(tokens[1]),
+            num_processes_tree_estimation=num_processes,
+            num_processes_counting=1,
+            num_processes_optimization=1,
+            edge_or_cherry="cherry++__2023_04_06_test_2",
+        )
+        with open(
+            "lg_paper_fig__" + rate_estimator_name + "__profiling_str.txt", "w"
+        ) as profiling_file:
+            profiling_file.write(f"{res_dict['profiling_str']}")
+        res = res_dict["learned_rate_matrix_path"]
+        return res
     elif rate_estimator_name.startswith("EM_FT__"):
         tokens = rate_estimator_name.split("__")
         assert len(tokens) == 3
