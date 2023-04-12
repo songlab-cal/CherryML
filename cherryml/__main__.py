@@ -183,10 +183,16 @@ if __name__ == "__main__":
         default="FastTree",
         help="Tree estimator to use. Can be either 'FastTree' or 'PhyML'.",  # noqa
     )
+    parser.add_argument(
+        "--cherryml_type",
+        type=str,
+        required=False,
+        default="cherryml",
+        help="Whether to use 'cherryml' or 'cherryml++'.",  # noqa
+    )
 
     # Functionality not currently exposed:
     # parser.add_argument("--do_adam")
-    # parser.add_argument("--edge_or_cherry")
     # parser.add_argument("--cpp_counting_command_line_prefix")
     # parser.add_argument("--cpp_counting_command_line_suffix")
     # parser.add_argument("--optimizer_initialization")
