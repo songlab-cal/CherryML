@@ -262,7 +262,7 @@ def count_transitions(
         cpp_command_line_suffix: For extra C++ args related to performance.
     """
     if edge_or_cherry.startswith("cherry++__"):
-        edge_or_cherry == "cherry++"
+        edge_or_cherry = "cherry++"
     start_time = time.time()
 
     logger = logging.getLogger(__name__)
