@@ -667,8 +667,9 @@ def fig_computational_and_stat_eff_cherry_vs_em(
     for a, b in zip(indices, cherry_errors):
         plt.text(a - 0.3, 1.2 * b, str(b) + "%", fontsize=fontsize)
     if include_cherry_plus_plus:
-        for a, b in zip(indices, cherry_plus_plus_errors):
-            plt.text(a - 0.3, b / 1.5, str(b) + "%", fontsize=fontsize)
+        # for a, b in zip(indices, cherry_plus_plus_errors):
+        #     plt.text(a - 0.3, b / 1.5, str(b) + "%", fontsize=fontsize)
+        pass
     plt.tight_layout()
     plt.savefig(os.path.join(output_image_dir, f"errors{IMG_EXTENSION}"))
     plt.close()
