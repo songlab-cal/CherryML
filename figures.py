@@ -737,6 +737,7 @@ def fig_single_site_quantization_error(
     num_sequences: int = 1024,
     random_seed: int = 0,
     simulated_data_dirs: Optional[Dict[str, str]] = None,
+    edge_or_cherry: str = "cherry",
 ):
     """
     We show that ~100 quantization points (geometric increments of 10%) is
@@ -837,6 +838,7 @@ def fig_single_site_quantization_error(
                 num_processes_tree_estimation=num_processes_tree_estimation,
                 num_processes_counting=num_processes_counting,
                 num_processes_optimization=num_processes_optimization,
+                edge_or_cherry=edge_or_cherry,
             )
         )
 
