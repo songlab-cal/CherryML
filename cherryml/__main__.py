@@ -188,7 +188,7 @@ if __name__ == "__main__":
         type=str,
         required=False,
         default="cherryml",
-        help="Whether to use 'cherryml' or 'cherryml++'.",  # noqa
+        help="Whether to use 'cherryml' or 'cherryml++'.",
     )
 
     # Functionality not currently exposed:
