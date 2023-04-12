@@ -648,7 +648,7 @@ def fig_computational_and_stat_eff_cherry_vs_em(
         100 * np.array(cherry_errors_nonpct),
         "o-",
         label="CherryML",
-        color="red"
+        color="red",
     )
     if include_cherry_plus_plus:
         plt.plot(
@@ -656,7 +656,7 @@ def fig_computational_and_stat_eff_cherry_vs_em(
             100 * np.array(cherry_plus_plus_errors_nonpct),
             "o-",
             label="CherryML++",
-            color="orange"
+            color="orange",
         )
     plt.plot(
         indices,
@@ -682,7 +682,12 @@ def fig_computational_and_stat_eff_cherry_vs_em(
         #     plt.text(a - 0.3, b / 1.5, str(b) + "%", fontsize=fontsize)
         pass
     plt.tight_layout()
-    plt.savefig(os.path.join(output_image_dir, f"errors{IMG_EXTENSION}"))
+    plt.savefig(
+        os.path.join(
+            output_image_dir,
+            f"errors_{include_cherry_plus_plus}{IMG_EXTENSION}",
+        )
+    )
     plt.close()
 
     num_families = num_families_cherry
@@ -690,7 +695,13 @@ def fig_computational_and_stat_eff_cherry_vs_em(
     plt.figure(dpi=300)
     plt.plot(indices, cherry_times, "o-", label="CherryML", color="red")
     if include_cherry_plus_plus:
-        plt.plot(indices, cherry_plus_plus_times, "o-", label="CherryML++", color="orange")
+        plt.plot(
+            indices,
+            cherry_plus_plus_times,
+            "o-",
+            label="CherryML++",
+            color="orange",
+        )
     plt.plot(indices, em_times, "o-", label="EM", color="blue")
     plt.ylim((5, 5e5))
     plt.xticks(indices, num_families, fontsize=fontsize)
@@ -708,7 +719,11 @@ def fig_computational_and_stat_eff_cherry_vs_em(
         for a, b in zip(indices, cherry_plus_plus_times):
             plt.text(a - 0.3, b * 1.5, str(b) + "s", fontsize=fontsize)
     plt.tight_layout()
-    plt.savefig(os.path.join(output_image_dir, f"times{IMG_EXTENSION}"))
+    plt.savefig(
+        os.path.join(
+            output_image_dir, f"times_{include_cherry_plus_plus}{IMG_EXTENSION}"
+        )
+    )
     plt.close()
 
 
@@ -2906,7 +2921,9 @@ def _get_qmaker_5_clades_msa_dirs() -> Dict[str, str]:
 
 
 @caching.cached()
-def report_dataset_statistics_str(msa_dir: str, families: Optional[List[str]] = None) -> str:
+def report_dataset_statistics_str(
+    msa_dir: str, families: Optional[List[str]] = None
+) -> str:
     """
     Reports statistics on the training data:
     - Total number of MSAs
