@@ -1205,6 +1205,7 @@ def learn_coevolution_model_on_pfam15k(
     num_processes_optimization_coevolution: int = 8,
     angstrom_cutoff: float = 8.0,
     minimum_distance_for_nontrivial_contact: int = 7,
+    edge_or_cherry: str = "cherryml",
 ) -> Dict:
     """
     Returns a dictionary with the learned rate matrices.
@@ -1254,6 +1255,7 @@ def learn_coevolution_model_on_pfam15k(
         num_processes_tree_estimation=num_processes_tree_estimation,
         num_processes_optimization=num_processes_optimization_single_site,
         num_processes_counting=num_processes_counting,
+        edge_or_cherry=edge_or_cherry,
     )["learned_rate_matrix_path"]
     cherry = read_rate_matrix(cherry_path).to_numpy()
     del cherry  # unused
@@ -1326,6 +1328,7 @@ def learn_coevolution_model_on_pfam15k(
         num_processes_counting=num_processes_counting,
         num_processes_optimization=num_processes_optimization_single_site,
         sites_subset_dir=contacting_sites_dir,
+        edge_or_cherry=edge_or_cherry,
     )["learned_rate_matrix_path"]
     cherry_contact = read_rate_matrix(cherry_contact_path).to_numpy()
     del cherry_contact  # unused
@@ -1359,6 +1362,7 @@ def learn_coevolution_model_on_pfam15k(
         num_processes_tree_estimation=num_processes_tree_estimation,
         num_processes_counting=num_processes_counting,
         num_processes_optimization=num_processes_optimization_coevolution,
+        edge_or_cherry=edge_or_cherry,
     )["learned_rate_matrix_path"]
 
     # Coevolution model without masking #
@@ -1376,6 +1380,7 @@ def learn_coevolution_model_on_pfam15k(
         num_processes_tree_estimation=num_processes_tree_estimation,
         num_processes_counting=num_processes_counting,
         num_processes_optimization=num_processes_optimization_coevolution,
+        edge_or_cherry=edge_or_cherry,
     )
     cherry_2_no_mask_path = cherry_2_no_mask_dir["learned_rate_matrix_path"]
 
@@ -1511,6 +1516,7 @@ def fig_pair_site_quantization_error(
     minimum_distance_for_nontrivial_contact: int = 7,
     random_seed_simulation: int = 0,
     simulated_data_dirs: Optional[Dict[str, str]] = None,
+    edge_or_cherry: str = "cherry",
 ):
     """
     We show that for the coevolutionary model, we can estimate co-transition
@@ -1581,7 +1587,9 @@ def fig_pair_site_quantization_error(
             return nondiag_mask_matrix
 
         if Q_2_name == "masked":
-            Q_2_path = learn_coevolution_model_on_pfam15k()["cherry_2_path"]
+            Q_2_path = learn_coevolution_model_on_pfam15k(
+                edge_or_cherry=edge_or_cherry,
+            )["cherry_2_path"]
             pi_2_path = os.path.join(
                 get_stationary_distribution(rate_matrix_path=Q_2_path)[
                     "output_probability_distribution_dir"
@@ -1591,7 +1599,9 @@ def fig_pair_site_quantization_error(
             coevolution_mask_path = "data/mask_matrices/aa_coevolution_mask.txt"
             mask_matrix = read_mask_matrix(coevolution_mask_path).to_numpy()
         elif Q_2_name.startswith("unmasked"):
-            Q_2_path = learn_coevolution_model_on_pfam15k()[
+            Q_2_path = learn_coevolution_model_on_pfam15k(
+                edge_or_cherry=edge_or_cherry,
+            )[
                 "cherry_2_no_mask_path"
             ]
             pi_2_path = os.path.join(
@@ -2023,7 +2033,9 @@ def fig_coevolution_vs_indep():
         "R",
     ]
 
-    rate_matrices_dict = learn_coevolution_model_on_pfam15k()
+    rate_matrices_dict = learn_coevolution_model_on_pfam15k(
+        edge_or_cherry=edge_or_cherry,
+    )
 
     Q1_contact_x_Q1_contact__1_rates_path = rate_matrices_dict[
         "cherry_contact_squared_path"
