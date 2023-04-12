@@ -1774,7 +1774,7 @@ def fig_pair_site_quantization_error(
 
 
 # Fig. 2c, 2d
-def fig_coevolution_vs_indep():
+def fig_coevolution_vs_indep(edge_or_cherry: str = "cherry"):
     output_image_dir = "images/fig_coevolution_vs_indep"
     if not os.path.exists(output_image_dir):
         os.makedirs(output_image_dir)
