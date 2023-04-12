@@ -214,12 +214,12 @@ def _fig_single_site_cherry(
     num_processes_tree_estimation: int = 4,
     num_sequences: int = 128,
     random_seed: int = 0,
-    cherry_type: str = "cherry",
+    edge_or_cherry: str = "cherry",
     simulated_data_dirs: Optional[Dict[str, str]] = None,
 ):
     caching.set_cache_dir("_cache_benchmarking_em")
 
-    output_image_dir = f"images/fig_single_site_{cherry_type}"
+    output_image_dir = f"images/fig_single_site_{edge_or_cherry}"
     if not os.path.exists(output_image_dir):
         os.makedirs(output_image_dir)
 
@@ -309,7 +309,7 @@ def _fig_single_site_cherry(
                 num_processes_tree_estimation=num_processes_tree_estimation,
                 num_processes_optimization=1,
                 num_processes_counting=1,
-                edge_or_cherry=cherry_type,
+                edge_or_cherry=edge_or_cherry,
             )
         )
 
@@ -603,7 +603,7 @@ def fig_computational_and_stat_eff_cherry_vs_em(
         cherry_errors_nonpct,
         cherry_times,
     ) = _fig_single_site_cherry(
-        cherry_type="cherry", simulated_data_dirs=simulated_data_dirs
+        edge_or_cherry="cherry", simulated_data_dirs=simulated_data_dirs
     )
     cherry_times = [int(x) for x in cherry_times]
     cherry_errors = [float("%.1f" % (100 * x)) for x in cherry_errors_nonpct]
@@ -614,7 +614,7 @@ def fig_computational_and_stat_eff_cherry_vs_em(
             cherry_plus_plus_errors_nonpct,
             cherry_plus_plus_times,
         ) = _fig_single_site_cherry(
-            cherry_type="cherry++__2023_04_06_test_2",
+            edge_or_cherry="cherry++__2023_04_06_test_2",
             simulated_data_dirs=simulated_data_dirs,
         )
         cherry_plus_plus_times = [int(x) for x in cherry_plus_plus_times]
@@ -1693,6 +1693,7 @@ def fig_pair_site_quantization_error(
             num_processes_tree_estimation=num_processes_tree_estimation,
             num_processes_counting=num_processes_counting,
             num_processes_optimization=num_processes_optimization,
+            edge_or_cherry=edge_or_cherry,
         )
 
         learned_rate_matrix_path = os.path.join(
@@ -2477,6 +2478,7 @@ def _fig_standard_benchmark(
     extra_evaluator_command_line_args: str = "",
     initial_tree_estimator_rate_matrix_path: str = "",
     figsize=(6.4, 4.8),
+    edge_or_cherry: str = "cherry",
 ):
     if tree_estimator_name not in ["FastTree", "PhyML"]:
         raise ValueError(
@@ -2500,7 +2502,8 @@ def _fig_standard_benchmark(
                 "num_processes_tree_estimation",
                 "num_processes_optimization",
                 "num_processes_counting",
-            ]
+            ],
+            exclude_if_default=["edge_or_cherry"],
         )
         def _fig_standard_benchmark__lg_end_to_end_with_cherryml_optimizer(
             msa_dir: str,
@@ -2513,6 +2516,7 @@ def _fig_standard_benchmark(
             num_iterations: int,
             tree_estimator_name: str,
             extra_tree_estimator_command_line_args: str,
+            edge_or_cherry: str = "cherry",
         ) -> Dict:
             """
             Wrapper around lg_end_to_end_with_cherryml_optimizer to speed
@@ -2545,6 +2549,7 @@ def _fig_standard_benchmark(
                 num_processes_optimization=num_processes_optimization,
                 num_processes_counting=num_processes_counting,
                 num_iterations=num_iterations,
+                edge_or_cherry=edge_or_cherry,
             )
 
         cherry_res_dict = _fig_standard_benchmark__lg_end_to_end_with_cherryml_optimizer(  # noqa
@@ -2558,6 +2563,7 @@ def _fig_standard_benchmark(
             num_iterations=num_iterations,
             tree_estimator_name=tree_estimator_name,
             extra_tree_estimator_command_line_args=extra_tree_estimator_command_line_args,  # noqa
+            edge_or_cherry=edge_or_cherry,
         )
         cherry_path = cherry_res_dict["learned_rate_matrix_path"]
 
