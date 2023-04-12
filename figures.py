@@ -668,7 +668,7 @@ def fig_computational_and_stat_eff_cherry_vs_em(
         plt.text(a - 0.3, 1.2 * b, str(b) + "%", fontsize=fontsize)
     if include_cherry_plus_plus:
         for a, b in zip(indices, cherry_plus_plus_errors):
-            plt.text(a - 0.3, 1.2 * b, str(b) + "%", fontsize=fontsize)
+            plt.text(a - 0.3, b / 1.1, str(b) + "%", fontsize=fontsize)
     plt.tight_layout()
     plt.savefig(os.path.join(output_image_dir, f"errors{IMG_EXTENSION}"))
     plt.close()
@@ -691,7 +691,7 @@ def fig_computational_and_stat_eff_cherry_vs_em(
     for a, b in zip(indices, em_times):
         plt.text(a - 0.35, b * 1.5, str(b) + "s", fontsize=fontsize)
     for a, b in zip(indices, cherry_times):
-        plt.text(a - 0.3, b * 1.5, str(b) + "s", fontsize=fontsize)
+        plt.text(a - 0.3, b / 1.5, str(b) + "s", fontsize=fontsize)
     if include_cherry_plus_plus:
         for a, b in zip(indices, cherry_plus_plus_times):
             plt.text(a - 0.3, b * 1.5, str(b) + "s", fontsize=fontsize)
