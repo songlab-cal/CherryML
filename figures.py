@@ -614,7 +614,7 @@ def fig_computational_and_stat_eff_cherry_vs_em(
             cherry_plus_plus_errors_nonpct,
             cherry_plus_plus_times,
         ) = _fig_single_site_cherry(
-            cherry_type="cherry++__2023_04_06_test_1",
+            cherry_type="cherry++__2023_04_06_test_2",
             simulated_data_dirs=simulated_data_dirs,
         )
         cherry_plus_plus_times = [int(x) for x in cherry_plus_plus_times]
