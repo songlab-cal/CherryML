@@ -474,6 +474,9 @@ vector<count_matrix> _map_func(
                         }
                     }
                 } else { // cherry
+                    if(edge_or_cherry != "cherry"){
+                        std::cerr << "edge_or_cherry = " << edge_or_cherry << std::endl;
+                    }
                     assert(edge_or_cherry == "cherry");
                     vector<adj_pair_t> children = tree->children(node);
                     if (children.size() == 2 && all_children_are_leafs(tree, children)){
