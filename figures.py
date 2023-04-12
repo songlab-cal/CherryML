@@ -656,14 +656,14 @@ def fig_computational_and_stat_eff_cherry_vs_em(
             100 * np.array(cherry_plus_plus_errors_nonpct),
             "o-",
             label="CherryML++",
-            color="red"
+            color="orange"
         )
     plt.plot(
         indices,
         100 * np.array(em_errors_nonpct),
         "o-",
         label="EM",
-        color="orange",
+        color="red",
     )
     plt.ylim((0.5, 200))
     plt.xticks(indices, num_families, fontsize=fontsize)
@@ -690,8 +690,8 @@ def fig_computational_and_stat_eff_cherry_vs_em(
     plt.figure(dpi=300)
     plt.plot(indices, cherry_times, "o-", label="CherryML", color="blue")
     if include_cherry_plus_plus:
-        plt.plot(indices, cherry_plus_plus_times, "o-", label="CherryML++", color="red")
-    plt.plot(indices, em_times, "o-", label="EM", color="orange")
+        plt.plot(indices, cherry_plus_plus_times, "o-", label="CherryML++", color="orange")
+    plt.plot(indices, em_times, "o-", label="EM", color="red")
     plt.ylim((5, 5e5))
     plt.xticks(indices, num_families, fontsize=fontsize)
     plt.yscale("log", base=10)
