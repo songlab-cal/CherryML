@@ -293,6 +293,8 @@ def count_co_transitions(
         cpp_command_line_prefix: E.g. to run the C++ binary on slurm.
         cpp_command_line_suffix: For extra C++ args related to performance.
     """
+    if edge_or_cherry.startswith("cherry++__"):
+        edge_or_cherry = "cherry++"
     start_time = time.time()
 
     if not os.path.exists(output_count_matrices_dir):
