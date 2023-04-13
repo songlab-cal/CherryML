@@ -2991,6 +2991,7 @@ def fig_qmaker(
     extra_evaluator_command_line_args: str = "",
     initial_tree_estimator_rate_matrix_path: str = get_lg_path(),
     num_processes_tree_estimation: int = NUM_PROCESSES_TREE_ESTIMATION,
+    edge_or_cherry: str = "cherry",
 ):
     """
     We show on the clades datasets that CherryML performs comparatively to EM
@@ -3037,4 +3038,5 @@ def fig_qmaker(
         initial_tree_estimator_rate_matrix_path=initial_tree_estimator_rate_matrix_path,  # noqa
         figsize=(6.4, 4.8),
         num_processes_tree_estimation=num_processes_tree_estimation,
+        edge_or_cherry=edge_or_cherry,
     )
