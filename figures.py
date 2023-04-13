@@ -37,7 +37,7 @@ from cherryml import (
     lg_end_to_end_with_cherryml_optimizer,
     lg_end_to_end_with_em_optimizer,
 )
-from cherryml.benchmarking.globals import IMG_EXTENSION
+from cherryml.benchmarking.globals import IMG_EXTENSIONS
 from cherryml.benchmarking.lg_paper import (
     get_lg_PfamTestingAlignments_data,
     get_lg_PfamTrainingAlignments_data,
@@ -375,10 +375,11 @@ def _fig_single_site_cherry(
                 % num_families_train_list[i]
             )
         plt.tight_layout()
-        plt.savefig(
-            f"{output_image_dir}/log_log_plot_{i}{IMG_EXTENSION}",
-            dpi=300,
-        )
+        for IMG_EXTENSION in IMG_EXTENSIONS:
+            plt.savefig(
+                f"{output_image_dir}/log_log_plot_{i}{IMG_EXTENSION}",
+                dpi=300,
+            )
         plt.close()
 
     df = pd.DataFrame(
@@ -407,10 +408,11 @@ def _fig_single_site_cherry(
         xlabel="Number of families",
         runtimes=runtimes,
     )
-    plt.savefig(
-        f"{output_image_dir}/violin_plot{IMG_EXTENSION}",
-        dpi=300,
-    )
+    for IMG_EXTENSION in IMG_EXTENSIONS:
+        plt.savefig(
+            f"{output_image_dir}/violin_plot{IMG_EXTENSION}",
+            dpi=300,
+        )
     plt.close()
 
     ys_relative_errors = [np.median(ys) for ys in yss_relative_errors]
@@ -538,10 +540,11 @@ def _fig_single_site_em(
                 % num_families_train_list[i]
             )
         plt.tight_layout()
-        plt.savefig(
-            f"{output_image_dir}/log_log_plot_{i}{IMG_EXTENSION}",
-            dpi=300,
-        )
+        for IMG_EXTENSION in IMG_EXTENSIONS:
+            plt.savefig(
+                f"{output_image_dir}/log_log_plot_{i}{IMG_EXTENSION}",
+                dpi=300,
+            )
         plt.close()
 
     df = pd.DataFrame(
@@ -570,10 +573,11 @@ def _fig_single_site_em(
         xlabel="Number of families",
         runtimes=runtimes,
     )
-    plt.savefig(
-        f"{output_image_dir}/violin_plot{IMG_EXTENSION}",
-        dpi=300,
-    )
+    for IMG_EXTENSION in IMG_EXTENSIONS:
+        plt.savefig(
+            f"{output_image_dir}/violin_plot{IMG_EXTENSION}",
+            dpi=300,
+        )
     plt.close()
 
     ys_relative_errors = [np.median(ys) for ys in yss_relative_errors]
@@ -682,12 +686,13 @@ def fig_computational_and_stat_eff_cherry_vs_em(
         #     plt.text(a - 0.3, b / 1.5, str(b) + "%", fontsize=fontsize)
         pass
     plt.tight_layout()
-    plt.savefig(
-        os.path.join(
-            output_image_dir,
-            f"errors_{include_cherry_plus_plus}{IMG_EXTENSION}",
+    for IMG_EXTENSION in IMG_EXTENSIONS:
+        plt.savefig(
+            os.path.join(
+                output_image_dir,
+                f"errors_{include_cherry_plus_plus}{IMG_EXTENSION}",
+            )
         )
-    )
     plt.close()
 
     num_families = num_families_cherry
@@ -719,11 +724,13 @@ def fig_computational_and_stat_eff_cherry_vs_em(
         for a, b in zip(indices, cherry_plus_plus_times):
             plt.text(a - 0.3, b * 1.5, str(b) + "s", fontsize=fontsize)
     plt.tight_layout()
-    plt.savefig(
-        os.path.join(
-            output_image_dir, f"times_{include_cherry_plus_plus}{IMG_EXTENSION}"
+    for IMG_EXTENSION in IMG_EXTENSIONS:
+        plt.savefig(
+            os.path.join(
+                output_image_dir,
+                f"times_{include_cherry_plus_plus}{IMG_EXTENSION}",
+            )
         )
-    )
     plt.close()
 
 
@@ -864,10 +871,11 @@ def fig_single_site_quantization_error(
                 "%.1f%% (%i quantization points)" % (q_errors[i], q_points[i])
             )
         plt.tight_layout()
-        plt.savefig(
-            f"{output_image_dir}/log_log_plot_{i}{IMG_EXTENSION}",
-            dpi=300,
-        )
+        for IMG_EXTENSION in IMG_EXTENSIONS:
+            plt.savefig(
+                f"{output_image_dir}/log_log_plot_{i}{IMG_EXTENSION}",
+                dpi=300,
+            )
         plt.close()
 
     df = pd.DataFrame(
@@ -895,10 +903,11 @@ def fig_single_site_quantization_error(
         title="Distribution of relative error as quantization improves",
         xlabel="Quantization points",
     )
-    plt.savefig(
-        f"{output_image_dir}/violin_plot{IMG_EXTENSION}",
-        dpi=300,
-    )
+    for IMG_EXTENSION in IMG_EXTENSIONS:
+        plt.savefig(
+            f"{output_image_dir}/violin_plot{IMG_EXTENSION}",
+            dpi=300,
+        )
     plt.close()
 
 
@@ -1489,13 +1498,14 @@ def learn_coevolution_model_on_pfam15k(
                     "Results on Pfam 15K data\n(held-out negative log-Likelihood)"  # noqa
                 )
         plt.tight_layout()
-        plt.savefig(
-            os.path.join(
-                output_image_dir,
-                f"log_likelihoods_{num_rate_categories}_{baseline}{IMG_EXTENSION}",
-            ),
-            dpi=300,
-        )
+        for IMG_EXTENSION in IMG_EXTENSIONS:
+            plt.savefig(
+                os.path.join(
+                    output_image_dir,
+                    f"log_likelihoods_{num_rate_categories}_{baseline}{IMG_EXTENSION}",
+                ),
+                dpi=300,
+            )
         plt.close()
     res = {
         "cherry_contact_squared_path": cherry_contact_squared_path,
@@ -1603,9 +1613,7 @@ def fig_pair_site_quantization_error(
         elif Q_2_name.startswith("unmasked"):
             Q_2_path = learn_coevolution_model_on_pfam15k(
                 edge_or_cherry=edge_or_cherry,
-            )[
-                "cherry_2_no_mask_path"
-            ]
+            )["cherry_2_no_mask_path"]
             pi_2_path = os.path.join(
                 get_stationary_distribution(rate_matrix_path=Q_2_path)[
                     "output_probability_distribution_dir"
@@ -1735,10 +1743,11 @@ def fig_pair_site_quantization_error(
                     % (q_errors[i], q_points[i])
                 )
             plt.tight_layout()
-            plt.savefig(
-                f"{output_image_dir}/log_log_plot_{i}_density_{density_plot}{IMG_EXTENSION}",
-                dpi=300,
-            )
+            for IMG_EXTENSION in IMG_EXTENSIONS:
+                plt.savefig(
+                    f"{output_image_dir}/log_log_plot_{i}_density_{density_plot}{IMG_EXTENSION}",
+                    dpi=300,
+                )
             plt.close()
 
     df = pd.DataFrame(
@@ -1769,10 +1778,11 @@ def fig_pair_site_quantization_error(
         grid=False,
     )
 
-    plt.savefig(
-        f"{output_image_dir}/violin_plot{IMG_EXTENSION}",
-        dpi=300,
-    )
+    for IMG_EXTENSION in IMG_EXTENSIONS:
+        plt.savefig(
+            f"{output_image_dir}/violin_plot{IMG_EXTENSION}",
+            dpi=300,
+        )
     plt.close()
 
 
@@ -1836,7 +1846,8 @@ def fig_coevolution_vs_indep(edge_or_cherry: str = "cherry"):
             ax.set_title(title, fontsize=14)
         fig.tight_layout()
         if len(plot_file) > 0:
-            plt.savefig(plot_file + f"{IMG_EXTENSION}", dpi=300)
+            for IMG_EXTENSION in IMG_EXTENSIONS:
+                plt.savefig(plot_file + f"{IMG_EXTENSION}", dpi=300)
         plt.show()
 
     def heatmap(
@@ -2338,10 +2349,11 @@ def fig_site_rates_vs_number_of_contacts(
     plt.grid()
     plt.legend(fontsize=fontsize)
 
-    plt.savefig(
-        f"{output_image_dir}/site_rate_vs_num_contacts{IMG_EXTENSION}",
-        dpi=300,
-    )
+    for IMG_EXTENSION in IMG_EXTENSIONS:
+        plt.savefig(
+            f"{output_image_dir}/site_rate_vs_num_contacts{IMG_EXTENSION}",
+            dpi=300,
+        )
     plt.close()
 
     print(f"number_of_sites = {number_of_sites}")
@@ -2351,10 +2363,11 @@ def fig_site_rates_vs_number_of_contacts(
     # plt.xlabel("number of non-trivial contacts")
     # plt.ylabel("number of sites")
     # plt.plot(xs, number_of_sites)
-    # plt.savefig(
-    #     f"{output_image_dir}/num_contacts_distribution{IMG_EXTENSION}",
-    #     dpi=300,
-    # )
+    # for IMG_EXTENSION in IMG_EXTENSIONS:
+    #     plt.savefig(
+    #         f"{output_image_dir}/num_contacts_distribution{IMG_EXTENSION}",
+    #         dpi=300,
+    #     )
     # plt.close()
 
 
@@ -2788,13 +2801,14 @@ def _fig_standard_benchmark(
             img_path += f"_num_iterations_{num_iterations}"
         if add_em:
             img_path += "_EM" + "_" + extra_em_command_line_args.split(".")[-1]
-        plt.savefig(
-            os.path.join(
-                output_image_dir,
-                img_path + f"{IMG_EXTENSION}",
-            ),
-            dpi=300,
-        )
+        for IMG_EXTENSION in IMG_EXTENSIONS:
+            plt.savefig(
+                os.path.join(
+                    output_image_dir,
+                    img_path + f"{IMG_EXTENSION}",
+                ),
+                dpi=300,
+            )
         plt.close()
 
 

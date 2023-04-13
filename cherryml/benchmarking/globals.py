@@ -1,1 +1,1 @@
-IMG_EXTENSION = ".pdf"
+IMG_EXTENSIONS = [".png", ".pdf"]
