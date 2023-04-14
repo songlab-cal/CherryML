@@ -14,7 +14,7 @@ mkdir /global/scratch/users/sprillo/cherryml_simulated_datasets/fig_1d/gt_likeli
 
 mkdir /global/scratch/users/sprillo/cherryml_simulated_datasets/fig_2ab/
 
-mkdir /global/scratch/users/sprillo/cherryml_simulated_datasets/fig_2ab/msa_dir && time cp -r _cache_benchmarking/subset_msa_to_leaf_nodes/08796a1c5ca4c6070c77b91780889748a6560723d3d88229a8af5add02539bd7/output_msa_dir/*.txt /global/scratch/users/sprillo/cherryml_simulated_datasets/fig_2ab/msa_dir/
+mkdir /global/scratch/users/sprillo/cherryml_simulated_datasets/fig_2ab/msa_dir && time cp -r _cache_benchmarking/subset_msa_to_leaf_nodes/40aaa15b51d7ca7f9fe0d55550947207f53bdc7def3d4a0401cd905d486604db/output_msa_dir/*.txt /global/scratch/users/sprillo/cherryml_simulated_datasets/fig_2ab/msa_dir/
 
 mkdir /global/scratch/users/sprillo/cherryml_simulated_datasets/fig_2ab/contact_map_dir && time cp -r _cache_benchmarking/create_maximal_matching_contact_map/492b760db9307f08efecec9ba203d84cdccecbe80ec8007d25580d595b342f7c/o_contact_map_dir/*.txt /global/scratch/users/sprillo/cherryml_simulated_datasets/fig_2ab/contact_map_dir/
 
