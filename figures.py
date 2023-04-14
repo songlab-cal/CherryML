@@ -54,6 +54,7 @@ from cherryml.benchmarking.pfam_15k import (
 from cherryml.evaluation import (
     compute_log_likelihoods,
     create_maximal_matching_contact_map,
+    plot_rate_matrices_against_each_other,
     plot_rate_matrix_predictions,
     relative_errors,
 )
@@ -936,6 +937,20 @@ def fig_lg_paper(
         output_image_dir=output_image_dir,
         use_colors=True,
     )
+
+    for codename_1, name_1 in rate_estimator_names:
+        for codename_2, name_2 in rate_estimator_names:
+            plot_rate_matrices_against_each_other(
+                Qs[codename_1],
+                Qs[codename_2],
+                name_1,
+                name_2,
+            )
+            for IMG_EXTENSION in IMG_EXTENSIONS:
+                plt.savefig(
+                    output_image_dir + "/" + name_1 + "__vs__" + name_2 + IMG_EXTENSION,
+                    dpi=300,
+                )
 
 
 @caching.cached_computation(
