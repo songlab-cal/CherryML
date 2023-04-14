@@ -187,8 +187,8 @@ if __name__ == "__main__":
         "--cherryml_type",
         type=str,
         required=False,
-        default="cherryml",
-        help="Whether to use 'cherryml' or 'cherryml++'.",
+        default="cherry++",
+        help="Whether to use 'cherry' or 'cherry++'.",
     )
 
     # Functionality not currently exposed:

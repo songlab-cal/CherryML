@@ -56,7 +56,7 @@ def cherryml_public_api(
     num_epochs: int = 500,
     minimum_distance_for_nontrivial_contact: int = 7,
     do_adam: bool = True,
-    cherryml_type: str = "cherry",
+    cherryml_type: str = "cherry++",
     cpp_counting_command_line_prefix: str = "",
     cpp_counting_command_line_suffix: str = "",
     optimizer_initialization: str = "jtt-ipw",

@@ -223,8 +223,7 @@ The CherryML API provides extensive functionality through additional flags, whic
                         Tree estimator to use. Can be either 'FastTree' or
                         'PhyML'. (default: FastTree)
   --cherryml_type CHERRYML_TYPE
-                        Whether to use 'cherryml' or 'cherryml++'. (default:
-                        cherryml)
+                        Whether to use 'cherry' or 'cherry++'. (default: cherry++)
 ```
 
 # Evaluation API
