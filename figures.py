@@ -269,14 +269,12 @@ def _fig_single_site_cherry(
                 f"gt_site_rates_dir = {gt_site_rates_dir}\n"
                 f"gt_likelihood_dir = {gt_likelihood_dir}\n"
             )
-            if not os.path.exists("fig_1bc_simulated_data_dirs.txt"):
-                with open("fig_1bc_simulated_data_dirs.txt", "w") as out_file:
-                    out_file.write(logging_str)
-            if not os.path.exists("fig_1bc_simulated_data_families_all.txt"):
-                with open(
-                    "fig_1bc_simulated_data_families_all.txt", "w"
-                ) as out_file:
-                    out_file.write(" ".join(families_all))
+            with open("fig_1bc_simulated_data_dirs.txt", "w") as out_file:
+                out_file.write(logging_str)
+            with open(
+                "fig_1bc_simulated_data_families_all.txt", "w"
+            ) as out_file:
+                out_file.write(" ".join(families_all))
             print(logging_str)
         else:
             families_all = (
@@ -817,9 +815,8 @@ def fig_single_site_quantization_error(
                 f"gt_site_rates_dir = {gt_site_rates_dir}\n"
                 f"gt_likelihood_dir = {gt_likelihood_dir}\n"
             )
-            if not os.path.exists("fig_1d_simulated_data_dirs.txt"):
-                with open("fig_1d_simulated_data_dirs.txt", "w") as out_file:
-                    out_file.write(logging_str)
+            with open("fig_1d_simulated_data_dirs.txt", "w") as out_file:
+                out_file.write(logging_str)
             print(logging_str)
         else:
             msa_dir = simulated_data_dirs["msa_dir"]
@@ -1672,9 +1669,8 @@ def fig_pair_site_quantization_error(
                 f"gt_site_rates_dir = {gt_site_rates_dir}\n"
                 f"gt_likelihood_dir = {gt_likelihood_dir}\n"
             )
-            if not os.path.exists("fig_2ab_simulated_data_dirs.txt"):
-                with open("fig_2ab_simulated_data_dirs.txt", "w") as out_file:
-                    out_file.write(logging_str)
+            with open("fig_2ab_simulated_data_dirs.txt", "w") as out_file:
+                out_file.write(logging_str)
             print(logging_str)
         else:
             msa_dir = simulated_data_dirs["msa_dir"]
