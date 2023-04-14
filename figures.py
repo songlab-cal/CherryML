@@ -1361,11 +1361,13 @@ def learn_coevolution_model_on_pfam15k(
             "jtt_ipw_dir_0",
             "rate_matrix_dir_0",
         ]:
+            dir_to_lg_end_to_end_with_cherryml_optimizer_res = lg_end_to_end_with_cherryml_optimizer_res[
+                lg_end_to_end_with_cherryml_optimizer_output_dir
+            ]
+            print(f"dir_to_lg_end_to_end_with_cherryml_optimizer_res = {dir_to_lg_end_to_end_with_cherryml_optimizer_res}")
             with open(
                 os.path.join(
-                    lg_end_to_end_with_cherryml_optimizer_res[
-                        lg_end_to_end_with_cherryml_optimizer_output_dir
-                    ],
+                    dir_to_lg_end_to_end_with_cherryml_optimizer_res,
                     "profiling.txt",
                 ),
                 "r",

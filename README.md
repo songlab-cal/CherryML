@@ -519,6 +519,8 @@ cp /opt/xrate/download/xrate/bin/xrate /opt/xrate/bin/xrate
 popd
 ```
 
+Finally, make sure you have `open-mpi` installed. Installation instructions may depend on the system. For example, for Mac, `brew install open-mpi` should work.
+
 Once you have met all the requirements, run the fast tests to make sure they pass:
 
 ```
