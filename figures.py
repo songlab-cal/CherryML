@@ -948,7 +948,7 @@ def fig_lg_paper(
             )
             for IMG_EXTENSION in IMG_EXTENSIONS:
                 plt.savefig(
-                    output_image_dir + "/" + name_1 + "__vs__" + name_2 + IMG_EXTENSION,
+                    output_image_dir + "/" + codename_1 + "__vs__" + codename_2 + IMG_EXTENSION,
                     dpi=300,
                 )
 
