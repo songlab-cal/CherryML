@@ -37,3 +37,24 @@ mkdir /global/scratch/users/sprillo/cherryml_simulated_datasets/fig_1bc/gt_site_
 mkdir /global/scratch/users/sprillo/cherryml_simulated_datasets/fig_1bc/gt_likelihood_dir && time cp -r _cache_benchmarking_em/fast_tree/eecc0e2b9e570733bd4817b6bc57abd38ef31652f30cc17612d66147203398a2/output_likelihood_dir/*.txt /global/scratch/users/sprillo/cherryml_simulated_datasets/fig_1bc/gt_likelihood_dir/  # 0m50s
 
 time cp -r fig_1bc_simulated_data_families_all.txt /global/scratch/users/sprillo/cherryml_simulated_datasets/fig_1bc/  # 0s
+
+
+
+mkdir /global/scratch/users/sprillo/cherryml_simulated_datasets/rate_matrices
+
+cp _cache_benchmarking/quantized_transitions_mle/9858a0319e46041903de4c8b87147b96549e7b8991086574025f2a792a1621c9/output_rate_matrix_dir/result.txt /global/scratch/users/sprillo/cherryml_simulated_datasets/rate_matrices/Q2.txt
+
+cp data/rate_matrices/lg.txt /global/scratch/users/sprillo/cherryml_simulated_datasets/rate_matrices/lg.txt
+
+
+pushd /global/scratch/users/sprillo/cherryml_simulated_datasets/
+
+tar -cvzf fig_1d.tgz fig_1d/
+
+tar -cvzf fig_2ab.tgz fig_2ab/
+
+tar -cvzf fig_1bc.tgz fig_1bc/
+
+tar -cvzf rate_matrices.tgz rate_matrices/
+
+popd
