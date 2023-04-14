@@ -941,8 +941,8 @@ def fig_lg_paper(
     for codename_1, name_1 in rate_estimator_names:
         for codename_2, name_2 in rate_estimator_names:
             plot_rate_matrices_against_each_other(
-                Qs[codename_1],
-                Qs[codename_2],
+                read_rate_matrix(Qs[codename_1]),
+                read_rate_matrix(Qs[codename_2]),
                 name_1,
                 name_2,
             )
