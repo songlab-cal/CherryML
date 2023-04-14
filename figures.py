@@ -325,11 +325,13 @@ def _fig_single_site_cherry(
                 "jtt_ipw_dir_0",
                 "rate_matrix_dir_0",
             ]:
+                dir_lg_end_to_end_with_cherryml_optimizer_output_dir = lg_end_to_end_with_cherryml_optimizer_res[
+                    lg_end_to_end_with_cherryml_optimizer_output_dir
+                ]
+                print(f"dir_lg_end_to_end_with_cherryml_optimizer_output_dir = {dir_lg_end_to_end_with_cherryml_optimizer_output_dir}")
                 with open(
                     os.path.join(
-                        lg_end_to_end_with_cherryml_optimizer_res[
-                            lg_end_to_end_with_cherryml_optimizer_output_dir
-                        ],
+                        dir_lg_end_to_end_with_cherryml_optimizer_output_dir,
                         "profiling.txt",
                     ),
                     "r",
