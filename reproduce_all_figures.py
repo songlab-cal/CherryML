@@ -76,7 +76,6 @@ if __name__ == "__main__":
     )  # Fig. 1b, 1c
     figures.fig_computational_and_stat_eff_cherry_vs_em(
         simulated_data_dirs=simulated_data_dirs_fig_1bc,
-        include_cherry_plus_plus=True,
     )  # Supp. Fig.
     # ~ 62 hr
 

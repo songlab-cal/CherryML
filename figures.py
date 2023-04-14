@@ -586,7 +586,7 @@ def _fig_single_site_em(
 # Fig. 1b, 1c
 def fig_computational_and_stat_eff_cherry_vs_em(
     extra_em_command_line_args: str = "-log 6 -f 3 -mi 0.000001",
-    include_cherry_plus_plus: bool = False,
+    edge_or_cherry: str = "cherry++__2023_04_06_test_2",
     simulated_data_dirs: Optional[Dict[str, str]] = None,
 ):
     """
@@ -606,24 +606,10 @@ def fig_computational_and_stat_eff_cherry_vs_em(
         cherry_errors_nonpct,
         cherry_times,
     ) = _fig_single_site_cherry(
-        edge_or_cherry="cherry", simulated_data_dirs=simulated_data_dirs
+        edge_or_cherry=edge_or_cherry, simulated_data_dirs=simulated_data_dirs
     )
     cherry_times = [int(x) for x in cherry_times]
     cherry_errors = [float("%.1f" % (100 * x)) for x in cherry_errors_nonpct]
-
-    if include_cherry_plus_plus:
-        (
-            num_families_cherry_plus_plus,
-            cherry_plus_plus_errors_nonpct,
-            cherry_plus_plus_times,
-        ) = _fig_single_site_cherry(
-            edge_or_cherry="cherry++__2023_04_06_test_2",
-            simulated_data_dirs=simulated_data_dirs,
-        )
-        cherry_plus_plus_times = [int(x) for x in cherry_plus_plus_times]
-        cherry_plus_plus_errors = [
-            float("%.1f" % (100 * x)) for x in cherry_plus_plus_errors_nonpct
-        ]
 
     num_families_em, em_errors_nonpct, em_times = _fig_single_site_em(
         extra_em_command_line_args=extra_em_command_line_args,
@@ -635,15 +621,10 @@ def fig_computational_and_stat_eff_cherry_vs_em(
 
     print(f"cherry_errors_nonpct = {cherry_errors_nonpct}")
     print(f"cherry_times = {cherry_times}")
-    if include_cherry_plus_plus:
-        print(
-            f"cherry_plus_plus_errors_nonpct = {cherry_plus_plus_errors_nonpct}"
-        )
-        print(f"cherry_plus_plus_times = {cherry_plus_plus_times}")
     print(f"em_errors_nonpct = {em_errors_nonpct}")
     print(f"em_times = {em_times}")
 
-    num_families = num_families_cherry
+    num_families = num_families_em
     indices = [i for i in range(len(num_families))]
     plt.figure(dpi=300)
     plt.plot(
@@ -653,14 +634,6 @@ def fig_computational_and_stat_eff_cherry_vs_em(
         label="CherryML",
         color="red",
     )
-    if include_cherry_plus_plus:
-        plt.plot(
-            indices,
-            100 * np.array(cherry_plus_plus_errors_nonpct),
-            "o-",
-            label="CherryML++",
-            color="orange",
-        )
     plt.plot(
         indices,
         100 * np.array(em_errors_nonpct),
@@ -680,16 +653,12 @@ def fig_computational_and_stat_eff_cherry_vs_em(
         plt.text(a - 0.35, b / 1.5, str(b) + "%", fontsize=fontsize)
     for a, b in zip(indices, cherry_errors):
         plt.text(a - 0.3, 1.2 * b, str(b) + "%", fontsize=fontsize)
-    if include_cherry_plus_plus:
-        # for a, b in zip(indices, cherry_plus_plus_errors):
-        #     plt.text(a - 0.3, b / 1.5, str(b) + "%", fontsize=fontsize)
-        pass
     plt.tight_layout()
     for IMG_EXTENSION in IMG_EXTENSIONS:
         plt.savefig(
             os.path.join(
                 output_image_dir,
-                f"errors_{include_cherry_plus_plus}{IMG_EXTENSION}",
+                f"errors{IMG_EXTENSION}",
             )
         )
     plt.close()
@@ -698,14 +667,6 @@ def fig_computational_and_stat_eff_cherry_vs_em(
     indices = [i for i in range(len(num_families))]
     plt.figure(dpi=300)
     plt.plot(indices, cherry_times, "o-", label="CherryML", color="red")
-    if include_cherry_plus_plus:
-        plt.plot(
-            indices,
-            cherry_plus_plus_times,
-            "o-",
-            label="CherryML++",
-            color="orange",
-        )
     plt.plot(indices, em_times, "o-", label="EM", color="blue")
     plt.ylim((5, 5e5))
     plt.xticks(indices, num_families, fontsize=fontsize)
@@ -719,15 +680,12 @@ def fig_computational_and_stat_eff_cherry_vs_em(
         plt.text(a - 0.35, b * 1.5, str(b) + "s", fontsize=fontsize)
     for a, b in zip(indices, cherry_times):
         plt.text(a - 0.3, b / 2.0, str(b) + "s", fontsize=fontsize)
-    if include_cherry_plus_plus:
-        for a, b in zip(indices, cherry_plus_plus_times):
-            plt.text(a - 0.3, b * 1.5, str(b) + "s", fontsize=fontsize)
     plt.tight_layout()
     for IMG_EXTENSION in IMG_EXTENSIONS:
         plt.savefig(
             os.path.join(
                 output_image_dir,
-                f"times_{include_cherry_plus_plus}{IMG_EXTENSION}",
+                f"times{IMG_EXTENSION}",
             )
         )
     plt.close()
