@@ -402,9 +402,9 @@ sys	0m17.869s
 Evaluation took 3 minutes wall-clock time on the same computer. The output is:
 
 ```
-Total log-likelihood: -2042877.196799998
+Total log-likelihood: -2042731.0602000006
 Total number of sites: 101064
-Average log-likelihood per site: -20.21369821895035
+Average log-likelihood per site: -20.21225223818571
 [...]
 ```
 
@@ -436,7 +436,7 @@ Average log-likelihood per site: -20.50697311703476
 [...]
 ```
 
-As we can see, the de-novo estimated rate matrix outperforms the LG rate matrix, with an average increase in log-likelihood per site of `0.293` (1.4%).
+As we can see, the de-novo estimated rate matrix outperforms the LG rate matrix, with an average increase in log-likelihood per site of `0.295` (1.4%).
 
 # Reproducing all figures in our paper
 
