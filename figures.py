@@ -277,6 +277,7 @@ def _fig_single_site_cherry(
                     "fig_1bc_simulated_data_families_all.txt", "w"
                 ) as out_file:
                     out_file.write(" ".join(families_all))
+            print(logging_str)
         else:
             families_all = (
                 open(simulated_data_dirs["families_all.txt"], "r")
@@ -819,6 +820,7 @@ def fig_single_site_quantization_error(
             if not os.path.exists("fig_1d_simulated_data_dirs.txt"):
                 with open("fig_1d_simulated_data_dirs.txt", "w") as out_file:
                     out_file.write(logging_str)
+            print(logging_str)
         else:
             msa_dir = simulated_data_dirs["msa_dir"]
             # contact_map_dir = simulated_data_dirs["contact_map_dir"]
@@ -1673,6 +1675,7 @@ def fig_pair_site_quantization_error(
             if not os.path.exists("fig_2ab_simulated_data_dirs.txt"):
                 with open("fig_2ab_simulated_data_dirs.txt", "w") as out_file:
                     out_file.write(logging_str)
+            print(logging_str)
         else:
             msa_dir = simulated_data_dirs["msa_dir"]
             contact_map_dir = simulated_data_dirs["contact_map_dir"]
