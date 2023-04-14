@@ -313,7 +313,7 @@ bool all_children_are_leafs(Tree* tree, const vector<adj_pair_t> & children){
     return true;
 }
 
-pair<string, float> _dfs(
+pair<string, double> _dfs(
     double* count_matrices_data,
     string node,
     Tree* tree,
@@ -331,12 +331,12 @@ pair<string, float> _dfs(
         return make_pair(node, 0.0f);
     }
     vector<string> unmatched_leaves_under;
-    vector<float> distances_under;
+    vector<double> distances_under;
     for (adj_pair_t& edge : tree->children(node)){
         string child = edge.node;
         double branch_length = edge.length;
         string child_seq = (*msa)[child];
-        pair<string, float> maybe_unmatched_leaf_and_distance = _dfs(
+        pair<string, double> maybe_unmatched_leaf_and_distance = _dfs(
             count_matrices_data,
             child,
             tree,
@@ -346,7 +346,7 @@ pair<string, float> _dfs(
             total_pairs
         );
         string maybe_unmatched_leaf = maybe_unmatched_leaf_and_distance.first;
-        float maybe_distance = maybe_unmatched_leaf_and_distance.second;
+        double maybe_distance = maybe_unmatched_leaf_and_distance.second;
         if(maybe_distance >= -0.5){
             unmatched_leaves_under.push_back(maybe_unmatched_leaf);
             distances_under.push_back(maybe_distance + branch_length);
@@ -358,9 +358,9 @@ pair<string, float> _dfs(
     while(index + 1 <= int(unmatched_leaves_under.size()) - 1){
         (*total_pairs) += 1;
         string leaf_1 = unmatched_leaves_under[index];
-        float branch_length_1 = distances_under[index];
+        double branch_length_1 = distances_under[index];
         string leaf_2 = unmatched_leaves_under[index + 1];
-        float branch_length_2 = distances_under[index + 1];
+        double branch_length_2 = distances_under[index + 1];
         // NOTE: Copy-pasta from below ("cherry" case)...
         string leaf_seq_1 = (*msa)[leaf_1];
         string leaf_seq_2 = (*msa)[leaf_2];
