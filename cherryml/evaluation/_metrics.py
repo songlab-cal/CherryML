@@ -185,7 +185,7 @@ def plot_rate_matrices_against_each_other(
     y_pred_name: str,
     mask_matrix: Optional[MaskMatrixType] = None,
     density_plot: bool = False,
-    min_y: int = -5,
+    min_y: int = -7,
 ) -> None:
     """
     Plot "true" vs "predicted" rate matrix. These need not be true vs estimated,
