@@ -1403,7 +1403,7 @@ def learn_coevolution_model_on_pfam15k(
             "Cherry contact squared",
             cherry_contact_squared_path,
         ),
-        ("Cherry2", cherry_2_path),
+        ("Cherry2; masked", cherry_2_path),
         ("Cherry2; no mask", cherry_2_no_mask_path),
     ]
 
