@@ -951,6 +951,7 @@ def fig_lg_paper(
                     output_image_dir + "/" + codename_1 + "__vs__" + codename_2 + IMG_EXTENSION,
                     dpi=300,
                 )
+                plt.close()
 
 
 @caching.cached_computation(
