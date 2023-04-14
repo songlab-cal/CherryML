@@ -547,7 +547,7 @@ You do not need to worry about downloading the data from the LG paper - we will 
 
 ## Optional: Download simulated datasets
 
-Our simulated datasets are available on Zenodo at https://zenodo.org/record/7814723#.ZDSUDyZlBXk . If you do not download them, they will be simulated again (not a big  deal at all). If you _do_ download them and want to use them, make sure to change the variables in `reproduce_all_figures.py` at the top (specifically, `simulated_data_dirs_fig_1d`, `simulated_data_dirs_fig_2ab`, `simulated_data_dirs_fig_1bc`) to point to the downloaded data. We think these datasets might be of independent interest (beyond our specific benchmarks), which is why we make them available on Zenodo.
+Our simulated datasets are available on Zenodo at https://zenodo.org/record/7830072#.ZDnPBuzMKTc . If you do not download them, they will be simulated again (not a big  deal at all). If you _do_ download them and want to use them, make sure to change the variables in `reproduce_all_figures.py` at the top (specifically, `simulated_data_dirs_fig_1d`, `simulated_data_dirs_fig_2ab`, `simulated_data_dirs_fig_1bc`) to point to the downloaded data. We think these datasets might be of independent interest (beyond our specific benchmarks), which is why we make them available on Zenodo.
 
 ## Run code to reproduce all figures
 
