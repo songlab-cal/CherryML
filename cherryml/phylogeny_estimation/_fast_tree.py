@@ -333,6 +333,7 @@ def _map_func(args: List):
         "output_site_rates_dir",
         "output_likelihood_dir",
     ],
+    write_extra_log_files=True,
 )
 def fast_tree(
     msa_dir: str,

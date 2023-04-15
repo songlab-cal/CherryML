@@ -32,6 +32,7 @@ logger = logging.getLogger(__name__)
     parallel_arg="families",
     exclude_args=["num_processes"],
     output_dirs=["o_contact_map_dir"],
+    write_extra_log_files=True,
 )
 def create_maximal_matching_contact_map(
     i_contact_map_dir: str,

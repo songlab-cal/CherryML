@@ -232,6 +232,7 @@ def _map_func(args) -> List[Tuple[float, pd.DataFrame]]:
         "cpp_command_line_suffix",
     ],
     output_dirs=["output_count_matrices_dir"],
+    write_extra_log_files=True,
 )
 def count_co_transitions(
     tree_dir: str,

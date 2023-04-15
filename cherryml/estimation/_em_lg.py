@@ -246,6 +246,7 @@ def _translate_rate_matrix_to_historian_format(
 @caching.cached_computation(
     output_dirs=["output_rate_matrix_dir"],
     exclude_args=[],
+    write_extra_log_files=True,
 )
 def em_lg(
     tree_dir: str,

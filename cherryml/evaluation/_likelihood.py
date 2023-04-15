@@ -469,6 +469,7 @@ def _map_func(args: Dict):
     output_dirs=[
         "output_likelihood_dir",
     ],
+    write_extra_log_files=True,
 )
 def compute_log_likelihoods(
     tree_dir: str,

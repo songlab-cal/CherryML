@@ -172,6 +172,7 @@ def create_synthetic_count_matrices(
     samples_per_row: int,
     rate_matrix_path: str,
     output_count_matrices_dir: Optional[str] = None,
+    write_extra_log_files=True,
 ):
     """
     Create synthetic count matrices.
@@ -957,6 +958,7 @@ def fig_lg_paper(
 
 @caching.cached_computation(
     output_dirs=["output_probability_distribution_dir"],
+    write_extra_log_files=True,
 )
 def get_stationary_distribution(
     rate_matrix_path: str,
@@ -973,6 +975,7 @@ def get_stationary_distribution(
 
 @caching.cached_computation(
     output_dirs=["output_rate_matrix_dir"],
+    write_extra_log_files=True,
 )
 def normalize_rate_matrix(
     rate_matrix_path: str,
@@ -990,6 +993,7 @@ def normalize_rate_matrix(
 
 @caching.cached_computation(
     output_dirs=["output_rate_matrix_dir"],
+    write_extra_log_files=True,
 )
 def chain_product_cached(
     rate_matrix_1_path: str,
@@ -1139,6 +1143,7 @@ def _map_func_compute_contacting_sites(args: List) -> None:
     exclude_args=["num_processes"],
     parallel_arg="families",
     output_dirs=["output_sites_subset_dir"],
+    write_extra_log_files=True,
 )
 def _compute_contacting_sites(
     contact_map_dir: str,

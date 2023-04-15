@@ -80,6 +80,7 @@ def _map_func_subset_data_to_sites_subset(args: List) -> None:
     exclude_args=["num_processes"],
     parallel_arg="families",
     output_dirs=["output_msa_dir", "output_site_rates_dir"],
+    write_extra_log_files=True,
 )
 def _subset_data_to_sites_subset(
     sites_subset_dir: str,

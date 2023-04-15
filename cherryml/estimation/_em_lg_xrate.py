@@ -239,6 +239,7 @@ def run_xrate(
 @caching.cached_computation(
     output_dirs=["output_rate_matrix_dir"],
     exclude_args=[],
+    write_extra_log_files=True,
 )
 def em_lg_xrate(
     tree_dir: str,
