@@ -939,6 +939,7 @@ def fig_lg_paper(
     )
 
     for codename_1, name_1 in rate_estimator_names:
+        print(f"lg paper figure; rate matrix {codename_1} / {name_1} is at location {Qs[codename_1]}")
         for codename_2, name_2 in rate_estimator_names:
             plot_rate_matrices_against_each_other(
                 read_rate_matrix(Qs[codename_1]).to_numpy(),
