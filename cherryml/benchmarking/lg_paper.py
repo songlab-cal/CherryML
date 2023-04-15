@@ -337,6 +337,7 @@ def run_rate_estimator(
             num_processes_tree_estimation=num_processes,
             num_processes_counting=1,
             num_processes_optimization=1,
+            edge_or_cherry="cherry",
         )
         with open(
             "lg_paper_fig__" + rate_estimator_name + "__profiling_str.txt", "w"
