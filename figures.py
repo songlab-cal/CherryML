@@ -326,7 +326,7 @@ def _fig_single_site_cherry(
                 families=families_train,
             )["output_dir"] + "/result.txt"
         )
-        print(f"Number of sites: {number_of_sites}")
+        print(f"Number of sites for {num_families_train} families: {number_of_sites}")
 
         # Now run the cherryml method.
         lg_end_to_end_with_cherryml_optimizer_res = (
