@@ -349,7 +349,15 @@ def _fig_single_site_cherry(
                 families=families_train,
             )["output_dir"] + "/result.txt"
         )
+        number_of_residues = read_pickle(
+            get_msas_number_of_residues__cached(
+                msa_dir=msa_dir,
+                families=families_train,
+                exclude_gaps=True,
+            )["output_dir"] + "/result.txt"
+        )
         print(f"Number of sites for {num_families_train} families: {number_of_sites}")
+        print(f"Number of residues for {num_families_train} families: {number_of_residues}")
 
         # Now run the cherryml method.
         lg_end_to_end_with_cherryml_optimizer_res = (
@@ -990,7 +998,15 @@ def fig_lg_paper(
             families=get_families(lg_pfam_training_alignments_dir)
         )["output_dir"] + "/result.txt"
     )
+    num_residues = read_pickle(
+        get_msas_number_of_residues__cached(
+            msa_dir=lg_pfam_training_alignments_dir,
+            families=get_families(lg_pfam_training_alignments_dir),
+            exclude_gaps=True,
+        )["output_dir"] + "/result.txt"
+    )
     print(f"LG paper Fig. 4 num_sites = {num_sites}")
+    print(f"LG paper Fig. 4 num_residues = {num_residues}")
 
     y, df, bootstraps, Qs = reproduce_lg_paper_fig_4(
         msa_train_dir=lg_pfam_training_alignments_dir,
