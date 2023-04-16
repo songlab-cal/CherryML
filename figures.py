@@ -64,10 +64,12 @@ from cherryml.io import (
     read_log_likelihood,
     read_mask_matrix,
     read_msa,
+    read_pickle,
     read_rate_matrix,
     read_site_rates,
     write_count_matrices,
     write_msa,
+    write_pickle,
     write_probability_distribution,
     write_rate_matrix,
     write_sites_subset,
@@ -211,6 +213,27 @@ def create_synthetic_count_matrices(
     )
 
 
+@caching.cached_computation(
+    output_dirs=["output_dir"],
+)
+def get_msas_number_of_sites__cached(
+    msa_dir: str,
+    families: List[str],
+    output_dir: Optional[str] = None,
+):
+    """
+    Get the total number of sites in the dataset.
+    """
+    res = 0
+    for family in families:
+        num_sites = get_msa_num_sites(
+            os.path.join(msa_dir, family + ".txt")
+        )
+        res += num_sites
+    assert(res >= 1)
+    write_pickle(res, os.path.join(output_dir, "result.txt"))
+
+
 def _fig_single_site_cherry(
     num_rate_categories: int = 1,
     num_processes_tree_estimation: int = 4,
@@ -294,6 +317,15 @@ def _fig_single_site_cherry(
             gt_tree_dir = simulated_data_dirs["gt_tree_dir"]
             gt_site_rates_dir = simulated_data_dirs["gt_site_rates_dir"]
             gt_likelihood_dir = simulated_data_dirs["gt_likelihood_dir"]
+
+        # Report the total number of sites in the dataset.
+        number_of_sites = read_pickle(
+            get_msas_number_of_sites__cached(
+                msa_dir=msa_dir,
+                families=families_train,
+            )["output_dir"] + "/result.txt"
+        )
+        print(f"Number of sites: {number_of_sites}")
 
         # Now run the cherryml method.
         lg_end_to_end_with_cherryml_optimizer_res = (

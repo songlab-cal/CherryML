@@ -2,6 +2,18 @@ import os
 from typing import Dict
 
 
+def get_msa_num_sites(
+    msa_path: str,
+) -> int:
+    """
+    Get the number of sites in an MSA (efficiently).
+    """
+    for i, line in enumerate(open(msa_path, "r")):
+        if i == 1:
+            return len(line.strip())
+    raise Exception("We shouldn't be here!")
+
+
 def read_msa(
     msa_path: str,
 ) -> Dict[str, str]:
