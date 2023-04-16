@@ -129,6 +129,7 @@ def plot_rate_matrix_predictions(
     y_pred: RateMatrixType,
     mask_matrix: Optional[MaskMatrixType] = None,
     density_plot: bool = False,
+    alpha: Optional[float] = 0.3,
 ) -> None:
     num_states = y_true.shape[0]
     if mask_matrix is None:
@@ -150,8 +151,8 @@ def plot_rate_matrix_predictions(
     if density_plot:
         sns.jointplot(x=ys_true, y=ys_pred, kind="hex", color="#4CB391")
     else:
-        sns.scatterplot(ys_true, ys_pred, alpha=0.3)
-        # plt.scatter(ys_true, ys_pred, alpha=0.3)
+        sns.scatterplot(ys_true, ys_pred, alpha=alpha)
+        # plt.scatter(ys_true, ys_pred, alpha=alpha)
 
     plt.xticks(fontsize=14)
     plt.yticks(fontsize=14)
