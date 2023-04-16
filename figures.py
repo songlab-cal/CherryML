@@ -353,6 +353,7 @@ def _fig_single_site_cherry(
             lg_end_to_end_with_cherryml_optimizer_res["rate_matrix_dir_0"],
             "result.txt",
         )
+        print(f"CherryML learned_rate_matrix_path, {num_families_train} = {learned_rate_matrix_path}")
         learned_rate_matrix = read_rate_matrix(
             learned_rate_matrix_path
         ).to_numpy()
@@ -520,6 +521,7 @@ def _fig_single_site_em(
         learned_rate_matrix_path = os.path.join(
             em_estimator_res["rate_matrix_dir_0"], "result.txt"
         )
+        print(f"EM learned_rate_matrix_path, {num_families_train} = {learned_rate_matrix_path}")
         learned_rate_matrix = read_rate_matrix(learned_rate_matrix_path)
         learned_rate_matrix = learned_rate_matrix.to_numpy()
 
