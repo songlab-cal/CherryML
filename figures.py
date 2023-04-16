@@ -60,6 +60,7 @@ from cherryml.evaluation import (
 )
 from cherryml.global_vars import TITLES
 from cherryml.io import (
+    get_msa_num_residues,
     get_msa_num_sites,
     read_contact_map,
     read_log_likelihood,
@@ -231,6 +232,28 @@ def get_msas_number_of_sites__cached(
             os.path.join(msa_dir, family + ".txt")
         )
         res += num_sites
+    assert(res >= 1)
+    write_pickle(res, os.path.join(output_dir, "result.txt"))
+
+
+@caching.cached_computation(
+    output_dirs=["output_dir"],
+)
+def get_msas_number_of_residues__cached(
+    msa_dir: str,
+    families: List[str],
+    exclude_gaps: bool,
+    output_dir: Optional[str] = None,
+):
+    """
+    Get the total number of sites in the dataset.
+    """
+    res = 0
+    for family in families:
+        res += get_msa_num_residues(
+            os.path.join(msa_dir, family + ".txt"),
+            exclude_gaps=exclude_gaps
+        )
     assert(res >= 1)
     write_pickle(res, os.path.join(output_dir, "result.txt"))
 
