@@ -2581,7 +2581,6 @@ def _fig_standard_benchmark(
     msa_dir_train: str,
     msa_dir_test: str,
     output_image_dir: str,
-    cache_dir: str,
     single_site_rate_matrices: List[Tuple[str, str]],
     num_rate_categories: int = 4,
     num_processes_tree_estimation: int = NUM_PROCESSES_TREE_ESTIMATION,
@@ -2609,8 +2608,6 @@ def _fig_standard_benchmark(
 
     if not os.path.exists(output_image_dir):
         os.makedirs(output_image_dir)
-
-    caching.set_cache_dir(cache_dir)
 
     families_train = get_families(msa_dir_train)
     families_test = get_families(msa_dir_test)
@@ -3121,6 +3118,7 @@ def fig_qmaker(
     We show on the clades datasets that CherryML performs comparatively to EM
     while being faster, even when taking into account tree estimation.
     """
+    caching.set_cache_dir("_cache_benchmarking_qmaker")
 
     qmaker_data_dirs = _get_qmaker_5_clades_msa_dirs()
     msa_dir_train = qmaker_data_dirs[f"{clade_name}_train"]
@@ -3147,7 +3145,6 @@ def fig_qmaker(
         msa_dir_train=msa_dir_train,
         msa_dir_test=msa_dir_test,
         output_image_dir=f"images/fig_qmaker/{clade_name}",
-        cache_dir="_cache_benchmarking_qmaker",
         single_site_rate_matrices=single_site_rate_matrices,
         num_families_test=num_families_test,
         add_cherryml=add_cherryml,
