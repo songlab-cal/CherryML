@@ -963,7 +963,7 @@ def fig_lg_paper(
 
     num_sites = read_pickle(
         get_msas_number_of_sites__cached(
-            msa_train_dir=lg_pfam_training_alignments_dir,
+            msa_dir=lg_pfam_training_alignments_dir,
             families=get_families(lg_pfam_training_alignments_dir)
         )["output_dir"] + "/result.txt"
     )
