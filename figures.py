@@ -1000,7 +1000,7 @@ def fig_lg_paper(
                     output_image_dir + "/" + codename_1.replace(' ', '_') + "__vs__" + codename_2.replace(' ', '_') + IMG_EXTENSION,
                     dpi=300,
                 )
-                plt.close()
+            plt.close()
 
 
 @caching.cached_computation(
@@ -1881,7 +1881,7 @@ def fig_coevolution_vs_indep(edge_or_cherry: str = "cherry++__2023_04_06_test_2"
         if len(plot_file) > 0:
             for IMG_EXTENSION in IMG_EXTENSIONS:
                 plt.savefig(plot_file + f"{IMG_EXTENSION}", dpi=300)
-        plt.show()
+        plt.close()
 
     def heatmap(
         data,
