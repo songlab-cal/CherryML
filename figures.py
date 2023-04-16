@@ -372,7 +372,8 @@ def _fig_single_site_cherry(
 
     for i in range(len(num_families_train_list)):
         plot_rate_matrix_predictions(
-            read_rate_matrix(get_lg_path()).to_numpy(), Qs[i]
+            read_rate_matrix(get_lg_path()).to_numpy(), Qs[i],
+            alpha=1.0,
         )
         if TITLES:
             plt.title(
@@ -538,7 +539,8 @@ def _fig_single_site_em(
 
     for i in range(len(num_families_train_list)):
         plot_rate_matrix_predictions(
-            read_rate_matrix(get_lg_path()).to_numpy(), Qs[i]
+            read_rate_matrix(get_lg_path()).to_numpy(), Qs[i],
+            alpha=1.0,
         )
         if TITLES:
             plt.title(
@@ -829,7 +831,8 @@ def fig_single_site_quantization_error(
 
     for i in range(len(q_points)):
         plot_rate_matrix_predictions(
-            read_rate_matrix(get_lg_path()).to_numpy(), Qs[i]
+            read_rate_matrix(get_lg_path()).to_numpy(), Qs[i],
+            alpha=1.0,
         )
         if TITLES:
             plt.title(
