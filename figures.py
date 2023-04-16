@@ -961,6 +961,14 @@ def fig_lg_paper(
             "or 'FastTree'."
         )
 
+    num_sites = read_pickle(
+        get_msas_number_of_sites__cached(
+            msa_train_dir=lg_pfam_training_alignments_dir,
+            families=get_families(lg_pfam_training_alignments_dir)
+        )["output_dir"] + "/result.txt"
+    )
+    print(f"LG paper Fig. 4 num_sites = {num_sites}")
+
     y, df, bootstraps, Qs = reproduce_lg_paper_fig_4(
         msa_train_dir=lg_pfam_training_alignments_dir,
         families_train=get_families(lg_pfam_training_alignments_dir),
