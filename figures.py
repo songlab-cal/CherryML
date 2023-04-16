@@ -816,6 +816,7 @@ def fig_single_site_quantization_error(
             lg_end_to_end_with_cherryml_optimizer_res["rate_matrix_dir_0"],
             "result.txt",
         )
+        print(f"learned_rate_matrix_path = {learned_rate_matrix_path}")
 
         learned_rate_matrix = read_rate_matrix(
             learned_rate_matrix_path
