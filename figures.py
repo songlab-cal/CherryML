@@ -994,6 +994,7 @@ def fig_lg_paper(
                 read_rate_matrix(Qs[codename_2]).to_numpy(),
                 name_1,
                 name_2,
+                alpha=1.0,
             )
             for IMG_EXTENSION in IMG_EXTENSIONS:
                 plt.savefig(

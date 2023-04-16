@@ -187,6 +187,7 @@ def plot_rate_matrices_against_each_other(
     mask_matrix: Optional[MaskMatrixType] = None,
     density_plot: bool = False,
     min_y: int = -7,
+    alpha: float = 0.3,
 ) -> None:
     """
     Plot "true" vs "predicted" rate matrix. These need not be true vs estimated,
@@ -212,8 +213,8 @@ def plot_rate_matrices_against_each_other(
     if density_plot:
         sns.jointplot(x=ys_true, y=ys_pred, kind="hex", color="#4CB391")
     else:
-        sns.scatterplot(ys_true, ys_pred, alpha=0.3)
-        # plt.scatter(ys_true, ys_pred, alpha=0.3)
+        sns.scatterplot(ys_true, ys_pred, alpha=alpha)
+        # plt.scatter(ys_true, ys_pred, alpha=alpha)
 
     plt.xticks(fontsize=14)
     plt.yticks(fontsize=14)
