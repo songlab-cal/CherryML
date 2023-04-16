@@ -61,6 +61,7 @@ from cherryml.evaluation import (
 from cherryml.global_vars import TITLES
 from cherryml.io import (
     get_msa_num_residues,
+    get_msas_number_of_sequences,
     get_msa_num_sites,
     read_contact_map,
     read_log_likelihood,
@@ -239,6 +240,27 @@ def get_msas_number_of_sites__cached(
 @caching.cached_computation(
     output_dirs=["output_dir"],
 )
+def get_msas_number_of_sequences__cached(
+    msa_dir: str,
+    families: List[str],
+    output_dir: Optional[str] = None,
+):
+    """
+    Get the total number of sequences in the dataset.
+    """
+    res = 0
+    for family in families:
+        num_sequences = get_msa_num_sequences(
+            os.path.join(msa_dir, family + ".txt")
+        )
+        res += num_sequences
+    assert(res >= 1)
+    write_pickle(res, os.path.join(output_dir, "result.txt"))
+
+
+@caching.cached_computation(
+    output_dirs=["output_dir"],
+)
 def get_msas_number_of_residues__cached(
     msa_dir: str,
     families: List[str],
@@ -246,7 +268,7 @@ def get_msas_number_of_residues__cached(
     output_dir: Optional[str] = None,
 ):
     """
-    Get the total number of sites in the dataset.
+    Get the total number of residues in the dataset.
     """
     res = 0
     for family in families:
@@ -349,6 +371,12 @@ def _fig_single_site_cherry(
                 families=families_train,
             )["output_dir"] + "/result.txt"
         )
+        number_of_sequences = read_pickle(
+            get_msas_number_of_sequences__cached(
+                msa_dir=msa_dir,
+                families=families_train,
+            )["output_dir"] + "/result.txt"
+        )
         number_of_residues = read_pickle(
             get_msas_number_of_residues__cached(
                 msa_dir=msa_dir,
@@ -357,6 +385,7 @@ def _fig_single_site_cherry(
             )["output_dir"] + "/result.txt"
         )
         print(f"Number of sites for {num_families_train} families: {number_of_sites}")
+        print(f"Number of sequences for {num_families_train} families: {number_of_sequences}")
         print(f"Number of residues for {num_families_train} families: {number_of_residues}")
 
         # Now run the cherryml method.
@@ -998,6 +1027,12 @@ def fig_lg_paper(
             families=get_families(lg_pfam_training_alignments_dir)
         )["output_dir"] + "/result.txt"
     )
+    num_sequences = read_pickle(
+        get_msas_number_of_sequences__cached(
+            msa_dir=lg_pfam_training_alignments_dir,
+            families=get_families(lg_pfam_training_alignments_dir)
+        )["output_dir"] + "/result.txt"
+    )
     num_residues = read_pickle(
         get_msas_number_of_residues__cached(
             msa_dir=lg_pfam_training_alignments_dir,
@@ -1006,6 +1041,7 @@ def fig_lg_paper(
         )["output_dir"] + "/result.txt"
     )
     print(f"LG paper Fig. 4 num_sites = {num_sites}")
+    print(f"LG paper Fig. 4 num_sequences = {num_sequences}")
     print(f"LG paper Fig. 4 num_residues = {num_residues}")
 
     y, df, bootstraps, Qs = reproduce_lg_paper_fig_4(

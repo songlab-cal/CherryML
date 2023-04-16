@@ -38,6 +38,16 @@ def get_msa_num_residues(
         return res
 
 
+def get_msa_num_sequences(
+    msa_path: str,
+) -> int:
+    """
+    Get the number of sequences in an MSA.
+    """
+    msa = read_msa(msa_path)
+    return len(msa)
+
+
 def read_msa(
     msa_path: str,
 ) -> Dict[str, str]:
