@@ -364,7 +364,7 @@ def _fig_single_site_cherry(
             gt_site_rates_dir = simulated_data_dirs["gt_site_rates_dir"]
             gt_likelihood_dir = simulated_data_dirs["gt_likelihood_dir"]
 
-        # Report the total number of sites in the dataset.
+        # Report the total number of sites, etc. in the dataset.
         number_of_sites = read_pickle(
             get_msas_number_of_sites__cached(
                 msa_dir=msa_dir,
@@ -3075,27 +3075,29 @@ def report_dataset_statistics_str(
     """
     if families is None:
         families = get_families(msa_dir)
-    number_of_sequences_list = []
-    number_of_sites_list = []
-    number_of_residues_list = (
-        []
-    )  # The product of the number of sequences times the number of sites.
-    for family in families:
-        msa_path = os.path.join(msa_dir, family + ".txt")
-        msa = read_msa(msa_path)
-        number_of_sequences = len(msa)
-        number_of_sequences_list.append(number_of_sequences)
-        number_of_sites = len(list(msa.values())[0])
-        number_of_sites_list.append(number_of_sites)
-        number_of_residues = number_of_sequences * number_of_sites
-        number_of_residues_list.append(number_of_residues)
-    res = (
-        f"Number of MSAs = {len(number_of_sequences_list)}\n"
-        f"Number of sequences per MSA = {np.mean(number_of_sequences_list)}\n"
-        f"Number of sites per MSA = {np.mean(number_of_sites_list)}\n"
-        f"Total number of sites = {np.sum(number_of_sites_list)}\n"
-        f"Total number of residues = {np.sum(number_of_residues_list)}\n"
+    number_of_sites = read_pickle(
+        get_msas_number_of_sites__cached(
+            msa_dir=msa_dir,
+            families=families,
+        )["output_dir"] + "/result.txt"
     )
+    number_of_sequences = read_pickle(
+        get_msas_number_of_sequences__cached(
+            msa_dir=msa_dir,
+            families=families,
+        )["output_dir"] + "/result.txt"
+    )
+    number_of_residues = read_pickle(
+        get_msas_number_of_residues__cached(
+            msa_dir=msa_dir,
+            families=families,
+            exclude_gaps=True,
+        )["output_dir"] + "/result.txt"
+    )
+    res = f"Number of MSAs = {len(families)}\n"
+    res += f"Number of sequences: {number_of_sequences}\n"
+    res += f"Number of sites: {number_of_sites}\n"
+    res += f"Number of residues: {number_of_residues}\n"
     return res
 
 
