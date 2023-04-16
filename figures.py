@@ -61,7 +61,7 @@ from cherryml.evaluation import (
 from cherryml.global_vars import TITLES
 from cherryml.io import (
     get_msa_num_residues,
-    get_msas_number_of_sequences,
+    get_msa_num_sequences,
     get_msa_num_sites,
     read_contact_map,
     read_log_likelihood,
