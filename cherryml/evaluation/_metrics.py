@@ -2,6 +2,7 @@ from typing import Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
+import scipy
 import seaborn as sns
 
 RateMatrixType = np.array
@@ -178,6 +179,11 @@ def plot_rate_matrix_predictions(
 
     plt.plot([min_y, 0], [min_y, 0], color="r")
 
+    spearman = scipy.stats.spearmanr(y_true, y_pred).correlation
+    print(f"spearman: {spearman}")
+    pearson = scipy.stats.pearsonr(y_true, y_pred).correlation
+    print(f"pearson: {pearson}")
+
 
 def plot_rate_matrices_against_each_other(
     y_true: RateMatrixType,
@@ -209,6 +215,11 @@ def plot_rate_matrices_against_each_other(
         for (i, j) in nonzero_indices
         if i != j
     ]
+
+    spearman = scipy.stats.spearmanr(y_true, y_pred).correlation
+    print(f"{y_true_name} vs {y_pred_name} spearman: {spearman}")
+    pearson = scipy.stats.pearsonr(y_true, y_pred).correlation
+    print(f"{y_true_name} vs {y_pred_name} pearson: {pearson}")
 
     if density_plot:
         sns.jointplot(x=ys_true, y=ys_pred, kind="hex", color="#4CB391")
