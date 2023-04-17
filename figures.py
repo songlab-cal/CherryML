@@ -447,6 +447,7 @@ def _fig_single_site_cherry(
         yss_relative_errors.append(relative_errors(lg, learned_rate_matrix))
 
     for i in range(len(num_families_train_list)):
+        print(f"Plotting rate matrix predictions for CherryML; num families train = {num_families_train_list[i]}")
         plot_rate_matrix_predictions(
             read_rate_matrix(get_lg_path()).to_numpy(), Qs[i],
             alpha=1.0,
@@ -614,6 +615,7 @@ def _fig_single_site_em(
         yss_relative_errors.append(relative_errors(lg, learned_rate_matrix))
 
     for i in range(len(num_families_train_list)):
+        print(f"Plotting rate matrix predictions for EM; num families train = {num_families_train_list[i]}")
         plot_rate_matrix_predictions(
             read_rate_matrix(get_lg_path()).to_numpy(), Qs[i],
             alpha=1.0,
