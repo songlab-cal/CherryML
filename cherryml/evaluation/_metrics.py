@@ -216,9 +216,9 @@ def plot_rate_matrices_against_each_other(
         if i != j
     ]
 
-    spearman = scipy.stats.spearmanr(y_true, y_pred).correlation
+    spearman = scipy.stats.spearmanr(ys_true, ys_pred).correlation
     print(f"{y_true_name} vs {y_pred_name} spearman: {spearman}")
-    pearson = scipy.stats.pearsonr(y_true, y_pred).correlation
+    pearson = scipy.stats.pearsonr(ys_true, ys_pred).correlation
     print(f"{y_true_name} vs {y_pred_name} pearson: {pearson}")
 
     if density_plot:
