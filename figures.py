@@ -2765,7 +2765,7 @@ def _fig_standard_benchmark(
         )
         for IMG_EXTENSION in IMG_EXTENSIONS:
             plt.savefig(
-                output_image_dir + "/EM_vs_CherryML_log_log_plot" + IMG_EXTENSION
+                output_image_dir + "/EM_vs_CherryML_log_log_plot" + IMG_EXTENSION,
                 dpi=300,
             )
         plt.close()
