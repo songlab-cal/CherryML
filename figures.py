@@ -1006,7 +1006,7 @@ def fig_lg_paper(
 
      # Report the total number of sites, etc. in the dataset.
     dataset_statistics_str = report_dataset_statistics_str(
-        msa_dir=msa_dir,
+        msa_dir=lg_pfam_training_alignments_dir,
         families=families_train,
     )
     print(f"LG paper fig 4. statistics: {dataset_statistics_str}")
