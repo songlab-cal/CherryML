@@ -2755,6 +2755,21 @@ def _fig_standard_benchmark(
             profiling_file.write(em_res_dict["profiling_str"])
         single_site_rate_matrices.append(("LG w/EM\n(re-estimated)", em_path))
 
+    if add_em and add_cherryml:
+        plot_rate_matrices_against_each_other(
+            read_rate_matrix(em_path).to_numpy(),
+            read_rate_matrix(cherry_path).to_numpy(),
+            y_true_name="EM",
+            y_pred_name="CherryML",
+            alpha=1.0,
+        )
+        for IMG_EXTENSION in IMG_EXTENSIONS:
+            plt.savefig(
+                output_image_dir + "/EM_vs_CherryML_log_log_plot" + IMG_EXTENSION
+                dpi=300,
+            )
+        plt.close()
+
     log_likelihoods = []  # type: List[Tuple[str, float]]
 
     per_family_lls = []
