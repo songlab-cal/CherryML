@@ -179,10 +179,10 @@ def plot_rate_matrix_predictions(
 
     plt.plot([min_y, 0], [min_y, 0], color="r")
 
-    spearman = scipy.stats.spearmanr(y_true, y_pred).correlation
-    print(f"spearman: {spearman}")
-    pearson = scipy.stats.pearsonr(y_true, y_pred).correlation
-    print(f"pearson: {pearson}")
+    spearman = scipy.stats.spearmanr(ys_true, ys_pred).correlation
+    print(f"{y_true_name} vs {y_pred_name} spearman: {spearman}")
+    pearson = scipy.stats.pearsonr(ys_true, ys_pred)[0]
+    print(f"{y_true_name} vs {y_pred_name} pearson: {pearson}")
 
 
 def plot_rate_matrices_against_each_other(
