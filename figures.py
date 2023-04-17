@@ -365,28 +365,11 @@ def _fig_single_site_cherry(
             gt_likelihood_dir = simulated_data_dirs["gt_likelihood_dir"]
 
         # Report the total number of sites, etc. in the dataset.
-        number_of_sites = read_pickle(
-            get_msas_number_of_sites__cached(
-                msa_dir=msa_dir,
-                families=families_train,
-            )["output_dir"] + "/result.txt"
+        dataset_statistics_str = report_dataset_statistics_str(
+            msa_dir=msa_dir,
+            families=families_train,
         )
-        number_of_sequences = read_pickle(
-            get_msas_number_of_sequences__cached(
-                msa_dir=msa_dir,
-                families=families_train,
-            )["output_dir"] + "/result.txt"
-        )
-        number_of_residues = read_pickle(
-            get_msas_number_of_residues__cached(
-                msa_dir=msa_dir,
-                families=families_train,
-                exclude_gaps=True,
-            )["output_dir"] + "/result.txt"
-        )
-        print(f"Number of sites for {num_families_train} families: {number_of_sites}")
-        print(f"Number of sequences for {num_families_train} families: {number_of_sequences}")
-        print(f"Number of residues for {num_families_train} families: {number_of_residues}")
+        print(dataset_statistics_str)
 
         # Now run the cherryml method.
         lg_end_to_end_with_cherryml_optimizer_res = (
@@ -1021,28 +1004,12 @@ def fig_lg_paper(
             "or 'FastTree'."
         )
 
-    num_sites = read_pickle(
-        get_msas_number_of_sites__cached(
-            msa_dir=lg_pfam_training_alignments_dir,
-            families=get_families(lg_pfam_training_alignments_dir)
-        )["output_dir"] + "/result.txt"
+     # Report the total number of sites, etc. in the dataset.
+    dataset_statistics_str = report_dataset_statistics_str(
+        msa_dir=msa_dir,
+        families=families_train,
     )
-    num_sequences = read_pickle(
-        get_msas_number_of_sequences__cached(
-            msa_dir=lg_pfam_training_alignments_dir,
-            families=get_families(lg_pfam_training_alignments_dir)
-        )["output_dir"] + "/result.txt"
-    )
-    num_residues = read_pickle(
-        get_msas_number_of_residues__cached(
-            msa_dir=lg_pfam_training_alignments_dir,
-            families=get_families(lg_pfam_training_alignments_dir),
-            exclude_gaps=True,
-        )["output_dir"] + "/result.txt"
-    )
-    print(f"LG paper Fig. 4 num_sites = {num_sites}")
-    print(f"LG paper Fig. 4 num_sequences = {num_sequences}")
-    print(f"LG paper Fig. 4 num_residues = {num_residues}")
+    print(f"LG paper fig 4. statistics: {dataset_statistics_str}")
 
     y, df, bootstraps, Qs = reproduce_lg_paper_fig_4(
         msa_train_dir=lg_pfam_training_alignments_dir,
@@ -1359,6 +1326,13 @@ def learn_coevolution_model_on_pfam15k(
         families=families_train,
         num_processes=num_processes_tree_estimation,
     )["output_msa_dir"]
+
+    dataset_statistics_str = report_dataset_statistics_str(
+        msa_dir=msa_dir_train,
+        families=families_train,
+    )
+    print(f"PFAM 15K (subsampled to {num_sequences} seqs per familiy) "
+          f"statistics:\n{dataset_statistics_str}")
 
     # Run the cherry method using FastTree tree estimator
     cherry_path = lg_end_to_end_with_cherryml_optimizer(
