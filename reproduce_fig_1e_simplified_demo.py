@@ -10,7 +10,7 @@ if __name__ == "__main__":
         rate_estimator_names=[
             ("reproduced WAG", "WAG\nrate matrix"),
             ("reproduced LG", "LG\nrate matrix"),
-            ("Cherry__4", "LG w/CherryML\n(re-estimated)"),
+            ("Cherry++__4", "LG w/CherryML\n(re-estimated)"),
         ],
         lg_pfam_training_alignments_dir="data/lg_paper_data/lg_PfamTrainingAlignments",
         lg_pfam_testing_alignments_dir="data/lg_paper_data/lg_PfamTestingAlignments",
