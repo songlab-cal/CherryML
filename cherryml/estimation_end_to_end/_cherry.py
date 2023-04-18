@@ -22,6 +22,9 @@ from cherryml.types import PhylogenyEstimatorType
 from cherryml.utils import get_amino_acids, get_process_args
 
 
+CHERRYML_TYPE = "cherry++__2023_04_06_test_2"
+
+
 def _init_logger():
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
@@ -186,7 +189,7 @@ def lg_end_to_end_with_cherryml_optimizer(
     learning_rate: float = 1e-1,
     num_epochs: int = 2000,
     do_adam: bool = True,
-    edge_or_cherry: str = "cherry++__2023_04_06_test_2",
+    edge_or_cherry: str = CHERRYML_TYPE,
     cpp_counting_command_line_prefix: str = "",
     cpp_counting_command_line_suffix: str = "",
     num_processes_tree_estimation: int = 8,
@@ -391,7 +394,7 @@ def coevolution_end_to_end_with_cherryml_optimizer(
     learning_rate: float = 1e-1,
     num_epochs: int = 500,
     do_adam: bool = True,
-    edge_or_cherry: str = "cherry++__2023_04_06_test_2",
+    edge_or_cherry: str = CHERRYML_TYPE,
     cpp_counting_command_line_prefix: str = "",
     cpp_counting_command_line_suffix: str = "",
     num_processes_tree_estimation: int = 8,

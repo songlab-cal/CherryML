@@ -33,6 +33,7 @@ from cherryml.phylogeny_estimation import fast_tree
 from cherryml.utils import pushd
 
 from .globals import IMG_EXTENSIONS
+from cherryml.estimation_end_to_end import CHERRYML_TYPE
 
 
 def init_logger():
@@ -360,7 +361,7 @@ def run_rate_estimator(
             num_processes_tree_estimation=num_processes,
             num_processes_counting=1,
             num_processes_optimization=1,
-            edge_or_cherry="cherry++__2023_04_06_test_2",
+            edge_or_cherry=CHERRYML_TYPE,
         )
         with open(
             "lg_paper_fig__" + rate_estimator_name + "__profiling_str.txt", "w"

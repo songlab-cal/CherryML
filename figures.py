@@ -30,6 +30,7 @@ import pandas as pd
 import seaborn as sns
 import tqdm
 
+from cherryml.estimation_end_to_end import CHERRYML_TYPE
 import cherryml.utils as utils
 from cherryml import (
     caching,
@@ -285,7 +286,7 @@ def _fig_single_site_cherry(
     num_processes_tree_estimation: int = 4,
     num_sequences: int = 128,
     random_seed: int = 0,
-    edge_or_cherry: str = "cherry++__2023_04_06_test_2",
+    edge_or_cherry: str = CHERRYML_TYPE,
     simulated_data_dirs: Optional[Dict[str, str]] = None,
 ):
     caching.set_cache_dir("_cache_benchmarking_em")
@@ -673,7 +674,7 @@ def _fig_single_site_em(
 # Fig. 1b, 1c
 def fig_computational_and_stat_eff_cherry_vs_em(
     extra_em_command_line_args: str = "-log 6 -f 3 -mi 0.000001",
-    edge_or_cherry: str = "cherry++__2023_04_06_test_2",
+    edge_or_cherry: str = CHERRYML_TYPE,
     simulated_data_dirs: Optional[Dict[str, str]] = None,
 ):
     """
@@ -788,7 +789,7 @@ def fig_single_site_quantization_error(
     num_sequences: int = 1024,
     random_seed: int = 0,
     simulated_data_dirs: Optional[Dict[str, str]] = None,
-    edge_or_cherry: str = "cherry++__2023_04_06_test_2",
+    edge_or_cherry: str = CHERRYML_TYPE,
 ):
     """
     We show that ~100 quantization points (geometric increments of 10%) is
@@ -1291,7 +1292,7 @@ def learn_coevolution_model_on_pfam15k(
     num_processes_optimization_coevolution: int = 8,
     angstrom_cutoff: float = 8.0,
     minimum_distance_for_nontrivial_contact: int = 7,
-    edge_or_cherry: str = "cherry++__2023_04_06_test_2",
+    edge_or_cherry: str = CHERRYML_TYPE,
 ) -> Dict:
     """
     Returns a dictionary with the learned rate matrices.
@@ -1612,7 +1613,7 @@ def fig_pair_site_quantization_error(
     minimum_distance_for_nontrivial_contact: int = 7,
     random_seed_simulation: int = 0,
     simulated_data_dirs: Optional[Dict[str, str]] = None,
-    edge_or_cherry: str = "cherry++__2023_04_06_test_2",
+    edge_or_cherry: str = CHERRYML_TYPE,
 ):
     """
     We show that for the coevolutionary model, we can estimate co-transition
@@ -1872,7 +1873,7 @@ def fig_pair_site_quantization_error(
 
 
 # Fig. 2c, 2d
-def fig_coevolution_vs_indep(edge_or_cherry: str = "cherry++__2023_04_06_test_2"):
+def fig_coevolution_vs_indep(edge_or_cherry: str = CHERRYML_TYPE):
     output_image_dir = "images/fig_coevolution_vs_indep"
     if not os.path.exists(output_image_dir):
         os.makedirs(output_image_dir)
@@ -2575,7 +2576,7 @@ def _fig_standard_benchmark(
     extra_evaluator_command_line_args: str = "",
     initial_tree_estimator_rate_matrix_path: str = "",
     figsize=(6.4, 4.8),
-    edge_or_cherry: str = "cherry++__2023_04_06_test_2",
+    edge_or_cherry: str = CHERRYML_TYPE,
 ):
     if tree_estimator_name not in ["FastTree", "PhyML"]:
         raise ValueError(
@@ -2610,7 +2611,7 @@ def _fig_standard_benchmark(
             num_iterations: int,
             tree_estimator_name: str,
             extra_tree_estimator_command_line_args: str,
-            edge_or_cherry: str = "cherry++__2023_04_06_test_2",
+            edge_or_cherry: str = CHERRYML_TYPE,
         ) -> Dict:
             """
             Wrapper around lg_end_to_end_with_cherryml_optimizer to speed
@@ -3103,7 +3104,7 @@ def fig_qmaker(
     extra_evaluator_command_line_args: str = "",
     initial_tree_estimator_rate_matrix_path: str = get_lg_path(),
     num_processes_tree_estimation: int = NUM_PROCESSES_TREE_ESTIMATION,
-    edge_or_cherry: str = "cherry++__2023_04_06_test_2",
+    edge_or_cherry: str = CHERRYML_TYPE,
 ):
     """
     We show on the clades datasets that CherryML performs comparatively to EM
