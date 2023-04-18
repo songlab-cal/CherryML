@@ -978,8 +978,8 @@ def fig_lg_paper(
     rate_estimator_names: List[Tuple[str, str]] = [
         ("reproduced WAG", "WAG\nrate matrix"),
         ("reproduced LG", "LG\nrate matrix"),
-        ("Cherry++__4", "LG w/CherryML\n(re-estimated)"),
-        ("EM_FT__4__0.000001", "LG w/EM\n(re-estimated)"),
+        ("Cherry++__4", "LG w/ CherryML\n(re-estimated)"),
+        ("EM_FT__4__0.000001", "LG w/ EM\n(re-estimated)"),
     ],
     baseline_rate_estimator_name: Tuple[str, str] = ("reproduced JTT", "JTT"),
     num_processes: int = 4,
@@ -989,7 +989,7 @@ def fig_lg_paper(
     lg_pfam_testing_alignments_dir: str = "./lg_paper_data/lg_PfamTestingAlignments",  # noqa
 ):
     """
-    LG paper figure 4, extended with LG w/CherryML.
+    LG paper figure 4, extended with LG w/ CherryML.
     """
     if not os.path.exists(output_image_dir):
         os.makedirs(output_image_dir)
@@ -2696,7 +2696,7 @@ def _fig_standard_benchmark(
         ) as profiling_file:
             profiling_file.write(cherry_res_dict["profiling_str"])
         single_site_rate_matrices.append(
-            ("LG w/CherryML\n(re-estimated)", cherry_path)
+            ("LG w/ CherryML\n(re-estimated)", cherry_path)
         )
 
     if add_em:
@@ -2781,7 +2781,7 @@ def _fig_standard_benchmark(
             "w",
         ) as profiling_file:
             profiling_file.write(em_res_dict["profiling_str"])
-        single_site_rate_matrices.append(("LG w/EM\n(re-estimated)", em_path))
+        single_site_rate_matrices.append(("LG w/ EM\n(re-estimated)", em_path))
 
     if add_em and add_cherryml:
         plot_rate_matrices_against_each_other(
