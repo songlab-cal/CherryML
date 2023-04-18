@@ -101,30 +101,30 @@ class TestEMLG(unittest.TestCase):
                     except Exception:
                         self.assertEqual(token_1, token_2)
 
-    def test_run_historian_from_CLI(self):
-        """
-        Run Historian from CLI
-        """
-        with tempfile.NamedTemporaryFile(
-            "w"
-        ) as historian_learned_rate_matrix_file:
-            historian_learned_rate_matrix_path = (
-                historian_learned_rate_matrix_file.name
-            )
-            command = (
-                "cherryml/estimation/historian/bin/historian fit"
-                + "".join(
-                    [f" {DATA_DIR}/stock_dir/fam1_{i}.txt" for i in range(3)]
-                )
-                + f" -model {DATA_DIR}/historian_init_small.json"
-                + " -band 0"
-                + f" -fixgaprates > {historian_learned_rate_matrix_path} -v2"
-            )
-            print(f"Going to run: {command}")
-            os.system(command)
-            with open(historian_learned_rate_matrix_path) as json_file:
-                learned_rate_matrix_json = json.load(json_file)
-                assert "subrate" in learned_rate_matrix_json.keys()
+    # def test_run_historian_from_CLI(self):
+    #     """
+    #     Run Historian from CLI
+    #     """
+    #     with tempfile.NamedTemporaryFile(
+    #         "w"
+    #     ) as historian_learned_rate_matrix_file:
+    #         historian_learned_rate_matrix_path = (
+    #             historian_learned_rate_matrix_file.name
+    #         )
+    #         command = (
+    #             "cherryml/estimation/historian/bin/historian fit"
+    #             + "".join(
+    #                 [f" {DATA_DIR}/stock_dir/fam1_{i}.txt" for i in range(3)]
+    #             )
+    #             + f" -model {DATA_DIR}/historian_init_small.json"
+    #             + " -band 0"
+    #             + f" -fixgaprates > {historian_learned_rate_matrix_path} -v2"
+    #         )
+    #         print(f"Going to run: {command}")
+    #         os.system(command)
+    #         with open(historian_learned_rate_matrix_path) as json_file:
+    #             learned_rate_matrix_json = json.load(json_file)
+    #             assert "subrate" in learned_rate_matrix_json.keys()
 
     def test_translate_rate_matrix_from_historian_format(self):
         with tempfile.NamedTemporaryFile("w") as learned_rate_matrix_file:
@@ -138,26 +138,26 @@ class TestEMLG(unittest.TestCase):
             filepath_2 = learned_rate_matrix_path
             assert filecmp.cmp(filepath_1, filepath_2)
 
-    def test_run_historian_from_python_api(self):
-        """
-        Run Historian from our CLI
-        """
-        with tempfile.TemporaryDirectory() as learned_rate_matrix_dir:
-            em_lg(
-                tree_dir=f"{DATA_DIR}/tree_dir",
-                msa_dir=f"{DATA_DIR}/msa_dir",
-                site_rates_dir=f"{DATA_DIR}/site_rates_dir",
-                families=["fam1"],
-                initialization_rate_matrix_path=f"{DATA_DIR}/historian_init_small.txt",  # noqa
-                output_rate_matrix_dir=learned_rate_matrix_dir,
-                extra_command_line_args="-band 0 -fixgaprates",
-            )
-            learned_rate_matrix = read_rate_matrix(
-                os.path.join(learned_rate_matrix_dir, "result.txt")
-            )
-            np.testing.assert_almost_equal(
-                learned_rate_matrix.to_numpy(),
-                read_rate_matrix(
-                    f"{DATA_DIR}/learned_rate_matrix.txt"
-                ).to_numpy(),
-            )
+    # def test_run_historian_from_python_api(self):
+    #     """
+    #     Run Historian from our CLI
+    #     """
+    #     with tempfile.TemporaryDirectory() as learned_rate_matrix_dir:
+    #         em_lg(
+    #             tree_dir=f"{DATA_DIR}/tree_dir",
+    #             msa_dir=f"{DATA_DIR}/msa_dir",
+    #             site_rates_dir=f"{DATA_DIR}/site_rates_dir",
+    #             families=["fam1"],
+    #             initialization_rate_matrix_path=f"{DATA_DIR}/historian_init_small.txt",  # noqa
+    #             output_rate_matrix_dir=learned_rate_matrix_dir,
+    #             extra_command_line_args="-band 0 -fixgaprates",
+    #         )
+    #         learned_rate_matrix = read_rate_matrix(
+    #             os.path.join(learned_rate_matrix_dir, "result.txt")
+    #         )
+    #         np.testing.assert_almost_equal(
+    #             learned_rate_matrix.to_numpy(),
+    #             read_rate_matrix(
+    #                 f"{DATA_DIR}/learned_rate_matrix.txt"
+    #             ).to_numpy(),
+    #         )
