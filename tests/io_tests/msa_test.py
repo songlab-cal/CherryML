@@ -1,6 +1,10 @@
 import unittest
 
-from cherryml.io import get_msa_num_residues, get_msa_num_sequences, get_msa_num_sites
+from cherryml.io import (
+    get_msa_num_residues,
+    get_msa_num_sequences,
+    get_msa_num_sites,
+)
 
 
 class Test_get_msa_num_sites(unittest.TestCase):

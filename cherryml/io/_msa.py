@@ -31,7 +31,7 @@ def get_msa_num_residues(
     else:
         res = sum(
             [
-                len(seq) - seq.count('.') - seq.count('-') - seq.count('_')
+                len(seq) - seq.count(".") - seq.count("-") - seq.count("_")
                 for seq in list(msa.values())
             ]
         )

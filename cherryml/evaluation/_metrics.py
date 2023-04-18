@@ -233,10 +233,19 @@ def plot_rate_matrices_against_each_other(
     if TITLES:
         plt.title("True vs predicted rate matrix entries")
         plt.xlabel(
-            "Entry " + y_true_name + "$_{" + f"{mask_matrix.shape[0]}" + "}[i, j]$", fontsize=18
+            "Entry "
+            + y_true_name
+            + "$_{"
+            + f"{mask_matrix.shape[0]}"
+            + "}[i, j]$",
+            fontsize=18,
         )
         plt.ylabel(
-            "Entry " + y_pred_name + "$_{" + f"{mask_matrix.shape[0]}" + "}[i, j]$",
+            "Entry "
+            + y_pred_name
+            + "$_{"
+            + f"{mask_matrix.shape[0]}"
+            + "}[i, j]$",
             fontsize=18,
         )  # noqa
     plt.axis("scaled")

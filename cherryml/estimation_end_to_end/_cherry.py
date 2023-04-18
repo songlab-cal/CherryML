@@ -21,7 +21,6 @@ from cherryml.markov_chain import get_equ_path, get_equ_x_equ_path
 from cherryml.types import PhylogenyEstimatorType
 from cherryml.utils import get_amino_acids, get_process_args
 
-
 CHERRYML_TYPE = "cherry++__2023_04_06_test_2"
 
 

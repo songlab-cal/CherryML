@@ -22,6 +22,7 @@ from cherryml import (
     lg_end_to_end_with_cherryml_optimizer,
     lg_end_to_end_with_em_optimizer,
 )
+from cherryml.estimation_end_to_end import CHERRYML_TYPE
 from cherryml.io import read_log_likelihood
 from cherryml.markov_chain import (
     get_equ_path,
@@ -33,7 +34,6 @@ from cherryml.phylogeny_estimation import fast_tree
 from cherryml.utils import pushd
 
 from .globals import IMG_EXTENSIONS
-from cherryml.estimation_end_to_end import CHERRYML_TYPE
 
 
 def init_logger():
