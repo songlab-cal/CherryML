@@ -3,7 +3,7 @@ import figures
 ################################################################################
 ##### Optional: set these to the locations of the provided simulated data ######
 ##### directories to skip simulating entirely. The simulated data is      ######
-##### available at https://zenodo.org/record/7814723#.ZDSUDyZlBXk         ######
+##### available at https://zenodo.org/record/7830072#.ZDnPBuzMKTc         ######
 ################################################################################
 
 simulated_data_dirs_fig_1d = None
