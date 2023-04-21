@@ -274,6 +274,7 @@ def get_phyml_default_extra_command_line_args() -> str:
         "output_site_rates_dir",
         "output_likelihood_dir",
     ],
+    write_extra_log_files=True,
 )
 def phyml(
     msa_dir: str,

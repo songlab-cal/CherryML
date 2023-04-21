@@ -80,6 +80,7 @@ def _map_func_compute_contact_maps(args: List) -> None:
     exclude_args=["num_processes"],
     parallel_arg="families",
     output_dirs=["output_contact_map_dir"],
+    write_extra_log_files=True,
 )
 def compute_contact_maps(
     pfam_15k_pdb_dir: str,
@@ -197,6 +198,7 @@ def _map_func_subsample_pfam_15k_msas(args: List):
     exclude_args=["num_processes"],
     parallel_arg="families",
     output_dirs=["output_msa_dir"],
+    write_extra_log_files=True,
 )
 def subsample_pfam_15k_msas(
     pfam_15k_msa_dir: str,
@@ -349,6 +351,7 @@ def fig_family_sizes(
 @caching.cached_parallel_computation(
     parallel_arg="families",
     output_dirs=["output_contact_map_dir"],
+    write_extra_log_files=True,
 )
 def create_trivial_contact_maps(
     msa_dir: str,
@@ -374,6 +377,7 @@ def create_trivial_contact_maps(
 @caching.cached_parallel_computation(
     parallel_arg="families",
     output_dirs=["output_msa_dir"],
+    write_extra_log_files=True,
 )
 def subset_msa_to_leaf_nodes(
     msa_dir: str,

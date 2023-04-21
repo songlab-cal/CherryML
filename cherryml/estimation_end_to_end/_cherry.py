@@ -21,6 +21,8 @@ from cherryml.markov_chain import get_equ_path, get_equ_x_equ_path
 from cherryml.types import PhylogenyEstimatorType
 from cherryml.utils import get_amino_acids, get_process_args
 
+CHERRYML_TYPE = "cherry++"
+
 
 def _init_logger():
     logger = logging.getLogger(__name__)
@@ -80,6 +82,7 @@ def _map_func_subset_data_to_sites_subset(args: List) -> None:
     exclude_args=["num_processes"],
     parallel_arg="families",
     output_dirs=["output_msa_dir", "output_site_rates_dir"],
+    write_extra_log_files=True,
 )
 def _subset_data_to_sites_subset(
     sites_subset_dir: str,
@@ -185,7 +188,7 @@ def lg_end_to_end_with_cherryml_optimizer(
     learning_rate: float = 1e-1,
     num_epochs: int = 2000,
     do_adam: bool = True,
-    edge_or_cherry: str = "cherry",
+    edge_or_cherry: str = CHERRYML_TYPE,
     cpp_counting_command_line_prefix: str = "",
     cpp_counting_command_line_suffix: str = "",
     num_processes_tree_estimation: int = 8,
@@ -390,7 +393,7 @@ def coevolution_end_to_end_with_cherryml_optimizer(
     learning_rate: float = 1e-1,
     num_epochs: int = 500,
     do_adam: bool = True,
-    edge_or_cherry: str = "cherry",
+    edge_or_cherry: str = CHERRYML_TYPE,
     cpp_counting_command_line_prefix: str = "",
     cpp_counting_command_line_suffix: str = "",
     num_processes_tree_estimation: int = 8,

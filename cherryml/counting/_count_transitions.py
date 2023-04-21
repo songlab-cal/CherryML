@@ -59,46 +59,46 @@ def _map_func(args) -> List[Tuple[float, pd.DataFrame]]:
         site_rates = read_site_rates(
             site_rates_path=os.path.join(site_rates_dir, family + ".txt")
         )
-        for node in tree.nodes():
-            if edge_or_cherry == "edge":
-                node_seq = msa[node]
-                msa_length = len(node_seq)
-                # Extract all transitions on edges starting at 'node'
-                for (child, branch_length) in tree.children(node):
-                    child_seq = msa[child]
-                    for amino_acid_idx in range(msa_length):
-                        site_rate = site_rates[amino_acid_idx]
-                        q_idx = quantization_idx(
-                            branch_length * site_rate, quantization_points
-                        )
-                        if q_idx is not None:
-                            start_state = node_seq[amino_acid_idx]
-                            end_state = child_seq[amino_acid_idx]
-                            if (
-                                start_state in amino_acids
-                                and end_state in amino_acids
-                            ):
-                                start_state_idx = aa_to_int[start_state]
-                                end_state_idx = aa_to_int[end_state]
-                                count_matrices_numpy[
-                                    q_idx, start_state_idx, end_state_idx
-                                ] += 1
-            elif edge_or_cherry == "cherry":
-                children = tree.children(node)
-                if len(children) == 2 and all(
-                    [tree.is_leaf(child) for (child, _) in children]
-                ):
+        if edge_or_cherry == "cherry++":
+            total_pairs = []
+
+            def dfs(node) -> Optional[Tuple[int, float]]:
+                """
+                Pair up leaves under me.
+
+                Return a single unpaired leaf and its distance, it such exists.
+                """
+                if tree.is_leaf(node):
+                    return (node, 0.0)
+                unmatched_leaves_under = []
+                distances_under = []
+                for child, branch_length in tree.children(node):
+                    maybe_unmatched_leaf, maybe_distance = dfs(child)
+                    if maybe_unmatched_leaf is not None:
+                        assert maybe_distance is not None
+                        unmatched_leaves_under.append(maybe_unmatched_leaf)
+                        distances_under.append(maybe_distance + branch_length)
+                assert len(unmatched_leaves_under) == len(distances_under)
+                index = 0
+
+                while index + 1 <= len(unmatched_leaves_under) - 1:
+                    total_pairs.append(1)
                     (leaf_1, branch_length_1), (leaf_2, branch_length_2) = (
-                        children[0],
-                        children[1],
+                        (unmatched_leaves_under[index], distances_under[index]),
+                        (
+                            unmatched_leaves_under[index + 1],
+                            distances_under[index + 1],
+                        ),
                     )
+                    # NOTE: Copy-pasta from below ("cherry" case)...
                     leaf_seq_1, leaf_seq_2 = msa[leaf_1], msa[leaf_2]
                     msa_length = len(leaf_seq_1)
                     for amino_acid_idx in range(msa_length):
                         site_rate = site_rates[amino_acid_idx]
                         branch_length_total = branch_length_1 + branch_length_2
                         q_idx = quantization_idx(
-                            branch_length_total * site_rate, quantization_points
+                            branch_length_total * site_rate,
+                            quantization_points,
                         )
                         if q_idx is not None:
                             state_1 = leaf_seq_1[amino_acid_idx]
@@ -115,6 +115,75 @@ def _map_func(args) -> List[Tuple[float, pd.DataFrame]]:
                                 count_matrices_numpy[
                                     q_idx, state_2_idx, state_1_idx
                                 ] += 0.5
+
+                    index += 2
+                if len(unmatched_leaves_under) % 2 == 0:
+                    return (None, None)
+                else:
+                    return (unmatched_leaves_under[-1], distances_under[-1])
+
+            dfs(tree.root())
+            assert len(total_pairs) == int(len(tree.leaves()) / 2)
+        else:
+            for node in tree.nodes():
+                if edge_or_cherry == "edge":
+                    node_seq = msa[node]
+                    msa_length = len(node_seq)
+                    # Extract all transitions on edges starting at 'node'
+                    for child, branch_length in tree.children(node):
+                        child_seq = msa[child]
+                        for amino_acid_idx in range(msa_length):
+                            site_rate = site_rates[amino_acid_idx]
+                            q_idx = quantization_idx(
+                                branch_length * site_rate, quantization_points
+                            )
+                            if q_idx is not None:
+                                start_state = node_seq[amino_acid_idx]
+                                end_state = child_seq[amino_acid_idx]
+                                if (
+                                    start_state in amino_acids
+                                    and end_state in amino_acids
+                                ):
+                                    start_state_idx = aa_to_int[start_state]
+                                    end_state_idx = aa_to_int[end_state]
+                                    count_matrices_numpy[
+                                        q_idx, start_state_idx, end_state_idx
+                                    ] += 1
+                elif edge_or_cherry == "cherry":
+                    children = tree.children(node)
+                    if len(children) == 2 and all(
+                        [tree.is_leaf(child) for (child, _) in children]
+                    ):
+                        (leaf_1, branch_length_1), (leaf_2, branch_length_2) = (
+                            children[0],
+                            children[1],
+                        )
+                        leaf_seq_1, leaf_seq_2 = msa[leaf_1], msa[leaf_2]
+                        msa_length = len(leaf_seq_1)
+                        for amino_acid_idx in range(msa_length):
+                            site_rate = site_rates[amino_acid_idx]
+                            branch_length_total = (
+                                branch_length_1 + branch_length_2
+                            )
+                            q_idx = quantization_idx(
+                                branch_length_total * site_rate,
+                                quantization_points,
+                            )
+                            if q_idx is not None:
+                                state_1 = leaf_seq_1[amino_acid_idx]
+                                state_2 = leaf_seq_2[amino_acid_idx]
+                                if (
+                                    state_1 in amino_acids
+                                    and state_2 in amino_acids
+                                ):
+                                    state_1_idx = aa_to_int[state_1]
+                                    state_2_idx = aa_to_int[state_2]
+                                    count_matrices_numpy[
+                                        q_idx, state_1_idx, state_2_idx
+                                    ] += 0.5
+                                    count_matrices_numpy[
+                                        q_idx, state_2_idx, state_1_idx
+                                    ] += 0.5
     count_matrices = [
         [
             q,
@@ -137,6 +206,7 @@ def _map_func(args) -> List[Tuple[float, pd.DataFrame]]:
         "cpp_command_line_suffix",
     ],
     output_dirs=["output_count_matrices_dir"],
+    write_extra_log_files=True,
 )
 def count_transitions(
     tree_dir: str,
@@ -192,6 +262,8 @@ def count_transitions(
         cpp_command_line_prefix: E.g. to run the C++ binary on slurm.
         cpp_command_line_suffix: For extra C++ args related to performance.
     """
+    if edge_or_cherry.startswith("cherry++__"):
+        edge_or_cherry = "cherry++"
     start_time = time.time()
 
     logger = logging.getLogger(__name__)
@@ -240,6 +312,7 @@ def count_transitions(
                 f"Going to run C++ implementation on {len(families)} families "
                 f"using {num_processes} processes"
             )
+            # logger.info(f"command = {command}")
             os.system(command)
 
             # Remove auxiliary files

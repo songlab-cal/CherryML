@@ -22,6 +22,7 @@ from cherryml import (
     lg_end_to_end_with_cherryml_optimizer,
     lg_end_to_end_with_em_optimizer,
 )
+from cherryml.estimation_end_to_end import CHERRYML_TYPE
 from cherryml.io import read_log_likelihood
 from cherryml.markov_chain import (
     get_equ_path,
@@ -31,6 +32,8 @@ from cherryml.markov_chain import (
 )
 from cherryml.phylogeny_estimation import fast_tree
 from cherryml.utils import pushd
+
+from .globals import IMG_EXTENSIONS
 
 
 def init_logger():
@@ -335,6 +338,30 @@ def run_rate_estimator(
             num_processes_tree_estimation=num_processes,
             num_processes_counting=1,
             num_processes_optimization=1,
+            edge_or_cherry="cherry",
+        )
+        with open(
+            "lg_paper_fig__" + rate_estimator_name + "__profiling_str.txt", "w"
+        ) as profiling_file:
+            profiling_file.write(f"{res_dict['profiling_str']}")
+        res = res_dict["learned_rate_matrix_path"]
+        return res
+    elif rate_estimator_name.startswith("Cherry++__"):
+        tokens = rate_estimator_name.split("__")
+        assert len(tokens) == 2
+        res_dict = lg_end_to_end_with_cherryml_optimizer(
+            msa_dir=msa_train_dir,
+            families=families_train,
+            tree_estimator=partial(
+                fast_tree,
+                num_rate_categories=4,
+            ),
+            initial_tree_estimator_rate_matrix_path=get_equ_path(),
+            num_iterations=int(tokens[1]),
+            num_processes_tree_estimation=num_processes,
+            num_processes_counting=1,
+            num_processes_optimization=1,
+            edge_or_cherry=CHERRYML_TYPE,
         )
         with open(
             "lg_paper_fig__" + rate_estimator_name + "__profiling_str.txt", "w"
@@ -450,7 +477,7 @@ def reproduce_lg_paper_fig_4(
         ] + rate_estimator_names
     else:
         rate_estimator_names_w_baseline = list(set(rate_estimator_names))
-    for (rate_estimator_name, _) in rate_estimator_names_w_baseline:
+    for rate_estimator_name, _ in rate_estimator_names_w_baseline:
         print(f"Evaluating rate_estimator_name: {rate_estimator_name}")
         st = time.time()
         if rate_estimator_name.startswith("reported"):
@@ -558,9 +585,12 @@ def reproduce_lg_paper_fig_4(
     else:
         plt.ylabel("Average per-site AIC, in nats", fontsize=fontsize)
     plt.yticks(fontsize=fontsize)
-    plt.savefig(
-        f"{output_image_dir}/lg_paper_figure.jpg", bbox_inches="tight", dpi=300
-    )
+    for IMG_EXTENSION in IMG_EXTENSIONS:
+        plt.savefig(
+            f"{output_image_dir}/lg_paper_figure{IMG_EXTENSION}",
+            bbox_inches="tight",
+            dpi=300,
+        )
     plt.close()
 
     if num_bootstraps:

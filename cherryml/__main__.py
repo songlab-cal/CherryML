@@ -183,10 +183,20 @@ if __name__ == "__main__":
         default="FastTree",
         help="Tree estimator to use. Can be either 'FastTree' or 'PhyML'.",  # noqa
     )
+    parser.add_argument(
+        "--cherryml_type",
+        type=str,
+        required=False,
+        default="cherry++",
+        help="Whether to use 'cherry' or 'cherry++'. Here, 'cherry' uses just "
+        "the cherries in the trees, whereas 'cherry++' iteratively picks "
+        "cherries until at most one unpaired sequence remains. Thus, 'cherry++'"
+        " uses more of the available data. Empirically, 'cherry++' shows "
+        "increased statistical efficiency at essentially no runtime cost.",
+    )
 
     # Functionality not currently exposed:
     # parser.add_argument("--do_adam")
-    # parser.add_argument("--edge_or_cherry")
     # parser.add_argument("--cpp_counting_command_line_prefix")
     # parser.add_argument("--cpp_counting_command_line_suffix")
     # parser.add_argument("--optimizer_initialization")

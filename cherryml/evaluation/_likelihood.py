@@ -132,7 +132,7 @@ def dp_likelihood_computation(
             single_site_obs = np.zeros(
                 shape=(n_independent_sites, len(amino_acids), 1)
             )
-            for (i, site_id) in enumerate(independent_sites):
+            for i, site_id in enumerate(independent_sites):
                 single_site_obs[i, :, :] = one_hot_single_site_observation(
                     seq[site_id]
                 )
@@ -141,7 +141,7 @@ def dp_likelihood_computation(
             pair_site_obs = np.zeros(
                 shape=(n_contacting_pairs, len(pairs_of_amino_acids), 1)
             )
-            for (i, (site_id_1, site_id_2)) in enumerate(contacting_pairs):
+            for i, (site_id_1, site_id_2) in enumerate(contacting_pairs):
                 pair_site_obs[i, :, :] = one_hot_pair_site_observation(
                     seq[site_id_1], seq[site_id_2]
                 )
@@ -179,9 +179,9 @@ def dp_likelihood_computation(
         st = time.time()
         if n_independent_sites > 0:
             exponents = []
-            for (i, node) in enumerate(non_root_nodes):
+            for i, node in enumerate(non_root_nodes):
                 (_, length) = tree.parent(node)
-                for (j, site_rate) in enumerate(unique_site_rates):
+                for j, site_rate in enumerate(unique_site_rates):
                     exponents.append(length * site_rate)
 
             expTQ_1 = matrix_exponential(
@@ -192,7 +192,7 @@ def dp_likelihood_computation(
                 device_1,
             )
 
-            for (i, node) in enumerate(non_root_nodes):
+            for i, node in enumerate(non_root_nodes):
                 single_site_transition_mats_node = np.zeros(
                     shape=(
                         n_independent_sites,
@@ -200,7 +200,7 @@ def dp_likelihood_computation(
                         len(amino_acids),
                     )
                 )
-                for (j, site_id) in enumerate(independent_sites):
+                for j, site_id in enumerate(independent_sites):
                     single_site_transition_mats_node[j, :, :] = expTQ_1[
                         (i * num_cats) + site_rate_to_cat[site_rates[site_id]],
                         :,
@@ -214,7 +214,7 @@ def dp_likelihood_computation(
         st = time.time()
         if n_contacting_pairs > 0:
             exponents = []
-            for (i, node) in enumerate(non_root_nodes):
+            for i, node in enumerate(non_root_nodes):
                 (_, length) = tree.parent(node)
                 exponents.append(length)
 
@@ -226,7 +226,7 @@ def dp_likelihood_computation(
                 device_2,
             )
 
-            for (i, node) in enumerate(non_root_nodes):
+            for i, node in enumerate(non_root_nodes):
                 pair_site_transition_mats[node] = expTQ_2[i, :, :][None, :, :]
 
         profiling_str += f"\tTime for pair-site expms: {time.time() - st}\n"
@@ -252,7 +252,7 @@ def dp_likelihood_computation(
         if tree.is_leaf(node):
             continue
         if n_independent_sites > 0:
-            for (child, _) in tree.children(node):
+            for child, _ in tree.children(node):
                 dp_single_site_child = dp_single_site[child]
                 max_ll_single_site_child = dp_single_site_child.max(
                     axis=1, keepdims=True
@@ -269,7 +269,7 @@ def dp_likelihood_computation(
                     np.log(log_arg) + max_ll_single_site_child
                 )
         if n_contacting_pairs > 0:
-            for (child, _) in tree.children(node):
+            for child, _ in tree.children(node):
                 dp_pair_site_child = dp_pair_site[child]
                 max_ll_pair_site_child = dp_pair_site_child.max(
                     axis=1, keepdims=True
@@ -311,10 +311,10 @@ def dp_likelihood_computation(
 
     lls = [0] * num_sites
     if n_independent_sites > 0:
-        for (i, site_id) in enumerate(independent_sites):
+        for i, site_id in enumerate(independent_sites):
             lls[site_id] = res_single_site[i, 0, 0]
     if n_contacting_pairs > 0:
-        for (i, (site_id_1, site_id_2)) in enumerate(contacting_pairs):
+        for i, (site_id_1, site_id_2) in enumerate(contacting_pairs):
             lls[site_id_1] = res_pair_site[i, 0, 0] / 2.0
             lls[site_id_2] = res_pair_site[i, 0, 0] / 2.0
 
@@ -469,6 +469,7 @@ def _map_func(args: Dict):
     output_dirs=[
         "output_likelihood_dir",
     ],
+    write_extra_log_files=True,
 )
 def compute_log_likelihoods(
     tree_dir: str,

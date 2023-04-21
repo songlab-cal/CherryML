@@ -105,7 +105,7 @@ def translate_site_rates(
         .read()
         .split("\n")
     )
-    for (j, line) in enumerate(lines):
+    for j, line in enumerate(lines):
         if line.startswith("Rates"):
             lines_1_split = lines[j].split(" ")
             lines_2_split = lines[j + 1].split(" ")
@@ -333,6 +333,7 @@ def _map_func(args: List):
         "output_site_rates_dir",
         "output_likelihood_dir",
     ],
+    write_extra_log_files=True,
 )
 def fast_tree(
     msa_dir: str,

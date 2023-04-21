@@ -1,0 +1,25 @@
+12 nodes
+root
+internal-1
+internal-2
+internal-3
+internal-4
+internal-5
+seq1
+seq2
+seq3
+seq4
+seq5
+seq6
+11 edges
+root internal-1 1.0
+internal-1 internal-2 1.0
+internal-1 internal-3 1.0
+internal-2 seq1 2.0
+internal-2 internal-4 1.0
+internal-3 internal-5 1.0
+internal-3 seq6 2.0
+internal-4 seq2 1.0
+internal-4 seq3 1.0
+internal-5 seq4 1.0
+internal-5 seq5 1.0

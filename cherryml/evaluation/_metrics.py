@@ -2,6 +2,7 @@ from typing import Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
+import scipy
 import seaborn as sns
 
 RateMatrixType = np.array
@@ -129,6 +130,7 @@ def plot_rate_matrix_predictions(
     y_pred: RateMatrixType,
     mask_matrix: Optional[MaskMatrixType] = None,
     density_plot: bool = False,
+    alpha: Optional[float] = 0.3,
 ) -> None:
     num_states = y_true.shape[0]
     if mask_matrix is None:
@@ -150,8 +152,8 @@ def plot_rate_matrix_predictions(
     if density_plot:
         sns.jointplot(x=ys_true, y=ys_pred, kind="hex", color="#4CB391")
     else:
-        sns.scatterplot(ys_true, ys_pred, alpha=0.3)
-        # plt.scatter(ys_true, ys_pred, alpha=0.3)
+        sns.scatterplot(ys_true, ys_pred, alpha=alpha)
+        # plt.scatter(ys_true, ys_pred, alpha=alpha)
 
     plt.xticks(fontsize=14)
     plt.yticks(fontsize=14)
@@ -169,6 +171,86 @@ def plot_rate_matrix_predictions(
 
     min_y_data = min(ys_true + ys_pred)
     min_y = -7
+
+    ticks = [np.log(10**i) / np.log(10) for i in range(min_y, 1)]
+    tickslabels = [f"$10^{{{i}}}$" for i in range(min_y, 1)]
+    plt.xticks(ticks, tickslabels)
+    plt.yticks(ticks, tickslabels)
+
+    plt.plot([min_y, 0], [min_y, 0], color="r")
+
+    spearman = scipy.stats.spearmanr(ys_true, ys_pred).correlation
+    print(f"spearman: {spearman}")
+    pearson = scipy.stats.pearsonr(ys_true, ys_pred)[0]
+    print(f"pearson: {pearson}")
+
+
+def plot_rate_matrices_against_each_other(
+    y_true: RateMatrixType,
+    y_pred: RateMatrixType,
+    y_true_name: str,
+    y_pred_name: str,
+    mask_matrix: Optional[MaskMatrixType] = None,
+    density_plot: bool = False,
+    min_y: int = -7,
+    alpha: float = 0.3,
+) -> None:
+    """
+    Plot "true" vs "predicted" rate matrix. These need not be true vs estimated,
+    they can be anything.
+    """
+    num_states = y_true.shape[0]
+    if mask_matrix is None:
+        mask_matrix = np.ones(shape=(num_states, num_states), dtype=int)
+    nonzero_indices = list(zip(*np.where(mask_matrix == 1)))
+
+    ys_true = [
+        np.log(y_true[i, j]) / np.log(10)
+        for (i, j) in nonzero_indices
+        if i != j
+    ]
+
+    ys_pred = [
+        np.log(y_pred[i, j]) / np.log(10)
+        for (i, j) in nonzero_indices
+        if i != j
+    ]
+
+    spearman = scipy.stats.spearmanr(ys_true, ys_pred).correlation
+    print(f"{y_true_name} vs {y_pred_name} spearman: {spearman}")
+    pearson = scipy.stats.pearsonr(ys_true, ys_pred)[0]
+    print(f"{y_true_name} vs {y_pred_name} pearson: {pearson}")
+
+    if density_plot:
+        sns.jointplot(x=ys_true, y=ys_pred, kind="hex", color="#4CB391")
+    else:
+        sns.scatterplot(ys_true, ys_pred, alpha=alpha)
+        # plt.scatter(ys_true, ys_pred, alpha=alpha)
+
+    plt.xticks(fontsize=14)
+    plt.yticks(fontsize=14)
+
+    if TITLES:
+        plt.title("True vs predicted rate matrix entries")
+        plt.xlabel(
+            "Entry "
+            + y_true_name
+            + "$_{"
+            + f"{mask_matrix.shape[0]}"
+            + "}[i, j]$",
+            fontsize=18,
+        )
+        plt.ylabel(
+            "Entry "
+            + y_pred_name
+            + "$_{"
+            + f"{mask_matrix.shape[0]}"
+            + "}[i, j]$",
+            fontsize=18,
+        )  # noqa
+    plt.axis("scaled")
+
+    min_y_data = min(ys_true + ys_pred)
 
     ticks = [np.log(10**i) / np.log(10) for i in range(min_y, 1)]
     tickslabels = [f"$10^{{{i}}}$" for i in range(min_y, 1)]

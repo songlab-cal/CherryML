@@ -75,6 +75,7 @@ def _map_func(args: List):
         "output_site_rates_dir",
         "output_likelihood_dir",
     ],
+    write_extra_log_files=True,
 )
 def gt_tree_estimator(
     gt_tree_dir: str,

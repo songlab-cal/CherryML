@@ -37,6 +37,7 @@ from cherryml import (
     lg_end_to_end_with_cherryml_optimizer,
     lg_end_to_end_with_em_optimizer,
 )
+from cherryml.benchmarking.globals import IMG_EXTENSIONS
 from cherryml.benchmarking.lg_paper import (
     get_lg_PfamTestingAlignments_data,
     get_lg_PfamTrainingAlignments_data,
@@ -50,22 +51,29 @@ from cherryml.benchmarking.pfam_15k import (
     simulate_ground_truth_data_single_site,
     subsample_pfam_15k_msas,
 )
+from cherryml.estimation_end_to_end import CHERRYML_TYPE
 from cherryml.evaluation import (
     compute_log_likelihoods,
     create_maximal_matching_contact_map,
+    plot_rate_matrices_against_each_other,
     plot_rate_matrix_predictions,
     relative_errors,
 )
 from cherryml.global_vars import TITLES
 from cherryml.io import (
+    get_msa_num_residues,
+    get_msa_num_sequences,
+    get_msa_num_sites,
     read_contact_map,
     read_log_likelihood,
     read_mask_matrix,
     read_msa,
+    read_pickle,
     read_rate_matrix,
     read_site_rates,
     write_count_matrices,
     write_msa,
+    write_pickle,
     write_probability_distribution,
     write_rate_matrix,
     write_sites_subset,
@@ -170,6 +178,7 @@ def create_synthetic_count_matrices(
     samples_per_row: int,
     rate_matrix_path: str,
     output_count_matrices_dir: Optional[str] = None,
+    write_extra_log_files=True,
 ):
     """
     Create synthetic count matrices.
@@ -208,15 +217,78 @@ def create_synthetic_count_matrices(
     )
 
 
-def fig_single_site_cherry(
+@caching.cached_computation(
+    output_dirs=["output_dir"],
+)
+def get_msas_number_of_sites__cached(
+    msa_dir: str,
+    families: List[str],
+    output_dir: Optional[str] = None,
+):
+    """
+    Get the total number of sites in the dataset.
+    """
+    res = 0
+    for family in families:
+        num_sites = get_msa_num_sites(os.path.join(msa_dir, family + ".txt"))
+        res += num_sites
+    assert res >= 1
+    write_pickle(res, os.path.join(output_dir, "result.txt"))
+
+
+@caching.cached_computation(
+    output_dirs=["output_dir"],
+)
+def get_msas_number_of_sequences__cached(
+    msa_dir: str,
+    families: List[str],
+    output_dir: Optional[str] = None,
+):
+    """
+    Get the total number of sequences in the dataset.
+    """
+    res = 0
+    for family in families:
+        num_sequences = get_msa_num_sequences(
+            os.path.join(msa_dir, family + ".txt")
+        )
+        res += num_sequences
+    assert res >= 1
+    write_pickle(res, os.path.join(output_dir, "result.txt"))
+
+
+@caching.cached_computation(
+    output_dirs=["output_dir"],
+)
+def get_msas_number_of_residues__cached(
+    msa_dir: str,
+    families: List[str],
+    exclude_gaps: bool,
+    output_dir: Optional[str] = None,
+):
+    """
+    Get the total number of residues in the dataset.
+    """
+    res = 0
+    for family in families:
+        res += get_msa_num_residues(
+            os.path.join(msa_dir, family + ".txt"), exclude_gaps=exclude_gaps
+        )
+    assert res >= 1
+    write_pickle(res, os.path.join(output_dir, "result.txt"))
+
+
+def _fig_single_site_cherry(
     num_rate_categories: int = 1,
     num_processes_tree_estimation: int = 4,
     num_sequences: int = 128,
     random_seed: int = 0,
+    edge_or_cherry: str = CHERRYML_TYPE,
+    simulated_data_dirs: Optional[Dict[str, str]] = None,
 ):
     caching.set_cache_dir("_cache_benchmarking_em")
 
-    output_image_dir = "images/fig_single_site_cherry"
+    output_image_dir = f"images/fig_single_site_{edge_or_cherry}"
     if not os.path.exists(output_image_dir):
         os.makedirs(output_image_dir)
 
@@ -225,36 +297,77 @@ def fig_single_site_cherry(
     runtimes = []
     yss_relative_errors = []
     Qs = []
-    for (i, num_families_train) in enumerate(num_families_train_list):
+    for i, num_families_train in enumerate(num_families_train_list):
         msg = f"***** num_families_train = {num_families_train} *****"
         print("*" * len(msg))
         print(msg)
         print("*" * len(msg))
 
-        families_all = get_families_within_cutoff(
-            pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
-            min_num_sites=190,
-            max_num_sites=230,
-            min_num_sequences=num_sequences,
-            max_num_sequences=1000000,
-        )
-        families_train = families_all[:num_families_train]
+        if simulated_data_dirs is None:
+            families_all = get_families_within_cutoff(
+                pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
+                min_num_sites=190,
+                max_num_sites=230,
+                min_num_sequences=num_sequences,
+                max_num_sequences=1000000,
+            )
+            families_train = families_all[:num_families_train]
 
-        (
-            msa_dir,
-            contact_map_dir,
-            gt_msa_dir,
-            gt_tree_dir,
-            gt_site_rates_dir,
-            gt_likelihood_dir,
-        ) = simulate_ground_truth_data_single_site(
-            pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
-            num_sequences=num_sequences,
-            families=families_all,
-            num_rate_categories=num_rate_categories,
-            num_processes=num_processes_tree_estimation,
-            random_seed=random_seed,
+            (
+                msa_dir,
+                contact_map_dir,
+                gt_msa_dir,
+                gt_tree_dir,
+                gt_site_rates_dir,
+                gt_likelihood_dir,
+            ) = simulate_ground_truth_data_single_site(
+                pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
+                num_sequences=num_sequences,
+                families=families_all,
+                num_rate_categories=num_rate_categories,
+                num_processes=num_processes_tree_estimation,
+                random_seed=random_seed,
+            )
+
+            logging_str = (
+                "Fig. 1bc simulated_data_dirs are:\n"
+                f"msa_dir = {msa_dir}\n"
+                # f"contact_map_dir = {contact_map_dir}\n"
+                # f"gt_msa_dir = {gt_msa_dir}\n"
+                f"gt_tree_dir = {gt_tree_dir}\n"
+                f"gt_site_rates_dir = {gt_site_rates_dir}\n"
+                f"gt_likelihood_dir = {gt_likelihood_dir}\n"
+            )
+            # Uncomment to write out the simulated data dirs used
+            # with open("fig_1bc_simulated_data_dirs.txt", "w") as out_file:
+            #     out_file.write(logging_str)
+            # with open(
+            #     "fig_1bc_simulated_data_families_all.txt", "w"
+            # ) as out_file:
+            #     out_file.write(" ".join(families_all))
+            print(logging_str)
+        else:
+            families_all = (
+                open(simulated_data_dirs["families_all.txt"], "r")
+                .read()
+                .strip()
+                .split()
+            )
+            families_train = families_all[:num_families_train]
+
+            msa_dir = simulated_data_dirs["msa_dir"]
+            # contact_map_dir = simulated_data_dirs["contact_map_dir"]
+            # gt_msa_dir = simulated_data_dirs["gt_msa_dir"]
+            gt_tree_dir = simulated_data_dirs["gt_tree_dir"]
+            gt_site_rates_dir = simulated_data_dirs["gt_site_rates_dir"]
+            gt_likelihood_dir = simulated_data_dirs["gt_likelihood_dir"]
+
+        # Report the total number of sites, etc. in the dataset.
+        dataset_statistics_str = report_dataset_statistics_str(
+            msa_dir=msa_dir,
+            families=families_train,
         )
+        print(dataset_statistics_str)
 
         # Now run the cherryml method.
         lg_end_to_end_with_cherryml_optimizer_res = (
@@ -272,7 +385,7 @@ def fig_single_site_cherry(
                 num_processes_tree_estimation=num_processes_tree_estimation,
                 num_processes_optimization=1,
                 num_processes_counting=1,
-                edge_or_cherry="cherry",
+                edge_or_cherry=edge_or_cherry,
             )
         )
 
@@ -288,11 +401,17 @@ def fig_single_site_cherry(
                 "jtt_ipw_dir_0",
                 "rate_matrix_dir_0",
             ]:
+                dir_lg_end_to_end_with_cherryml_optimizer_output_dir = (
+                    lg_end_to_end_with_cherryml_optimizer_res[
+                        lg_end_to_end_with_cherryml_optimizer_output_dir
+                    ]
+                )
+                print(
+                    f"dir_lg_end_to_end_with_cherryml_optimizer_output_dir = {dir_lg_end_to_end_with_cherryml_optimizer_output_dir}"
+                )
                 with open(
                     os.path.join(
-                        lg_end_to_end_with_cherryml_optimizer_res[
-                            lg_end_to_end_with_cherryml_optimizer_output_dir
-                        ],
+                        dir_lg_end_to_end_with_cherryml_optimizer_output_dir,
                         "profiling.txt",
                     ),
                     "r",
@@ -312,6 +431,9 @@ def fig_single_site_cherry(
             lg_end_to_end_with_cherryml_optimizer_res["rate_matrix_dir_0"],
             "result.txt",
         )
+        print(
+            f"CherryML learned_rate_matrix_path, {num_families_train} = {learned_rate_matrix_path}"
+        )
         learned_rate_matrix = read_rate_matrix(
             learned_rate_matrix_path
         ).to_numpy()
@@ -329,8 +451,13 @@ def fig_single_site_cherry(
         yss_relative_errors.append(relative_errors(lg, learned_rate_matrix))
 
     for i in range(len(num_families_train_list)):
+        print(
+            f"Plotting rate matrix predictions for CherryML; num families train = {num_families_train_list[i]}"
+        )
         plot_rate_matrix_predictions(
-            read_rate_matrix(get_lg_path()).to_numpy(), Qs[i]
+            read_rate_matrix(get_lg_path()).to_numpy(),
+            Qs[i],
+            alpha=1.0,
         )
         if TITLES:
             plt.title(
@@ -338,10 +465,11 @@ def fig_single_site_cherry(
                 % num_families_train_list[i]
             )
         plt.tight_layout()
-        plt.savefig(
-            f"{output_image_dir}/log_log_plot_{i}",
-            dpi=300,
-        )
+        for IMG_EXTENSION in IMG_EXTENSIONS:
+            plt.savefig(
+                f"{output_image_dir}/log_log_plot_{i}{IMG_EXTENSION}",
+                dpi=300,
+            )
         plt.close()
 
     df = pd.DataFrame(
@@ -370,22 +498,24 @@ def fig_single_site_cherry(
         xlabel="Number of families",
         runtimes=runtimes,
     )
-    plt.savefig(
-        f"{output_image_dir}/violin_plot",
-        dpi=300,
-    )
+    for IMG_EXTENSION in IMG_EXTENSIONS:
+        plt.savefig(
+            f"{output_image_dir}/violin_plot{IMG_EXTENSION}",
+            dpi=300,
+        )
     plt.close()
 
     ys_relative_errors = [np.median(ys) for ys in yss_relative_errors]
     return num_families_train_list, ys_relative_errors, runtimes
 
 
-def fig_single_site_em(
+def _fig_single_site_em(
     extra_em_command_line_args: str = "-log 6 -f 3 -mi 0.000001",
     num_processes: int = 4,
     num_rate_categories: int = 1,
     num_sequences: int = 128,
     random_seed: int = 0,
+    simulated_data_dirs: Optional[Dict[str, str]] = None,
 ):
     output_image_dir = (
         "images/fig_single_site_em__"
@@ -401,36 +531,52 @@ def fig_single_site_em(
     yss_relative_errors = []
     runtimes = []
     Qs = []
-    for (i, num_families_train) in enumerate(num_families_train_list):
+    for i, num_families_train in enumerate(num_families_train_list):
         msg = f"***** num_families_train = {num_families_train} *****"
         print("*" * len(msg))
         print(msg)
         print("*" * len(msg))
 
-        families_all = get_families_within_cutoff(
-            pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
-            min_num_sites=190,
-            max_num_sites=230,
-            min_num_sequences=num_sequences,
-            max_num_sequences=1000000,
-        )
-        families_train = families_all[:num_families_train]
+        if simulated_data_dirs is None:
+            families_all = get_families_within_cutoff(
+                pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
+                min_num_sites=190,
+                max_num_sites=230,
+                min_num_sequences=num_sequences,
+                max_num_sequences=1000000,
+            )
+            families_train = families_all[:num_families_train]
 
-        (
-            msa_dir,
-            contact_map_dir,
-            gt_msa_dir,
-            gt_tree_dir,
-            gt_site_rates_dir,
-            gt_likelihood_dir,
-        ) = simulate_ground_truth_data_single_site(
-            pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
-            num_sequences=num_sequences,
-            families=families_all,
-            num_rate_categories=num_rate_categories,
-            num_processes=num_processes,
-            random_seed=random_seed,
-        )
+            (
+                msa_dir,
+                contact_map_dir,
+                gt_msa_dir,
+                gt_tree_dir,
+                gt_site_rates_dir,
+                gt_likelihood_dir,
+            ) = simulate_ground_truth_data_single_site(
+                pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
+                num_sequences=num_sequences,
+                families=families_all,
+                num_rate_categories=num_rate_categories,
+                num_processes=num_processes,
+                random_seed=random_seed,
+            )
+        else:
+            families_all = (
+                open(simulated_data_dirs["families_all.txt"], "r")
+                .read()
+                .strip()
+                .split()
+            )
+            families_train = families_all[:num_families_train]
+
+            msa_dir = simulated_data_dirs["msa_dir"]
+            # contact_map_dir = simulated_data_dirs["contact_map_dir"]
+            # gt_msa_dir = simulated_data_dirs["gt_msa_dir"]
+            gt_tree_dir = simulated_data_dirs["gt_tree_dir"]
+            gt_site_rates_dir = simulated_data_dirs["gt_site_rates_dir"]
+            gt_likelihood_dir = simulated_data_dirs["gt_likelihood_dir"]
 
         em_estimator_res = lg_end_to_end_with_em_optimizer(
             msa_dir=msa_dir,
@@ -460,6 +606,9 @@ def fig_single_site_em(
         learned_rate_matrix_path = os.path.join(
             em_estimator_res["rate_matrix_dir_0"], "result.txt"
         )
+        print(
+            f"EM learned_rate_matrix_path, {num_families_train} = {learned_rate_matrix_path}"
+        )
         learned_rate_matrix = read_rate_matrix(learned_rate_matrix_path)
         learned_rate_matrix = learned_rate_matrix.to_numpy()
 
@@ -475,8 +624,13 @@ def fig_single_site_em(
         yss_relative_errors.append(relative_errors(lg, learned_rate_matrix))
 
     for i in range(len(num_families_train_list)):
+        print(
+            f"Plotting rate matrix predictions for EM; num families train = {num_families_train_list[i]}"
+        )
         plot_rate_matrix_predictions(
-            read_rate_matrix(get_lg_path()).to_numpy(), Qs[i]
+            read_rate_matrix(get_lg_path()).to_numpy(),
+            Qs[i],
+            alpha=1.0,
         )
         if TITLES:
             plt.title(
@@ -484,10 +638,11 @@ def fig_single_site_em(
                 % num_families_train_list[i]
             )
         plt.tight_layout()
-        plt.savefig(
-            f"{output_image_dir}/log_log_plot_{i}",
-            dpi=300,
-        )
+        for IMG_EXTENSION in IMG_EXTENSIONS:
+            plt.savefig(
+                f"{output_image_dir}/log_log_plot_{i}{IMG_EXTENSION}",
+                dpi=300,
+            )
         plt.close()
 
     df = pd.DataFrame(
@@ -516,10 +671,11 @@ def fig_single_site_em(
         xlabel="Number of families",
         runtimes=runtimes,
     )
-    plt.savefig(
-        f"{output_image_dir}/violin_plot",
-        dpi=300,
-    )
+    for IMG_EXTENSION in IMG_EXTENSIONS:
+        plt.savefig(
+            f"{output_image_dir}/violin_plot{IMG_EXTENSION}",
+            dpi=300,
+        )
     plt.close()
 
     ys_relative_errors = [np.median(ys) for ys in yss_relative_errors]
@@ -529,7 +685,15 @@ def fig_single_site_em(
 # Fig. 1b, 1c
 def fig_computational_and_stat_eff_cherry_vs_em(
     extra_em_command_line_args: str = "-log 6 -f 3 -mi 0.000001",
+    edge_or_cherry: str = CHERRYML_TYPE,
+    simulated_data_dirs: Optional[Dict[str, str]] = None,
 ):
+    """
+    We show that CherryML retains a high statistical efficiency compared to EM.
+
+    If `simulated_data_dirs` is provided, then the data simulation step will be
+    skipped.
+    """
     fontsize = 14
 
     output_image_dir = "images/fig_computational_and_stat_eff_cherry_vs_em"
@@ -540,11 +704,15 @@ def fig_computational_and_stat_eff_cherry_vs_em(
         num_families_cherry,
         cherry_errors_nonpct,
         cherry_times,
-    ) = fig_single_site_cherry()
+    ) = _fig_single_site_cherry(
+        edge_or_cherry=edge_or_cherry, simulated_data_dirs=simulated_data_dirs
+    )
     cherry_times = [int(x) for x in cherry_times]
     cherry_errors = [float("%.1f" % (100 * x)) for x in cherry_errors_nonpct]
-    num_families_em, em_errors_nonpct, em_times = fig_single_site_em(
+
+    num_families_em, em_errors_nonpct, em_times = _fig_single_site_em(
         extra_em_command_line_args=extra_em_command_line_args,
+        simulated_data_dirs=simulated_data_dirs,
     )
     em_times = [int(x) for x in em_times]
     em_errors = [float("%.1f" % (100 * x)) for x in em_errors_nonpct]
@@ -555,13 +723,23 @@ def fig_computational_and_stat_eff_cherry_vs_em(
     print(f"em_errors_nonpct = {em_errors_nonpct}")
     print(f"em_times = {em_times}")
 
-    num_families = num_families_cherry
+    num_families = num_families_em
     indices = [i for i in range(len(num_families))]
     plt.figure(dpi=300)
     plt.plot(
-        indices, 100 * np.array(cherry_errors_nonpct), "o-", label="CherryML"
+        indices,
+        100 * np.array(cherry_errors_nonpct),
+        "o-",
+        label="CherryML",
+        color="red",
     )
-    plt.plot(indices, 100 * np.array(em_errors_nonpct), "o-", label="EM")
+    plt.plot(
+        indices,
+        100 * np.array(em_errors_nonpct),
+        "o-",
+        label="EM",
+        color="blue",
+    )
     plt.ylim((0.5, 200))
     plt.xticks(indices, num_families, fontsize=fontsize)
     plt.yscale("log", base=10)
@@ -575,14 +753,20 @@ def fig_computational_and_stat_eff_cherry_vs_em(
     for a, b in zip(indices, cherry_errors):
         plt.text(a - 0.3, 1.2 * b, str(b) + "%", fontsize=fontsize)
     plt.tight_layout()
-    plt.savefig(os.path.join(output_image_dir, "errors"))
+    for IMG_EXTENSION in IMG_EXTENSIONS:
+        plt.savefig(
+            os.path.join(
+                output_image_dir,
+                f"errors{IMG_EXTENSION}",
+            )
+        )
     plt.close()
 
     num_families = num_families_cherry
     indices = [i for i in range(len(num_families))]
     plt.figure(dpi=300)
-    plt.plot(indices, cherry_times, "o-", label="CherryML")
-    plt.plot(indices, em_times, "o-", label="EM")
+    plt.plot(indices, cherry_times, "o-", label="CherryML", color="red")
+    plt.plot(indices, em_times, "o-", label="EM", color="blue")
     plt.ylim((5, 5e5))
     plt.xticks(indices, num_families, fontsize=fontsize)
     plt.yscale("log", base=10)
@@ -594,9 +778,15 @@ def fig_computational_and_stat_eff_cherry_vs_em(
     for a, b in zip(indices, em_times):
         plt.text(a - 0.35, b * 1.5, str(b) + "s", fontsize=fontsize)
     for a, b in zip(indices, cherry_times):
-        plt.text(a - 0.3, b * 1.5, str(b) + "s", fontsize=fontsize)
+        plt.text(a - 0.3, b / 2.0, str(b) + "s", fontsize=fontsize)
     plt.tight_layout()
-    plt.savefig(os.path.join(output_image_dir, "times"))
+    for IMG_EXTENSION in IMG_EXTENSIONS:
+        plt.savefig(
+            os.path.join(
+                output_image_dir,
+                f"times{IMG_EXTENSION}",
+            )
+        )
     plt.close()
 
 
@@ -609,10 +799,15 @@ def fig_single_site_quantization_error(
     num_families_train: int = 15051,
     num_sequences: int = 1024,
     random_seed: int = 0,
+    simulated_data_dirs: Optional[Dict[str, str]] = None,
+    edge_or_cherry: str = CHERRYML_TYPE,
 ):
     """
     We show that ~100 quantization points (geometric increments of 10%) is
     enough.
+
+    If `simulated_data_dirs` is provided, then the data simulation step will be
+    skipped.
     """
     caching.set_cache_dir("_cache_benchmarking")
 
@@ -652,21 +847,42 @@ def fig_single_site_quantization_error(
             pfam_15k_msa_dir=PFAM_15K_MSA_DIR
         )
 
-        (
-            msa_dir,
-            contact_map_dir,
-            gt_msa_dir,
-            gt_tree_dir,
-            gt_site_rates_dir,
-            gt_likelihood_dir,
-        ) = simulate_ground_truth_data_single_site(
-            pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
-            num_sequences=num_sequences,
-            families=families_train,
-            num_rate_categories=num_rate_categories,
-            num_processes=num_processes_tree_estimation,
-            random_seed=random_seed,
-        )
+        if simulated_data_dirs is None:
+            (
+                msa_dir,
+                contact_map_dir,
+                gt_msa_dir,
+                gt_tree_dir,
+                gt_site_rates_dir,
+                gt_likelihood_dir,
+            ) = simulate_ground_truth_data_single_site(
+                pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
+                num_sequences=num_sequences,
+                families=families_train,
+                num_rate_categories=num_rate_categories,
+                num_processes=num_processes_tree_estimation,
+                random_seed=random_seed,
+            )
+            logging_str = (
+                "Fig. 1d simulated_data_dirs are:\n"
+                f"msa_dir = {msa_dir}\n"
+                # f"contact_map_dir = {contact_map_dir}\n"
+                # f"gt_msa_dir = {gt_msa_dir}\n"
+                f"gt_tree_dir = {gt_tree_dir}\n"
+                f"gt_site_rates_dir = {gt_site_rates_dir}\n"
+                f"gt_likelihood_dir = {gt_likelihood_dir}\n"
+            )
+            # Uncomment to write out the simulated data dirs used
+            # with open("fig_1d_simulated_data_dirs.txt", "w") as out_file:
+            #     out_file.write(logging_str)
+            print(logging_str)
+        else:
+            msa_dir = simulated_data_dirs["msa_dir"]
+            # contact_map_dir = simulated_data_dirs["contact_map_dir"]
+            # gt_msa_dir = simulated_data_dirs["gt_msa_dir"]
+            gt_tree_dir = simulated_data_dirs["gt_tree_dir"]
+            gt_site_rates_dir = simulated_data_dirs["gt_site_rates_dir"]
+            gt_likelihood_dir = simulated_data_dirs["gt_likelihood_dir"]
 
         lg_end_to_end_with_cherryml_optimizer_res = (
             lg_end_to_end_with_cherryml_optimizer(
@@ -686,6 +902,7 @@ def fig_single_site_quantization_error(
                 num_processes_tree_estimation=num_processes_tree_estimation,
                 num_processes_counting=num_processes_counting,
                 num_processes_optimization=num_processes_optimization,
+                edge_or_cherry=edge_or_cherry,
             )
         )
 
@@ -693,6 +910,7 @@ def fig_single_site_quantization_error(
             lg_end_to_end_with_cherryml_optimizer_res["rate_matrix_dir_0"],
             "result.txt",
         )
+        print(f"learned_rate_matrix_path = {learned_rate_matrix_path}")
 
         learned_rate_matrix = read_rate_matrix(
             learned_rate_matrix_path
@@ -703,7 +921,9 @@ def fig_single_site_quantization_error(
 
     for i in range(len(q_points)):
         plot_rate_matrix_predictions(
-            read_rate_matrix(get_lg_path()).to_numpy(), Qs[i]
+            read_rate_matrix(get_lg_path()).to_numpy(),
+            Qs[i],
+            alpha=1.0,
         )
         if TITLES:
             plt.title(
@@ -711,10 +931,11 @@ def fig_single_site_quantization_error(
                 "%.1f%% (%i quantization points)" % (q_errors[i], q_points[i])
             )
         plt.tight_layout()
-        plt.savefig(
-            f"{output_image_dir}/log_log_plot_{i}",
-            dpi=300,
-        )
+        for IMG_EXTENSION in IMG_EXTENSIONS:
+            plt.savefig(
+                f"{output_image_dir}/log_log_plot_{i}{IMG_EXTENSION}",
+                dpi=300,
+            )
         plt.close()
 
     df = pd.DataFrame(
@@ -742,10 +963,11 @@ def fig_single_site_quantization_error(
         title="Distribution of relative error as quantization improves",
         xlabel="Quantization points",
     )
-    plt.savefig(
-        f"{output_image_dir}/violin_plot",
-        dpi=300,
-    )
+    for IMG_EXTENSION in IMG_EXTENSIONS:
+        plt.savefig(
+            f"{output_image_dir}/violin_plot{IMG_EXTENSION}",
+            dpi=300,
+        )
     plt.close()
 
 
@@ -756,8 +978,8 @@ def fig_lg_paper(
     rate_estimator_names: List[Tuple[str, str]] = [
         ("reproduced WAG", "WAG\nrate matrix"),
         ("reproduced LG", "LG\nrate matrix"),
-        ("Cherry__4", "LG w/CherryML\n(re-estimated)"),
-        ("EM_FT__4__0.000001", "LG w/EM\n(re-estimated)"),
+        ("Cherry++__4", "LG w/ CherryML\n(re-estimated)"),
+        ("EM_FT__4__0.000001", "LG w/ EM\n(re-estimated)"),
     ],
     baseline_rate_estimator_name: Tuple[str, str] = ("reproduced JTT", "JTT"),
     num_processes: int = 4,
@@ -767,7 +989,7 @@ def fig_lg_paper(
     lg_pfam_testing_alignments_dir: str = "./lg_paper_data/lg_PfamTestingAlignments",  # noqa
 ):
     """
-    LG paper figure 4, extended with LG w/CherryML.
+    LG paper figure 4, extended with LG w/ CherryML.
     """
     if not os.path.exists(output_image_dir):
         os.makedirs(output_image_dir)
@@ -797,6 +1019,13 @@ def fig_lg_paper(
             "or 'FastTree'."
         )
 
+    # Report the total number of sites, etc. in the dataset.
+    dataset_statistics_str = report_dataset_statistics_str(
+        msa_dir=lg_pfam_training_alignments_dir,
+        families=get_families(lg_pfam_training_alignments_dir),
+    )
+    print(f"LG paper fig 4. statistics: {dataset_statistics_str}")
+
     y, df, bootstraps, Qs = reproduce_lg_paper_fig_4(
         msa_train_dir=lg_pfam_training_alignments_dir,
         families_train=get_families(lg_pfam_training_alignments_dir),
@@ -814,9 +1043,34 @@ def fig_lg_paper(
         use_colors=True,
     )
 
+    for codename_1, name_1 in rate_estimator_names:
+        print(
+            f"lg paper figure; rate matrix {codename_1} / {name_1} is at location {Qs[codename_1]}"
+        )
+        for codename_2, name_2 in rate_estimator_names:
+            plot_rate_matrices_against_each_other(
+                read_rate_matrix(Qs[codename_1]).to_numpy(),
+                read_rate_matrix(Qs[codename_2]).to_numpy(),
+                name_1,
+                name_2,
+                alpha=1.0,
+            )
+            for IMG_EXTENSION in IMG_EXTENSIONS:
+                plt.savefig(
+                    output_image_dir
+                    + "/"
+                    + codename_1.replace(" ", "_")
+                    + "__vs__"
+                    + codename_2.replace(" ", "_")
+                    + IMG_EXTENSION,
+                    dpi=300,
+                )
+            plt.close()
+
 
 @caching.cached_computation(
     output_dirs=["output_probability_distribution_dir"],
+    write_extra_log_files=True,
 )
 def get_stationary_distribution(
     rate_matrix_path: str,
@@ -833,6 +1087,7 @@ def get_stationary_distribution(
 
 @caching.cached_computation(
     output_dirs=["output_rate_matrix_dir"],
+    write_extra_log_files=True,
 )
 def normalize_rate_matrix(
     rate_matrix_path: str,
@@ -850,6 +1105,7 @@ def normalize_rate_matrix(
 
 @caching.cached_computation(
     output_dirs=["output_rate_matrix_dir"],
+    write_extra_log_files=True,
 )
 def chain_product_cached(
     rate_matrix_1_path: str,
@@ -999,6 +1255,7 @@ def _map_func_compute_contacting_sites(args: List) -> None:
     exclude_args=["num_processes"],
     parallel_arg="families",
     output_dirs=["output_sites_subset_dir"],
+    write_extra_log_files=True,
 )
 def _compute_contacting_sites(
     contact_map_dir: str,
@@ -1054,6 +1311,7 @@ def learn_coevolution_model_on_pfam15k(
     num_processes_optimization_coevolution: int = 8,
     angstrom_cutoff: float = 8.0,
     minimum_distance_for_nontrivial_contact: int = 7,
+    edge_or_cherry: str = CHERRYML_TYPE,
 ) -> Dict:
     """
     Returns a dictionary with the learned rate matrices.
@@ -1091,6 +1349,15 @@ def learn_coevolution_model_on_pfam15k(
         num_processes=num_processes_tree_estimation,
     )["output_msa_dir"]
 
+    dataset_statistics_str = report_dataset_statistics_str(
+        msa_dir=msa_dir_train,
+        families=families_train,
+    )
+    print(
+        f"PFAM 15K (subsampled to {num_sequences} seqs per familiy) "
+        f"statistics:\n{dataset_statistics_str}"
+    )
+
     # Run the cherry method using FastTree tree estimator
     cherry_path = lg_end_to_end_with_cherryml_optimizer(
         msa_dir=msa_dir_train,
@@ -1103,6 +1370,7 @@ def learn_coevolution_model_on_pfam15k(
         num_processes_tree_estimation=num_processes_tree_estimation,
         num_processes_optimization=num_processes_optimization_single_site,
         num_processes_counting=num_processes_counting,
+        edge_or_cherry=edge_or_cherry,
     )["learned_rate_matrix_path"]
     cherry = read_rate_matrix(cherry_path).to_numpy()
     del cherry  # unused
@@ -1175,6 +1443,7 @@ def learn_coevolution_model_on_pfam15k(
         num_processes_counting=num_processes_counting,
         num_processes_optimization=num_processes_optimization_single_site,
         sites_subset_dir=contacting_sites_dir,
+        edge_or_cherry=edge_or_cherry,
     )["learned_rate_matrix_path"]
     cherry_contact = read_rate_matrix(cherry_contact_path).to_numpy()
     del cherry_contact  # unused
@@ -1208,6 +1477,7 @@ def learn_coevolution_model_on_pfam15k(
         num_processes_tree_estimation=num_processes_tree_estimation,
         num_processes_counting=num_processes_counting,
         num_processes_optimization=num_processes_optimization_coevolution,
+        edge_or_cherry=edge_or_cherry,
     )["learned_rate_matrix_path"]
 
     # Coevolution model without masking #
@@ -1225,6 +1495,7 @@ def learn_coevolution_model_on_pfam15k(
         num_processes_tree_estimation=num_processes_tree_estimation,
         num_processes_counting=num_processes_counting,
         num_processes_optimization=num_processes_optimization_coevolution,
+        edge_or_cherry=edge_or_cherry,
     )
     cherry_2_no_mask_path = cherry_2_no_mask_dir["learned_rate_matrix_path"]
 
@@ -1235,11 +1506,17 @@ def learn_coevolution_model_on_pfam15k(
             "jtt_ipw_dir_0",
             "rate_matrix_dir_0",
         ]:
+            dir_to_lg_end_to_end_with_cherryml_optimizer_res = (
+                lg_end_to_end_with_cherryml_optimizer_res[
+                    lg_end_to_end_with_cherryml_optimizer_output_dir
+                ]
+            )
+            print(
+                f"dir_to_lg_end_to_end_with_cherryml_optimizer_res = {dir_to_lg_end_to_end_with_cherryml_optimizer_res}"
+            )
             with open(
                 os.path.join(
-                    lg_end_to_end_with_cherryml_optimizer_res[
-                        lg_end_to_end_with_cherryml_optimizer_output_dir
-                    ],
+                    dir_to_lg_end_to_end_with_cherryml_optimizer_res,
                     "profiling.txt",
                 ),
                 "r",
@@ -1273,7 +1550,7 @@ def learn_coevolution_model_on_pfam15k(
             "Cherry contact squared",
             cherry_contact_squared_path,
         ),
-        ("Cherry2", cherry_2_path),
+        ("Cherry2; masked", cherry_2_path),
         ("Cherry2; no mask", cherry_2_no_mask_path),
     ]
 
@@ -1331,13 +1608,14 @@ def learn_coevolution_model_on_pfam15k(
                     "Results on Pfam 15K data\n(held-out negative log-Likelihood)"  # noqa
                 )
         plt.tight_layout()
-        plt.savefig(
-            os.path.join(
-                output_image_dir,
-                f"log_likelihoods_{num_rate_categories}_{baseline}",
-            ),
-            dpi=300,
-        )
+        for IMG_EXTENSION in IMG_EXTENSIONS:
+            plt.savefig(
+                os.path.join(
+                    output_image_dir,
+                    f"log_likelihoods_{num_rate_categories}_{baseline}{IMG_EXTENSION}",
+                ),
+                dpi=300,
+            )
         plt.close()
     res = {
         "cherry_contact_squared_path": cherry_contact_squared_path,
@@ -1359,7 +1637,16 @@ def fig_pair_site_quantization_error(
     angstrom_cutoff: float = 8.0,
     minimum_distance_for_nontrivial_contact: int = 7,
     random_seed_simulation: int = 0,
+    simulated_data_dirs: Optional[Dict[str, str]] = None,
+    edge_or_cherry: str = CHERRYML_TYPE,
 ):
+    """
+    We show that for the coevolutionary model, we can estimate co-transition
+    rates accurately.
+
+    If `simulated_data_dirs` is provided, then the data simulation step will be
+    skipped.
+    """
     output_image_dir = (
         f"images/fig_pair_site_quantization_error__Q_2_name__{Q_2_name}"
     )
@@ -1422,7 +1709,9 @@ def fig_pair_site_quantization_error(
             return nondiag_mask_matrix
 
         if Q_2_name == "masked":
-            Q_2_path = learn_coevolution_model_on_pfam15k()["cherry_2_path"]
+            Q_2_path = learn_coevolution_model_on_pfam15k(
+                edge_or_cherry=edge_or_cherry,
+            )["cherry_2_path"]
             pi_2_path = os.path.join(
                 get_stationary_distribution(rate_matrix_path=Q_2_path)[
                     "output_probability_distribution_dir"
@@ -1432,15 +1721,16 @@ def fig_pair_site_quantization_error(
             coevolution_mask_path = "data/mask_matrices/aa_coevolution_mask.txt"
             mask_matrix = read_mask_matrix(coevolution_mask_path).to_numpy()
         elif Q_2_name.startswith("unmasked"):
-            Q_2_path = learn_coevolution_model_on_pfam15k()[
-                "cherry_2_no_mask_path"
-            ]
+            Q_2_path = learn_coevolution_model_on_pfam15k(
+                edge_or_cherry=edge_or_cherry,
+            )["cherry_2_no_mask_path"]
             pi_2_path = os.path.join(
                 get_stationary_distribution(rate_matrix_path=Q_2_path)[
                     "output_probability_distribution_dir"
                 ],
                 "result.txt",
             )
+            print(f"unmasked Q2_path: {Q_2_path}")
             coevolution_mask_path = None
             if Q_2_name == "unmasked-all-transitions":
                 mask_matrix = get_nondiag_mask_matrix(
@@ -1458,27 +1748,49 @@ def fig_pair_site_quantization_error(
                 )
                 assert mask_matrix.sum().sum() == 400 * 19 * 2
 
-        (
-            msa_dir,
-            contact_map_dir,
-            gt_msa_dir,
-            gt_tree_dir,
-            gt_site_rates_dir,
-            gt_likelihood_dir,
-        ) = simulate_ground_truth_data_coevolution(
-            pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
-            pfam_15k_pdb_dir=PFAM_15K_PDB_DIR,
-            minimum_distance_for_nontrivial_contact=mdnc,
-            angstrom_cutoff=angstrom_cutoff,
-            num_sequences=num_sequences,
-            families=families_all,
-            num_rate_categories=num_rate_categories,
-            num_processes=num_processes_tree_estimation,
-            random_seed=random_seed_simulation,
-            pi_2_path=pi_2_path,
-            Q_2_path=Q_2_path,
-            use_cpp_simulation_implementation=True,
-        )
+        if simulated_data_dirs is None:
+            (
+                msa_dir,
+                contact_map_dir,
+                gt_msa_dir,
+                gt_tree_dir,
+                gt_site_rates_dir,
+                gt_likelihood_dir,
+            ) = simulate_ground_truth_data_coevolution(
+                pfam_15k_msa_dir=PFAM_15K_MSA_DIR,
+                pfam_15k_pdb_dir=PFAM_15K_PDB_DIR,
+                minimum_distance_for_nontrivial_contact=mdnc,
+                angstrom_cutoff=angstrom_cutoff,
+                num_sequences=num_sequences,
+                families=families_all,
+                num_rate_categories=num_rate_categories,
+                num_processes=num_processes_tree_estimation,
+                random_seed=random_seed_simulation,
+                pi_2_path=pi_2_path,
+                Q_2_path=Q_2_path,
+                use_cpp_simulation_implementation=True,
+            )
+
+            logging_str = (
+                "Fig. 2ab simulated_data_dirs are:\n"
+                f"msa_dir = {msa_dir}\n"
+                f"contact_map_dir = {contact_map_dir}\n"
+                # f"gt_msa_dir = {gt_msa_dir}\n"
+                f"gt_tree_dir = {gt_tree_dir}\n"
+                f"gt_site_rates_dir = {gt_site_rates_dir}\n"
+                f"gt_likelihood_dir = {gt_likelihood_dir}\n"
+            )
+            # Uncomment to write out the simulated data dirs used
+            # with open("fig_2ab_simulated_data_dirs.txt", "w") as out_file:
+            #     out_file.write(logging_str)
+            print(logging_str)
+        else:
+            msa_dir = simulated_data_dirs["msa_dir"]
+            contact_map_dir = simulated_data_dirs["contact_map_dir"]
+            # gt_msa_dir = simulated_data_dirs["gt_msa_dir"]
+            gt_tree_dir = simulated_data_dirs["gt_tree_dir"]
+            gt_site_rates_dir = simulated_data_dirs["gt_site_rates_dir"]
+            gt_likelihood_dir = simulated_data_dirs["gt_likelihood_dir"]
 
         res_dict = coevolution_end_to_end_with_cherryml_optimizer(
             msa_dir=msa_dir,
@@ -1500,6 +1812,7 @@ def fig_pair_site_quantization_error(
             num_processes_tree_estimation=num_processes_tree_estimation,
             num_processes_counting=num_processes_counting,
             num_processes_optimization=num_processes_optimization,
+            edge_or_cherry=edge_or_cherry,
         )
 
         learned_rate_matrix_path = os.path.join(
@@ -1541,10 +1854,11 @@ def fig_pair_site_quantization_error(
                     % (q_errors[i], q_points[i])
                 )
             plt.tight_layout()
-            plt.savefig(
-                f"{output_image_dir}/log_log_plot_{i}_density_{density_plot}",
-                dpi=300,
-            )
+            for IMG_EXTENSION in IMG_EXTENSIONS:
+                plt.savefig(
+                    f"{output_image_dir}/log_log_plot_{i}_density_{density_plot}{IMG_EXTENSION}",
+                    dpi=300,
+                )
             plt.close()
 
     df = pd.DataFrame(
@@ -1575,15 +1889,16 @@ def fig_pair_site_quantization_error(
         grid=False,
     )
 
-    plt.savefig(
-        f"{output_image_dir}/violin_plot",
-        dpi=300,
-    )
+    for IMG_EXTENSION in IMG_EXTENSIONS:
+        plt.savefig(
+            f"{output_image_dir}/violin_plot{IMG_EXTENSION}",
+            dpi=300,
+        )
     plt.close()
 
 
 # Fig. 2c, 2d
-def fig_coevolution_vs_indep():
+def fig_coevolution_vs_indep(edge_or_cherry: str = CHERRYML_TYPE):
     output_image_dir = "images/fig_coevolution_vs_indep"
     if not os.path.exists(output_image_dir):
         os.makedirs(output_image_dir)
@@ -1608,7 +1923,6 @@ def fig_coevolution_vs_indep():
         round=2,
         **kwargs,
     ):
-
         fig, ax = plt.subplots(figsize=figsize)
         im = ax.imshow(inputMat, **kwargs)
         # show ticks and label them
@@ -1643,8 +1957,9 @@ def fig_coevolution_vs_indep():
             ax.set_title(title, fontsize=14)
         fig.tight_layout()
         if len(plot_file) > 0:
-            plt.savefig(plot_file, dpi=300)
-        plt.show()
+            for IMG_EXTENSION in IMG_EXTENSIONS:
+                plt.savefig(plot_file + f"{IMG_EXTENSION}", dpi=300)
+        plt.close()
 
     def heatmap(
         data,
@@ -1843,7 +2158,9 @@ def fig_coevolution_vs_indep():
         "R",
     ]
 
-    rate_matrices_dict = learn_coevolution_model_on_pfam15k()
+    rate_matrices_dict = learn_coevolution_model_on_pfam15k(
+        edge_or_cherry=edge_or_cherry,
+    )
 
     Q1_contact_x_Q1_contact__1_rates_path = rate_matrices_dict[
         "cherry_contact_squared_path"
@@ -2143,10 +2460,11 @@ def fig_site_rates_vs_number_of_contacts(
     plt.grid()
     plt.legend(fontsize=fontsize)
 
-    plt.savefig(
-        f"{output_image_dir}/site_rate_vs_num_contacts",
-        dpi=300,
-    )
+    for IMG_EXTENSION in IMG_EXTENSIONS:
+        plt.savefig(
+            f"{output_image_dir}/site_rate_vs_num_contacts{IMG_EXTENSION}",
+            dpi=300,
+        )
     plt.close()
 
     print(f"number_of_sites = {number_of_sites}")
@@ -2156,10 +2474,11 @@ def fig_site_rates_vs_number_of_contacts(
     # plt.xlabel("number of non-trivial contacts")
     # plt.ylabel("number of sites")
     # plt.plot(xs, number_of_sites)
-    # plt.savefig(
-    #     f"{output_image_dir}/num_contacts_distribution",
-    #     dpi=300,
-    # )
+    # for IMG_EXTENSION in IMG_EXTENSIONS:
+    #     plt.savefig(
+    #         f"{output_image_dir}/num_contacts_distribution{IMG_EXTENSION}",
+    #         dpi=300,
+    #     )
     # plt.close()
 
 
@@ -2264,7 +2583,6 @@ def _fig_standard_benchmark(
     msa_dir_train: str,
     msa_dir_test: str,
     output_image_dir: str,
-    cache_dir: str,
     single_site_rate_matrices: List[Tuple[str, str]],
     num_rate_categories: int = 4,
     num_processes_tree_estimation: int = NUM_PROCESSES_TREE_ESTIMATION,
@@ -2283,6 +2601,7 @@ def _fig_standard_benchmark(
     extra_evaluator_command_line_args: str = "",
     initial_tree_estimator_rate_matrix_path: str = "",
     figsize=(6.4, 4.8),
+    edge_or_cherry: str = CHERRYML_TYPE,
 ):
     if tree_estimator_name not in ["FastTree", "PhyML"]:
         raise ValueError(
@@ -2291,8 +2610,6 @@ def _fig_standard_benchmark(
 
     if not os.path.exists(output_image_dir):
         os.makedirs(output_image_dir)
-
-    caching.set_cache_dir(cache_dir)
 
     families_train = get_families(msa_dir_train)
     families_test = get_families(msa_dir_test)
@@ -2306,7 +2623,7 @@ def _fig_standard_benchmark(
                 "num_processes_tree_estimation",
                 "num_processes_optimization",
                 "num_processes_counting",
-            ]
+            ],
         )
         def _fig_standard_benchmark__lg_end_to_end_with_cherryml_optimizer(
             msa_dir: str,
@@ -2319,6 +2636,7 @@ def _fig_standard_benchmark(
             num_iterations: int,
             tree_estimator_name: str,
             extra_tree_estimator_command_line_args: str,
+            edge_or_cherry: str = CHERRYML_TYPE,
         ) -> Dict:
             """
             Wrapper around lg_end_to_end_with_cherryml_optimizer to speed
@@ -2351,6 +2669,7 @@ def _fig_standard_benchmark(
                 num_processes_optimization=num_processes_optimization,
                 num_processes_counting=num_processes_counting,
                 num_iterations=num_iterations,
+                edge_or_cherry=edge_or_cherry,
             )
 
         cherry_res_dict = _fig_standard_benchmark__lg_end_to_end_with_cherryml_optimizer(  # noqa
@@ -2364,6 +2683,7 @@ def _fig_standard_benchmark(
             num_iterations=num_iterations,
             tree_estimator_name=tree_estimator_name,
             extra_tree_estimator_command_line_args=extra_tree_estimator_command_line_args,  # noqa
+            edge_or_cherry=edge_or_cherry,
         )
         cherry_path = cherry_res_dict["learned_rate_matrix_path"]
 
@@ -2376,7 +2696,7 @@ def _fig_standard_benchmark(
         ) as profiling_file:
             profiling_file.write(cherry_res_dict["profiling_str"])
         single_site_rate_matrices.append(
-            ("LG w/CherryML\n(re-estimated)", cherry_path)
+            ("LG w/ CherryML\n(re-estimated)", cherry_path)
         )
 
     if add_em:
@@ -2461,7 +2781,24 @@ def _fig_standard_benchmark(
             "w",
         ) as profiling_file:
             profiling_file.write(em_res_dict["profiling_str"])
-        single_site_rate_matrices.append(("LG w/EM\n(re-estimated)", em_path))
+        single_site_rate_matrices.append(("LG w/ EM\n(re-estimated)", em_path))
+
+    if add_em and add_cherryml:
+        plot_rate_matrices_against_each_other(
+            read_rate_matrix(em_path).to_numpy(),
+            read_rate_matrix(cherry_path).to_numpy(),
+            y_true_name="EM",
+            y_pred_name="CherryML",
+            alpha=1.0,
+        )
+        for IMG_EXTENSION in IMG_EXTENSIONS:
+            plt.savefig(
+                output_image_dir
+                + "/EM_vs_CherryML_log_log_plot"
+                + IMG_EXTENSION,
+                dpi=300,
+            )
+        plt.close()
 
     log_likelihoods = []  # type: List[Tuple[str, float]]
 
@@ -2588,13 +2925,14 @@ def _fig_standard_benchmark(
             img_path += f"_num_iterations_{num_iterations}"
         if add_em:
             img_path += "_EM" + "_" + extra_em_command_line_args.split(".")[-1]
-        plt.savefig(
-            os.path.join(
-                output_image_dir,
-                img_path,
-            ),
-            dpi=300,
-        )
+        for IMG_EXTENSION in IMG_EXTENSIONS:
+            plt.savefig(
+                os.path.join(
+                    output_image_dir,
+                    img_path + f"{IMG_EXTENSION}",
+                ),
+                dpi=300,
+            )
         plt.close()
 
 
@@ -2656,7 +2994,7 @@ def _create_qmaker_msa_dir(
             )
             assert start <= end
             loci.append((start, end))
-    for (start, end) in loci:
+    for start, end in loci:
         msa_locus = {
             seq_name: seq[start - 1 : end] for (seq_name, seq) in msa.items()
         }
@@ -2740,6 +3078,48 @@ def _get_qmaker_5_clades_msa_dirs() -> Dict[str, str]:
     return res
 
 
+@caching.cached()
+def report_dataset_statistics_str(
+    msa_dir: str, families: Optional[List[str]] = None
+) -> str:
+    """
+    Reports statistics on the training data:
+    - Total number of MSAs
+    - Number of sequences per MSA.
+    - Number of sites per MSA.
+    - Total number of residues.
+    """
+    if families is None:
+        families = get_families(msa_dir)
+    number_of_sites = read_pickle(
+        get_msas_number_of_sites__cached(
+            msa_dir=msa_dir,
+            families=families,
+        )["output_dir"]
+        + "/result.txt"
+    )
+    number_of_sequences = read_pickle(
+        get_msas_number_of_sequences__cached(
+            msa_dir=msa_dir,
+            families=families,
+        )["output_dir"]
+        + "/result.txt"
+    )
+    number_of_residues = read_pickle(
+        get_msas_number_of_residues__cached(
+            msa_dir=msa_dir,
+            families=families,
+            exclude_gaps=True,
+        )["output_dir"]
+        + "/result.txt"
+    )
+    res = f"Number of MSAs = {len(families)}\n"
+    res += f"Number of sequences: {number_of_sequences}\n"
+    res += f"Number of sites: {number_of_sites}\n"
+    res += f"Number of residues: {number_of_residues}\n"
+    return res
+
+
 # Supp. Fig.
 def fig_qmaker(
     clade_name: str,
@@ -2754,16 +3134,28 @@ def fig_qmaker(
     extra_evaluator_command_line_args: str = "",
     initial_tree_estimator_rate_matrix_path: str = get_lg_path(),
     num_processes_tree_estimation: int = NUM_PROCESSES_TREE_ESTIMATION,
+    edge_or_cherry: str = CHERRYML_TYPE,
 ):
     """
     We show on the clades datasets that CherryML performs comparatively to EM
     while being faster, even when taking into account tree estimation.
     """
+    caching.set_cache_dir("_cache_benchmarking_qmaker")
 
     qmaker_data_dirs = _get_qmaker_5_clades_msa_dirs()
     msa_dir_train = qmaker_data_dirs[f"{clade_name}_train"]
     msa_dir_test = qmaker_data_dirs[f"{clade_name}_test"]
     del qmaker_data_dirs
+
+    # Print dataset statistics
+    dataset_statistics = report_dataset_statistics_str(
+        msa_dir=msa_dir_train,
+    )
+    print(f"Dataset statistics for {clade_name}, TRAIN:\n{dataset_statistics}")
+    dataset_statistics = report_dataset_statistics_str(
+        msa_dir=msa_dir_test,
+    )
+    print(f"Dataset statistics for {clade_name}, TEST:\n{dataset_statistics}")
 
     single_site_rate_matrices = [
         ("JTT", get_jtt_path()),
@@ -2775,7 +3167,6 @@ def fig_qmaker(
         msa_dir_train=msa_dir_train,
         msa_dir_test=msa_dir_test,
         output_image_dir=f"images/fig_qmaker/{clade_name}",
-        cache_dir="_cache_benchmarking_qmaker",
         single_site_rate_matrices=single_site_rate_matrices,
         num_families_test=num_families_test,
         add_cherryml=add_cherryml,
@@ -2790,4 +3181,5 @@ def fig_qmaker(
         initial_tree_estimator_rate_matrix_path=initial_tree_estimator_rate_matrix_path,  # noqa
         figsize=(6.4, 4.8),
         num_processes_tree_estimation=num_processes_tree_estimation,
+        edge_or_cherry=edge_or_cherry,
     )

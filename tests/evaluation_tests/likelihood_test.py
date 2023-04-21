@@ -1039,7 +1039,7 @@ class Test_real_data_pair_site_medium(unittest.TestCase):
         # universal rate of 1
         tree_scaled = Tree()
         tree_scaled.add_nodes(tree.nodes())
-        for (u, v, length) in tree.edges():
+        for u, v, length in tree.edges():
             tree_scaled.add_edge(u, v, length * median_site_rate)
         site_rates_scaled = [
             site_rate / median_site_rate for site_rate in site_rates
@@ -1116,7 +1116,7 @@ class Test_real_data_pair_site_large(unittest.TestCase):
         # universal rate of 1
         tree_scaled = Tree()
         tree_scaled.add_nodes(tree.nodes())
-        for (u, v, length) in tree.edges():
+        for u, v, length in tree.edges():
             tree_scaled.add_edge(u, v, length * median_site_rate)
         site_rates_scaled = [
             site_rate / median_site_rate for site_rate in site_rates
@@ -1194,7 +1194,7 @@ class Test_real_data_pair_site_huge(unittest.TestCase):
         # universal rate of 1
         tree_scaled = Tree()
         tree_scaled.add_nodes(tree.nodes())
-        for (u, v, length) in tree.edges():
+        for u, v, length in tree.edges():
             tree_scaled.add_edge(u, v, length * median_site_rate)
         site_rates_scaled = [
             site_rate / median_site_rate for site_rate in site_rates
@@ -1404,7 +1404,7 @@ class Test_real_data_pair_site_medium_multiprocess(unittest.TestCase):
         # universal rate of 1
         tree_scaled = Tree()
         tree_scaled.add_nodes(tree.nodes())
-        for (u, v, length) in tree.edges():
+        for u, v, length in tree.edges():
             tree_scaled.add_edge(u, v, length * median_site_rate)
         site_rates_scaled = [
             site_rate / median_site_rate for site_rate in site_rates
@@ -1487,7 +1487,7 @@ class Test_real_data_pair_site_large_multiprocess(unittest.TestCase):
         # universal rate of 1
         tree_scaled = Tree()
         tree_scaled.add_nodes(tree.nodes())
-        for (u, v, length) in tree.edges():
+        for u, v, length in tree.edges():
             tree_scaled.add_edge(u, v, length * median_site_rate)
         site_rates_scaled = [
             site_rate / median_site_rate for site_rate in site_rates
@@ -1570,7 +1570,7 @@ class Test_real_data_pair_site_huge_multiprocess(unittest.TestCase):
         # universal rate of 1
         tree_scaled = Tree()
         tree_scaled.add_nodes(tree.nodes())
-        for (u, v, length) in tree.edges():
+        for u, v, length in tree.edges():
             tree_scaled.add_edge(u, v, length * median_site_rate)
         site_rates_scaled = [
             site_rate / median_site_rate for site_rate in site_rates
@@ -1651,7 +1651,7 @@ class Test_real_data_pair_site_huge_1_cat(unittest.TestCase):
         # universal rate of 1
         tree_scaled = Tree()
         tree_scaled.add_nodes(tree.nodes())
-        for (u, v, length) in tree.edges():
+        for u, v, length in tree.edges():
             tree_scaled.add_edge(u, v, length * median_site_rate)
         site_rates_scaled = [
             site_rate / median_site_rate for site_rate in site_rates
@@ -1729,7 +1729,7 @@ class Test_real_data_pair_site_huge_2_cat(unittest.TestCase):
         # universal rate of 1
         tree_scaled = Tree()
         tree_scaled.add_nodes(tree.nodes())
-        for (u, v, length) in tree.edges():
+        for u, v, length in tree.edges():
             tree_scaled.add_edge(u, v, length * median_site_rate)
         site_rates_scaled = [
             site_rate / median_site_rate for site_rate in site_rates
@@ -1807,7 +1807,7 @@ class Test_real_data_pair_site_huge_4_cat(unittest.TestCase):
         # universal rate of 1
         tree_scaled = Tree()
         tree_scaled.add_nodes(tree.nodes())
-        for (u, v, length) in tree.edges():
+        for u, v, length in tree.edges():
             tree_scaled.add_edge(u, v, length * median_site_rate)
         site_rates_scaled = [
             site_rate / median_site_rate for site_rate in site_rates

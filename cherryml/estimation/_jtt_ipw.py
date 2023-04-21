@@ -27,6 +27,7 @@ _init_logger()
 
 @caching.cached_computation(
     output_dirs=["output_rate_matrix_dir"],
+    write_extra_log_files=True,
 )
 def jtt_ipw(
     count_matrices_path: str,

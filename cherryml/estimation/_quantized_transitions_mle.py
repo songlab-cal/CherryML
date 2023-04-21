@@ -35,6 +35,7 @@ _init_logger()
 @caching.cached_computation(
     output_dirs=["output_rate_matrix_dir"],
     exclude_args=["device", "OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS"],
+    write_extra_log_files=True,
 )
 def quantized_transitions_mle(
     count_matrices_path: str,

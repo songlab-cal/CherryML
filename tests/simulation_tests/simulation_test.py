@@ -126,7 +126,7 @@ class TestSimulation(unittest.TestCase):
                                 for i in sites_indep:
                                     state = seq[i]
                                     C_1[state] += 1
-                                for (i, j) in contacting_pairs:
+                                for i, j in contacting_pairs:
                                     state = seq[i] + seq[j]
                                     C_2[state] += 1
 
@@ -227,7 +227,7 @@ class TestSimulation(unittest.TestCase):
                                 for i in sites_indep:
                                     state = seq[i]
                                     C_1[state] += 1
-                                for (i, j) in contacting_pairs:
+                                for i, j in contacting_pairs:
                                     state = seq[i] + seq[j]
                                     C_2[state] += 1
 

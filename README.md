@@ -222,6 +222,14 @@ The CherryML API provides extensive functionality through additional flags, whic
   --tree_estimator_name TREE_ESTIMATOR_NAME
                         Tree estimator to use. Can be either 'FastTree' or
                         'PhyML'. (default: FastTree)
+  --cherryml_type CHERRYML_TYPE
+                        Whether to use 'cherry' or 'cherry++'. Here, 'cherry'
+                        uses just the cherries in the trees, whereas
+                        'cherry++' iteratively picks cherries until at most
+                        one unpaired sequence remains. Thus, 'cherry++' uses
+                        more of the available data. Empirically, 'cherry++'
+                        shows increased statistical efficiency at essentially
+                        no runtime cost. (default: cherry++)
 ```
 
 # Evaluation API
@@ -400,9 +408,9 @@ sys	0m17.869s
 Evaluation took 3 minutes wall-clock time on the same computer. The output is:
 
 ```
-Total log-likelihood: -2042877.196799998
+Total log-likelihood: -2042731.0602000006
 Total number of sites: 101064
-Average log-likelihood per site: -20.21369821895035
+Average log-likelihood per site: -20.21225223818571
 [...]
 ```
 
@@ -434,7 +442,7 @@ Average log-likelihood per site: -20.50697311703476
 [...]
 ```
 
-As we can see, the de-novo estimated rate matrix outperforms the LG rate matrix, with an average increase in log-likelihood per site of `0.293` (1.4%).
+As we can see, the de-novo estimated rate matrix outperforms the LG rate matrix, with an average increase in log-likelihood per site of `0.295` (1.4%).
 
 # Reproducing all figures in our paper
 
@@ -517,6 +525,8 @@ cp /opt/xrate/download/xrate/bin/xrate /opt/xrate/bin/xrate
 popd
 ```
 
+Finally, make sure you have `open-mpi` installed. Installation instructions may depend on the system. For example, for Mac, `brew install open-mpi` should work.
+
 Once you have met all the requirements, run the fast tests to make sure they pass:
 
 ```
@@ -540,6 +550,10 @@ https://files.ipd.uw.edu/pub/trRosetta/training_set.tar.gz
 After downloading and untarring the data into this repository, rename the `training_set` directory to `input_data`.
 
 You do not need to worry about downloading the data from the LG paper - we will download this automatically for you. Similarly, we will download the QMaker datasets.
+
+## Optional: Download simulated datasets
+
+Our simulated datasets are available on Zenodo at https://zenodo.org/record/7830072#.ZDnPBuzMKTc . If you do not download them, they will be simulated again (not a big  deal at all). If you _do_ download them and want to use them, make sure to change the variables in `reproduce_all_figures.py` at the top (specifically, `simulated_data_dirs_fig_1d`, `simulated_data_dirs_fig_2ab`, `simulated_data_dirs_fig_1bc`) to point to the downloaded data. We think these datasets might be of independent interest (beyond our specific benchmarks), which is why we make them available on Zenodo.
 
 ## Run code to reproduce all figures
 

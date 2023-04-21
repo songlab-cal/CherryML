@@ -275,6 +275,7 @@ def _map_func(args: Dict):
         "cpp_command_line_suffix",
     ],
     output_dirs=["output_msa_dir"],
+    write_extra_log_files=True,
 )
 def simulate_msas(
     tree_dir: str,

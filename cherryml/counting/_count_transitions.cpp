@@ -1,5 +1,5 @@
 #include <vector>
-#include<string>
+#include <string>
 #include <sstream> 
 #include <algorithm>
 #include <iostream>
@@ -9,6 +9,7 @@
 #include <map>
 #include <utility> 
 #include <chrono>
+#include <assert.h>
 
 #include <mpi.h>
 
@@ -312,6 +313,82 @@ bool all_children_are_leafs(Tree* tree, const vector<adj_pair_t> & children){
     return true;
 }
 
+pair<string, double> _dfs(
+    double* count_matrices_data,
+    string node,
+    Tree* tree,
+    map<string, string>* msa,
+    const vector<double> & site_rates,
+    const unordered_set<string> & amino_acids,
+    int* total_pairs
+){
+    // """
+    // Pair up leaves under me.
+
+    // Return a single unpaired leaf and its distance, it such exists. Else ("", -1).
+    // """
+    if(tree->is_leaf(node)){
+        return make_pair(node, 0.0f);
+    }
+    vector<string> unmatched_leaves_under;
+    vector<double> distances_under;
+    for (adj_pair_t& edge : tree->children(node)){
+        string child = edge.node;
+        double branch_length = edge.length;
+        string child_seq = (*msa)[child];
+        pair<string, double> maybe_unmatched_leaf_and_distance = _dfs(
+            count_matrices_data,
+            child,
+            tree,
+            msa,
+            site_rates,
+            amino_acids,
+            total_pairs
+        );
+        string maybe_unmatched_leaf = maybe_unmatched_leaf_and_distance.first;
+        double maybe_distance = maybe_unmatched_leaf_and_distance.second;
+        if(maybe_distance >= -0.5){
+            unmatched_leaves_under.push_back(maybe_unmatched_leaf);
+            distances_under.push_back(maybe_distance + branch_length);
+        }
+    }
+    assert(unmatched_leaves_under.size() == distances_under.size());
+    int index = 0;
+
+    while(index + 1 <= int(unmatched_leaves_under.size()) - 1){
+        (*total_pairs) += 1;
+        string leaf_1 = unmatched_leaves_under[index];
+        double branch_length_1 = distances_under[index];
+        string leaf_2 = unmatched_leaves_under[index + 1];
+        double branch_length_2 = distances_under[index + 1];
+        // NOTE: Copy-pasta from below ("cherry" case)...
+        string leaf_seq_1 = (*msa)[leaf_1];
+        string leaf_seq_2 = (*msa)[leaf_2];
+        double branch_length_total = branch_length_1 + branch_length_2;
+        for (int j=0; j<int(leaf_seq_1.size()); j++){
+            int q_idx = quantization_idx(branch_length_total * site_rates[j], quantization_points);
+            if (q_idx != -1){
+                string start_state = string{leaf_seq_1[j]};
+                string end_state = string{leaf_seq_2[j]};
+                if (
+                    amino_acids.find(string{leaf_seq_1[j]}) != amino_acids.end()
+                    && amino_acids.find(string{leaf_seq_2[j]}) != amino_acids.end()
+                ){
+                    count_matrices_data[q_idx * count_matrix_num_entries + aa_to_int[start_state] * count_matrix_size + aa_to_int[end_state]] += 0.5;
+                    count_matrices_data[q_idx * count_matrix_num_entries + aa_to_int[end_state] * count_matrix_size + aa_to_int[start_state]] += 0.5;
+                }
+            }
+        }
+
+        index += 2;
+    }
+    if(unmatched_leaves_under.size() % 2 == 0){
+        return make_pair("", -1.0);
+    } else {
+        return make_pair(unmatched_leaves_under[int(unmatched_leaves_under.size())-1], distances_under[int(distances_under.size())-1]);
+    }
+}
+
 vector<count_matrix> _map_func(
     const string & tree_dir,
     const string & msa_dir,
@@ -356,48 +433,72 @@ vector<count_matrix> _map_func(
         if (PROFILE) time_compute_contacting_pairs += std::chrono::duration<double>(end_ - start_).count();
 
         if (PROFILE) start_ = std::chrono::high_resolution_clock::now();
-        for (string node : tree->nodes()){
-            if (edge_or_cherry == "edge") {
-                string node_seq = (*msa)[node];
-                for (adj_pair_t& edge : tree->children(node)){
-                    string child = edge.node;
-                    double branch_length = edge.length;
-                    string child_seq = (*msa)[child];
-                    for (int j = 0; j < int(child_seq.size()); j++){
-                        int q_idx = quantization_idx(branch_length * site_rates[j], quantization_points);
-                        if (q_idx != -1){
-                            string start_state = string{node_seq[j]};
-                            string end_state = string{child_seq[j]};
-                            if (
-                                amino_acids.find(string{node_seq[j]}) != amino_acids.end()
-                                && amino_acids.find(string{child_seq[j]}) != amino_acids.end()
-                            ){
-                                count_matrices_data[q_idx * count_matrix_num_entries + aa_to_int[start_state] * count_matrix_size + aa_to_int[end_state]] += 1.0;
+        if (edge_or_cherry == "cherry++"){
+            int total_pairs = 0;
+            _dfs(
+                count_matrices_data,
+                tree->root(),
+                tree,
+                msa,
+                site_rates,
+                amino_acids,
+                & total_pairs
+            );
+            int num_leaves = 0;
+            for(auto node: tree->nodes()){
+                if(tree->is_leaf(node)){
+                    num_leaves++;
+                }
+            }
+            assert(total_pairs == int(num_leaves / 2));
+        } else {
+            for (string node : tree->nodes()){
+                if (edge_or_cherry == "edge") {
+                    string node_seq = (*msa)[node];
+                    for (adj_pair_t& edge : tree->children(node)){
+                        string child = edge.node;
+                        double branch_length = edge.length;
+                        string child_seq = (*msa)[child];
+                        for (int j = 0; j < int(child_seq.size()); j++){
+                            int q_idx = quantization_idx(branch_length * site_rates[j], quantization_points);
+                            if (q_idx != -1){
+                                string start_state = string{node_seq[j]};
+                                string end_state = string{child_seq[j]};
+                                if (
+                                    amino_acids.find(string{node_seq[j]}) != amino_acids.end()
+                                    && amino_acids.find(string{child_seq[j]}) != amino_acids.end()
+                                ){
+                                    count_matrices_data[q_idx * count_matrix_num_entries + aa_to_int[start_state] * count_matrix_size + aa_to_int[end_state]] += 1.0;
+                                }
                             }
                         }
                     }
-                }
-            } else { // cherry
-                vector<adj_pair_t> children = tree->children(node);
-                if (children.size() == 2 && all_children_are_leafs(tree, children)){
-                    string leaf_1 = children[0].node;
-                    double branch_length_1 = children[0].length;
-                    string leaf_2 = children[1].node;
-                    double branch_length_2 = children[1].length;
-                    string leaf_seq_1 = (*msa)[leaf_1];
-                    string leaf_seq_2 = (*msa)[leaf_2];
-                    double branch_length_total = branch_length_1 + branch_length_2;
-                    for (int j=0; j<int(leaf_seq_1.size()); j++){
-                        int q_idx = quantization_idx(branch_length_total * site_rates[j], quantization_points);
-                        if (q_idx != -1){
-                            string start_state = string{leaf_seq_1[j]};
-                            string end_state = string{leaf_seq_2[j]};
-                            if (
-                                amino_acids.find(string{leaf_seq_1[j]}) != amino_acids.end()
-                                && amino_acids.find(string{leaf_seq_2[j]}) != amino_acids.end()
-                            ){
-                                count_matrices_data[q_idx * count_matrix_num_entries + aa_to_int[start_state] * count_matrix_size + aa_to_int[end_state]] += 0.5;
-                                count_matrices_data[q_idx * count_matrix_num_entries + aa_to_int[end_state] * count_matrix_size + aa_to_int[start_state]] += 0.5;
+                } else { // cherry
+                    if(edge_or_cherry != "cherry"){
+                        std::cerr << "edge_or_cherry = " << edge_or_cherry << std::endl;
+                    }
+                    assert(edge_or_cherry == "cherry");
+                    vector<adj_pair_t> children = tree->children(node);
+                    if (children.size() == 2 && all_children_are_leafs(tree, children)){
+                        string leaf_1 = children[0].node;
+                        double branch_length_1 = children[0].length;
+                        string leaf_2 = children[1].node;
+                        double branch_length_2 = children[1].length;
+                        string leaf_seq_1 = (*msa)[leaf_1];
+                        string leaf_seq_2 = (*msa)[leaf_2];
+                        double branch_length_total = branch_length_1 + branch_length_2;
+                        for (int j=0; j<int(leaf_seq_1.size()); j++){
+                            int q_idx = quantization_idx(branch_length_total * site_rates[j], quantization_points);
+                            if (q_idx != -1){
+                                string start_state = string{leaf_seq_1[j]};
+                                string end_state = string{leaf_seq_2[j]};
+                                if (
+                                    amino_acids.find(string{leaf_seq_1[j]}) != amino_acids.end()
+                                    && amino_acids.find(string{leaf_seq_2[j]}) != amino_acids.end()
+                                ){
+                                    count_matrices_data[q_idx * count_matrix_num_entries + aa_to_int[start_state] * count_matrix_size + aa_to_int[end_state]] += 0.5;
+                                    count_matrices_data[q_idx * count_matrix_num_entries + aa_to_int[end_state] * count_matrix_size + aa_to_int[start_state]] += 0.5;
+                                }
                             }
                         }
                     }
