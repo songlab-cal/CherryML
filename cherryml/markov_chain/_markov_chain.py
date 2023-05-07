@@ -285,3 +285,18 @@ def get_lg_x_lg_stationary_path():
 
 def get_aa_coevolution_mask_path():
     return "data/mask_matrices/aa_coevolution_mask.txt"
+
+
+def get_Q2_path():
+    """
+    Path to 400 x 400 coevolutionary model from CherryML paper.
+    """
+    return "data/rate_matrices/coevolution/Q2.txt"
+
+
+def get_Q2_stationary_path():
+    """
+    Path to stationary distribution of 400 x 400 coevolutionary model from
+    CherryML paper.
+    """
+    return "data/rate_matrices/coevolution/Q2_stationary.txt"
