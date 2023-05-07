@@ -263,6 +263,10 @@ def get_wag_path():
     return "data/rate_matrices/wag.txt"
 
 
+def get_wag_stationary_path():
+    return "data/rate_matrices/wag_stationary.txt"
+
+
 def get_lg_path():
     return "data/rate_matrices/lg.txt"
 

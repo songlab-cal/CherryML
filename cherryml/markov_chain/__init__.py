@@ -15,6 +15,7 @@ from ._markov_chain import (
     get_lg_x_lg_path,
     get_lg_x_lg_stationary_path,
     get_wag_path,
+    get_wag_stationary_path,
     matrix_exponential,
     normalized,
     wag_matrix,
