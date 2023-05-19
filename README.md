@@ -12,6 +12,14 @@ This package also enables seamless reproduction of all results in our paper.
 
 For a quick demonstration of an end-to-end application of CherryML to real data, please check out the section "[End-to-end worked-out application: plant dataset](#end-to-end-worked-out-application:-plant-dataset)".
 
+# Citation
+
+If you use `cherryml` in your work, please cite:
+
+```
+Prillo, S., Deng, Y., Boyeau, P., Li, X., Chen, P.-Y., Song, Y.S.  (2023) CherryML: Scalable maximum likelihood estimation of phylogenetic models. Nature Methods, in press.
+```
+
 # Demo: CherryML applied to the LG model (runtime on a normal computer: 1 - 5 minutes)
 
 The following command learns a rate matrix from a set of MSAs, trees, and site rates (try it out!):
