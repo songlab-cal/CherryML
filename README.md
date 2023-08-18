@@ -1,4 +1,13 @@
+<!-- <div style="display: flex; align-items: center;">
+    <img src="docs/_static/logo_1.png" width="50" height="50" style="margin-bottom: 20px;">
+    <h1 style="margin-left: 10px;">CherryML: Scalable Maximum Likelihood Estimation of Phylogenetic Models</h1>
+</div> -->
+
 # CherryML: Scalable Maximum Likelihood Estimation of Phylogenetic Models
+
+![Cover](docs/_static/cover.jpeg)
+
+
 
 This package implements the CherryML method as applied to:
 1. The classical LG model of amino acid evolution with site rate variation [Le and Gascuel 2008] (involving a $20 \times 20$ rate matrix), as well as
