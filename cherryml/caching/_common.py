@@ -7,7 +7,7 @@ from typing import List
 
 
 def _init_logger():
-    logger = logging.getLogger("caching")
+    logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
     fmt_str = "[%(asctime)s] - %(name)s - %(levelname)s - %(message)s"
     formatter = logging.Formatter(fmt_str)
@@ -18,7 +18,7 @@ def _init_logger():
 
 
 _init_logger()
-logger = logging.getLogger("caching")
+logger = logging.getLogger(__name__)
 
 _CACHE_DIR = None
 _USE_HASH = True
@@ -39,7 +39,7 @@ def get_cache_dir():
 
 
 def set_log_level(log_level: int):
-    logger = logging.getLogger("caching")
+    logger = logging.getLogger(__name__)
     logger.setLevel(level=log_level)
 
 

@@ -19,7 +19,7 @@ from ._common import name_internal_nodes, translate_tree
 
 
 def _init_logger():
-    logger = logging.getLogger("phylogeny_estimation.phyml")
+    logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
     fmt_str = "[%(asctime)s] - %(name)s - %(levelname)s - %(message)s"
     formatter = logging.Formatter(fmt_str)
@@ -55,7 +55,7 @@ def _install_phyml() -> str:
     """
     if _phyml_is_installed_on_system():
         return "phyml"
-    logger = logging.getLogger("phylo_correction.phyml")
+    logger = logging.getLogger(__name__)
     logger.info("Checking for PhyML ...")
     dir_path = os.path.dirname(os.path.realpath(__file__))
     phyml_path = os.path.join(dir_path, "phyml_github")
@@ -287,7 +287,7 @@ def phyml(
     output_site_rates_dir: Optional[str] = None,
     output_likelihood_dir: Optional[str] = None,
 ):
-    logger = logging.getLogger("phylogeny_estimation.phyml")
+    logger = logging.getLogger(__name__)
 
     if not os.path.exists(output_tree_dir):
         os.makedirs(output_tree_dir)
