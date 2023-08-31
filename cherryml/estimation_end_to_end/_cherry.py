@@ -198,6 +198,7 @@ def lg_end_to_end_with_cherryml_optimizer(
     sites_subset_dir: Optional[str] = None,
     tree_dir: Optional[str] = None,
     site_rates_dir: Optional[str] = None,
+    alphabet: List[str] = get_amino_acids(),
 ) -> Dict:
     """
     LG pipeline with CherryML optimizer.
@@ -292,7 +293,7 @@ def lg_end_to_end_with_cherryml_optimizer(
             msa_dir=msa_dir,
             site_rates_dir=tree_estimator_output_dirs["output_site_rates_dir"],
             families=families,
-            amino_acids=get_amino_acids(),
+            amino_acids=alphabet[:],
             quantization_points=quantization_points,
             edge_or_cherry=edge_or_cherry,
             num_processes=num_processes_counting,
@@ -402,6 +403,7 @@ def coevolution_end_to_end_with_cherryml_optimizer(
     optimizer_initialization: str = "jtt-ipw",
     use_maximal_matching: bool = True,
     tree_dir: Optional[str] = None,
+    alphabet: List[str] = get_amino_acids(),
 ) -> Dict:
     """
     Cherry estimator for coevolution.
@@ -456,7 +458,7 @@ def coevolution_end_to_end_with_cherryml_optimizer(
             msa_dir=msa_dir,
             contact_map_dir=contact_map_dir,
             families=families,
-            amino_acids=get_amino_acids(),
+            amino_acids=alphabet[:],
             quantization_points=quantization_points,
             edge_or_cherry=edge_or_cherry,
             minimum_distance_for_nontrivial_contact=mdnc,
