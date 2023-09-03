@@ -15,7 +15,7 @@ from ._common import (
     get_use_hash,
 )
 
-logger = logging.getLogger("caching")
+logger = logging.getLogger(__name__)
 
 
 def secure_parallel_output(output_dir: str, parallel_arg: str) -> None:
