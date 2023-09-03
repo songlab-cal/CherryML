@@ -14,7 +14,7 @@ from ._common import (
     get_use_hash,
 )
 
-logger = logging.getLogger("__name__")
+logger = logging.getLogger(__name__)
 
 
 def cached(
