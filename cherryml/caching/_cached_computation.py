@@ -15,7 +15,7 @@ from ._common import (
     get_use_hash,
 )
 
-logger = logging.getLogger("caching")
+logger = logging.getLogger('.'.join(__name__.split('.')[:-1]))
 
 
 def _get_func_binding(
