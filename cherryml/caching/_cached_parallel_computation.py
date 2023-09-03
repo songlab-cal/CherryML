@@ -15,7 +15,7 @@ from ._common import (
     get_use_hash,
 )
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('.'.join(__name__.split('.')[:-1]))
 
 
 def secure_parallel_output(output_dir: str, parallel_arg: str) -> None:
