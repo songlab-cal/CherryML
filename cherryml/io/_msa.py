@@ -69,10 +69,6 @@ def read_msa(
         seq_name = lines[2 * i][1:]
         seq = lines[2 * i + 1]
         msa[seq_name] = seq
-    if len(set([len(seq) for seq in msa.values()])) != 1:
-        raise Exception(
-            f"MSA at {msa_path}: All sequences should have the same length."
-        )
     return msa
 
 

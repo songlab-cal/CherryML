@@ -5,15 +5,9 @@ from functools import wraps
 from inspect import signature
 from typing import List
 
-from ._common import (
-    CacheUsageError,
-    _get_func_caching_dir,
-    _get_mode,
-    _validate_decorator_args,
-    get_cache_dir,
-    get_read_only,
-    get_use_hash,
-)
+from ._common import (CacheUsageError, _get_func_caching_dir, _get_mode,
+                      _validate_decorator_args, get_cache_dir, get_read_only,
+                      get_use_hash)
 
 logger = logging.getLogger('.'.join(__name__.split('.')[:-1]))
 
@@ -33,6 +27,10 @@ def _get_parallel_func_binding(
     args,
     kwargs,
 ):
+    """
+    Note: does not exclude exclude_args_if_default, which is fine since this is
+    used just for logging purposes and nothing else.
+    """
     args = deepcopy(args)
     kwargs = deepcopy(kwargs)
     unhashed_args = exclude_args + [parallel_arg] + output_dirs
@@ -47,6 +45,7 @@ def _get_parallel_func_binding(
 def _get_parallel_func_caching_dir_aux(
     func,
     exclude_args: List[str],
+    exclude_args_if_default: List[str],
     parallel_arg: str,
     output_dirs: List[str],
     args,
@@ -69,9 +68,22 @@ def _get_parallel_func_caching_dir_aux(
     for output_dir in output_dirs:
         kwargs[output_dir] = None
 
+    unhashed_args = exclude_args + [parallel_arg] + output_dirs
+    # Now add the exclude_args_if_default
+    s = signature(func)
+    binding = s.bind(*args, **kwargs)
+    binding.apply_defaults()
+    for (arg, val) in binding.arguments.items():
+        if arg in exclude_args_if_default:
+            p = s.parameters[arg]
+            default = p.default
+            if val == default:
+                logger.info(f"Excluding {arg} because it has default value {val}.")
+                unhashed_args.append(arg)
+
     return _get_func_caching_dir(
         func=func,
-        unhashed_args=exclude_args + [parallel_arg] + output_dirs,
+        unhashed_args=unhashed_args,
         args=args,
         kwargs=kwargs,
         cache_dir=cache_dir,
@@ -82,6 +94,7 @@ def _get_parallel_func_caching_dir_aux(
 def _maybe_write_usefull_stuff_cached_parallel_computation(
     func,
     exclude_args,
+    exclude_args_if_default,
     parallel_arg,
     output_dirs,
     args,
@@ -105,6 +118,7 @@ def _maybe_write_usefull_stuff_cached_parallel_computation(
     unhashed_func_caching_dir = _get_parallel_func_caching_dir_aux(
         func,
         exclude_args,
+        exclude_args_if_default,
         parallel_arg,
         output_dirs,
         args,
@@ -148,6 +162,7 @@ def _maybe_write_usefull_stuff_cached_parallel_computation(
 def cached_parallel_computation(
     parallel_arg: str,
     exclude_args: List = [],
+    exclude_args_if_default: List = [],
     output_dirs: List = [],
     write_extra_log_files: bool = False,
 ):
@@ -208,6 +223,10 @@ def cached_parallel_computation(
     Args:
         exclude_args: Arguments which should be excluded when computing the
             cache key. For example, the number of processors to use.
+         exclude_args_if_default: Arguments which should be excluded when
+            computing the cache key, ONLY IF THEY TAKE THEIR DEFAULT VALUE.
+            Good for backwards compatibility when extending the cached function
+            with new arguments.
         parallel_arg: The argument over which computation is parallelized.
             This argument should be a list, and for each value in this list,
             an output is generated in each output directory.
@@ -237,7 +256,7 @@ def cached_parallel_computation(
             The wrapped function.
         """
         _validate_decorator_args(
-            func, decorator_args=exclude_args + [parallel_arg] + output_dirs
+            func, decorator_args=exclude_args + exclude_args_if_default + [parallel_arg] + output_dirs
         )
 
         @wraps(func)
@@ -264,6 +283,7 @@ def cached_parallel_computation(
             func_caching_dir = _get_parallel_func_caching_dir_aux(
                 func,
                 exclude_args,
+                exclude_args_if_default,
                 parallel_arg,
                 output_dirs,
                 args,
@@ -346,6 +366,7 @@ def cached_parallel_computation(
                 _maybe_write_usefull_stuff_cached_parallel_computation(
                     func,
                     exclude_args,
+                    exclude_args_if_default,
                     parallel_arg,
                     output_dirs,
                     args,

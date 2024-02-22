@@ -127,7 +127,14 @@ def _subsample_pfam_15k_msa(
     num_sequences: Optional[int],
     output_msa_dir: str,
     family: str,
+    return_full_length_unaligned_sequences: bool = False,
 ):
+    """
+    If `return_full_length_unaligned_sequences=True`, then the original,
+    full-length, unaligned sequences will be returned. (In particular,
+    insertions wrt the original sequence will be retained and uppercased,
+    and gaps will be removed from all sequences.)
+    """
     if not os.path.exists(pfam_15k_msa_path):
         raise FileNotFoundError(f"MSA file {pfam_15k_msa_path} does not exist!")
 
@@ -141,18 +148,48 @@ def _subsample_pfam_15k_msa(
                 raise Exception("Protein name line should start with '>'")
             protein_name = lines[i][1:].strip()
             protein_seq = lines[i + 1].strip()
-            # Lowercase amino acids in the sequence are repetitive
-            # sequences and should be ignored.
-            protein_seq = "".join([c for c in protein_seq if not c.islower()])
+            # Lowercase amino acids in the sequence are insertions wrt
+            # the reference sequence and should be removed if one
+            # desires to obtain sequences which are all of the same
+            # length (equal to the length of the reference sequence)
+            # as in an MSA.
+            if return_full_length_unaligned_sequences:
+                # In this case, we keep insertions wrt the reference
+                # sequence and remove gaps, thus obtaining the
+                # full-length, unaligned protein sequences.
+                # We just need to make all lowercase letters uppercase and
+                # remove gaps.
+                def make_upper_if_lower_and_clear_gaps(c: str) -> str:
+                    # Note that c may be a gap, which is why we
+                    # don't just do c.upper(); technically it
+                    # works to do "-".upper() but I think it's
+                    # confusing so I'll just write more code.
+                    if c.islower():
+                        return c.upper()
+                    elif c.isupper():
+                        return c
+                    else:
+                        assert c == "-"
+                        return ""
+
+                protein_seq = "".join(
+                    [
+                        make_upper_if_lower_and_clear_gaps(c)
+                        for c in protein_seq
+                    ]
+                )
+            else:
+                protein_seq = "".join([c for c in protein_seq if not c.islower()])
             msa.append((protein_name, protein_seq))
         # Check that all sequences in the MSA have the same length.
-        for i in range(len(msa) - 1):
-            if len(msa[i][1]) != len(msa[i + 1][1]):
-                raise Exception(
-                    f"Sequence\n{msa[i][1]}\nand\n{msa[i + 1][1]}\nin the "
-                    f"MSA do not have the same length! ({len(msa[i][1])} vs"
-                    f" {len(msa[i + 1][1])})"
-                )
+        if not return_full_length_unaligned_sequences:
+            for i in range(len(msa) - 1):
+                if len(msa[i][1]) != len(msa[i + 1][1]):
+                    raise Exception(
+                        f"Sequence\n{msa[i][1]}\nand\n{msa[i + 1][1]}\nin the "
+                        f"MSA do not have the same length! ({len(msa[i][1])} vs"
+                        f" {len(msa[i + 1][1])})"
+                    )
 
     # Subsample MSA
     family_int_hash = (
@@ -185,17 +222,20 @@ def _map_func_subsample_pfam_15k_msas(args: List):
     num_sequences = args[1]
     families = args[2]
     output_msa_dir = args[3]
+    return_full_length_unaligned_sequences = args[4]
     for family in families:
         _subsample_pfam_15k_msa(
             pfam_15k_msa_path=os.path.join(pfam_15k_msa_dir, family + ".a3m"),
             num_sequences=num_sequences,
             output_msa_dir=output_msa_dir,
             family=family,
+            return_full_length_unaligned_sequences=return_full_length_unaligned_sequences,
         )
 
 
 @caching.cached_parallel_computation(
     exclude_args=["num_processes"],
+    exclude_args_if_default=["return_full_length_unaligned_sequences"],
     parallel_arg="families",
     output_dirs=["output_msa_dir"],
     write_extra_log_files=True,
@@ -206,6 +246,7 @@ def subsample_pfam_15k_msas(
     families: List[str],
     output_msa_dir: str,
     num_processes: int,
+    return_full_length_unaligned_sequences: bool = False,
 ):
     map_args = [
         [
@@ -213,6 +254,7 @@ def subsample_pfam_15k_msas(
             num_sequences,
             get_process_args(process_rank, num_processes, families),
             output_msa_dir,
+            return_full_length_unaligned_sequences,
         ]
         for process_rank in range(num_processes)
     ]
