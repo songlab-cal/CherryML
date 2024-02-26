@@ -12,6 +12,7 @@ from cherryml import caching, utils
 from cherryml.estimation_end_to_end import (
     coevolution_end_to_end_with_cherryml_optimizer,
     lg_end_to_end_with_cherryml_optimizer,
+    lg_end_to_end_with_em_optimizer,
 )
 from cherryml.io import read_rate_matrix, write_rate_matrix
 from cherryml.markov_chain import get_lg_path
@@ -65,6 +66,9 @@ def cherryml_public_api(
     use_maximal_matching: bool = True,
     families: Optional[List[str]] = None,
     tree_estimator_name: str = "FastTree",
+    # Experimental args to use EM, NOT exposed to users
+    _em_backend: str = "",
+    _extra_em_command_line_args: str = "-log 6 -f 3 -mi 0.000001",
 ) -> str:
     """
     CherryML method applied to the LG model and the co-evolution model.
@@ -165,34 +169,66 @@ def cherryml_public_api(
         raise ValueError(f"Unknown tree_estimator_name: {tree_estimator_name}")
 
     if model_name == "LG":
-        outputs = lg_end_to_end_with_cherryml_optimizer(
-            msa_dir=msa_dir,
-            families=families,
-            tree_estimator=partial(
-                tree_estimator,
-                num_rate_categories=num_rate_categories,
-            ),
-            initial_tree_estimator_rate_matrix_path=initial_tree_estimator_rate_matrix_path,  # noqa
-            num_iterations=num_iterations,
-            quantization_grid_center=quantization_grid_center,
-            quantization_grid_step=quantization_grid_step,
-            quantization_grid_num_steps=quantization_grid_num_steps,
-            use_cpp_counting_implementation=use_cpp_counting_implementation,
-            optimizer_device=optimizer_device,
-            learning_rate=learning_rate,
-            num_epochs=num_epochs,
-            do_adam=do_adam,
-            edge_or_cherry=cherryml_type,
-            cpp_counting_command_line_prefix=cpp_counting_command_line_prefix,
-            cpp_counting_command_line_suffix=cpp_counting_command_line_suffix,
-            num_processes_tree_estimation=num_processes_tree_estimation,
-            num_processes_counting=num_processes_counting,
-            num_processes_optimization=num_processes_optimization,
-            optimizer_initialization=optimizer_initialization,
-            sites_subset_dir=sites_subset_dir,
-            tree_dir=tree_dir,
-            site_rates_dir=site_rates_dir,
-        )
+        if _em_backend != "":
+            if _em_backend not in ["xrate", "historian"]:
+                raise ValueError(
+                    "_em_backend may only be 'xrate' or 'historian' (or the "
+                    "empty string '' for default CherryML behaviour). You "
+                    f"provided: '{_em_backend}'."
+                )
+            outputs = lg_end_to_end_with_em_optimizer(
+                msa_dir=msa_dir,
+                families=families,
+                tree_estimator=partial(
+                    tree_estimator,
+                    num_rate_categories=num_rate_categories,
+                ),
+                initial_tree_estimator_rate_matrix_path=initial_tree_estimator_rate_matrix_path,  # noqa
+                num_iterations=num_iterations,
+                quantization_grid_center=quantization_grid_center,
+                quantization_grid_step=quantization_grid_step,
+                quantization_grid_num_steps=quantization_grid_num_steps,
+                use_cpp_counting_implementation=use_cpp_counting_implementation,  # noqa
+                extra_em_command_line_args=_extra_em_command_line_args,
+                cpp_counting_command_line_prefix=cpp_counting_command_line_prefix,  # noqa
+                cpp_counting_command_line_suffix=cpp_counting_command_line_suffix,  # noqa
+                num_processes_tree_estimation=num_processes_tree_estimation,
+                num_processes_counting=num_processes_counting,
+                num_processes_optimization=num_processes_optimization,
+                optimizer_initialization=optimizer_initialization,
+                sites_subset_dir=sites_subset_dir,
+                em_backend=_em_backend,
+            )
+        else:
+            # Just standard CherryML (the only thing we expose to users)
+            outputs = lg_end_to_end_with_cherryml_optimizer(
+                msa_dir=msa_dir,
+                families=families,
+                tree_estimator=partial(
+                    tree_estimator,
+                    num_rate_categories=num_rate_categories,
+                ),
+                initial_tree_estimator_rate_matrix_path=initial_tree_estimator_rate_matrix_path,  # noqa
+                num_iterations=num_iterations,
+                quantization_grid_center=quantization_grid_center,
+                quantization_grid_step=quantization_grid_step,
+                quantization_grid_num_steps=quantization_grid_num_steps,
+                use_cpp_counting_implementation=use_cpp_counting_implementation,  # noqa
+                optimizer_device=optimizer_device,
+                learning_rate=learning_rate,
+                num_epochs=num_epochs,
+                do_adam=do_adam,
+                edge_or_cherry=cherryml_type,
+                cpp_counting_command_line_prefix=cpp_counting_command_line_prefix,  # noqa
+                cpp_counting_command_line_suffix=cpp_counting_command_line_suffix,  # noqa
+                num_processes_tree_estimation=num_processes_tree_estimation,
+                num_processes_counting=num_processes_counting,
+                num_processes_optimization=num_processes_optimization,
+                optimizer_initialization=optimizer_initialization,
+                sites_subset_dir=sites_subset_dir,
+                tree_dir=tree_dir,
+                site_rates_dir=site_rates_dir,
+            )
         learned_rate_matrix = read_rate_matrix(
             os.path.join(outputs["learned_rate_matrix_path"])
         )

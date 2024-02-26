@@ -195,6 +195,27 @@ if __name__ == "__main__":
         "increased statistical efficiency at essentially no runtime cost.",
     )
 
+    # Experimental args to use EM, NOT exposed to users
+    parser.add_argument(
+        "--_em_backend",
+        type=str,
+        required=False,
+        default="",
+        help="Experimental argument, DO NOT USE. Whether to use EM instead "
+        "of CherryML. Can be either empty string '' (for default behaviour of "
+        "using CherryML), 'xrate' or 'historian'.",
+    )
+    parser.add_argument(
+        "--_extra_em_command_line_args",
+        type=str,
+        required=False,
+        default="-log 6 -f 3 -mi 0.000001",
+        help="Experimental argument, DO NOT USE. Extra EM command line "
+        "arguments. Defaults to '-log 6 -f 3 -mi 0.000001' for use with XRATE."
+        " Setting a larger -mi will result in faster runtime but less accurate"
+        " estimates."
+    )
+
     # Functionality not currently exposed:
     # parser.add_argument("--do_adam")
     # parser.add_argument("--cpp_counting_command_line_prefix")
