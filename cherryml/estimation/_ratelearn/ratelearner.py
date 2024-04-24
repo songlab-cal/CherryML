@@ -43,6 +43,7 @@ class RateMatrixLearner:
         mask: str = None,
         rate_matrix_parameterization="pande_reversible",
         initialization: Optional[np.array] = None,
+        skip_writing_to_output_dir: bool = False,  # For efficiency reasons, we might want to avoid I/O completely
     ):
         self.branches = branches
         self.mats = mats
@@ -58,6 +59,9 @@ class RateMatrixLearner:
         self.trained_ = False
         self.device = device
         self.initialization = initialization
+        self.skip_writing_to_output_dir = skip_writing_to_output_dir
+        if skip_writing_to_output_dir:
+            self.output_dir = None  # To make sure we indeed never perform I/O
 
     def train(
         self,
@@ -75,8 +79,9 @@ class RateMatrixLearner:
         output_dir = self.output_dir
         initialization = self.initialization
 
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
+        if not skip_writing_to_output_dir:
+            if not os.path.exists(output_dir):
+                os.makedirs(output_dir)
 
         # Open frequency matrices
         self.quantized_data, self.n_states = self.get_branch_to_mat()
@@ -136,7 +141,8 @@ class RateMatrixLearner:
         self.df_res = df_res
         self.Q_dict = Q_dict
         self.trained = True
-        self.process_results()
+        if not self.skip_writing_to_output_dir:
+            self.process_results()
 
     def get_branch_to_mat(self):
         n_features = self.mats[0].shape[0]
@@ -165,3 +171,14 @@ class RateMatrixLearner:
         plt.tight_layout()
         plt.savefig(os.path.join(output_dir, "training_plot.png"))
         plt.close()
+
+    def get_learnt_rate_matrix(self) -> pd.DataFrame:
+        if not self.trained:
+            raise ValueError(
+                "Model should be trained first!"
+            )
+        return pd.DataFrame(
+            self.Q_dict["result"],
+            columns=self.states,
+            index=self.states,
+        )
