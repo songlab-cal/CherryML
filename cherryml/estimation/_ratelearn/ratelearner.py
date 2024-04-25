@@ -79,7 +79,7 @@ class RateMatrixLearner:
         output_dir = self.output_dir
         initialization = self.initialization
 
-        if not skip_writing_to_output_dir:
+        if not self.skip_writing_to_output_dir:
             if not os.path.exists(output_dir):
                 os.makedirs(output_dir)
 
