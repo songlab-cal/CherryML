@@ -147,7 +147,7 @@ class RateMatrixLearner:
     def get_branch_to_mat(self):
         n_features = self.mats[0].shape[0]
         qtimes = torch.tensor(self.branches)
-        cmats = torch.tensor(self.mats)
+        cmats = torch.tensor(np.array(self.mats))
         quantized_data = TensorDataset(qtimes, cmats)
         return quantized_data, n_features
 
