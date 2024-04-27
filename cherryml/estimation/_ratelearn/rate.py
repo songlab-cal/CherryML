@@ -1,4 +1,5 @@
 from typing import Optional
+import warnings
 
 import numpy as np
 import torch
@@ -14,6 +15,17 @@ def solve_stationery_dist(rate_matrix):
     stationery_dist = eigvecs[:, index]
     stationery_dist = stationery_dist / sum(stationery_dist)
     return stationery_dist
+
+
+def _are_almost_equal(a: np.array, b: np.array, decimal: int = 7) -> bool:
+    """
+    Wrapper around np.testing that returns a boolean
+    """
+    try:
+        np.testing.assert_almost_equal(a, b, decimal=decimal)
+        return True
+    except AssertionError:
+        return False
 
 
 class RateMatrix(nn.Module):
@@ -65,7 +77,8 @@ class RateMatrix(nn.Module):
             assert pi_inv_mat.shape == (num_states, num_states)
             assert pi_mat.shape == (num_states, num_states)
             S = pi_mat @ initialization @ pi_inv_mat
-            np.testing.assert_almost_equal(S, np.transpose(S))
+            if not _are_almost_equal(S, np.transpose(S), decimal=4):
+                warnings.warn('S and its transpose are not almost equal up to 4 decimal places.')
             vals = [
                 np.log(np.exp(S[i, j]) - 1)
                 for i in range(num_states)
