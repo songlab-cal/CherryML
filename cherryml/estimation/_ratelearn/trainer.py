@@ -185,7 +185,7 @@ def train_quantization(
         # Take a gradient step.
         loss.backward(retain_graph=True)
         optimizer.step()
-        rg.set_description(str(loss.item()), refresh=True)
+        # rg.set_description(str(loss.item()), refresh=True)
         total_time_train += time.time() - st_train
 
         st_eval = time.time()
