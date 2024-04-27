@@ -1,4 +1,4 @@
-__version__ = "v0.1.2"
+__version__ = "v0.1.3"
 
 from cherryml._cherryml_public_api import cherryml_public_api
 from cherryml.counting import count_co_transitions, count_transitions
