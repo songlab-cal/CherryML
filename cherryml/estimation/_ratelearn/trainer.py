@@ -146,7 +146,8 @@ def train_quantization(
     start = time.time()
     df_res_tuples = []
     loss = 0.0
-    rg = tqdm(range(num_epochs))
+    # rg = tqdm(range(num_epochs))
+    rg = list(range(num_epochs))
     st_all = time.time()
     total_time_train = 0
     total_time_eval = 0
