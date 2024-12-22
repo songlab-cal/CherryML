@@ -22,7 +22,7 @@ import pytest
 from cherryml import caching
 from cherryml import utils
 
-GAP_CHARACTER = "-"  # TODO: Remove any code that has to do with this.
+GAP_CHARACTER = "-"  # NOTE: This is specific to some applications.
 
 
 def _init_logger():

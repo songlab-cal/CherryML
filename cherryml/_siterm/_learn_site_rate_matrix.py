@@ -1215,7 +1215,7 @@ def learn_site_rate_matrices(
     return_pandas_dataframes: bool = True,
 ) -> Dict:
     """
-    Learn a rate matrix for a site given the tree and leaf states.
+    Learn a rate matrix per site given the tree and leaf states.
 
     Args:
         tree_newick: The tree in newick format.
@@ -1248,7 +1248,7 @@ def learn_site_rate_matrices(
         rate_matrix_for_site_rate_estimation: If provided, the rate matrix to use
             to estimate site rates. If `None`, then the
             `regularization_rate_matrix` will be used.
-        num_epochs: Number of epochs (Adam steps) in the PyTOrch optimizer.
+        num_epochs: Number of epochs (Adam steps) in the PyTorch optimizer.
         use_fast_site_rate_implementation: Whether to use fast site rate implementation.
             Only used if `use_fast_implementation=True`.
         return_pandas_dataframes: If False, then a 3D numpy array will be returned, which
@@ -1874,38 +1874,39 @@ def test_fast_site_rate_estimation_real_data_2():
             total_time += float(v)
     print(f"total_time cuda = {total_time} (sum of times) vs {time.time() - st} (real time)")
 
-    # Plot rate matrices
-    fig, axes = plt.subplots(4, 5, figsize=(15, 12))  # Adjust figsize as needed for readability
-    fig.tight_layout(pad=4.0)  # Adjust spacing between plots
+    ##### Uncomment this to plot site-specific rate matrices.
+    # # Plot rate matrices
+    # fig, axes = plt.subplots(4, 5, figsize=(15, 12))  # Adjust figsize as needed for readability
+    # fig.tight_layout(pad=4.0)  # Adjust spacing between plots
 
-    # Define the fixed color scale range
-    vmin, vmax = -5, 3
-    cmap = sns.diverging_palette(0, 240, s=75, l=50, n=500, center="light")
+    # # Define the fixed color scale range
+    # vmin, vmax = -5, 3
+    # cmap = sns.diverging_palette(0, 240, s=75, l=50, n=500, center="light")
 
-    for i, ax in enumerate(axes.flat):  # Flatten the 2D grid of axes into a 1D array
-        if i < 20:  # Ensure we don't exceed the number of plots
-            sns.heatmap(
-                site_rate_matrices[i],
-                cmap=cmap, 
-                center=0, 
-                vmin=vmin, 
-                vmax=vmax, 
-                ax=ax, 
-                cbar=False,  # Turn off individual colorbars for clarity
-                annot=True,
-                fmt=".1f",
-            )
-            ax.set_title(f"Site {i}")
-        else:
-            ax.axis("off")  # Turn off unused axes
+    # for i, ax in enumerate(axes.flat):  # Flatten the 2D grid of axes into a 1D array
+    #     if i < 20:  # Ensure we don't exceed the number of plots
+    #         sns.heatmap(
+    #             site_rate_matrices[i],
+    #             cmap=cmap, 
+    #             center=0, 
+    #             vmin=vmin, 
+    #             vmax=vmax, 
+    #             ax=ax, 
+    #             cbar=False,  # Turn off individual colorbars for clarity
+    #             annot=True,
+    #             fmt=".1f",
+    #         )
+    #         ax.set_title(f"Site {i}")
+    #     else:
+    #         ax.axis("off")  # Turn off unused axes
 
-    # Add a single colorbar for the entire figure
-    cbar_ax = fig.add_axes([0.96, 0.15, 0.02, 0.7])  # [left, bottom, width, height]
-    sns.heatmap([[vmin, vmax]], cmap=cmap, cbar=True, cbar_ax=cbar_ax)
-    cbar_ax.set_yticks([vmin, 0, vmax])
-    cbar_ax.set_yticklabels([vmin, 0, vmax])
+    # # Add a single colorbar for the entire figure
+    # cbar_ax = fig.add_axes([0.96, 0.15, 0.02, 0.7])  # [left, bottom, width, height]
+    # sns.heatmap([[vmin, vmax]], cmap=cmap, cbar=True, cbar_ax=cbar_ax)
+    # cbar_ax.set_yticks([vmin, 0, vmax])
+    # cbar_ax.set_yticklabels([vmin, 0, vmax])
 
-    plt.savefig(f"grid_plot__{GRID_SIZE}_qps__{NUM_PYTORCH_EPOCHS}_epochs__{NUM_SITE_RATES}_rates.png")
-    plt.show()
-    plt.close()
-    # assert(False)
+    # plt.savefig(f"grid_plot__{GRID_SIZE}_qps__{NUM_PYTORCH_EPOCHS}_epochs__{NUM_SITE_RATES}_rates.png")
+    # plt.show()
+    # plt.close()
+    # # assert(False)
