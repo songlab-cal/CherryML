@@ -14,7 +14,7 @@ import torch
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pytest
-from cherryml.siterm.fast_site_rates import compute_optimal_site_rates  # Import the compiled Cython function
+from cherryml._siterm.fast_site_rates import compute_optimal_site_rates  # Import the compiled Cython function
 
 
 # Default quantization grid:

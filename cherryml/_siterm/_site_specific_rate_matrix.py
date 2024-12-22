@@ -328,7 +328,7 @@ def _get_count_prior_probability_matrices(
     stationary_distribution = compute_stationary_distribution(
         rate_matrix=rate_matrix,
     )
-    matrix_exponentials = cherryml.siterm._utils.matrix_exponential_reversible(
+    matrix_exponentials = cherryml._siterm._utils.matrix_exponential_reversible(
         rate_matrix=rate_matrix,
         exponents=quantization_points_sorted,
     )
@@ -936,7 +936,7 @@ def evaluate_site_specific_rate_matrix_model_transitions_log_likelihood_per_site
     assert(len(transitions[0][0]) == site_specific_rate_matrices.shape[0])
     num_sites = len(transitions[0][0])
     matrix_exponentials = [
-        cherryml.siterm._utils.matrix_exponential_reversible(
+        cherryml._siterm._utils.matrix_exponential_reversible(
             rate_matrix=site_specific_rate_matrices[site_id, :, :],
             exponents=[t for (x, y, t) in transitions],
         )
