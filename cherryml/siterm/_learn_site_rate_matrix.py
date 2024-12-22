@@ -208,7 +208,7 @@ def _matrix_exponential_reversible(
     return markov_chain.matrix_exponential_reversible(
         exponents=exponents,
         fact=markov_chain.FactorizedReversibleModel(rate_matrix),
-        device="cpu",
+        device=device,
     )
 
 
