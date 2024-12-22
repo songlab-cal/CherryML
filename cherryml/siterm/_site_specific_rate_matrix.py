@@ -1797,9 +1797,9 @@ def test_vectorized_cherryml_implementation_GOAT():
     """
     families = ["1a0b_1_A", "1a2o_1_A", "1a4m_1_A"]
     alphabet = list(utils.amino_acids) + [GAP_CHARACTER]
-    msa_dir = "tests/example_data/train_msas"
-    site_rates_dir = "tests/example_data/train_site_rates_4cat"
-    tree_dir = "tests/example_data/train_trees_fast_tree_wag_4rc"
+    msa_dir = "tests/siterm_tests/example_data/train_msas"
+    site_rates_dir = "tests/siterm_tests/example_data/train_site_rates_4cat"
+    tree_dir = "tests/siterm_tests/example_data/train_trees_fast_tree_wag_4rc"
     regularization_rate_matrix_path = "data/rate_matrices/wag_21_x_21.txt"
     with tempfile.TemporaryDirectory() as mp_msa_dir:
         for family in families:

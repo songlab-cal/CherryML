@@ -1,4 +1,7 @@
 from setuptools import setup, find_packages
+from setuptools import setup, Extension
+from Cython.Build import cythonize
+import numpy as np
 
 
 def get_version_from_init(init_path='cherryml/__init__.py'):
@@ -9,6 +12,18 @@ def get_version_from_init(init_path='cherryml/__init__.py'):
 
 
 version = get_version_from_init()
+
+
+extensions = [
+    Extension(
+        "cherryml.siterm.fast_site_rates",
+        ["cherryml/siterm/fast_site_rates.pyx"],
+        include_dirs=[np.get_include()],
+        language="c++",  # Tell the compiler to use C++
+        extra_compile_args=["-std=c++11", "-O3"],  # Optional: Use C++11 standard
+    )
+]
+
 
 setup(
     name='cherryml',
@@ -34,4 +49,5 @@ setup(
         'tqdm',
         'wget',
     ],
+    ext_modules=cythonize(extensions),
 )
