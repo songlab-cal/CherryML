@@ -7,7 +7,6 @@ import pandas as pd
 from typing import Any, Dict, List, Tuple, Optional
 from ete3 import Tree as TreeETE
 from ._site_specific_rate_matrix import _estimate_site_specific_rate_matrices_given_tree_and_site_rates
-from cherryml import caching
 from scipy.stats import gamma
 import logging
 import torch
@@ -869,15 +868,6 @@ def test__learn_site_rate_matrices_given_site_rates_too_2():
     )
 
 
-@caching.cached(
-    exclude_if_default=[
-        "site_rate_grid",
-        "site_rate_prior",
-        "alphabet_for_site_rate_estimation",
-        "rate_matrix_for_site_rate_estimation",
-        "num_epochs",
-    ],
-)
 def learn_site_rate_matrix(
     tree_newick: str,
     leaf_states: Dict[str, str],
@@ -1184,18 +1174,6 @@ def test_learn_site_rate_matrix_with_site_rate_prior_and_gaps():
     )
 
 
-@caching.cached(
-    exclude_if_default=[
-        "site_rate_grid",
-        "site_rate_prior",
-        "alphabet_for_site_rate_estimation",
-        "rate_matrix_for_site_rate_estimation",
-        "num_epochs",
-        "use_fast_site_rate_implementation",
-        "quantization_grid_num_steps",
-        "return_pandas_dataframes",
-    ],
-)
 def learn_site_rate_matrices(
     tree_newick: str,
     leaf_states: Dict[str, str],
