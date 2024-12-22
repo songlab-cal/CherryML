@@ -874,7 +874,7 @@ def test__learn_site_rate_matrices_given_site_rates_too_2():
         "site_rate_grid",
         "site_rate_prior",
         "alphabet_for_site_rate_estimation",
-        "rate_matrix_for_site_rate_estimation"
+        "rate_matrix_for_site_rate_estimation",
         "num_epochs",
     ],
 )
