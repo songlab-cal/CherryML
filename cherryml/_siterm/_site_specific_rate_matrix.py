@@ -1675,6 +1675,7 @@ def evaluate_site_specific_rate_matrix_model_transitions_log_likelihood__cached(
         )
 
 
+@pytest.mark.slow
 def test_train_site_specific_rate_matrix_model__cached():
     """
     Tests that the VEP scores make sense on a hand-crafted example.
