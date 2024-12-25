@@ -25,13 +25,24 @@ io_helpers.o: build_dir
 fast_cherries.o: build_dir
 	$(CXX) $(CFLAGS)  fast_cherries.cpp -o $(BUILD_DIR)/fast_cherries.o
 
+pairing_algorithms.o: build_dir
+	$(CXX) $(CFLAGS) pairing_algorithms.cpp -o $(BUILD_DIR)/pairing_algorithms.o
+
+
 # compiles all test files
 test_io_helpers.o : build_dir
 	$(CXX) $(CFLAGS) $(TEST_DIR)/test_io_helpers.cpp -o $(BUILD_DIR)/test_io_helpers.o
 
+test_pairing_algorithms.o: pairing_algorithms.o build_dir
+	$(CXX) $(CFLAGS) $(TEST_DIR)/test_pairing_algorithms.cpp -o $(BUILD_DIR)/test_pairing_algorithms.o
+
 # runs test files
 test_io_helpers: test_io_helpers.o io_helpers.o matrix_exponential.o build_dir
 	$(CXX) $(LFLAGS) $(BUILD_DIR)/r8lib.o $(BUILD_DIR)/c8lib.o $(BUILD_DIR)/matrix_exponential.o $(BUILD_DIR)/test_io_helpers.o $(BUILD_DIR)/io_helpers.o -o $(BUILD_DIR)/run_test
+	$(BUILD_DIR)/run_test
+
+test_pairing_algorithms: test_pairing_algorithms.o 
+	$(CXX) $(LFLAGS) $(BUILD_DIR)/test_pairing_algorithms.o $(BUILD_DIR)/pairing_algorithms.o -o $(BUILD_DIR)/run_test
 	$(BUILD_DIR)/run_test
 
 build_dir :
