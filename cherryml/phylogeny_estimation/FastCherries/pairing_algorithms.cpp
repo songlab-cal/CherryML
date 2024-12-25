@@ -33,6 +33,7 @@ inline double hamming_distance(
         return 0;
     }
     
+    // original code used log likelihood of a cherry as the distance, so hamming distance is negated to keep conistent
     return dist*-1.0/count;
 }
 
@@ -47,7 +48,7 @@ inline std::pair<std::string, std::vector<double> > find_farthest(
     const std::vector<int> &x_seq = msa_map.at(x);
     std::vector<double> distances;
     distances.reserve(msa_list.size());
-    for(std::string seq:msa_list) {
+    for(const std::string &seq:msa_list) {
         double d = hamming_distance(msa_map.at(seq), x_seq);
         distances.push_back(d);
         if(d < farthest) {
