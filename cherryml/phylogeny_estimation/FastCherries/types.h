@@ -67,3 +67,21 @@ struct msa_type{
     std::vector<std::vector<int> > all_sequences;
 };
 
+
+struct matrix {
+    int n; 
+    int m;  
+    std::vector<double> data;  // Flattened representation
+
+    matrix(int n_size, int m_size)
+        : n(n_size), m(m_size), data(n * m, 0.0) {
+    }
+
+    double& operator()(int ni, int mi) {
+        return data[ni * m + mi];
+    }
+
+    const double& operator()(int ni, int mi) const {
+        return data[ni * m + mi];
+    }
+};
