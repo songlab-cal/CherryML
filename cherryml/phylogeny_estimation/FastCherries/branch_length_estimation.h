@@ -3,7 +3,12 @@
 #include <string>
 #include <vector>
 
-
+std::vector<int> get_branch_lengths(
+    const std::vector<std::pair<std::vector<int>, std::vector<int> > >& cherries, 
+    const transition_matrices& log_transition_matrices,
+    const std::vector<double>& quantization_points,
+    const std::vector<int>& site_to_rate_index
+);
 std::vector<int> get_site_rates(
     const std::vector<std::pair<std::vector<int>, std::vector<int> > >& cherries, 
     const transition_matrices& log_transition_matrices,

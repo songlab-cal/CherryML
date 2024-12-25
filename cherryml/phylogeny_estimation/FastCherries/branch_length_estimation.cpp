@@ -159,45 +159,51 @@ void site_rates_gamma_bins_all_pairs_inplace(
 }
 
 
-int get_branch_lengths(
-    const std::vector<int>& x, 
-    const std::vector<int>& y, 
+std::vector<int> get_branch_lengths(
+    const std::vector<std::pair<std::vector<int>, std::vector<int> > >& cherries, 
     const transition_matrices& log_transition_matrices,
     const std::vector<double>& quantization_points,
     const std::vector<int>& site_to_rate_index
 ) {
-    // Binary search-based peak finding algorithm
-    double max_ll = -DBL_MAX;
+    std::vector<int> branch_lengths;
+    branch_lengths.reserve(cherries.size());
+    for(int cherry_index = 0; cherry_index < cherries.size(); cherry_index++) {
+        const std::vector<int>& x = cherries[cherry_index].first;
+        const std::vector<int>& y = cherries[cherry_index].second;
+        // Binary search-based peak finding algorithm
+        double max_ll = -DBL_MAX;
 
-    // Apply binary search for maximum likelihood estimation
-    int low = 0;
-    int high = quantization_points.size() - 1;
+        // Apply binary search for maximum likelihood estimation
+        int low = 0;
+        int high = quantization_points.size() - 1;
 
-    while (low < high) {
-        int mid = low + (high - low) / 2;
-        double ll_m = 0.0;
-        double ll_m1 = 0.0;
-        // Calculate log likelihood for current quantization point
-        for(int i = 0; i < x.size(); i++){
-            int xi = x[i];
-            int yi = y[i];
-            if(xi != -1 && yi != -1) {
-                ll_m += log_transition_matrices(mid, site_to_rate_index[i], xi, yi) + 
-                    log_transition_matrices(mid, site_to_rate_index[i], yi, xi);
-                ll_m1 += log_transition_matrices(mid + 1, site_to_rate_index[i], xi, yi) + 
-                    log_transition_matrices(mid + 1, site_to_rate_index[i], yi, xi);
+        while (low < high) {
+            int mid = low + (high - low) / 2;
+            double ll_m = 0.0;
+            double ll_m1 = 0.0;
+            // Calculate log likelihood for current quantization point
+            for(int i = 0; i < x.size(); i++){
+                int xi = x[i];
+                int yi = y[i];
+                if(xi != -1 && yi != -1) {
+                    ll_m += log_transition_matrices(mid, site_to_rate_index[i], xi, yi) + 
+                        log_transition_matrices(mid, site_to_rate_index[i], yi, xi);
+                    ll_m1 += log_transition_matrices(mid + 1, site_to_rate_index[i], xi, yi) + 
+                        log_transition_matrices(mid + 1, site_to_rate_index[i], yi, xi);
+                }
+            }
+            max_ll = std::max(max_ll, ll_m);
+            max_ll = std::max(max_ll, ll_m1);
+            // Update the search range
+            if (ll_m > ll_m1) {
+                high = mid;
+            } else {
+                low = mid + 1;
             }
         }
-        max_ll = std::max(max_ll, ll_m);
-        max_ll = std::max(max_ll, ll_m1);
-        // Update the search range
-        if (ll_m > ll_m1) {
-            high = mid;
-        } else {
-            low = mid + 1;
-        }
+        branch_lengths.push_back(low);
     }
-    return low;
+    return branch_lengths;
 }
 
 std::vector<int> get_site_rates(
@@ -207,7 +213,6 @@ std::vector<int> get_site_rates(
     const std::vector<int>& lengths_index,
     const std::vector<double>& priors
 ) {
-    // this can probably be sped up with binary search, but we're just rolling with this for now since we don't usually use that many rate categories
     std::vector<int> site_rates;
     site_rates.reserve(cherries[0].first.size());
     for(int site_index = 0; site_index < cherries[0].first.size(); site_index++) {
@@ -266,16 +271,13 @@ length_and_rates ble(
    //}
    //std::cout << std::endl;
    //std::cout<<"getting initial lengths" <<std::endl;
-    std::vector<int> lengths_index(cherries.size(), 0);
-    for(int i = 0; i < cherries.size(); i++) {
-        lengths_index[i] = get_branch_lengths(
-            cherries[i].first, 
-            cherries[i].second,
-            log_transition_matrices, 
-            quantization_points, 
-            site_to_rate_index
-        );
-    }
+    std::vector<int> lengths_index = get_branch_lengths(
+        cherries,
+        log_transition_matrices, 
+        quantization_points, 
+        site_to_rate_index
+    );
+    
     std::vector<double> priors;
     priors.reserve(rate_categories.size());
     for(double rate:rate_categories) {
@@ -292,17 +294,13 @@ length_and_rates ble(
             lengths_index,
             priors
         );
-        std::vector<int> new_lengths_index(cherries.size(), 0);
-        //std::cout << "getting new lengths" << std::endl;
-        for(int i = 0; i < cherries.size(); i++) {
-            new_lengths_index[i] = get_branch_lengths(
-                cherries[i].first, 
-                cherries[i].second,
-                log_transition_matrices, 
-                quantization_points, 
-                site_to_rate_index
-            );
-        }
+        std::vector<int> new_lengths_index = get_branch_lengths(
+            cherries,
+            log_transition_matrices, 
+            quantization_points, 
+            site_to_rate_index
+        );
+        
         match = true;
         for(int i = 0; match && i < lengths_index.size(); i++) {
             match = match && (lengths_index[i] == new_lengths_index[i]);
