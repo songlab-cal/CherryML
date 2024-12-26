@@ -170,10 +170,6 @@ std::vector<int> get_branch_lengths(
     for(int cherry_index = 0; cherry_index < cherries.size(); cherry_index++) {
         const std::vector<int>& x = cherries[cherry_index].first;
         const std::vector<int>& y = cherries[cherry_index].second;
-        // Binary search-based peak finding algorithm
-        double max_ll = -DBL_MAX;
-
-        // Apply binary search for maximum likelihood estimation
         int low = 0;
         int high = quantization_points.size() - 1;
 
@@ -181,7 +177,6 @@ std::vector<int> get_branch_lengths(
             int mid = low + (high - low) / 2;
             double ll_m = 0.0;
             double ll_m1 = 0.0;
-            // Calculate log likelihood for current quantization point
             for(int i = 0; i < x.size(); i++){
                 int xi = x[i];
                 int yi = y[i];
@@ -192,8 +187,6 @@ std::vector<int> get_branch_lengths(
                         log_transition_matrices(mid + 1, site_to_rate_index[i], yi, xi);
                 }
             }
-            max_ll = std::max(max_ll, ll_m);
-            max_ll = std::max(max_ll, ll_m1);
             // Update the search range
             if (ll_m > ll_m1) {
                 high = mid;
@@ -216,35 +209,31 @@ std::vector<int> get_site_rates(
     std::vector<int> site_rates;
     site_rates.reserve(cherries[0].first.size());
     for(int site_index = 0; site_index < cherries[0].first.size(); site_index++) {
-        int low = 0, high = priors.size() - 1;
-        int best_rate = 0;
-        double best_ll = -DBL_MAX;
+        int low = 0;
+        int high = priors.size() - 1;
 
-        while (low <= high) {
+        while (low < high) {
             int mid = low + (high - low) / 2;
-
-            // Calculate the log-likelihood of rate `mid`
-            double ll_of_rate = priors[mid];
+            double ll_m =  priors[mid];
+            double ll_m1 = priors[mid + 1];
+            
             for (int i = 0; i < cherries.size(); i++) {
                 int xi = cherries[i].first[site_index];
                 int yi = cherries[i].second[site_index];
-                if (xi != -1 && yi != -1) {
-                    ll_of_rate += log_transition_matrices(lengths_index[i], mid, xi, yi) +
-                                log_transition_matrices(lengths_index[i], mid, yi, xi);
+                if(xi != -1 && yi != -1) {
+                    ll_m += log_transition_matrices(lengths_index[i], mid, xi, yi) + 
+                        log_transition_matrices(lengths_index[i], mid, yi, xi);
+                    ll_m1 += log_transition_matrices(lengths_index[i], mid + 1, xi, yi) + 
+                        log_transition_matrices(lengths_index[i], mid + 1, yi, xi);
                 }
             }
-
-            // If we found a better log-likelihood, store it and adjust the search bounds.
-            if (ll_of_rate > best_ll) {
-                best_ll = ll_of_rate;
-                best_rate = mid;
-                low = mid + 1;  // Try to find a better rate by going to the higher half
+            if (ll_m > ll_m1) {
+                high = mid;
             } else {
-                high = mid - 1;  // Otherwise, search the lower half
+                low = mid + 1;
             }
         }
-        //std::cout << std::endl;
-        site_rates.push_back(best_rate);
+        site_rates.push_back(low);
     }
     return site_rates;
 }

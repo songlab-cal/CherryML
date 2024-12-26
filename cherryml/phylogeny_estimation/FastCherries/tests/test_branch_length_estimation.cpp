@@ -32,14 +32,10 @@ void test_branch_lengths(
         quantization_points,
         site_to_rate
     );
-
-    for(int i = 0; i < cherries.size(); i++) {
-        std::cout << lengths[i] << ' ';
-    }
-    std::cout << std::endl;
     for(int i = 0; i < cherries.size(); i++) {
         assert(lengths[i] == expected[i]);
     }
+    std::cout << "test branch lengths passes" << std::endl;
 }
 
 void test_branch_lengths1() {
@@ -198,12 +194,6 @@ void test_lg_ble() {
         rate_categories,
         50
     ).lengths;
-
-    std::cout<< res[0]  << std::endl;
-    std::cout<< res[1]  << std::endl;
-    std::cout<< res[2]  << std::endl;    
-    std::cout<< res[3]  << std::endl;    
-    
     
     std::cout << "lg_ble sanity passes" << std::endl;
 }
