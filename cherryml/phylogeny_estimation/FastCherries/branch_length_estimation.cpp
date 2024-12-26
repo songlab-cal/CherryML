@@ -133,11 +133,6 @@ void site_rates_gamma_bins_all_pairs_inplace(
     for(int i = 1; i < rate_categories.size(); i++) {
         midpoints.push_back(sqrt(rate_categories[i-1]*rate_categories[i]));
     }
-    //std::cout << "midpoints ";
-    //for(double m:midpoints) {
-    //    std::cout << m << " ";
-    //}
-    //std::cout << std::endl;
     std::vector<double> weights;
     double shape = 3.0;
     weights.reserve(rate_categories.size());

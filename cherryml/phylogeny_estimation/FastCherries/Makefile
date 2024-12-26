@@ -22,15 +22,14 @@ matrix_exponential.o: build_dir
 io_helpers.o: build_dir
 	$(CXX) $(CFLAGS) io_helpers.cpp -o $(BUILD_DIR)/io_helpers.o
 
-fast_cherries.o: build_dir
-	$(CXX) $(CFLAGS)  fast_cherries.cpp -o $(BUILD_DIR)/fast_cherries.o
-
 pairing_algorithms.o: build_dir
 	$(CXX) $(CFLAGS) pairing_algorithms.cpp -o $(BUILD_DIR)/pairing_algorithms.o
 
 branch_length_estimation.o: build_dir
 	$(CXX) $(CFLAGS) branch_length_estimation.cpp -o $(BUILD_DIR)/branch_length_estimation.o
 
+fast_cherries.o: pairing_algorithms.o branch_length_estimation.o io_helpers.o matrix_exponential.o build_dir
+	$(CXX) $(CFLAGS)  fast_cherries.cpp -o $(BUILD_DIR)/fast_cherries.o
 
 # compiles all test files
 test_io_helpers.o : build_dir
@@ -57,3 +56,6 @@ test_branch_length_estimation: test_branch_length_estimation.o io_helpers.o matr
 
 build_dir :
 	mkdir -p $(BUILD_DIR)
+
+main : fast_cherries.o
+	$(CXX) $(LFLAGS) $(BUILD_DIR)/r8lib.o $(BUILD_DIR)/c8lib.o $(BUILD_DIR)/matrix_exponential.o $(BUILD_DIR)/pairing_algorithms.o $(BUILD_DIR)/io_helpers.o $(BUILD_DIR)/fast_cherries.o $(BUILD_DIR)/branch_length_estimation.o -o $(BUILD_DIR)/mcle_cherries
