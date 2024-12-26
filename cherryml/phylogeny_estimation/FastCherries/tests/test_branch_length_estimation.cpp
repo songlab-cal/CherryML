@@ -89,7 +89,6 @@ void test_get_site_rates(
     std::vector<int> site_to_rate = get_site_rates(
         cherries, 
         log_transition_matrices,
-        quantization_points,
         lengths_index,
         priors
     );

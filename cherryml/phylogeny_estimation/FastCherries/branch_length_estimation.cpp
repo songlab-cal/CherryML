@@ -202,7 +202,6 @@ std::vector<int> get_branch_lengths(
 std::vector<int> get_site_rates(
     const std::vector<std::pair<std::vector<int>, std::vector<int> > >& cherries, 
     const transition_matrices& log_transition_matrices,
-    const std::vector<double>& quantization_points,
     const std::vector<int>& lengths_index,
     const std::vector<double>& priors
 ) {
@@ -216,7 +215,6 @@ std::vector<int> get_site_rates(
             int mid = low + (high - low) / 2;
             double ll_m =  priors[mid];
             double ll_m1 = priors[mid + 1];
-            
             for (int i = 0; i < cherries.size(); i++) {
                 int xi = cherries[i].first[site_index];
                 int yi = cherries[i].second[site_index];
@@ -279,7 +277,6 @@ length_and_rates ble(
         site_to_rate_index = get_site_rates(
             cherries, 
             log_transition_matrices,
-            quantization_points,
             lengths_index,
             priors
         );

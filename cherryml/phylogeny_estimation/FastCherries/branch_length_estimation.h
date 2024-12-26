@@ -12,7 +12,6 @@ std::vector<int> get_branch_lengths(
 std::vector<int> get_site_rates(
     const std::vector<std::pair<std::vector<int>, std::vector<int> > >& cherries, 
     const transition_matrices& log_transition_matrices,
-    const std::vector<double>& quantization_points,
     const std::vector<int>& lengths_index,
     const std::vector<double>& priors
 ); 
