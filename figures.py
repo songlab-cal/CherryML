@@ -31,6 +31,7 @@ import seaborn as sns
 import tqdm
 
 import cherryml.utils as utils
+from cherryml.config import Config, create_config_from_dict, sanity_check_config
 from cherryml import (
     caching,
     coevolution_end_to_end_with_cherryml_optimizer,
@@ -90,7 +91,9 @@ from cherryml.markov_chain import (
     matrix_exponential,
     normalized,
 )
-from cherryml.phylogeny_estimation import fast_tree, gt_tree_estimator, phyml
+from cherryml.phylogeny_estimation import fast_tree, gt_tree_estimator, phyml, phylogeny_estimator
+from cherryml.phylogeny_estimation.phylogeny_estimator import get_phylogeny_estimator_from_config
+
 from cherryml.types import PhylogenyEstimatorType
 from cherryml.utils import get_families, get_process_args
 
@@ -982,6 +985,16 @@ def fig_lg_paper(
         ("EM_FT__4__0.000001", "LG w/ EM\n(re-estimated)"),
     ],
     baseline_rate_estimator_name: Tuple[str, str] = ("reproduced JTT", "JTT"),
+    phylogeny_estimator_configs:Config = [
+        create_config_from_dict({"identifier":{}, "args":{}}),
+        create_config_from_dict({"identifier":{}, "args":{}}),
+        create_config_from_dict({"identifier":"fast_tree", 
+                                 "args":{"num_rate_categories":4}}
+                                ),
+        create_config_from_dict({"identifier":"fast_tree", 
+                                 "args":{"num_rate_categories":4}}
+                                ),
+    ],
     num_processes: int = 4,
     evaluation_phylogeny_estimator_name: str = "PhyML",
     output_image_dir: str = "images/fig_lg_paper/",
@@ -1032,6 +1045,7 @@ def fig_lg_paper(
         msa_test_dir=lg_pfam_testing_alignments_dir,
         families_test=get_families(lg_pfam_testing_alignments_dir),
         rate_estimator_names=rate_estimator_names[:],
+        phylogeny_estimator_configs=phylogeny_estimator_configs,
         baseline_rate_estimator_name=baseline_rate_estimator_name,
         evaluation_phylogeny_estimator=evaluation_phylogeny_estimator,
         num_processes=num_processes,
@@ -2596,6 +2610,7 @@ def _fig_standard_benchmark(
     clade_name: str = "",
     fontsize: int = 13,
     tree_estimator_name: str = "",
+    tree_estimator_config_list: List[Config] = [{}],
     extra_tree_estimator_command_line_args: str = "",
     evaluator_name: str = "",
     extra_evaluator_command_line_args: str = "",
@@ -2634,7 +2649,7 @@ def _fig_standard_benchmark(
             num_processes_optimization: int,
             num_processes_counting: int,
             num_iterations: int,
-            tree_estimator_name: str,
+            tree_estimator_config: Config,
             extra_tree_estimator_command_line_args: str,
             edge_or_cherry: str = CHERRYML_TYPE,
         ) -> Dict:
@@ -2643,22 +2658,8 @@ def _fig_standard_benchmark(
             up checking a bunch of files during caching. Gets rid of the
             unhashable tree_estimator via hardcoding.
             """
-            if tree_estimator_name == "FastTree":
-                tree_estimator = partial(
-                    fast_tree,
-                    num_rate_categories=num_rate_categories,
-                    extra_command_line_args=extra_tree_estimator_command_line_args,  # noqa
-                )
-            elif tree_estimator_name == "PhyML":
-                assert extra_tree_estimator_command_line_args == ""
-                tree_estimator = partial(
-                    phyml,
-                    num_rate_categories=num_rate_categories,
-                )
-            else:
-                raise ValueError(
-                    f"Unknown tree_estimator_name = '{tree_estimator_name}'"
-                )
+
+            tree_estimator = get_phylogeny_estimator_from_config(tree_estimator_config)
 
             return lg_end_to_end_with_cherryml_optimizer(
                 msa_dir=msa_dir,
@@ -2671,33 +2672,33 @@ def _fig_standard_benchmark(
                 num_iterations=num_iterations,
                 edge_or_cherry=edge_or_cherry,
             )
+        for tree_estimator_name, tree_estimator_config in zip(tree_estimator_names_list, tree_estimator_config_list):
+            cherry_res_dict = _fig_standard_benchmark__lg_end_to_end_with_cherryml_optimizer(  # noqa
+                msa_dir=msa_dir_train,
+                families=families_train,
+                num_rate_categories=num_rate_categories,
+                initial_tree_estimator_rate_matrix_path=initial_tree_estimator_rate_matrix_path,  # noqa
+                num_processes_tree_estimation=num_processes_tree_estimation,
+                num_processes_optimization=num_processes_optimization,
+                num_processes_counting=num_processes_counting,
+                num_iterations=num_iterations,
+                tree_estimator_config=tree_estimator_config,
+                extra_tree_estimator_command_line_args=extra_tree_estimator_command_line_args,  # noqa
+                edge_or_cherry=edge_or_cherry,
+            )
+            cherry_path = cherry_res_dict["learned_rate_matrix_path"]
 
-        cherry_res_dict = _fig_standard_benchmark__lg_end_to_end_with_cherryml_optimizer(  # noqa
-            msa_dir=msa_dir_train,
-            families=families_train,
-            num_rate_categories=num_rate_categories,
-            initial_tree_estimator_rate_matrix_path=initial_tree_estimator_rate_matrix_path,  # noqa
-            num_processes_tree_estimation=num_processes_tree_estimation,
-            num_processes_optimization=num_processes_optimization,
-            num_processes_counting=num_processes_counting,
-            num_iterations=num_iterations,
-            tree_estimator_name=tree_estimator_name,
-            extra_tree_estimator_command_line_args=extra_tree_estimator_command_line_args,  # noqa
-            edge_or_cherry=edge_or_cherry,
-        )
-        cherry_path = cherry_res_dict["learned_rate_matrix_path"]
-
-        with open(
-            os.path.join(
-                output_image_dir,
-                "cherryml_profiling.txt",
-            ),
-            "w",
-        ) as profiling_file:
-            profiling_file.write(cherry_res_dict["profiling_str"])
-        single_site_rate_matrices.append(
-            ("LG w/ CherryML\n(re-estimated)", cherry_path)
-        )
+            with open(
+                os.path.join(
+                    output_image_dir,
+                    "cherryml_profiling.txt",
+                ),
+                "w",
+            ) as profiling_file:
+                profiling_file.write(cherry_res_dict["profiling_str"])
+            single_site_rate_matrices.append(
+                ("LG w/ CherryML\n(re-estimated)", cherry_path)
+            )
 
     if add_em:
         # Run the EM method using FastTree tree estimator

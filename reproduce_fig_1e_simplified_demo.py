@@ -1,5 +1,7 @@
 import figures
 
+from cherryml.config import create_config_from_dict
+
 if __name__ == "__main__":
     print("Creating figure 1e with FastTree instead of PhyML ...")
 
@@ -10,7 +12,14 @@ if __name__ == "__main__":
         rate_estimator_names=[
             ("reproduced WAG", "WAG\nrate matrix"),
             ("reproduced LG", "LG\nrate matrix"),
-            ("Cherry++__4", "LG w/ CherryML\n(re-estimated)"),
+            ("Cherry++__1", "LG w/ CherryML\n(re-estimated)"),
+        ],
+        phylogeny_estimator_configs=[
+            create_config_from_dict({"identifier":"fast_tree", "args":{"num_rate_categories":1}}),
+            create_config_from_dict({"identifier":"fast_tree", "args":{"num_rate_categories":1}}),
+            create_config_from_dict({"identifier":"fast_tree", 
+                                    "args":{"num_rate_categories":4}}
+                                    ),
         ],
         lg_pfam_training_alignments_dir="data/lg_paper_data/lg_PfamTrainingAlignments",
         lg_pfam_testing_alignments_dir="data/lg_paper_data/lg_PfamTestingAlignments",

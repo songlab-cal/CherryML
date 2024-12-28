@@ -17,6 +17,7 @@ import numpy as np
 import pandas as pd
 import wget
 
+from cherryml.config import Config, create_config_from_dict
 from cherryml import (
     PhylogenyEstimatorType,
     lg_end_to_end_with_cherryml_optimizer,
@@ -30,7 +31,7 @@ from cherryml.markov_chain import (
     get_lg_path,
     get_wag_path,
 )
-from cherryml.phylogeny_estimation import fast_tree
+from cherryml.phylogeny_estimation.phylogeny_estimator import get_phylogeny_estimator_from_config
 from cherryml.utils import pushd
 
 from .globals import IMG_EXTENSIONS
@@ -308,6 +309,7 @@ def get_lg_PfamTrainingAlignments_data(
 # @caching.cached()
 def run_rate_estimator(
     rate_estimator_name: str,
+    phylogeny_estimator_configs: Config,
     msa_train_dir: str,
     families_train: List[str],
     num_processes: int,
@@ -352,10 +354,7 @@ def run_rate_estimator(
         res_dict = lg_end_to_end_with_cherryml_optimizer(
             msa_dir=msa_train_dir,
             families=families_train,
-            tree_estimator=partial(
-                fast_tree,
-                num_rate_categories=4,
-            ),
+            tree_estimator=get_phylogeny_estimator_from_config(phylogeny_estimator_configs),
             initial_tree_estimator_rate_matrix_path=get_equ_path(),
             num_iterations=int(tokens[1]),
             num_processes_tree_estimation=num_processes,
@@ -433,6 +432,7 @@ def reproduce_lg_paper_fig_4(
     msa_test_dir: str,
     families_test: List[str],
     rate_estimator_names: List[Tuple[str]],
+    phylogeny_estimator_configs:Config,
     baseline_rate_estimator_name: Optional[Tuple[str, str]],
     evaluation_phylogeny_estimator: PhylogenyEstimatorType,
     num_processes: int,
@@ -475,9 +475,15 @@ def reproduce_lg_paper_fig_4(
         rate_estimator_names_w_baseline = [
             baseline_rate_estimator_name
         ] + rate_estimator_names
+        phylogeny_estimator_configs = [
+            create_config_from_dict({"identifier":{}, "args":{}})
+        ] + phylogeny_estimator_configs
     else:
         rate_estimator_names_w_baseline = list(set(rate_estimator_names))
-    for rate_estimator_name, _ in rate_estimator_names_w_baseline:
+    assert len(rate_estimator_names_w_baseline) == len(phylogeny_estimator_configs), f"there must be the same number of rate estimator configs as there are names! {len(rate_estimator_names_w_baseline)} {len(phylogeny_estimator_configs)}"
+    using_lg = False
+    for rate_estimator_name, config in zip(rate_estimator_names_w_baseline, phylogeny_estimator_configs):
+        rate_estimator_name = rate_estimator_name[0]
         print(f"Evaluating rate_estimator_name: {rate_estimator_name}")
         st = time.time()
         if rate_estimator_name.startswith("reported"):
@@ -491,6 +497,7 @@ def reproduce_lg_paper_fig_4(
         else:
             rate_matrix_path = run_rate_estimator(
                 rate_estimator_name=rate_estimator_name,
+                phylogeny_estimator_configs=config,
                 msa_train_dir=msa_train_dir,
                 families_train=families_train,
                 num_processes=num_processes,
