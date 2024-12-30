@@ -97,3 +97,23 @@ def read_probability_distribution(
             "should add to 1.0, with a tolerance of 1e-6."
         )
     return res
+
+def read_computed_cherries_from_file(file_path):
+    cherries = []
+    distances = []
+
+    with open(file_path, 'r') as file:
+        lines = file.readlines()
+        i = 0
+
+        while i < len(lines):
+            x = lines[i].strip()
+            y = lines[i + 1].strip()
+            cherries.append((x, y))
+
+            distance = float(lines[i + 2].strip())
+            distances.append(distance)
+
+            i += 3
+
+    return cherries, distances

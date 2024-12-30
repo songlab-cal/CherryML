@@ -12,7 +12,7 @@ if __name__ == "__main__":
         rate_estimator_names=[
             ("reproduced WAG", "WAG\nrate matrix"),
             ("reproduced LG", "LG\nrate matrix"),
-            ("Cherry++__1", "LG w/ CherryML\n(re-estimated)"),
+            ("Cherry++__1__FastTree_4rc", "LG model\n CherryML\n with \nFastTree"),
         ],
         phylogeny_estimator_configs=[
             create_config_from_dict({"identifier":"fast_tree", "args":{"num_rate_categories":1}}),

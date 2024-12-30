@@ -15,6 +15,7 @@ from ._rate_matrix import (
     read_rate_matrix,
     write_probability_distribution,
     write_rate_matrix,
+    read_computed_cherries_from_file
 )
 from ._site_rates import read_site_rates, write_site_rates
 from ._sites_subset import read_sites_subset, write_sites_subset

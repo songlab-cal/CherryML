@@ -58,7 +58,7 @@ build_dir :
 	mkdir -p $(BUILD_DIR)
 
 main : fast_cherries.o
-	$(CXX) $(LFLAGS) $(BUILD_DIR)/r8lib.o $(BUILD_DIR)/c8lib.o $(BUILD_DIR)/matrix_exponential.o $(BUILD_DIR)/pairing_algorithms.o $(BUILD_DIR)/io_helpers.o $(BUILD_DIR)/fast_cherries.o $(BUILD_DIR)/branch_length_estimation.o -o $(BUILD_DIR)/mcle_cherries
+	$(CXX) $(LFLAGS) $(BUILD_DIR)/r8lib.o $(BUILD_DIR)/c8lib.o $(BUILD_DIR)/matrix_exponential.o $(BUILD_DIR)/pairing_algorithms.o $(BUILD_DIR)/io_helpers.o $(BUILD_DIR)/fast_cherries.o $(BUILD_DIR)/branch_length_estimation.o -o $(BUILD_DIR)/fast_cherries
 
 clean :
 	rm -f $(BUILD_DIR)/*

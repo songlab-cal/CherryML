@@ -1,6 +1,7 @@
 from cherryml.config import Config, sanity_check_config
 from functools import partial
 from ._fast_tree import fast_tree
+from ._fast_cherries import fast_cherries
 from ._phyml import phyml
 from cherryml.types import PhylogenyEstimatorType
 def get_phylogeny_estimator_from_config(
@@ -20,6 +21,8 @@ def get_phylogeny_estimator_from_config(
                        gt_site_rates_dir=gt_site_rates_dir,
                        gt_likelihood_dir=gt_likelihood_dir,
                        **dict(args))
+    elif name == "fast_cherries":
+        return partial(fast_cherries, **dict(args))
     else:
         raise NameError(f'{name} is not a valid phylogeny estimator! Valid estimators are ["fast_tree", "PhyML", "gt"].')
     

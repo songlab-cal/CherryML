@@ -350,7 +350,6 @@ def run_rate_estimator(
         return res
     elif rate_estimator_name.startswith("Cherry++__"):
         tokens = rate_estimator_name.split("__")
-        assert len(tokens) == 2
         res_dict = lg_end_to_end_with_cherryml_optimizer(
             msa_dir=msa_train_dir,
             families=families_train,
@@ -555,16 +554,50 @@ def reproduce_lg_paper_fig_4(
         if not use_colors:
             colors.append("black")
         elif "reproduced" in model_name:
-            colors.append("blue")
-        elif "Cherry" in model_name:
+            colors.append("black")
+        elif "FastTree" in model_name:
             colors.append("red")
+        elif "Cherry" in model_name:
+            colors.append("blue")
         elif "EM" in model_name:
             colors.append("yellow")
         else:
             colors.append("brown")
     plt.figure(figsize=figsize)
+    pairing_times = []
+    ble_times = []
+    estimation_times = []
+    total_times = []
+    for x in rate_estimator_names:
+        profiling_str = f"lg_paper_fig__{x[0]}__profiling_str.txt"
+        found_pairing = False
+        found_ble = False
+        found_estimation = False
+        found_total = False
+        if os.path.isfile(profiling_str):
+            with open(profiling_str, "r") as file:
+                for line in file:
+                    tokens = line.split(" ")
+                    if tokens[0] == "time_tree_estimation":
+                        t = float(tokens[-1])
+                        estimation_times.append(t)
+                        found_estimation = True
+                    elif tokens[0] == "total_cpu_time:":
+                        t = float(tokens[-1])
+                        total_times.append(t)
+                        found_total = True
+                    
+        if not found_estimation:
+            estimation_times.append(0)
+        if not found_pairing:
+            pairing_times.append(0)
+        if not found_ble:
+            ble_times.append(0)
+        if not found_total:
+            total_times.append(0)
+
     plt.bar(
-        x=[x[1] for x in rate_estimator_names],
+        x=[f"{x[1]}" for x in rate_estimator_names],
         height=y,
         color=colors,
     )
@@ -572,8 +605,9 @@ def reproduce_lg_paper_fig_4(
     ax = plt.gca()
     ax.yaxis.grid()
     handles = [
-        mpatches.Patch(color="blue", label="Reproduced"),
-        mpatches.Patch(color="red", label="CherryML"),
+        mpatches.Patch(color="black", label="Reproduced"),
+        mpatches.Patch(color="red", label="FastTree"),
+        mpatches.Patch(color="blue", label="FastCherries"),
     ]
     if any(["EM" in model_name for model_name in model_names]):
         handles.append(mpatches.Patch(color="yellow", label="EM"))
@@ -592,10 +626,38 @@ def reproduce_lg_paper_fig_4(
     else:
         plt.ylabel("Average per-site AIC, in nats", fontsize=fontsize)
     plt.yticks(fontsize=fontsize)
+
     for IMG_EXTENSION in IMG_EXTENSIONS:
         plt.savefig(
             f"{output_image_dir}/lg_paper_figure{IMG_EXTENSION}",
             bbox_inches="tight",
+            dpi=300,
+        )
+    plt.close()
+
+    plt.bar(x=[f"{x[1]}" for x in rate_estimator_names[2:]], 
+            height=np.array(estimation_times[2:]) - np.array(ble_times[2:]) - np.array(pairing_times[2:]), 
+            bottom=np.array(ble_times[2:]) + np.array(pairing_times[2:]), 
+            label='Tree Estimation'
+    )
+    plt.bar(x=[f"{x[1]}" for x in rate_estimator_names[2:]], 
+            height=np.array(total_times[2:]) - np.array(estimation_times[2:]), 
+            bottom=np.array(estimation_times[2:]), 
+            label='Rate Matrix Estimation'
+    )
+    plt.yticks(fontsize=fontsize)
+
+    plt.ylabel('Runtime (s)', fontsize=fontsize)
+    plt.legend(fontsize=fontsize, loc='upper right')
+    plt.xticks(rotation=0, fontsize=fontsize)
+    plt.tight_layout()
+    img_path = f"runtime_comparison"  # noqa
+    for IMG_EXTENSION in IMG_EXTENSIONS:
+        plt.savefig(
+            os.path.join(
+                output_image_dir,
+                img_path + f"{IMG_EXTENSION}",
+            ),
             dpi=300,
         )
     plt.close()

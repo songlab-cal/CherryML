@@ -25,9 +25,6 @@
  * @param quantization_grid_num_steps [integer] 
  *        The number of steps in the quantization grid.
  *
- * @param num_threads [integer] 
- *        The number of threads to be used for parallel processing of the MSA files.
- *
  * @param num_rate_categories_ble [integer] 
  *        The number of rate categories used in BLE. Default value is 1 (i.e., the WAG model).
  *
@@ -75,7 +72,6 @@ int main(int argc, char *argv[]) {
         arguments.count("-quantization_grid_center") == 0||
         arguments.count("-quantization_grid_step") == 0||
         arguments.count("-quantization_grid_num_steps") == 0||
-        arguments.count("-num_threads") == 0||
         arguments.count("-num_rate_categories_ble") == 0||
         arguments.count("-max_iters_ble") == 0) {
         std::cerr << "missing args"<< std::endl;
