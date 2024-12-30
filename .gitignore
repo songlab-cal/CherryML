@@ -1,0 +1,10 @@
+*.o
+build/*
+*__pycache__*
+_cache_lg_paper/*
+__pycache__
+*.pyc
+*.success
+*.newick
+*.profiling
+data/*
