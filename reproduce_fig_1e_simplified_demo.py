@@ -8,15 +8,19 @@ if __name__ == "__main__":
     figures.fig_lg_paper(
         evaluation_phylogeny_estimator_name="FastTree",
         output_image_dir="fig_1e_simplified/",
-        num_processes=32,
+        num_processes=9,
         rate_estimator_names=[
             ("reproduced WAG", "WAG\nrate matrix"),
             ("reproduced LG", "LG\nrate matrix"),
-            ("Cherry++__1__FastTree_4rc", "LG model\n CherryML\n with \nFastTree"),
+            ("Cherry++__4__FastCherries_4rc", "LG model\n CherryML\n with \nFastCherries"),
+            ("Cherry++__4__FastTree_4rc", "LG model\n CherryML\n with \nFastTree"),
         ],
         phylogeny_estimator_configs=[
             create_config_from_dict({"identifier":"fast_tree", "args":{"num_rate_categories":1}}),
             create_config_from_dict({"identifier":"fast_tree", "args":{"num_rate_categories":1}}),
+            create_config_from_dict({"identifier":"fast_cherries", 
+                                    "args":{"num_rate_categories":4, "max_iters":50}}
+                                    ),
             create_config_from_dict({"identifier":"fast_tree", 
                                     "args":{"num_rate_categories":4}}
                                     ),
