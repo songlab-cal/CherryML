@@ -191,7 +191,7 @@ def fast_cherries(
     num_rate_categories: int,
     max_iters: int,
     num_processes: int,
-    _version = "1",
+    _version = "2",
     output_tree_dir: Optional[str] = None,
     output_site_rates_dir: Optional[str] = None,
     output_likelihood_dir: Optional[str] = None,

@@ -7,13 +7,15 @@ std::vector<int> get_branch_lengths(
     const std::vector<std::pair<std::vector<int>, std::vector<int> > >& cherries, 
     const transition_matrices& log_transition_matrices,
     const std::vector<double>& quantization_points,
-    const std::vector<int>& site_to_rate_index
+    const std::vector<int>& site_to_rate_index,
+    const std::vector<std::vector<int>>& valid_indices
 );
 std::vector<int> get_site_rates(
     const std::vector<std::pair<std::vector<int>, std::vector<int> > >& cherries, 
     const transition_matrices& log_transition_matrices,
     const std::vector<int>& lengths_index,
-    const std::vector<double>& priors
+    const std::vector<double>& priors,
+    const std::vector<std::vector<int>>& valid_indices
 ); 
 /*
 given a list of cherries, computes the MLE distances of each cherry under the WAG model using the provided optimization_algorithm

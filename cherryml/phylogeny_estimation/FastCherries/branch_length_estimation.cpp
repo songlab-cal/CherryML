@@ -153,18 +153,20 @@ void site_rates_gamma_bins_all_pairs_inplace(
     }
 }
 
-
 std::vector<int> get_branch_lengths(
-    const std::vector<std::pair<std::vector<int>, std::vector<int> > >& cherries, 
+    const std::vector<std::pair<std::vector<int>, std::vector<int>>>& cherries, 
     const transition_matrices& log_transition_matrices,
     const std::vector<double>& quantization_points,
-    const std::vector<int>& site_to_rate_index
+    const std::vector<int>& site_to_rate_index,
+    const std::vector<std::vector<int>>& valid_indices
 ) {
     std::vector<int> branch_lengths;
     branch_lengths.reserve(cherries.size());
-    for(int cherry_index = 0; cherry_index < cherries.size(); cherry_index++) {
+
+    for (int cherry_index = 0; cherry_index < cherries.size(); cherry_index++) {
         const std::vector<int>& x = cherries[cherry_index].first;
         const std::vector<int>& y = cherries[cherry_index].second;
+
         int low = 0;
         int high = quantization_points.size() - 1;
 
@@ -172,16 +174,20 @@ std::vector<int> get_branch_lengths(
             int mid = low + (high - low) / 2;
             double ll_m = 0.0;
             double ll_m1 = 0.0;
-            for(int i = 0; i < x.size(); i++){
-                int xi = x[i];
-                int yi = y[i];
-                if(xi != -1 && yi != -1) {
-                    ll_m += log_transition_matrices(mid, site_to_rate_index[i], xi, yi) + 
-                        log_transition_matrices(mid, site_to_rate_index[i], yi, xi);
-                    ll_m1 += log_transition_matrices(mid + 1, site_to_rate_index[i], xi, yi) + 
-                        log_transition_matrices(mid + 1, site_to_rate_index[i], yi, xi);
-                }
+
+            // Loop over only valid indices, no need for an if statement
+            #pragma omp simd reduction(+:ll_m, ll_m1)
+            #pragma GCC unroll 4
+            for (size_t idx = 0; idx < valid_indices[cherry_index].size(); idx++) {
+                const int i = valid_indices[cherry_index][idx];
+                const int xi = x[i];
+                const int yi = y[i];
+                ll_m += log_transition_matrices(mid, site_to_rate_index[i], xi, yi) + 
+                         log_transition_matrices(mid, site_to_rate_index[i], yi, xi);
+                ll_m1 += log_transition_matrices(mid + 1, site_to_rate_index[i], xi, yi) + 
+                          log_transition_matrices(mid + 1, site_to_rate_index[i], yi, xi);
             }
+
             // Update the search range
             if (ll_m > ll_m1) {
                 high = mid;
@@ -189,45 +195,56 @@ std::vector<int> get_branch_lengths(
                 low = mid + 1;
             }
         }
+
         branch_lengths.push_back(low);
     }
+
     return branch_lengths;
 }
 
 std::vector<int> get_site_rates(
-    const std::vector<std::pair<std::vector<int>, std::vector<int> > >& cherries, 
+    const std::vector<std::pair<std::vector<int>, std::vector<int>>>& cherries, 
     const transition_matrices& log_transition_matrices,
     const std::vector<int>& lengths_index,
-    const std::vector<double>& priors
+    const std::vector<double>& priors,
+    const std::vector<std::vector<int>>& valid_indices
 ) {
     std::vector<int> site_rates;
     site_rates.reserve(cherries[0].first.size());
-    for(int site_index = 0; site_index < cherries[0].first.size(); site_index++) {
+
+    for (int site_index = 0; site_index < cherries[0].first.size(); site_index++) {
         int low = 0;
         int high = priors.size() - 1;
 
         while (low < high) {
             int mid = low + (high - low) / 2;
-            double ll_m =  priors[mid];
+            double ll_m = priors[mid];
             double ll_m1 = priors[mid + 1];
-            for (int i = 0; i < cherries.size(); i++) {
-                int xi = cherries[i].first[site_index];
-                int yi = cherries[i].second[site_index];
-                if(xi != -1 && yi != -1) {
-                    ll_m += log_transition_matrices(lengths_index[i], mid, xi, yi) + 
-                        log_transition_matrices(lengths_index[i], mid, yi, xi);
-                    ll_m1 += log_transition_matrices(lengths_index[i], mid + 1, xi, yi) + 
-                        log_transition_matrices(lengths_index[i], mid + 1, yi, xi);
-                }
+
+            // Loop over only valid cherries for the current site_index
+            #pragma omp simd reduction(+:ll_m, ll_m1)
+            #pragma GCC unroll 4
+            for (size_t idx = 0; idx < valid_indices[site_index].size(); idx++) {
+                const int i = valid_indices[site_index][idx];
+                const int xi = cherries[i].first[site_index];
+                const int yi = cherries[i].second[site_index];
+                ll_m += log_transition_matrices(lengths_index[i], mid, xi, yi) + 
+                         log_transition_matrices(lengths_index[i], mid, yi, xi);
+                ll_m1 += log_transition_matrices(lengths_index[i], mid + 1, xi, yi) + 
+                          log_transition_matrices(lengths_index[i], mid + 1, yi, xi);
             }
+
+            // Update the search range
             if (ll_m > ll_m1) {
                 high = mid;
             } else {
                 low = mid + 1;
             }
         }
+
         site_rates.push_back(low);
     }
+
     return site_rates;
 }
 
@@ -248,16 +265,38 @@ length_and_rates ble(
         site_to_rate_index,
         s
     );
-   //for(int i = 0; i < l; i++) {
-   //    std::cout << site_to_rate_index[i] << " ";
-   //}
-   //std::cout << std::endl;
-   //std::cout<<"getting initial lengths" <<std::endl;
+    // Precompute valid indices for each site across all cherries
+    std::vector<std::vector<int>> valid_indices_for_site_rate(cherries[0].first.size());
+    for (int site_index = 0; site_index < cherries[0].first.size(); site_index++) {
+        for (int i = 0; i < cherries.size(); i++) {
+            int xi = cherries[i].first[site_index];
+            int yi = cherries[i].second[site_index];
+            if (xi != -1 && yi != -1) {
+                valid_indices_for_site_rate[site_index].push_back(i);  // Store valid index for this site
+            }
+        }
+    }
+
+    std::vector<std::vector<int>> valid_indices_for_branch_length(cherries.size());
+    for (int cherry_index = 0; cherry_index < cherries.size(); cherry_index++) {
+        const std::vector<int>& x = cherries[cherry_index].first;
+        const std::vector<int>& y = cherries[cherry_index].second;
+        std::vector<int> valid_indices;
+        valid_indices.reserve(x.size());
+        for (int i = 0; i < x.size(); i++) {
+            if (x[i] != -1 && y[i] != -1) {
+                valid_indices_for_branch_length[cherry_index].push_back(i);  // Store index of valid pair
+            }
+        }
+    }
+
+    // begin coordinate ascent
     std::vector<int> lengths_index = get_branch_lengths(
         cherries,
         log_transition_matrices, 
         quantization_points, 
-        site_to_rate_index
+        site_to_rate_index,
+        valid_indices_for_branch_length
     );
     
     std::vector<double> priors;
@@ -265,7 +304,7 @@ length_and_rates ble(
     for(double rate:rate_categories) {
         priors.push_back(2*std::log(rate) - 3*rate);
     }
-    
+
     bool match = false;
     while(!match && max_iters) {
         //std::cout << max_iters << std::endl;
@@ -273,13 +312,15 @@ length_and_rates ble(
             cherries, 
             log_transition_matrices,
             lengths_index,
-            priors
+            priors,
+            valid_indices_for_site_rate
         );
         std::vector<int> new_lengths_index = get_branch_lengths(
             cherries,
             log_transition_matrices, 
             quantization_points, 
-            site_to_rate_index
+            site_to_rate_index,
+            valid_indices_for_branch_length
         );
         
         match = true;
