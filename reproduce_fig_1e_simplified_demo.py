@@ -10,20 +10,20 @@ if __name__ == "__main__":
         output_image_dir="fig_1e_simplified/",
         num_processes=9,
         rate_estimator_names=[
-            ("reproduced WAG", "WAG\nrate matrix"),
-            ("reproduced LG", "LG\nrate matrix"),
-            ("Cherry++__4__FastCherries_4rc", "LG model\n CherryML\n with \nFastCherries"),
-            ("Cherry++__4__FastTree_4rc", "LG model\n CherryML\n with \nFastTree"),
+            #("reproduced WAG", "WAG\nrate matrix"),
+            #("reproduced LG", "LG\nrate matrix"),
+            ("Cherry++__4__FastCherries_4rc", "LG model\n CherryML\n with \nFastCherries 4rc"),
+            #("Cherry++__4__FastTree_4rc", "LG model\n CherryML\n with \nFastTree 4rc"),
         ],
         phylogeny_estimator_configs=[
-            create_config_from_dict({"identifier":"fast_tree", "args":{"num_rate_categories":1}}),
-            create_config_from_dict({"identifier":"fast_tree", "args":{"num_rate_categories":1}}),
+            #create_config_from_dict({"identifier":"fast_tree", "args":{"num_rate_categories":1}}),
+            #create_config_from_dict({"identifier":"fast_tree", "args":{"num_rate_categories":1}}),
             create_config_from_dict({"identifier":"fast_cherries", 
-                                    "args":{"num_rate_categories":4, "max_iters":50}}
+                                    "args":{"num_rate_categories":4, "max_iters":50, "_version":3}}
                                     ),
-            create_config_from_dict({"identifier":"fast_tree", 
-                                    "args":{"num_rate_categories":4}}
-                                    ),
+            #create_config_from_dict({"identifier":"fast_tree", 
+            #                        "args":{"num_rate_categories":4}}
+            #                        ),
         ],
         lg_pfam_training_alignments_dir="data/lg_paper_data/lg_PfamTrainingAlignments",
         lg_pfam_testing_alignments_dir="data/lg_paper_data/lg_PfamTestingAlignments",

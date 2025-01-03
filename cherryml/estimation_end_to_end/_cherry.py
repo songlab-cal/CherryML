@@ -78,6 +78,20 @@ def _map_func_subset_data_to_sites_subset(args: List) -> None:
         caching.secure_parallel_output(output_site_rates_dir, family)
 
 
+def is_pairer(tree_estimator_output_dirs: str, families: List[str]) -> float:
+    """
+    checks if the phylogeny estimator is a pairer by checking that the pairing time is in the profiling file
+    """
+    profiling_file_path = os.path.join(
+        tree_estimator_output_dirs["output_tree_dir"],
+        families[0] + ".profiling",
+    )
+    if not os.path.exists(profiling_file_path):
+        return False
+    with open(profiling_file_path, "r") as profiling_file:
+        profiling_file_contents = profiling_file.read()
+        return "pairing" in profiling_file_contents
+
 @caching.cached_parallel_computation(
     exclude_args=["num_processes"],
     parallel_arg="families",
@@ -140,23 +154,26 @@ def _get_runtime_from_profiling_file(profiling_file_path: str) -> float:
         res = float(profiling_file_contents.split()[2])
         return res
 
-
 def _get_runtime_from_tree_estimator_profiling_file(
-    profiling_file_path: str,
+    profiling_file_path: str, attribute: str
 ) -> float:
     """
     TODO: Define a serialization protocol for profiling files and move to IO
     """
     if not os.path.exists(profiling_file_path):
         return 0  # No profiling information was provided (e.g. GT tree dir)
+    index = -1
+    if attribute == "pairing":
+        index = 1
+    elif attribute == "ble":
+        index = 3
     with open(profiling_file_path, "r") as profiling_file:
         profiling_file_contents = profiling_file.read()
-        res = float(profiling_file_contents.split()[-1])
+        res = float(profiling_file_contents.split()[index])
         return res
 
-
 def _get_tree_estimation_runtime(
-    tree_estimator_output_dirs: str, families: List[str]
+    tree_estimator_output_dirs: str, families: List[str], attribute: str=""
 ) -> float:
     """
     Total runtime used to estimate trees
@@ -169,10 +186,25 @@ def _get_tree_estimation_runtime(
             family + ".profiling",
         )
         res += _get_runtime_from_tree_estimator_profiling_file(
-            profiling_file_path
+            profiling_file_path, attribute
         )
     return res
 
+def _get_all_site_rates(
+    tree_estimator_output_dirs: str, families: List[str]
+) -> List[List[float]]:
+    """
+    list of list of site rates.
+    res[i][j] is the site rate of the j-th site for the i-th family
+    """
+    res = []
+    for family in sorted(families):
+        profiling_file_path = os.path.join(
+            tree_estimator_output_dirs["output_site_rates_dir"],
+            family + ".txt",
+        )
+        res.append(read_site_rates(profiling_file_path))
+    return res
 
 def lg_end_to_end_with_cherryml_optimizer(
     msa_dir: str,
@@ -242,10 +274,13 @@ def lg_end_to_end_with_cherryml_optimizer(
     res["quantization_points"] = quantization_points
 
     time_tree_estimation = 0
+    time_pairing = 0
+    time_ble = 0
     time_counting = 0
     time_jtt_ipw = 0
     time_optimization = 0
-
+    is_a_pairer = False
+    
     current_estimate_rate_matrix_path = initial_tree_estimator_rate_matrix_path
     for iteration in range(num_iterations):
         if (
@@ -269,8 +304,16 @@ def lg_end_to_end_with_cherryml_optimizer(
         ] = tree_estimator_output_dirs
 
         time_tree_estimation += _get_tree_estimation_runtime(
-            tree_estimator_output_dirs, families
+            tree_estimator_output_dirs, families, "total"
         )
+        if is_a_pairer or is_pairer(tree_estimator_output_dirs=tree_estimator_output_dirs, families=families):
+            is_a_pairer = True
+            time_pairing += _get_tree_estimation_runtime(
+                tree_estimator_output_dirs, families, "pairing"
+            )
+            time_ble += _get_tree_estimation_runtime(
+                tree_estimator_output_dirs, families, "ble"
+            )
 
         if sites_subset_dir is not None:
             res_dict = _subset_data_to_sites_subset(
@@ -356,13 +399,21 @@ def lg_end_to_end_with_cherryml_optimizer(
 
     res["learned_rate_matrix_path"] = current_estimate_rate_matrix_path
 
+    res["all_site_rates"] = _get_all_site_rates(tree_estimator_output_dirs=tree_estimator_output_dirs,
+                                                families=families)
     res["time_tree_estimation"] = time_tree_estimation
+
+    if is_a_pairer:
+        res["time_pairing"] = time_pairing
+        res["time_ble"] = time_ble
+
     res["time_counting"] = time_counting
     res["time_jtt_ipw"] = time_jtt_ipw
     res["time_optimization"] = time_optimization
     res["total_cpu_time"] = (
         time_tree_estimation + time_counting + time_jtt_ipw + time_optimization
     )
+
 
     profiling_str = (
         f"CherryML runtimes:\n"
@@ -373,9 +424,26 @@ def lg_end_to_end_with_cherryml_optimizer(
         f"time_optimization: {res['time_optimization']}\n"
         f"total_cpu_time: {res['total_cpu_time']}\n"
     )
+    if is_a_pairer:
+        profiling_str += (
+            f"time_pairing {res['time_pairing']}\n"
+            f"time_ble {res['time_ble']}"
+        )
     res["profiling_str"] = profiling_str
 
+    # write dfs function to pop cherries from the tree and compute distance of cherries, 
+    # store a list of all the cherry distance in res, order doesn't matter, we only care 
+    # about the distribution of branch legnths
+    #res["cherry_distances"] = _get_all_cherry_distances(
+    #    tree_estimator_output_dirs=tree_estimator_output_dirs,
+    #    families=families
+    #)
+    #res["cherry_composite_likelihoods"] = _get_cherry_likelihoods(
+    #    tree_estimator_output_dirs=tree_estimator_output_dirs,
+    #    families=families
+    #)
     return res
+
 
 
 def coevolution_end_to_end_with_cherryml_optimizer(

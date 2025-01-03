@@ -152,7 +152,7 @@ def plot_rate_matrix_predictions(
     if density_plot:
         sns.jointplot(x=ys_true, y=ys_pred, kind="hex", color="#4CB391")
     else:
-        sns.scatterplot(ys_true, ys_pred, alpha=alpha)
+        sns.scatterplot(x=ys_true, y=ys_pred, alpha=alpha)
         # plt.scatter(ys_true, ys_pred, alpha=alpha)
 
     plt.xticks(fontsize=14)
