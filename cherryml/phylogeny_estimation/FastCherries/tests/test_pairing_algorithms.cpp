@@ -28,6 +28,9 @@ void test_dc_pairer(
 
     assert(res.size() == expected.size());
     for(int i = 0; i < res.size(); i++) {
+        std::cout << res[i].first << " " << res[i].second  << ", ";
+    }
+    for(int i = 0; i < res.size(); i++) {
         
         assert(expected[i] == res[i]);
     }

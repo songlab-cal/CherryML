@@ -27,6 +27,7 @@ length_and_rates ble(
     const transition_matrices& log_transition_matrices,
     const std::vector<double>& quantization_points, 
     const std::vector<double>& rate_categories,
+    const std::vector<double>& weights_for_initial_site_rates, 
     int max_iters
 ) ;
 

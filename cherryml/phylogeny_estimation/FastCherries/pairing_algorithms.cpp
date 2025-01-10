@@ -37,7 +37,6 @@ inline double hamming_distance(
     return dist*-1.0/count;
 }
 
-
 inline std::pair<std::string, std::vector<double> > find_farthest(
     const std::vector<std::string>& msa_list,
     const std::unordered_map<std::string, std::vector<int> >& msa_map,
