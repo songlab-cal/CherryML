@@ -18,8 +18,8 @@ from cherryml._siterm._learn_site_rate_matrix import get_standard_site_rate_grid
 
 
 def learn_site_specific_rate_matrices(
-    tree_newick: str,
-    msa: Dict[str, str],
+    tree_newick: str,  # TODO: Allow None, in which case it will be reconstructed.
+    msa: Dict[str, str],  # TODO: Allow path to MSA too.
     alphabet: List[str],
     regularization_rate_matrix: pd.DataFrame,
     regularization_strength: float = 0.5,
