@@ -44,6 +44,7 @@
 #include <fstream>
 #include <cmath>
 #include <stdlib.h>
+#include <assert.h>
 
 
 // copied from FastTree 2.1
