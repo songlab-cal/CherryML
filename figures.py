@@ -291,9 +291,9 @@ def _fig_single_site_cherry(
     edge_or_cherry: str = CHERRYML_TYPE,
     simulated_data_dirs: Optional[Dict[str, str]] = None,
     num_families_train_list = [4, 8, 16, 32, 64, 128, 256, 512, 1024],
-    sequence_length: Optional[int] = None,  # If None, the real MSA lengths are used.
     normalize_learned_rate_matrix=False,
-    initial_rate_matrix_path=get_equ_path()
+    initial_rate_matrix_path=get_equ_path(),
+    total_only = False
 ):
     caching.set_cache_dir("_cache_benchmarking_em")
 
@@ -346,7 +346,6 @@ def _fig_single_site_cherry(
                 num_rate_categories=num_rate_categories,
                 num_processes=num_processes_tree_estimation,
                 random_seed=random_seed,
-                sequence_length=sequence_length,
             )
 
             logging_str = (
@@ -415,39 +414,41 @@ def _fig_single_site_cherry(
 
         def get_runtime(
             lg_end_to_end_with_cherryml_optimizer_res: Dict[str,str],
+            total_only = False
         ) -> float:
             """
             Get the runtime of CherryML.
             """
-            #res = 0
-            #for lg_end_to_end_with_cherryml_optimizer_output_dir in [
-            #    "count_matrices_dir_0",
-            #    "jtt_ipw_dir_0",
-            #    "rate_matrix_dir_0",
-            #]:
-            #    dir_lg_end_to_end_with_cherryml_optimizer_output_dir = (
-            #        lg_end_to_end_with_cherryml_optimizer_res[
-            #            lg_end_to_end_with_cherryml_optimizer_output_dir
-            #        ]
-            #    )
-            #    print(
-            #        f"dir_lg_end_to_end_with_cherryml_optimizer_output_dir = {dir_lg_end_to_end_with_cherryml_optimizer_output_dir}"
-            #    )
-            #    with open(
-            #        os.path.join(
-            #            dir_lg_end_to_end_with_cherryml_optimizer_output_dir,
-            #            "profiling.txt",
-            #        ),
-            #        "r",
-            #    ) as profiling_file:
-            #        profiling_file_contents = profiling_file.read()
-            #        print(
-            #            f"{lg_end_to_end_with_cherryml_optimizer_output_dir} "  # noqa
-            #            f"profiling_file_contents = {profiling_file_contents}"  # noqa
-            #        )
-            #        res += float(profiling_file_contents.split()[2])
-            #return res
-            return lg_end_to_end_with_cherryml_optimizer_res["total_cpu_time"]
+            if total_only:
+                return lg_end_to_end_with_cherryml_optimizer_res["total_cpu_time"]
+            res = 0
+            for lg_end_to_end_with_cherryml_optimizer_output_dir in [
+                "count_matrices_dir_0",
+                "jtt_ipw_dir_0",
+                "rate_matrix_dir_0",
+            ]:
+                dir_lg_end_to_end_with_cherryml_optimizer_output_dir = (
+                    lg_end_to_end_with_cherryml_optimizer_res[
+                        lg_end_to_end_with_cherryml_optimizer_output_dir
+                    ]
+                )
+                print(
+                    f"dir_lg_end_to_end_with_cherryml_optimizer_output_dir = {dir_lg_end_to_end_with_cherryml_optimizer_output_dir}"
+                )
+                with open(
+                    os.path.join(
+                        dir_lg_end_to_end_with_cherryml_optimizer_output_dir,
+                        "profiling.txt",
+                    ),
+                    "r",
+                ) as profiling_file:
+                    profiling_file_contents = profiling_file.read()
+                    print(
+                        f"{lg_end_to_end_with_cherryml_optimizer_output_dir} "  # noqa
+                        f"profiling_file_contents = {profiling_file_contents}"  # noqa
+                    )
+                    res += float(profiling_file_contents.split()[2])
+            return res
 
         runtime = get_runtime(lg_end_to_end_with_cherryml_optimizer_res)
         runtimes.append(runtime)
@@ -546,6 +547,7 @@ def _fig_single_site_em(
     num_sequences: int = 128,
     random_seed: int = 0,
     simulated_data_dirs: Optional[Dict[str, str]] = None,
+    num_families_train_list:List[int] = [4, 8, 16, 32, 64, 128, 256, 512, 1024]
 ):
     output_image_dir = (
         "images/fig_single_site_em__"
@@ -556,7 +558,6 @@ def _fig_single_site_em(
 
     caching.set_cache_dir("_cache_benchmarking_em")
 
-    num_families_train_list = [4, 8, 16, 32, 64, 128, 256, 512, 1024]
 
     yss_relative_errors = []
     runtimes = []
@@ -714,24 +715,28 @@ def _fig_single_site_em(
 
 # Fig. 1b, 1c
 def fig_computational_and_stat_eff_cherry_vs_em(
-    tree_estimator_config_list:Config = [],
-    labels:List[str] = [],
-    styles:List[str] = [],
-    colors:List[str] = [],
-    num_iterations_list:List[str] = [],
+    tree_estimator_config_list:Config = [
+        create_config_from_dict({
+                "identifier":"gt",
+                "args":{"num_rate_categories":4}
+        })
+    ],
+    labels:List[str] = ["CherryML"],
+    styles:List[str] = ["o-"],
+    colors:List[str] = ["red"],
+    num_iterations_list:List[str] = [1],
     add_em:bool = True,
     extra_em_command_line_args: str = "-log 6 -f 3 -mi 0.000001",
     edge_or_cherry: str = CHERRYML_TYPE,
     simulated_data_dirs: Optional[Dict[str, str]] = None,
     num_processes_tree_estimation:int = 4,
     num_rate_categories:int = 1,
-    supplemental_plots:bool = False,
-    test_missing:bool = False,
-    sequence_length: Optional[int] = None,  # If None, the real MSA lengths are used.
     output_image_dir = "images/fig_computational_and_stat_eff_cherry_vs_em",
     normalize_learned_rate_matrix=False,
     num_families_train_list=[4, 8, 16, 32, 64, 128, 256, 512, 1024],
     fontsize = 14,
+    neurips_labels = False,
+    total_only=False
 ):
     """
     We show that CherryML retains a high statistical efficiency compared to EM.
@@ -743,13 +748,9 @@ def fig_computational_and_stat_eff_cherry_vs_em(
     if not os.path.exists(output_image_dir):
         os.makedirs(output_image_dir)
     cherry_times_all = [] 
-    cherry_errors_nonpct_all = []
     cherry_errors_all = []
+    cherry_errors_nonpct_all = []
     num_families_cherry_all = []
-    cherry_distance_distributions_all = []
-    site_rates_all = []
-    #cherry_composite_likelihoods_all = []
-    percent_missing_list = []
     plt.figure(dpi=800)
     for i in range(len(tree_estimator_config_list)):
         tree_estimator_config = tree_estimator_config_list[i]
@@ -758,9 +759,8 @@ def fig_computational_and_stat_eff_cherry_vs_em(
             num_families_cherry,
             cherry_errors_nonpct,
             cherry_times,
-            cherry_distance_distributions,
-            site_rates,
-            #cherry_composite_likelihoods,
+            _,
+            _,
         ) = _fig_single_site_cherry(
             tree_estimator_config=tree_estimator_config, 
             num_rate_categories=num_rate_categories,
@@ -769,46 +769,23 @@ def fig_computational_and_stat_eff_cherry_vs_em(
             simulated_data_dirs=simulated_data_dirs,
             num_iterations=num_iterations,
             num_families_train_list = num_families_train_list,
-            sequence_length=sequence_length,
-            normalize_learned_rate_matrix=normalize_learned_rate_matrix
+            normalize_learned_rate_matrix=normalize_learned_rate_matrix,
+            total_only=total_only
         )
-        cherry_distance_distributions_all.append(cherry_distance_distributions)
-        site_rates_all.append(site_rates)
         num_families_cherry_all.append(num_families_cherry)
         cherry_times = [int(x) for x in cherry_times]
         cherry_errors = [float("%.1f" % (100 * x)) for x in cherry_errors_nonpct]
         print(f"cherry_errors_nonpct = {cherry_errors_nonpct}")
         print(f"cherry_times = {cherry_times}")
-        
+        print(f"cherry_families = {num_families_train_list}")
         cherry_times_all.append(cherry_times)
-        cherry_errors_nonpct_all.append(cherry_errors_nonpct)
         cherry_errors_all.append(cherry_errors)
-    
-    plt.figure(dpi=800)
-    for i, tree_estimator_config in enumerate(tree_estimator_config_list):
-        cherry_errors_nonpct = cherry_errors_nonpct_all[i]
-        cherry_errors = cherry_errors_all[i]
-        num_families = num_families_cherry_all[i]
-        indices = [i for i in range(len(num_families))]
-        plt.plot(
-            num_families,
-            100 * np.array(cherry_errors_nonpct),
-            styles[i],
-            label=labels[i],
-            color=colors[i],
-        )
-        cherry_times_all.append(cherry_times)
-        
-    # hard coding text for the neurips submission
-    for a, b in zip(num_families_cherry_all[0], cherry_errors_all[0]):
-        plt.text(a*0.75, 1.5 * b, str(b), fontsize=fontsize, color="maroon")
-    for a, b in zip(num_families_cherry_all[1], cherry_errors_all[1]):
-        plt.text(a*0.75, b / 2.0, str(b), fontsize=fontsize, color='darkblue')
+        cherry_errors_nonpct_all.append(cherry_errors_nonpct)
     if add_em:
         num_families_em, em_errors_nonpct, em_times = _fig_single_site_em(
             extra_em_command_line_args=extra_em_command_line_args,
             simulated_data_dirs=simulated_data_dirs,
-            sequence_length=sequence_length,
+            num_families_train_list = num_families_train_list,
         )
         em_times = [int(x) for x in em_times]
         em_errors = [float("%.1f" % (100 * x)) for x in em_errors_nonpct]
@@ -816,17 +793,38 @@ def fig_computational_and_stat_eff_cherry_vs_em(
 
         print(f"em_errors_nonpct = {em_errors_nonpct}")
         print(f"em_times = {em_times}")
-
+        print(f"num_families_em = {num_families_em}")
         plt.plot(
-            indices,
+            num_families_em,
             100 * np.array(em_errors_nonpct),
             "o-",
             label="EM",
             color="blue",
         )
-        for a, b in zip(indices, em_errors):
+        for a, b in zip(num_families_em, em_errors):
             plt.text(a - 0.35, b / 1.5, str(b) + "%", fontsize=fontsize)
     
+    for i, tree_estimator_config in enumerate(tree_estimator_config_list):
+        cherry_errors_nonpct = cherry_errors_nonpct_all[i]
+        plt.plot(
+            num_families_train_list,
+            100 * np.array(cherry_errors_nonpct),
+            styles[i],
+            label=labels[i],
+            color=colors[i],
+        )
+    
+    if neurips_labels:
+        for a, b in zip(num_families_cherry_all[0], cherry_errors_all[0]):
+            plt.text(a*0.75, 1.5 * b, str(b), fontsize=fontsize, color="maroon")
+        for a, b in zip(num_families_cherry_all[1], cherry_errors_all[1]):
+            plt.text(a*0.75, b / 2.0, str(b), fontsize=fontsize, color='darkblue')
+    else:
+        print("hi", cherry_errors_all, num_families_cherry_all)
+        for a, b in zip(num_families_cherry_all[0], cherry_errors_all[0]):
+            plt.text(a*0.75, 1.5 * b, str(b), fontsize=fontsize, color="maroon")
+
+        
     plt.ylim((0.05, 200))
     plt.xscale("log", base=2)
     #plt.xticks(indices, num_families, fontsize=fontsize)
@@ -848,7 +846,11 @@ def fig_computational_and_stat_eff_cherry_vs_em(
     plt.close()
     
     plt.figure(dpi=800)
-    for i, tree_estimator_config in enumerate(tree_estimator_config_list[:-1]):
+    if neurips_labels:
+        plot_times_for_estimators = tree_estimator_config_list[:-1]
+    else:
+        plot_times_for_estimators = tree_estimator_config_list
+    for i, tree_estimator_config in enumerate(plot_times_for_estimators):
         cherry_times = cherry_times_all[i]
         num_families = num_families_cherry
         indices = [i for i in range(len(num_families))]
@@ -858,15 +860,17 @@ def fig_computational_and_stat_eff_cherry_vs_em(
                 label=labels[i], 
                 color=colors[i]
         )
-    
-    for a, b in zip(num_families_cherry, cherry_times_all[1]):
-        plt.text(a*0.9**(len(str(b))), 1.6 * b, str(b), fontsize=fontsize, color='darkblue')
-    for a, b in zip(num_families_cherry, cherry_times_all[0]):
-        plt.text(a*0.9**(len(str(b))), b / 2.2, str(b), fontsize=fontsize, color="maroon") 
-
+    if neurips_labels:
+        for a, b in zip(num_families_cherry, cherry_times_all[1]):
+            plt.text(a*0.9**(len(str(b))), 1.6 * b, str(b), fontsize=fontsize, color='darkblue')
+        for a, b in zip(num_families_cherry, cherry_times_all[0]):
+            plt.text(a*0.9**(len(str(b))), b / 2.2, str(b), fontsize=fontsize, color="maroon") 
+    else:
+        for a, b in zip(num_families_cherry, cherry_times_all[0]):
+            plt.text(a*0.9**(len(str(b))), b / 2.2, str(b), fontsize=fontsize, color="maroon") 
     if add_em:
-        plt.plot(indices, em_times, "o-", label="EM", color="blue")
-        for a, b in zip(indices, em_times):
+        plt.plot(num_families_em, em_times, "o-", label="EM", color="blue")
+        for a, b in zip(num_families_em, em_times):
             plt.text(a - 0.35, b * 1.5, str(b) + "s", fontsize=fontsize)
 
     plt.ylim((5, 5e5))

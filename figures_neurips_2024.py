@@ -15,19 +15,20 @@ def efficiency():
     configs, styles, colors = get_configs_and_styles_from_name(labels)
     figures.fig_computational_and_stat_eff_cherry_vs_em(
         tree_estimator_config_list = configs,
-        labels = labels,
+        labels = labels, 
         styles = styles,
         colors = colors,
         num_iterations_list = [4]*len(labels),
         add_em = False,
         simulated_data_dirs=simulated_data_dirs_fig_1bc,
         num_processes_tree_estimation=num_processes,
-        supplemental_plots=False,
         num_rate_categories=4,
         output_image_dir="neurips_figures/simulated_estimated",
         normalize_learned_rate_matrix=True, 
         num_families_train_list=[4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192],
         fontsize=15,
+        neurips_labels = True,
+        total_only=True
     )
 
 def reproduce_lg():
@@ -51,8 +52,6 @@ def reproduce_lg():
         ],
         lg_pfam_training_alignments_dir="data/lg_paper_data/lg_PfamTrainingAlignments",
         lg_pfam_testing_alignments_dir="data/lg_paper_data/lg_PfamTestingAlignments",
-        include_title=False,
-        fontsize=15,
     )  
     print("Creating figure 1e done!")
 def qmaker():
@@ -106,6 +105,6 @@ def qmaker():
     )
 
 if __name__ == "__main__":
-    qmaker()
+    #qmaker()
     reproduce_lg()
-    efficiency()
+    #efficiency()
