@@ -1,0 +1,9 @@
+**__pycache__**
+cherryml/counting/_count_co_transitions
+cherryml/counting/_count_transitions
+cherryml/estimation/historian/
+cherryml/estimation/xrate/
+cherryml/phylogeny_estimation/FastTree
+cherryml/phylogeny_estimation/phyml_github/
+cherryml/simulation/simulate
+
