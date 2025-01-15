@@ -105,6 +105,6 @@ def qmaker():
     )
 
 if __name__ == "__main__":
-    #qmaker()
+    qmaker()
     reproduce_lg()
-    #efficiency()
+    efficiency()

@@ -414,7 +414,7 @@ def _fig_single_site_cherry(
 
         def get_runtime(
             lg_end_to_end_with_cherryml_optimizer_res: Dict[str,str],
-            total_only = False
+            total_only:bool
         ) -> float:
             """
             Get the runtime of CherryML.
@@ -450,7 +450,7 @@ def _fig_single_site_cherry(
                     res += float(profiling_file_contents.split()[2])
             return res
 
-        runtime = get_runtime(lg_end_to_end_with_cherryml_optimizer_res)
+        runtime = get_runtime(lg_end_to_end_with_cherryml_optimizer_res, total_only=total_only)
         runtimes.append(runtime)
         if num_iterations == 0:
             learned_rate_matrix_path = initial_rate_matrix_path
