@@ -206,13 +206,15 @@ def write_tree(
             f"{node_name_prefix + u} {node_name_prefix + v} "
             f"{d * scaling_factor}\n"
         )
-    open(tree_path, "w").write(res)
+    with open(tree_path, "w") as tree_file:
+        tree_file.write(res)
 
 
 def read_tree(
     tree_path: str,
 ) -> Tree:
-    lines = open(tree_path, "r").read().strip().split("\n")
+    with open(tree_path, "r") as tree_file:
+        lines = tree_file.read().strip().split("\n")
     try:
         n, s = lines[0].split(" ")
         if s != "nodes":

@@ -7,3 +7,16 @@ cherryml/phylogeny_estimation/FastTree
 cherryml/phylogeny_estimation/phyml_github/
 cherryml/simulation/simulate
 
+*.o
+build/*
+*__pycache__*
+_cache_lg_paper/*
+_cache_benchmarking_qmaker/*
+__pycache__
+*.pyc
+*.success
+*.newick
+*.profiling
+data/*
+*.txt
+input_data

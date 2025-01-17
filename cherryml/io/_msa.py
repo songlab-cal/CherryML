@@ -52,7 +52,8 @@ def read_msa(
     msa_path: str,
 ) -> Dict[str, str]:
     msa = {}
-    lines = open(msa_path, "r").read().strip().split("\n")
+    with open(msa_path, "r") as msa_file:
+        lines = msa_file.read().strip().split("\n")
     if len(lines) % 2 != 0:
         raise Exception(
             f"The MSA at {msa_path} should have an even number of lines"
