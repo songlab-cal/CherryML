@@ -35,7 +35,7 @@ def reproduce_lg():
     figures.fig_lg_paper(
         evaluation_phylogeny_estimator_name="PhyML",
         output_image_dir="neurips_figures/lg_reproduced",
-        num_processes=9,
+        num_processes=num_processes,
         rate_estimator_names=[
             ("reproduced WAG", "WAG\nrate \nmatrix"),
             ("reproduced LG", "LG\nrate \nmatrix"),
