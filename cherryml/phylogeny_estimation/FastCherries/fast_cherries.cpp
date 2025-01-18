@@ -2,7 +2,8 @@
  * @brief Processes a list of MSA's in parallel and outputs a set of cherries for each MSA.
  *
  * @param rate_matrix_path [string] 
- *        A file path to a 20x20 rate matrix.
+ *        A file path to the rate matrix. The i-th column and j-th row should 
+ *        correspond to the rate of transitioning from alphabet[i] to alphabet[j]. 
  *
  * @param msa_list_path [string] 
  *        A file path containing a list of file paths (one per line) pointing to MSA files.
@@ -30,6 +31,9 @@
  *
  * @param max_iters_ble [integer] 
  *        The maximum number of iterations for BLE. Default value is 50.
+ * @param alphabet_path [string] optional
+ *        Path to a file containing the alphabet used. The alphabet should be in the same order as the 
+ *        rows and columns of the rate matrix if not provided, default_alphabet will be assumed.
  */
 
 
@@ -213,7 +217,9 @@ int main(int argc, char *argv[]) {
     }
 
     std::unordered_map<char, int> alphabet = default_alphabet;
-
+    if(arguments.count("-alphabet_path") > 0) {
+        alphabet = read_alphabet(arguments["-alphabet_path"]);
+    }
     srand(seed);
 
     const std::vector<double>& quantization_points = compute_quantization_points(

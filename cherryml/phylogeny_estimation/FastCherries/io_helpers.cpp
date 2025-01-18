@@ -4,6 +4,7 @@
 #include <string>
 #include <iomanip>
 #include <sstream>
+#include <unordered_map>
 #include <cmath>
 #include "io_helpers.h"
 #include "matrix_exponential/matrix_exponential.hpp"
@@ -12,6 +13,20 @@
 inline int get_char_index(char c, const unordered_map<char, int>& alphabet) {
     auto it = alphabet.find(c);
     return (it != alphabet.end()) ? it->second : -1;
+}
+
+std::unordered_map<char, int> read_alphabet(std::string alphabet_path) {
+    ifstream alphabet_file(alphabet_path);
+    int size;
+    alphabet_file >> size;
+    std::unordered_map<char, int> alphabet;
+    for(int i = 0; i < size; i++) {
+        char c;
+        alphabet_file >> c;
+        alphabet[c] = i;
+    }
+    alphabet_file.close();
+    return alphabet;
 }
 
 msa_type read_msa(const std::string& msa_path, const unordered_map<char, int>& alphabet) {

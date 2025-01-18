@@ -67,7 +67,7 @@ class TestFastCherries(unittest.TestCase):
             output_site_rates_dir = "tests/phylogeny_estimation_tests/pairing_ble_test_site_rates",
             output_likelihood_dir = "tests/phylogeny_estimation_tests/pairing_ble_test_likelihoods",
         )
-        # LG
+        # WAG
         fast_cherries(
             msa_dir = "tests/data",
             families = [f[:-4] for f in listdir("tests/data")[:400] if isfile(join("tests/data", f)) and f[-4:] == ".txt"],
@@ -93,6 +93,65 @@ class TestFastCherries(unittest.TestCase):
             output_site_rates_dir = "tests/phylogeny_estimation_tests/pairing_ble_test_site_rates",
             output_likelihood_dir = "tests/phylogeny_estimation_tests/pairing_ble_test_likelihoods",
         )
+    def test_run_different_alphabet(self):
+        if not os.path.exists("tests/phylogeny_estimation_tests/pairing_ble_test_trees"):
+            os.makedirs("tests/phylogeny_estimation_tests/pairing_ble_test_trees")
+        if not os.path.exists("tests/phylogeny_estimation_tests/pairing_ble_test_likelihoods"):
+            os.makedirs("tests/phylogeny_estimation_tests/pairing_ble_test_likelihoods")
+        if not os.path.exists("tests/phylogeny_estimation_tests/pairing_ble_test_site_rates"):
+            os.makedirs("tests/phylogeny_estimation_tests/pairing_ble_test_site_rates")
+
+        for filename in os.listdir("tests/phylogeny_estimation_tests/pairing_ble_test_trees"):
+            file_path = os.path.join("tests/phylogeny_estimation_tests/pairing_ble_test_trees", filename)
+            try:
+                if os.path.isfile(file_path):
+                    os.remove(file_path)
+                    print(f"Removed file: {file_path}")
+            except Exception as e:
+                print(f"Error occurred whilegi removing {file_path}: {e}")
+        for filename in os.listdir("tests/phylogeny_estimation_tests/pairing_ble_test_likelihoods"):
+            file_path = os.path.join("tests/phylogeny_estimation_tests/pairing_ble_test_likelihoods", filename)
+            try:
+                if os.path.isfile(file_path):
+                    os.remove(file_path)
+                    print(f"Removed file: {file_path}")
+            except Exception as e:
+                print(f"Error occurred while removing {file_path}: {e}")
+        for filename in os.listdir("tests/phylogeny_estimation_tests/pairing_ble_test_site_rates"):
+            file_path = os.path.join("tests/phylogeny_estimation_tests/pairing_ble_test_site_rates", filename)
+            try:
+                if os.path.isfile(file_path):
+                    os.remove(file_path)
+                    print(f"Removed file: {file_path}")
+            except Exception as e:
+                print(f"Error occurred while removing {file_path}: {e}")
+        # LG
+        fast_cherries(
+            msa_dir = "tests/phylogeny_estimation_tests/different_alphabet",
+            families = ["msa"],
+            rate_matrix_path = "tests/phylogeny_estimation_tests/weird_rate_matrix.txt",
+            num_rate_categories= 4,
+            max_iters = 50,
+            num_processes=1,
+            remake=False,
+            output_tree_dir = "tests/phylogeny_estimation_tests/pairing_ble_test_trees",
+            output_site_rates_dir = "tests/phylogeny_estimation_tests/pairing_ble_test_site_rates",
+            output_likelihood_dir = "tests/phylogeny_estimation_tests/pairing_ble_test_likelihoods",
+        )
+
+        fast_cherries_output_path = "tests/phylogeny_estimation_tests/pairing_ble_test_trees/msa.txt"
+        tree = read_tree(fast_cherries_output_path)
+        cherries = tree.children(tree.root()) 
+        assert(len(cherries) == 2)
+        expected = [("s1", "s3"),("s3", "s1"),("s4", "s2"),("s2", "s4")] 
+        
+        cherry_with_lengths = tree.children(cherries[0][0])
+        assert((cherry_with_lengths[0][0],cherry_with_lengths[1][0]) in expected)
+
+        cherry_with_lengths = tree.children(cherries[1][0])
+        assert((cherry_with_lengths[0][0],cherry_with_lengths[1][0]) in expected)
+        
+
 
     def test_correct_runtime(self):
         """
