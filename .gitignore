@@ -2,6 +2,7 @@
 build/*
 *__pycache__*
 _cache_lg_paper/*
+_cache_benchmarking_qmaker/*
 __pycache__
 *.pyc
 *.success
@@ -9,3 +10,4 @@ __pycache__
 *.profiling
 data/*
 *.txt
+input_data
