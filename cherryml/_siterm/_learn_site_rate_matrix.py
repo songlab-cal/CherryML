@@ -1326,23 +1326,24 @@ def learn_site_rate_matrices(
         return res
     else:
         num_sites = len(list(leaf_states.values())[0])
-        res_dicts = [
-            learn_site_rate_matrix(
-                tree_newick=tree_newick,
-                site_rate=site_rates[i],
-                leaf_states={k: v[i] for (k, v) in leaf_states.items()},
-                alphabet=alphabet,
-                regularization_rate_matrix=regularization_rate_matrix,
-                regularization_strength=regularization_strength,
-                site_rate_grid=site_rate_grid,
-                site_rate_prior=site_rate_prior,
-                alphabet_for_site_rate_estimation=alphabet_for_site_rate_estimation,
-                rate_matrix_for_site_rate_estimation=rate_matrix_for_site_rate_estimation,
-                num_epochs=num_epochs,
-                quantization_grid_num_steps=quantization_grid_num_steps,
+        res_dicts = []
+        for i in range(num_sites):
+            res_dicts.append(
+                learn_site_rate_matrix(
+                    tree_newick=tree_newick,
+                    site_rate=site_rates[i],
+                    leaf_states={k: v[i] for (k, v) in leaf_states.items()},
+                    alphabet=alphabet,
+                    regularization_rate_matrix=regularization_rate_matrix,
+                    regularization_strength=regularization_strength,
+                    site_rate_grid=site_rate_grid,
+                    site_rate_prior=site_rate_prior,
+                    alphabet_for_site_rate_estimation=alphabet_for_site_rate_estimation,
+                    rate_matrix_for_site_rate_estimation=rate_matrix_for_site_rate_estimation,
+                    num_epochs=num_epochs,
+                    quantization_grid_num_steps=quantization_grid_num_steps,
+                )
             )
-            for i in range(num_sites)
-        ]
         res = {
             "learnt_rate_matrices": [
                 res_dict["learnt_rate_matrix"].to_numpy()
