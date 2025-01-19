@@ -632,6 +632,7 @@ def _learn_site_rate_matrix_given_site_rate_too(
     regularization_strength: float,
     num_epochs: int = 100,
     quantization_grid_num_steps: int = QUANTIZATION_GRID_NUM_STEPS,
+    num_cores: int = 1,
 ) -> pd.DataFrame:
     quantization_grid_center = QUANTIZATION_GRID_CENTER
     quantization_grid_step = QUANTIZATION_GRID_STEP ** (QUANTIZATION_GRID_NUM_STEPS / quantization_grid_num_steps)
@@ -659,6 +660,7 @@ def _learn_site_rate_matrix_given_site_rate_too(
         rate_matrix_parameterization="pande_reversible",
         log_dir=None,
         plot_site_specific_rate_matrices=0,
+        vectorized_cherryml_implementation_num_cores=num_cores,
     )["res"]
     site_specific_rate_matrix = pd.DataFrame(
         learned_rate_tensor_numpy[0, :, :],
@@ -871,6 +873,7 @@ def learn_site_rate_matrix(
     num_epochs: int = 100,
     quantization_grid_num_steps: int = QUANTIZATION_GRID_NUM_STEPS,
     site_rate: Optional[float] = None,
+    num_cores: int = 1,
 ) -> Dict:
     """
     Learn a rate matrix for a site given the tree and leaf states.
@@ -909,6 +912,7 @@ def learn_site_rate_matrix(
             to estimate site rates. If `None`, then the
             `regularization_rate_matrix` will be used.
         site_rate: The site rate. If `None`, it will be estimated.
+        num_cores: Number of cores used internally by PyTorch to speed up.
 
     Returns:
         A dictionary with the following entries:
@@ -947,6 +951,7 @@ def learn_site_rate_matrix(
         regularization_strength=regularization_strength,
         num_epochs=num_epochs,
         quantization_grid_num_steps=quantization_grid_num_steps,
+        num_cores=num_cores,
     )
     time_learn_site_rate_matrix_given_site_rate_too += time.time() - st
     res = {
@@ -1342,6 +1347,7 @@ def learn_site_rate_matrices(
                     rate_matrix_for_site_rate_estimation=rate_matrix_for_site_rate_estimation,
                     num_epochs=num_epochs,
                     quantization_grid_num_steps=quantization_grid_num_steps,
+                    num_cores=1,
                 )
             )
         res = {
