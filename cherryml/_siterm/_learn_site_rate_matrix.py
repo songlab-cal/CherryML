@@ -720,7 +720,6 @@ def _learn_site_rate_matrices_given_site_rates_too(
     vectorized_cherryml_implementation_num_cores: int = 1,
     num_epochs: int = 100,
     quantization_grid_num_steps: int = QUANTIZATION_GRID_NUM_STEPS,
-    return_pandas_dataframes: bool = True,
 ) -> Dict:
     """
     Returns a fictionary with:
@@ -764,17 +763,7 @@ def _learn_site_rate_matrices_given_site_rates_too(
     st = time.time()
     learned_rate_tensor_numpy = learned_rate_tensor_numpy__res_dict["res"]
     learned_rate_tensor_numpy__profiling_dict = {k: v for k, v in learned_rate_tensor_numpy__res_dict.items() if k.startswith("time_")}
-    if return_pandas_dataframes:
-        site_specific_rate_matrices = [
-            pd.DataFrame(
-                learned_rate_tensor_numpy[i, :, :],
-                columns=alphabet,
-                index=alphabet,
-            )
-            for i in range(len(site_rates))
-        ]
-    else:
-        site_specific_rate_matrices = learned_rate_tensor_numpy
+    site_specific_rate_matrices = learned_rate_tensor_numpy
     profiling_res["time_build_pandas_return"] = time.time() - st
     res = {
         "res": site_specific_rate_matrices,
@@ -809,7 +798,7 @@ def test__learn_site_rate_matrices_given_site_rates_too():
         regularization_strength=0.5,
     )["res"]
     np.testing.assert_array_almost_equal(
-        site_rate_matrices[0].T.to_numpy(),
+        site_rate_matrices[0].T,
         pd.DataFrame(
             [
                 [-0.25240713357925415, 0.08471570909023285, 0.08471573144197464, 0.08297567069530487],
@@ -854,7 +843,7 @@ def test__learn_site_rate_matrices_given_site_rates_too_2():
         regularization_strength=0.5,
     )["res"]
     np.testing.assert_array_almost_equal(
-        site_rate_matrices[0].to_numpy(),
+        site_rate_matrices[0],
         pd.DataFrame(
             [
                 [-0.12, 0.04, 0.1, 0.07],
@@ -881,6 +870,7 @@ def learn_site_rate_matrix(
     rate_matrix_for_site_rate_estimation: Optional[pd.DataFrame] = None,
     num_epochs: int = 100,
     quantization_grid_num_steps: int = QUANTIZATION_GRID_NUM_STEPS,
+    site_rate: Optional[float] = None,
 ) -> Dict:
     """
     Learn a rate matrix for a site given the tree and leaf states.
@@ -918,6 +908,7 @@ def learn_site_rate_matrix(
         rate_matrix_for_site_rate_estimation: If provided, the rate matrix to use
             to estimate site rates. If `None`, then the
             `regularization_rate_matrix` will be used.
+        site_rate: The site rate. If `None`, it will be estimated.
 
     Returns:
         A dictionary with the following entries:
@@ -937,13 +928,14 @@ def learn_site_rate_matrix(
     )
     time_convert_newick_to_CherryML_Tree += time.time() - st
     st = time.time()
-    site_rate = _estimate_site_rate(
-        tree=tree,
-        leaf_states=leaf_states,
-        rate_matrix=rate_matrix_for_site_rate_estimation,
-        site_rate_grid=site_rate_grid,
-        site_rate_prior=site_rate_prior,
-    )
+    if site_rate is None:
+        site_rate = _estimate_site_rate(
+            tree=tree,
+            leaf_states=leaf_states,
+            rate_matrix=rate_matrix_for_site_rate_estimation,
+            site_rate_grid=site_rate_grid,
+            site_rate_prior=site_rate_prior,
+        )
     time_estimate_site_rate += time.time() - st
     st = time.time()
     learnt_rate_matrix = _learn_site_rate_matrix_given_site_rate_too(
@@ -1159,7 +1151,7 @@ def test_learn_site_rate_matrix_with_site_rate_prior_and_gaps():
     )
     learnt_rate_matrix = res_dict["learnt_rate_matrices"][0]
     np.testing.assert_array_almost_equal(
-        learnt_rate_matrix.T.to_numpy(),
+        learnt_rate_matrix.T,
         pd.DataFrame(
             [
                 [-0.5652167201042175, 0.0038684408646076918, 0.003868441330268979, 0.0038684408646076918, 0.5536113381385803],
@@ -1191,7 +1183,6 @@ def learn_site_rate_matrices(
     num_epochs: int = 100,
     use_fast_site_rate_implementation: bool = False,
     quantization_grid_num_steps: int = QUANTIZATION_GRID_NUM_STEPS,
-    return_pandas_dataframes: bool = True,
 ) -> Dict:
     """
     Learn a rate matrix per site given the tree and leaf states.
@@ -1231,9 +1222,6 @@ def learn_site_rate_matrices(
         num_epochs: Number of epochs (Adam steps) in the PyTorch optimizer.
         use_fast_site_rate_implementation: Whether to use fast site rate implementation.
             Only used if `use_fast_implementation=True`.
-        return_pandas_dataframes: If False, then a 3D numpy array will be returned, which
-            is much faster than returning a list of pandas dataframes. (Pandas is so
-            slow!)
 
     Returns:
         A dictionary with the following entries:
@@ -1242,8 +1230,6 @@ def learn_site_rate_matrices(
             - "time_...": The time taken by this substep. (They should add up
                 to the total runtime).
     """
-    if not return_pandas_dataframes and not use_fast_implementation:
-        raise ValueError(f"return_pandas_dataframes=False should be used with use_fast_implementation=True.")
     profiling_res = {}
     st = time.time()
     if alphabet_for_site_rate_estimation is None:
@@ -1293,24 +1279,25 @@ def learn_site_rate_matrices(
     profiling_res["time_estimate_tree"] = time.time() - st
 
     time_convert_newick_to_CherryML_Tree = 0.0
-    time_estimate_site_rate = 0.0
-    if use_fast_implementation:
-        st = time.time()
-        tree = _convert_newick_to_CherryML_Tree(
-            tree_newick=tree_newick,
-        )
-        time_convert_newick_to_CherryML_Tree += time.time() - st
-        st = time.time()
-        site_rate_fn = _estimate_site_rates_fast if use_fast_site_rate_implementation else _estimate_site_rates
-        site_rates = site_rate_fn(
-            tree=tree,
-            leaf_states=leaf_states,
-            site_rate_grid=site_rate_grid,
-            site_rate_prior=site_rate_prior,
-            rate_matrix=rate_matrix_for_site_rate_estimation,
-        )
-        time_estimate_site_rate += time.time() - st
+    st = time.time()
+    tree = _convert_newick_to_CherryML_Tree(
+        tree_newick=tree_newick,
+    )
+    time_convert_newick_to_CherryML_Tree += time.time() - st
 
+    time_estimate_site_rate = 0.0
+    st = time.time()
+    site_rate_fn = _estimate_site_rates_fast if use_fast_site_rate_implementation else _estimate_site_rates
+    site_rates = site_rate_fn(
+        tree=tree,
+        leaf_states=leaf_states,
+        site_rate_grid=site_rate_grid,
+        site_rate_prior=site_rate_prior,
+        rate_matrix=rate_matrix_for_site_rate_estimation,
+    )
+    time_estimate_site_rate += time.time() - st
+
+    if use_fast_implementation:
         # For this step, we profile it at the subroutine level so we don't do `st = time.time()` as before.
         # Instead, the profiling information comes from the returned dictionary.
         learnt_rate_matrices__res_dict = _learn_site_rate_matrices_given_site_rates_too(
@@ -1325,7 +1312,6 @@ def learn_site_rate_matrices(
             vectorized_cherryml_implementation_num_cores=fast_implementation_num_cores,
             num_epochs=num_epochs,
             quantization_grid_num_steps=quantization_grid_num_steps,
-            return_pandas_dataframes=return_pandas_dataframes,
         )
         learnt_rate_matrices = learnt_rate_matrices__res_dict["res"]
         learnt_rate_matrices__profiling_dict = {k: v for k, v in learnt_rate_matrices__res_dict.items() if k.startswith("time_")}
@@ -1343,6 +1329,7 @@ def learn_site_rate_matrices(
         res_dicts = [
             learn_site_rate_matrix(
                 tree_newick=tree_newick,
+                site_rate=site_rates[i],
                 leaf_states={k: v[i] for (k, v) in leaf_states.items()},
                 alphabet=alphabet,
                 regularization_rate_matrix=regularization_rate_matrix,
@@ -1358,7 +1345,7 @@ def learn_site_rate_matrices(
         ]
         res = {
             "learnt_rate_matrices": [
-                res_dict["learnt_rate_matrix"]
+                res_dict["learnt_rate_matrix"].to_numpy()
                 for res_dict in res_dicts
             ],
             "learnt_site_rates": [
@@ -1416,7 +1403,7 @@ def test_learn_site_rate_matrices():
         np.testing.assert_almost_equal(learnt_site_rates, [0.5])
         site_rate_matrices = res_dict["learnt_rate_matrices"]
         np.testing.assert_array_almost_equal(
-            site_rate_matrices[0].to_numpy(),
+            site_rate_matrices[0],
             pd.DataFrame(
                 [
                     [-0.48, 0.03, 0.24, 0.21],
@@ -1503,7 +1490,7 @@ def test_learn_site_rate_matrices_large():
             use_fast_implementation=use_fast_implementation,
         )["learnt_rate_matrices"]
         np.testing.assert_array_almost_equal(
-            site_rate_matrices[0].T.to_numpy(),
+            site_rate_matrices[0].T,
             pd.DataFrame(
                 [
                     [-0.24429482221603394, 0.1794303059577942, 0.03243225812911987, 0.03243225812911987],
@@ -1791,7 +1778,6 @@ def test_fast_site_rate_estimation_real_data():
             ),
             num_epochs=NUM_PYTORCH_EPOCHS,
             quantization_grid_num_steps=GRID_SIZE,
-            return_pandas_dataframes=False,
         )
         site_rate_matrices[fast_implementation_device] = res_dict["learnt_rate_matrices"]
         total_time = 0.0
@@ -1879,7 +1865,6 @@ def test_fast_site_rate_estimation_real_data_2():
             ),
             num_epochs=NUM_PYTORCH_EPOCHS,
             quantization_grid_num_steps=GRID_SIZE,
-            return_pandas_dataframes=False,
         )
     site_rate_matrices = res_dict["learnt_rate_matrices"]
     total_time = 0.0

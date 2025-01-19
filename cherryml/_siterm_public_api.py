@@ -17,6 +17,7 @@ from cherryml._siterm._learn_site_rate_matrix import learn_site_rate_matrices
 from cherryml._siterm._learn_site_rate_matrix import get_standard_site_rate_grid, get_standard_site_rate_prior, _get_msa_example, _get_test_msa, _get_test_tree, _get_tree_newick, _convert_newick_to_CherryML_Tree
 from cherryml.utils import get_amino_acids
 
+
 def learn_site_specific_rate_matrices(
     tree_newick: Optional[str],
     msa: Dict[str, str],  # TODO: Allow path to MSA too.
@@ -29,6 +30,7 @@ def learn_site_specific_rate_matrices(
     rate_matrix_for_site_rate_estimation: Optional[pd.DataFrame] = None,
     num_epochs: int = 100,
     quantization_grid_num_steps: int = 64,
+    use_vectorized_implementation: bool = True,
 ) -> Dict:
     """
     Learn a rate matrix per site given the tree and leaf states.
@@ -69,9 +71,6 @@ def learn_site_specific_rate_matrices(
             use to estimate site rates. If `None`, then the
             `regularization_rate_matrix` will be used.
         num_epochs: Number of epochs (Adam steps) in the PyTorch optimizer.
-        return_pandas_dataframes: If False, then a 3D numpy array will be returned, which
-            is much faster than returning a list of pandas dataframes. (Pandas is so
-            slow!)
         quantization_grid_num_steps: Number of quantization points to use will
             be `2 * quantization_grid_num_steps + 1` (we take this number of
             steps left and right of the grid center). Lowering
@@ -80,6 +79,19 @@ def learn_site_specific_rate_matrices(
             `quantization_grid_num_steps=64` works really well, but reasonable
             estimates can be obtained very fast with as low as
             `quantization_grid_num_steps=8`.
+        use_vectorized_implementation: When `True`, a single computational
+            graph including all sites of the MSA will be constructed to learn
+            the site-specific rate matrices. Otherwise, the algorithm will loop
+            over each site in the MSA separately, running coordinate ascent
+            once for each site. As a note, while the vectorized and
+            non-vectorized implementation converge to the same solution, they
+            don't converge with the same trajectories, so when using a smaller
+            number of `num_epochs` (e.g. `num_epochs=30`) the learnt rate
+            matrices may differ in non-trivial ways. However, when using a
+            larger number of epochs, e.g. `num_epochs=200`, they should be
+            very similar. The main reason to use the non-vectorized
+            implementation is because it requires less RAM memory, as each
+            site it processes separately, making it faster when RAM is limited.
 
     Returns:
         A dictionary with the following entries:
@@ -96,7 +108,7 @@ def learn_site_specific_rate_matrices(
         alphabet=alphabet,
         regularization_rate_matrix=regularization_rate_matrix,
         regularization_strength=regularization_strength,
-        use_fast_implementation=True,
+        use_fast_implementation=use_vectorized_implementation,
         fast_implementation_device=device,
         fast_implementation_num_cores=1,  # Doesn't really make sense to vectorize at this level.
         site_rate_grid=site_rate_grid,
@@ -106,7 +118,6 @@ def learn_site_specific_rate_matrices(
         num_epochs=num_epochs,
         use_fast_site_rate_implementation=True,
         quantization_grid_num_steps=quantization_grid_num_steps,
-        return_pandas_dataframes=False,
     )
     return res_dict
 
@@ -689,6 +700,78 @@ def test_learn_site_specific_rate_matrices_real_vectorized_GOAT_with_fast_cherri
     # cbar_ax.set_yticklabels([vmin, 0, vmax])
 
     # plt.savefig(f"test_learn_site_specific_rate_matrices_real_vectorized_GOAT_with_fast_cherries_proteins.png")
+    # plt.show()
+    # plt.close()
+    # # assert(False)
+
+
+@pytest.mark.slow
+def test_learn_site_specific_rate_matrices_real_vectorized_GOAT_with_fast_cherries_proteins_not_vectorized():
+    """
+    Same as test_learn_site_specific_rate_matrices_real_vectorized_GOAT_with_fast_cherries_proteins
+    but we don't use the vectorized implementation. Note that the rate matrices learnt by these two tests
+    are different because we set `num_epochs=30`, but when set to higher e.g. `num_epochs=200` they are
+    very similar.
+
+    NOTE: To run this specific test, you can do:
+    $ python -m pytest cherryml/_siterm_public_api.py::test_learn_site_specific_rate_matrices_real_vectorized_GOAT_with_fast_cherries_proteins_not_vectorized --runslow
+    """
+    site_rate_matrices = {}
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    msa = cherryml_io.read_msa(os.path.join(dir_path, "../tests/data/Aln0037_txt-gb_phyml.txt"))
+    st = time.time()
+    res_dict = learn_site_specific_rate_matrices(
+        tree_newick=None,
+        msa=msa,
+        alphabet=get_amino_acids(),
+        regularization_rate_matrix=cherryml_io.read_rate_matrix("data/rate_matrices/equ.txt"),
+        regularization_strength=0.5,
+        alphabet_for_site_rate_estimation=get_amino_acids(),
+        rate_matrix_for_site_rate_estimation=cherryml_io.read_rate_matrix("data/rate_matrices/equ.txt"),
+        num_epochs=30,
+        use_vectorized_implementation=False,
+    )
+    site_rate_matrices = res_dict["learnt_rate_matrices"]
+    total_time = 0.0
+    for k, v in res_dict.items():
+        if k.startswith("time_"):
+            print(k, v)
+            total_time += float(v)
+    print(f"total_time cuda = {total_time} (sum of times) vs {time.time() - st} (real time)")
+
+    ##### Uncomment this to plot site-specific rate matrices.
+    # # Plot rate matrices
+    # fig, axes = plt.subplots(2, 2, figsize=(15, 12))  # Adjust figsize as needed for readability
+    # fig.tight_layout(pad=4.0)  # Adjust spacing between plots
+
+    # # Define the fixed color scale range
+    # vmin, vmax = -5, 3
+    # cmap = sns.diverging_palette(0, 240, s=75, l=50, n=500, center="light")
+
+    # for i, ax in enumerate(axes.flat):  # Flatten the 2D grid of axes into a 1D array
+    #     if i < 4:  # Ensure we don't exceed the number of plots
+    #         sns.heatmap(
+    #             pd.DataFrame(site_rate_matrices[i], columns=get_amino_acids(), index=get_amino_acids()),
+    #             cmap=cmap, 
+    #             center=0, 
+    #             vmin=vmin, 
+    #             vmax=vmax, 
+    #             ax=ax, 
+    #             cbar=False,  # Turn off individual colorbars for clarity
+    #             annot=True,
+    #             fmt=".1f",
+    #         )
+    #         ax.set_title(f"Site {i}")
+    #     else:
+    #         ax.axis("off")  # Turn off unused axes
+
+    # # Add a single colorbar for the entire figure
+    # cbar_ax = fig.add_axes([0.96, 0.15, 0.02, 0.7])  # [left, bottom, width, height]
+    # sns.heatmap([[vmin, vmax]], cmap=cmap, cbar=True, cbar_ax=cbar_ax)
+    # cbar_ax.set_yticks([vmin, 0, vmax])
+    # cbar_ax.set_yticklabels([vmin, 0, vmax])
+
+    # plt.savefig(f"test_learn_site_specific_rate_matrices_real_vectorized_GOAT_with_fast_cherries_proteins_not_vectorized.png")
     # plt.show()
     # plt.close()
     # # assert(False)
