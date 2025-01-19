@@ -60,11 +60,12 @@ def _map_func(args: List):
     quantization_grid_step = args[7]
     quantization_grid_num_steps = args[8]
     rate_matrix_path = args[9]
-    verbose = args[10]
-    bin_path = args[11]
-    seed = args[12]
-    num_rate_categories = args[13]
-    max_iters = args[14]
+    alphabet_path = args[10]
+    verbose = args[11]
+    bin_path = args[12]
+    seed = args[13]
+    num_rate_categories = args[14]
+    max_iters = args[15]
 
     st = time.time()
     if not families:
@@ -93,8 +94,8 @@ def _map_func(args: List):
                         " -profiling_list_path " + output_paths_file.name + \
                         " -site_rate_list_path " + site_rate_paths_file.name + \
                         " -num_rate_categories_ble " + str(num_rate_categories) + \
-                        " -max_iters_ble " + str(max_iters)
-
+                        " -max_iters_ble " + str(max_iters) + \
+                        " -alphabet_path " + alphabet_path
                     if verbose:
                         logger.info(command)
                     os.system(command)
@@ -220,8 +221,10 @@ def fast_cherries(
 
     bin_path = _make_fast_cherries_and_return_bin_path(remake)
 
+    alphabet = list(rate_matrix.columns)
     with tempfile.NamedTemporaryFile("w") as rate_matrix_file:
         with tempfile.TemporaryDirectory() as fast_cherries_output_dir:
+            with tempfile.NamedTemporaryFile("w") as alphabet_file:
                 quantization_points = [
                     (quantization_grid_center * quantization_grid_step**i)
                     for i in range(
@@ -231,7 +234,9 @@ def fast_cherries(
                 msa_paths = [os.path.join(msa_dir, family + ".txt") for family in families]
                 profiling_paths = [os.path.join(output_tree_dir, family + ".profiling") for family in families]
                 fast_cherries_output_paths = [os.path.join(fast_cherries_output_dir, family + ".output") for family in families]
-
+                with open(alphabet_file.name, "w") as f:
+                    f.write(str(len(alphabet)) + " " + " ".join(alphabet))
+                        
                 with open(rate_matrix_path, 'r') as source_file:
                     lines = source_file.readlines()
                     modified_lines = [line[1:] for line in lines[1:]]
@@ -251,6 +256,7 @@ def fast_cherries(
                         quantization_grid_step,
                         quantization_grid_num_steps,
                         rate_matrix_file.name,
+                        alphabet_file.name,
                         verbose,
                         bin_path,
                         seed,

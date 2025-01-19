@@ -5,6 +5,8 @@
 #include "types.h"
 
 
+std::unordered_map<char, int> read_alphabet(std::string alphabet_path);
+
 msa_type read_msa(const std::string& msa_path, const std::unordered_map<char, int>& alphabet);
 
 void write_cherries_and_distances(const std::vector<std::pair<std::string, std::string>>& cherries,
