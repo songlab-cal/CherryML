@@ -18,7 +18,7 @@ from cherryml._siterm._learn_site_rate_matrix import get_standard_site_rate_grid
 
 
 def learn_site_specific_rate_matrices(
-    tree_newick: str,  # TODO: Allow None, in which case it will be reconstructed.
+    tree_newick: Optional[str],
     msa: Dict[str, str],  # TODO: Allow path to MSA too.
     alphabet: List[str],
     regularization_rate_matrix: pd.DataFrame,
@@ -44,7 +44,8 @@ def learn_site_specific_rate_matrices(
     ```
 
     Args:
-        tree_newick: The tree in newick format.
+        tree_newick: The tree in newick format. If `None`, then FastCherries
+            will be used to estimate the tree (cherries).
         msa: For each leaf in the tree, the states for that leaf.
         alphabet: List of valid states, e.g. ["A", "C", "G", "T"].
         regularization_rate_matrix: Rate matrix to use to regularize the learnt
@@ -195,6 +196,54 @@ def test_learn_site_specific_rate_matrices_real_vectorized_GOAT():
         for species_id in range(msa.shape[1])
     }
     tree_newick = _get_tree_newick()
+    st = time.time()
+    res_dict = learn_site_specific_rate_matrices(
+        tree_newick=tree_newick,
+        msa={
+            k: v[:num_sites]
+            for (k, v) in leaf_states.items()
+        },
+        alphabet=["A", "C", "G", "T", "-"],
+        regularization_rate_matrix=pd.DataFrame(
+            [
+                [-1.0, 0.25, 0.25, 0.25, 0.25],
+                [0.25, -1.0, 0.25, 0.25, 0.25],
+                [0.25, 0.25, -1.0, 0.25, 0.25],
+                [0.25, 0.25, 0.25, -1.0, 0.25],
+                [0.25, 0.25, 0.25, 0.25, -1.0],
+            ],
+            index=["A", "C", "G", "T", "-"],
+            columns=["A", "C", "G", "T", "-"],
+        ),
+        regularization_strength=0.5,
+        alphabet_for_site_rate_estimation=["A", "C", "G", "T"],
+        rate_matrix_for_site_rate_estimation=pd.DataFrame(
+            [
+                [-1.0, 1.0/3.0, 1.0/3.0, 1.0/3.0],
+                [1.0/3.0, -1.0, 1.0/3.0, 1.0/3.0],
+                [1.0/3.0, 1.0/3.0, -1.0, 1.0/3.0],
+                [1.0/3.0, 1.0/3.0, 1.0/3.0, -1.0],
+            ],
+            index=["A", "C", "G", "T"],
+            columns=["A", "C", "G", "T"],
+        ),
+        num_epochs=200,
+    )
+
+
+@pytest.mark.slow
+def test_learn_site_specific_rate_matrices_real_vectorized_GOAT_with_fastcherries():
+    """
+    Same as above but we infer the tree instead.
+    """
+    num_sites = 128  # Use all 128 to appreciate speedup of vectorized implementation.
+    site_rate_matrices = {}
+    msa = _get_msa_example()
+    leaf_states = {
+        msa.columns[species_id]: (''.join(list(msa.iloc[:, species_id])))[:num_sites].upper()
+        for species_id in range(msa.shape[1])
+    }
+    tree_newick = None  # (instead of _get_tree_newick())
     st = time.time()
     res_dict = learn_site_specific_rate_matrices(
         tree_newick=tree_newick,

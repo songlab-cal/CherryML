@@ -1044,7 +1044,7 @@ def _get_test_expected_orderings(t: float = 1.0) -> List[List[Tuple[str, str, fl
     return expected_orderings
 
 
-def test_estimate_site_specific_rate_matrices_given_tree_and_site_rates(plot: bool = True):
+def test_estimate_site_specific_rate_matrices_given_tree_and_site_rates(plot: bool = False):
     tree = _get_test_tree_2(node_prefix="node-")
     msa = _get_test_msa_2(node_prefix="node-")
     mp_msa = _maximum_parsimony(

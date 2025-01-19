@@ -1,3 +1,4 @@
+import tempfile
 import time
 import os
 from cherryml import io as cherryml_io
@@ -14,7 +15,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import pytest
 from cherryml._siterm.fast_site_rates import compute_optimal_site_rates  # Import the compiled Cython function
-
+from cherryml.phylogeny_estimation._fast_cherries import fast_cherries
 
 # Default quantization grid:
 QUANTIZATION_GRID_CENTER = 0.03
@@ -1175,7 +1176,7 @@ def test_learn_site_rate_matrix_with_site_rate_prior_and_gaps():
 
 
 def learn_site_rate_matrices(
-    tree_newick: str,
+    tree_newick: Optional[str],
     leaf_states: Dict[str, str],
     alphabet: List[str],
     regularization_rate_matrix: pd.DataFrame,
@@ -1196,7 +1197,8 @@ def learn_site_rate_matrices(
     Learn a rate matrix per site given the tree and leaf states.
 
     Args:
-        tree_newick: The tree in newick format.
+        tree_newick: The tree in newick format. If `None`, then FastCherries
+            will be used to estimate the tree (cherries).
         leaf_states: For each leaf in the tree, the states for that leaf.
         alphabet: List of valid states.
         regularization_rate_matrix: Rate matrix to use to regularize the learnt
@@ -1254,6 +1256,40 @@ def learn_site_rate_matrices(
     assert(list(regularization_rate_matrix.columns) == alphabet)
     logger_to_shut_up = logging.getLogger("cherryml.estimation._ratelearn.trainer")
     logger_to_shut_up.setLevel(0)
+
+    # Estimate the tree if not provided
+    if tree_newick is None:
+        assert rate_matrix_for_site_rate_estimation is not None
+        with tempfile.TemporaryDirectory() as temporary_dir:
+            # temporary_dir = "temporary_dir"
+            # Write the rate matrix
+            _rate_matrix_path = os.path.join(temporary_dir, "rate_matrix.txt")
+            cherryml_io.write_rate_matrix(rate_matrix_for_site_rate_estimation.to_numpy(), list(rate_matrix_for_site_rate_estimation.columns), _rate_matrix_path)
+            # Write the MSA
+            _msa_dir = os.path.join(temporary_dir, "msa_dir")
+            _msa_path = os.path.join(_msa_dir, "family_0.txt")
+            os.makedirs(_msa_dir)
+            cherryml_io.write_msa(leaf_states, _msa_path)
+            # Create the temporary output dirs
+            _output_tree_dir = os.path.join(temporary_dir, "tree")
+            _output_site_rates_dir = os.path.join(temporary_dir, "site_rates")
+            _output_likelihood_dir = os.path.join(temporary_dir, "lls")
+            fast_cherries(
+                msa_dir=_msa_dir,
+                families=["family_0"],
+                rate_matrix_path=_rate_matrix_path,
+                num_rate_categories=20,
+                max_iters=50,
+                num_processes=1,
+                verbose=False,
+                output_tree_dir=_output_tree_dir,
+                output_site_rates_dir=_output_site_rates_dir,
+                output_likelihood_dir=_output_likelihood_dir,
+            )
+            _tree = cherryml_io.read_tree(os.path.join(_output_tree_dir, "family_0.txt"))
+            tree_newick = _tree.to_newick(format=1)
+            raise NotImplementedError
+
     time_convert_newick_to_CherryML_Tree = 0.0
     time_estimate_site_rate = 0.0
     profiling_res["time_init_learn_site_rate_matrices"] = time.time() - st
