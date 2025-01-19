@@ -7,9 +7,13 @@
 
 ![Cover](docs/_static/cover.jpeg)
 
+This package implements the methods - and allows easily reproducing the results - from the following two papers:
 
+> Prillo, S., Deng, Y., Boyeau, P., Li, X., Chen, P.-Y., Song, Y.S.  (2023) CherryML: Scalable maximum likelihood estimation of phylogenetic models. Nature Methods, in press.
 
-This package implements the CherryML method as applied to:
+> Prillo, S., Wu, W., Song, Y.S.  (2024) Ultrafast classical phylogenetic method beats large protein language models on variant effect prediction. NeurIPS.
+
+Firstly, as pertains to our paper `CherryML: Scalable maximum likelihood estimation of phylogenetic models`, this package implements the CherryML method as applied to:
 1. The classical LG model of amino acid evolution with site rate variation [Le and Gascuel 2008] (involving a $20 \times 20$ rate matrix), as well as
 2. A model of co-evolution at protein contact sites (involving a $400 \times 400$ rate matrix).
 
@@ -17,9 +21,13 @@ Note that (1) is NOT the LG rate matrix but the LG _model_; the LG rate matrix [
 
 We expect that the CherryML method will be applied to enable scalable estimation of many models in the future.
 
-This package also enables seamless reproduction of all results in our paper.
-
 For a quick demonstration of an end-to-end application of CherryML to real data, please check out the section "[End-to-end worked-out application: plant dataset](#end-to-end-worked-out-application:-plant-dataset)".
+
+Secondly, as pertains to our paper `Ultrafast classical phylogenetic method beats large protein language models on variant effect prediction`, this package implements the FastCherries phylogeny estimator and the SiteRM models:
+- FastCherries is a drop-in replacement for FastTree which speeds up the tree estimation step of CherryML by 10-100x.
+- SiteRM is an extension of the LG model that allows for a *different* rate matrix for each site of the MSA.
+
+For a quick demonstration of an end-to-end application of FastCherries+SiteRM to real data, please check out the section "[End-to-end worked-out FastCherries+SiteRM application: plant dataset](#end-to-end-worked-out-application-fastcherries-siterm:-plant-dataset)".
 
 # Citation
 
@@ -459,7 +467,7 @@ Average log-likelihood per site: -20.50697311703476
 
 As we can see, the de-novo estimated rate matrix outperforms the LG rate matrix, with an average increase in log-likelihood per site of `0.295` (1.4%).
 
-# Reproducing all figures in our paper
+# Reproducing all figures in our paper `CherryML: scalable maximum likelihood estimation of phylogenetic models`.
 
 To reproduce all figures in our paper, proceed as described below. Please note that this will not work in the compute capsule associated with this work since memory and compute are limited in the capsule. To reproduce all figures, you will need a machine with 32 CPU cores and 150G of storage; the Pfam dataset is large and we are in the realm of high-performance computing, which is out of reach with a compute capsule.
 
@@ -575,3 +583,23 @@ Our simulated datasets are available on Zenodo at https://zenodo.org/record/7830
 You are now ready to reproduce all figures in our paper. Just run `reproduce_all_figures.py` to reproduce all figures in our paper. The approximate runtime needed to reproduce each figure this way is commented in `reproduce_all_figures.py`. Note that the computational bottlenecks to reproduce all figures are (1) benchmarking EM with XRATE and (2) tree estimation (as opposed to the CherryML optimizer). To reproduce a specific figure, comment out the figures you do not want in `reproduce_all_figures.py`. The code is written in a functional style, so the functions can be run in any order at any time and will reproduce the results. All the intermediate computations are cached, so re-running the code will be very fast the second time around. The output figures will be found in the `images` folder.
 
 Tree estimation is parallelized, so by default you will need a machine with at least 32 cores. If you would like to use more (or less) cores, modify the value of `NUM_PROCESSES_TREE_ESTIMATION` at the top of the `figures.py` module. (However, note that the bottleneck when reproducing all figures is not tree estimation but performing EM with XRATE (Fig. 1b and Supp Fig. 1), which will take around 3-4 days regardless.)
+
+# Reproducing all figures in our paper `Ultrafast classical phylogenetic method beats large protein language models on variant effect prediction`.
+
+As always, please make sure all the tests are passing before attempting to reproduce any figures. You can run the tests with:
+
+```
+python -m pytest tests --runslow
+```
+
+Sometime some tests may fail due to e.g. failing to build `Historian`. You can ignore that test since `Historian` is not needed for our paper (it's just a third-party tool we wrapped and made available from our package for convenience).
+
+By default, 10 CPU cores are used to parallelize the benchmarks. You can change the number of CPU cores by changing the line `num_processes = 10` in the file `figures_neurips_2024.py`.
+
+## Figures 2c and 2d
+
+In the file `figures_neurips_2024.py`, the function `reproduce_lg()` reproduces Figures 2c and 2d. After running this function, Figures 2c and 2d will be located at `neurips_figures/lg_reproduced/lg_paper_figure.png` and `neurips_figures/lg_reproduced/runtime_comparisson.png` respectively. The function `reproduce_lg()` takes around 1 hours and a half on my Macbook Pro with `Apple M3 Pro` chip.
+
+## Supplementary Figure S1
+
+In the file `figures_neurips_2024.py`, the function `qmaker()` reproduces Supplementary Figure S1. After running this function, Supplementary Figure S1's subfigures will be located at `neurips_figures/fig_qmaker/[domain]/` as PNG files. The function `qmaker()` takes around 4 hours on my Macbook Pro with `Apple M3 Pro` chip.

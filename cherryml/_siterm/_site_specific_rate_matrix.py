@@ -21,6 +21,7 @@ from cherryml import markov_chain
 import pytest
 from cherryml import caching
 from cherryml import utils
+import torch
 
 GAP_CHARACTER = "-"  # NOTE: This is specific to some applications.
 
@@ -48,6 +49,7 @@ def _quantized_transitions_mle(
     loss_normalization: bool = True,
     OMP_NUM_THREADS: Optional[int] = 1,
     OPENBLAS_NUM_THREADS: Optional[int] = 1,
+    TORCH_NUM_THREAS: Optional[int] = 1,
     return_best_iter: bool = True,
     rate_matrix_parameterization: str = "pande_reversible",
 ) -> pd.DataFrame:
@@ -57,6 +59,7 @@ def _quantized_transitions_mle(
     states = list(count_matrices[0][1].index)
     with threadpool_limits(limits=OPENBLAS_NUM_THREADS, user_api="blas"):
         with threadpool_limits(limits=OMP_NUM_THREADS, user_api="openmp"):
+            torch.set_num_threads(TORCH_NUM_THREAS)  # Ensure PyTorch respects the limit
             with tempfile.TemporaryDirectory() as output_rate_matrix_dir:
                 rate_matrix_learner = RateMatrixLearner(
                     branches=[x[0] for x in count_matrices],
