@@ -1256,8 +1256,10 @@ def learn_site_rate_matrices(
     assert(list(regularization_rate_matrix.columns) == alphabet)
     logger_to_shut_up = logging.getLogger("cherryml.estimation._ratelearn.trainer")
     logger_to_shut_up.setLevel(0)
+    profiling_res["time_init_learn_site_rate_matrices"] = time.time() - st
 
     # Estimate the tree if not provided
+    st = time.time()
     if tree_newick is None:
         assert rate_matrix_for_site_rate_estimation is not None
         with tempfile.TemporaryDirectory() as temporary_dir:
@@ -1287,12 +1289,11 @@ def learn_site_rate_matrices(
                 output_likelihood_dir=_output_likelihood_dir,
             )
             _tree = cherryml_io.read_tree(os.path.join(_output_tree_dir, "family_0.txt"))
-            tree_newick = _tree.to_newick(format=1)
-            raise NotImplementedError
+            tree_newick = _tree.to_newick(format=2)
+    profiling_res["time_estimate_tree"] = time.time() - st
 
     time_convert_newick_to_CherryML_Tree = 0.0
     time_estimate_site_rate = 0.0
-    profiling_res["time_init_learn_site_rate_matrices"] = time.time() - st
     if use_fast_implementation:
         st = time.time()
         tree = _convert_newick_to_CherryML_Tree(

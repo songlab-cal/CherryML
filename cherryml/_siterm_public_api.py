@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 import pytest
 from cherryml._siterm._learn_site_rate_matrix import learn_site_rate_matrices
 from cherryml._siterm._learn_site_rate_matrix import get_standard_site_rate_grid, get_standard_site_rate_prior, _get_msa_example, _get_test_msa, _get_test_tree, _get_tree_newick, _convert_newick_to_CherryML_Tree
-
+from cherryml.utils import get_amino_acids
 
 def learn_site_specific_rate_matrices(
     tree_newick: Optional[str],
@@ -227,14 +227,62 @@ def test_learn_site_specific_rate_matrices_real_vectorized_GOAT():
             index=["A", "C", "G", "T"],
             columns=["A", "C", "G", "T"],
         ),
-        num_epochs=200,
+        num_epochs=30,
     )
+    site_rate_matrices = res_dict["learnt_rate_matrices"]
+    total_time = 0.0
+    for k, v in res_dict.items():
+        if k.startswith("time_"):
+            print(k, v)
+            total_time += float(v)
+    print(f"total_time cuda = {total_time} (sum of times) vs {time.time() - st} (real time)")
+
+    ##### Uncomment this to plot site-specific rate matrices.
+    # # Plot rate matrices
+    # fig, axes = plt.subplots(4, 5, figsize=(15, 12))  # Adjust figsize as needed for readability
+    # fig.tight_layout(pad=4.0)  # Adjust spacing between plots
+
+    # # Define the fixed color scale range
+    # vmin, vmax = -5, 3
+    # cmap = sns.diverging_palette(0, 240, s=75, l=50, n=500, center="light")
+
+    # for i, ax in enumerate(axes.flat):  # Flatten the 2D grid of axes into a 1D array
+    #     if i < 20:  # Ensure we don't exceed the number of plots
+    #         sns.heatmap(
+    #             site_rate_matrices[i],
+    #             cmap=cmap, 
+    #             center=0, 
+    #             vmin=vmin, 
+    #             vmax=vmax, 
+    #             ax=ax, 
+    #             cbar=False,  # Turn off individual colorbars for clarity
+    #             annot=True,
+    #             fmt=".1f",
+    #         )
+    #         ax.set_title(f"Site {i}")
+    #     else:
+    #         ax.axis("off")  # Turn off unused axes
+
+    # # Add a single colorbar for the entire figure
+    # cbar_ax = fig.add_axes([0.96, 0.15, 0.02, 0.7])  # [left, bottom, width, height]
+    # sns.heatmap([[vmin, vmax]], cmap=cmap, cbar=True, cbar_ax=cbar_ax)
+    # cbar_ax.set_yticks([vmin, 0, vmax])
+    # cbar_ax.set_yticklabels([vmin, 0, vmax])
+
+    # plt.savefig(f"test_learn_site_specific_rate_matrices_real_vectorized_GOAT.png")
+    # plt.show()
+    # plt.close()
+    # # assert(False)
+
 
 
 @pytest.mark.slow
-def test_learn_site_specific_rate_matrices_real_vectorized_GOAT_with_fastcherries():
+def test_learn_site_specific_rate_matrices_real_vectorized_GOAT_with_fast_cherries():
     """
     Same as above but we infer the tree instead.
+
+    NOTE: To run this specific test, you can do:
+    $ python -m pytest cherryml/_siterm_public_api.py::test_learn_site_specific_rate_matrices_real_vectorized_GOAT_with_fast_cherries --runslow
     """
     num_sites = 128  # Use all 128 to appreciate speedup of vectorized implementation.
     site_rate_matrices = {}
@@ -275,8 +323,52 @@ def test_learn_site_specific_rate_matrices_real_vectorized_GOAT_with_fastcherrie
             index=["A", "C", "G", "T"],
             columns=["A", "C", "G", "T"],
         ),
-        num_epochs=200,
+        num_epochs=30,
     )
+    site_rate_matrices = res_dict["learnt_rate_matrices"]
+    total_time = 0.0
+    for k, v in res_dict.items():
+        if k.startswith("time_"):
+            print(k, v)
+            total_time += float(v)
+    print(f"total_time cuda = {total_time} (sum of times) vs {time.time() - st} (real time)")
+
+    ##### Uncomment this to plot site-specific rate matrices.
+    # # Plot rate matrices
+    # fig, axes = plt.subplots(4, 5, figsize=(15, 12))  # Adjust figsize as needed for readability
+    # fig.tight_layout(pad=4.0)  # Adjust spacing between plots
+
+    # # Define the fixed color scale range
+    # vmin, vmax = -5, 3
+    # cmap = sns.diverging_palette(0, 240, s=75, l=50, n=500, center="light")
+
+    # for i, ax in enumerate(axes.flat):  # Flatten the 2D grid of axes into a 1D array
+    #     if i < 20:  # Ensure we don't exceed the number of plots
+    #         sns.heatmap(
+    #             site_rate_matrices[i],
+    #             cmap=cmap, 
+    #             center=0, 
+    #             vmin=vmin, 
+    #             vmax=vmax, 
+    #             ax=ax, 
+    #             cbar=False,  # Turn off individual colorbars for clarity
+    #             annot=True,
+    #             fmt=".1f",
+    #         )
+    #         ax.set_title(f"Site {i}")
+    #     else:
+    #         ax.axis("off")  # Turn off unused axes
+
+    # # Add a single colorbar for the entire figure
+    # cbar_ax = fig.add_axes([0.96, 0.15, 0.02, 0.7])  # [left, bottom, width, height]
+    # sns.heatmap([[vmin, vmax]], cmap=cmap, cbar=True, cbar_ax=cbar_ax)
+    # cbar_ax.set_yticks([vmin, 0, vmax])
+    # cbar_ax.set_yticklabels([vmin, 0, vmax])
+
+    # plt.savefig(f"test_learn_site_specific_rate_matrices_real_vectorized_GOAT_with_fast_cherries.png")
+    # plt.show()
+    # plt.close()
+    # # assert(False)
 
 
 @pytest.mark.slow
@@ -330,7 +422,7 @@ def test_learn_site_specific_rate_matrices_real_cuda_GOAT():
                 index=["A", "C", "G", "T"],
                 columns=["A", "C", "G", "T"],
             ),
-            num_epochs=200,
+            num_epochs=30,
         )
         site_rate_matrices[device] = res_dict["learnt_rate_matrices"]
         total_time = 0.0
@@ -531,6 +623,72 @@ def test_learn_site_specific_rate_matrices_real_data_2():
     # cbar_ax.set_yticklabels([vmin, 0, vmax])
 
     # plt.savefig(f"grid_plot__{GRID_SIZE}_qps__{NUM_PYTORCH_EPOCHS}_epochs__{NUM_SITE_RATES}_rates.png")
+    # plt.show()
+    # plt.close()
+    # # assert(False)
+
+
+@pytest.mark.slow
+def test_learn_site_specific_rate_matrices_real_vectorized_GOAT_with_fast_cherries_proteins():
+    """
+    Same as test_learn_site_specific_rate_matrices_real_vectorized_GOAT_with_fast_cherries
+    but with protein alignments
+    """
+    site_rate_matrices = {}
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    msa = cherryml_io.read_msa(os.path.join(dir_path, "../tests/data/Aln0037_txt-gb_phyml.txt"))
+    st = time.time()
+    res_dict = learn_site_specific_rate_matrices(
+        tree_newick=None,
+        msa=msa,
+        alphabet=get_amino_acids(),
+        regularization_rate_matrix=cherryml_io.read_rate_matrix("data/rate_matrices/equ.txt"),
+        regularization_strength=0.5,
+        alphabet_for_site_rate_estimation=get_amino_acids(),
+        rate_matrix_for_site_rate_estimation=cherryml_io.read_rate_matrix("data/rate_matrices/equ.txt"),
+        num_epochs=30,
+    )
+    site_rate_matrices = res_dict["learnt_rate_matrices"]
+    total_time = 0.0
+    for k, v in res_dict.items():
+        if k.startswith("time_"):
+            print(k, v)
+            total_time += float(v)
+    print(f"total_time cuda = {total_time} (sum of times) vs {time.time() - st} (real time)")
+
+    ##### Uncomment this to plot site-specific rate matrices.
+    # # Plot rate matrices
+    # fig, axes = plt.subplots(2, 2, figsize=(15, 12))  # Adjust figsize as needed for readability
+    # fig.tight_layout(pad=4.0)  # Adjust spacing between plots
+
+    # # Define the fixed color scale range
+    # vmin, vmax = -5, 3
+    # cmap = sns.diverging_palette(0, 240, s=75, l=50, n=500, center="light")
+
+    # for i, ax in enumerate(axes.flat):  # Flatten the 2D grid of axes into a 1D array
+    #     if i < 4:  # Ensure we don't exceed the number of plots
+    #         sns.heatmap(
+    #             pd.DataFrame(site_rate_matrices[i], columns=get_amino_acids(), index=get_amino_acids()),
+    #             cmap=cmap, 
+    #             center=0, 
+    #             vmin=vmin, 
+    #             vmax=vmax, 
+    #             ax=ax, 
+    #             cbar=False,  # Turn off individual colorbars for clarity
+    #             annot=True,
+    #             fmt=".1f",
+    #         )
+    #         ax.set_title(f"Site {i}")
+    #     else:
+    #         ax.axis("off")  # Turn off unused axes
+
+    # # Add a single colorbar for the entire figure
+    # cbar_ax = fig.add_axes([0.96, 0.15, 0.02, 0.7])  # [left, bottom, width, height]
+    # sns.heatmap([[vmin, vmax]], cmap=cmap, cbar=True, cbar_ax=cbar_ax)
+    # cbar_ax.set_yticks([vmin, 0, vmax])
+    # cbar_ax.set_yticklabels([vmin, 0, vmax])
+
+    # plt.savefig(f"test_learn_site_specific_rate_matrices_real_vectorized_GOAT_with_fast_cherries_proteins.png")
     # plt.show()
     # plt.close()
     # # assert(False)

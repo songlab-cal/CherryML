@@ -17,6 +17,8 @@ from cherryml.estimation_end_to_end import CHERRYML_TYPE
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
+import pytest
+
 
 class TestFastCherries(unittest.TestCase):
     def test_run_fast_cherries(self):
@@ -152,7 +154,7 @@ class TestFastCherries(unittest.TestCase):
         assert((cherry_with_lengths[0][0],cherry_with_lengths[1][0]) in expected)
         
 
-
+    @pytest.mark.slow
     def test_correct_runtime(self):
         """
         ensures that the runtimes are being recorded correctly
