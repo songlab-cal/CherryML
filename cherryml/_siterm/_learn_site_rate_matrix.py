@@ -1147,7 +1147,7 @@ def test_learn_site_rate_matrix_with_site_rate_prior_and_gaps():
             index=["A", "C", "G", "T"],
             columns=["A", "C", "G", "T"],
         ),
-        use_fast_implementation=True,
+        use_vectorized_implementation=True,
     )
     learnt_site_rate = res_dict["learnt_site_rates"][0]
     np.testing.assert_almost_equal(
@@ -1178,9 +1178,9 @@ def learn_site_rate_matrices(
     alphabet: List[str],
     regularization_rate_matrix: pd.DataFrame,
     regularization_strength: float,
-    use_fast_implementation: bool,
-    fast_implementation_device: str = "cpu",
-    fast_implementation_num_cores: int = 1,
+    use_vectorized_implementation: bool,
+    vectorized_implementation_device: str = "cpu",
+    vectorized_implementation_num_cores: int = 1,
     site_rate_grid: List[float] = [2.0 ** i for i in range(-10, 10)],  # For backwards compatibility reasons. Use get_standard_site_rate_grid() instead.
     site_rate_prior: List[float] = [1.0 for i in range(-10, 10)],  # For backwards compatibility reasons. Use get_standard_site_rate_prior() instead.
     alphabet_for_site_rate_estimation: Optional[List[str]] = None,
@@ -1201,10 +1201,12 @@ def learn_site_rate_matrices(
             rate matrix.
         regularization_strength: Between 0 and 1. 0 means no regularization at all,
             and 1 means fully regularized model.
-        use_fast_implementation: Whether to use fast, vectorized implementation.
-        fast_implementation_device: Whether to use "cpu" or GPU ("cuda"?).
-        fast_implementation_num_cores: Limit to the number of cores that
-            pytorch/numpy will use in the fast implementation.
+        use_vectorized_implementation: Whether to use vectorized implementation.
+        vectorized_implementation_device: Whether to use "cpu" or "cuda".
+        vectorized_implementation_num_cores: Limit to the number of cores that
+            pytorch/numpy will internally use in the vectorized implementation.
+            This is NOT about multiprocessing - it's about how many cores
+            pytorch/numpy can use to perform e.g. large matrix multiplies.
         site_rate_grid: Grid of site rates to consider. The standard site
             rate grid (used in FastCherries/SiteRM) can be obtained with
             `get_standard_site_rate_grid()`.
@@ -1226,7 +1228,7 @@ def learn_site_rate_matrices(
             `regularization_rate_matrix` will be used.
         num_epochs: Number of epochs (Adam steps) in the PyTorch optimizer.
         use_fast_site_rate_implementation: Whether to use fast site rate implementation.
-            Only used if `use_fast_implementation=True`.
+            Only used if `use_vectorized_implementation=True`.
 
     Returns:
         A dictionary with the following entries:
@@ -1302,7 +1304,7 @@ def learn_site_rate_matrices(
     )
     time_estimate_site_rate += time.time() - st
 
-    if use_fast_implementation:
+    if use_vectorized_implementation:
         # For this step, we profile it at the subroutine level so we don't do `st = time.time()` as before.
         # Instead, the profiling information comes from the returned dictionary.
         learnt_rate_matrices__res_dict = _learn_site_rate_matrices_given_site_rates_too(
@@ -1313,8 +1315,8 @@ def learn_site_rate_matrices(
             regularization_rate_matrix=regularization_rate_matrix,
             regularization_strength=regularization_strength,
             use_vectorized_cherryml_implementation=True,
-            vectorized_cherryml_implementation_device=fast_implementation_device,
-            vectorized_cherryml_implementation_num_cores=fast_implementation_num_cores,
+            vectorized_cherryml_implementation_device=vectorized_implementation_device,
+            vectorized_cherryml_implementation_num_cores=vectorized_implementation_num_cores,
             num_epochs=num_epochs,
             quantization_grid_num_steps=quantization_grid_num_steps,
         )
@@ -1351,10 +1353,13 @@ def learn_site_rate_matrices(
                 )
             )
         res = {
-            "learnt_rate_matrices": [
-                res_dict["learnt_rate_matrix"].to_numpy()
-                for res_dict in res_dicts
-            ],
+            "learnt_rate_matrices": np.stack(
+                [
+                    res_dict["learnt_rate_matrix"].to_numpy()
+                    for res_dict in res_dicts
+                ],
+                axis=0,
+            ),
             "learnt_site_rates": [
                 res_dict["learnt_site_rate"]
                 for res_dict in res_dicts
@@ -1388,7 +1393,7 @@ def learn_site_rate_matrices(
 
 
 def test_learn_site_rate_matrices():
-    for use_fast_implementation in [False, True]:
+    for use_vectorized_implementation in [False, True]:
         res_dict = learn_site_rate_matrices(
             tree_newick="(((leaf_1:1.0,leaf_2:1.0):1.0):1.0,((leaf_3:1.0,leaf_4:1.0):1.0):1.0);",
             leaf_states={"leaf_1": "C", "leaf_2": "C", "leaf_3": "C", "leaf_4": "G"},
@@ -1404,7 +1409,7 @@ def test_learn_site_rate_matrices():
                 columns=["A", "C", "G", "T"],
             ) / 3.0,
             regularization_strength=0.5,
-            use_fast_implementation=use_fast_implementation,
+            use_vectorized_implementation=use_vectorized_implementation,
         )
         learnt_site_rates = res_dict["learnt_site_rates"]
         np.testing.assert_almost_equal(learnt_site_rates, [0.5])
@@ -1476,7 +1481,7 @@ def test_learn_site_rate_matrices_large():
     tree_newick = _get_tree_newick()
     leaves = _convert_newick_to_CherryML_Tree(tree_newick).leaves()
     alphabet = ["A", "C", "G", "T"]
-    for use_fast_implementation in [False, True]:
+    for use_vectorized_implementation in [False, True]:
         site_rate_matrices = learn_site_rate_matrices(
             tree_newick=tree_newick,
             # leaf_states={leaf: "A" for leaf in leaves},  # Gives very slow rate matrix
@@ -1494,10 +1499,10 @@ def test_learn_site_rate_matrices_large():
                 columns=["A", "C", "G", "T"],
             ),
             regularization_strength=0.5,
-            use_fast_implementation=use_fast_implementation,
+            use_vectorized_implementation=use_vectorized_implementation,
         )["learnt_rate_matrices"]
         np.testing.assert_array_almost_equal(
-            site_rate_matrices[0].T,
+            site_rate_matrices[0, :, :].T,
             pd.DataFrame(
                 [
                     [-0.24429482221603394, 0.1794303059577942, 0.03243225812911987, 0.03243225812911987],
@@ -1582,8 +1587,8 @@ def test_learn_site_rate_matrices_real_vectorized_GOAT():
     """
     num_sites = 128  # Use all 128 to appreciate speedup of vectorized implementation.
     site_rate_matrices = {}
-    for use_fast_implementation in [True, False]:
-        print(f"***** use_fast_implementation = {use_fast_implementation} *****")
+    for use_vectorized_implementation in [True, False]:
+        print(f"***** use_vectorized_implementation = {use_vectorized_implementation} *****")
         msa = _get_msa_example()
         leaf_states = {
             msa.columns[species_id]: (''.join(list(msa.iloc[:, species_id])))[:num_sites].upper()
@@ -1610,9 +1615,9 @@ def test_learn_site_rate_matrices_real_vectorized_GOAT():
                 columns=["A", "C", "G", "T", "-"],
             ),
             regularization_strength=0.5,
-            use_fast_implementation=use_fast_implementation,
-            fast_implementation_device="cpu",
-            fast_implementation_num_cores=1,
+            use_vectorized_implementation=use_vectorized_implementation,
+            vectorized_implementation_device="cpu",
+            vectorized_implementation_num_cores=1,
             site_rate_grid=get_standard_site_rate_grid(),
             site_rate_prior=get_standard_site_rate_prior(),
             alphabet_for_site_rate_estimation=["A", "C", "G", "T"],
@@ -1628,11 +1633,11 @@ def test_learn_site_rate_matrices_real_vectorized_GOAT():
             ),
             num_epochs=200,
         )
-        site_rate_matrices[use_fast_implementation] = res_dict["learnt_rate_matrices"]
+        site_rate_matrices[use_vectorized_implementation] = res_dict["learnt_rate_matrices"]
         for k, v in res_dict.items():
             if k.startswith("time_"):
                 print(k, v)
-        if use_fast_implementation == False:
+        if use_vectorized_implementation == False:
             print("times_convert_newick_to_CherryML_Tree", res_dict["times_convert_newick_to_CherryML_Tree"])
             print("times_estimate_site_rate", res_dict["times_estimate_site_rate"])
             print("times_learn_site_rate_matrix_given_site_rate_too", res_dict["times_learn_site_rate_matrix_given_site_rate_too"])
@@ -1658,8 +1663,8 @@ def test_learn_site_rate_matrices_real_cuda_GOAT():
         return
     num_sites = 10  # Use all 128 to appreciate speedup of vectorized implementation.
     site_rate_matrices = {}
-    for fast_implementation_device in ["cpu", "cuda"]:
-        print(f"***** fast_implementation_device = {fast_implementation_device} *****")
+    for vectorized_implementation_device in ["cpu", "cuda"]:
+        print(f"***** vectorized_implementation_device = {vectorized_implementation_device} *****")
         msa = _get_msa_example()
         leaf_states = {
             msa.columns[species_id]: (''.join(list(msa.iloc[:, species_id])))[:num_sites].upper()
@@ -1686,9 +1691,9 @@ def test_learn_site_rate_matrices_real_cuda_GOAT():
                 columns=["A", "C", "G", "T", "-"],
             ),
             regularization_strength=0.5,
-            use_fast_implementation=True,
-            fast_implementation_device=fast_implementation_device,
-            fast_implementation_num_cores=1,
+            use_vectorized_implementation=True,
+            vectorized_implementation_device=vectorized_implementation_device,
+            vectorized_implementation_num_cores=1,
             site_rate_grid=get_standard_site_rate_grid(),
             site_rate_prior=get_standard_site_rate_prior(),
             alphabet_for_site_rate_estimation=["A", "C", "G", "T"],
@@ -1704,7 +1709,7 @@ def test_learn_site_rate_matrices_real_cuda_GOAT():
             ),
             num_epochs=200,
         )
-        site_rate_matrices[fast_implementation_device] = res_dict["learnt_rate_matrices"]
+        site_rate_matrices[vectorized_implementation_device] = res_dict["learnt_rate_matrices"]
         total_time = 0.0
         for k, v in res_dict.items():
             if k.startswith("time_"):
@@ -1736,8 +1741,8 @@ def test_fast_site_rate_estimation_real_data():
     GRID_SIZE = 8  # We can go as low as 16 or even 8!
 
     site_rate_matrices = {}
-    for fast_implementation_device in ["cpu", "cuda"]:
-        print(f"***** fast_implementation_device = {fast_implementation_device} *****")
+    for vectorized_implementation_device in ["cpu", "cuda"]:
+        print(f"***** vectorized_implementation_device = {vectorized_implementation_device} *****")
         msa = _get_msa_example()
         leaf_states = {
             msa.columns[species_id]: (''.join(list(msa.iloc[:, species_id])))[:num_sites].upper() * 512  # Repeat to get 65536 sites, like in GPN-MSA's batch size.
@@ -1764,10 +1769,10 @@ def test_fast_site_rate_estimation_real_data():
                 columns=["A", "C", "G", "T", "-"],
             ),
             regularization_strength=0.5,
-            use_fast_implementation=True,
-            use_fast_site_rate_implementation=fast_implementation_device == "cuda",
-            fast_implementation_device="cuda",
-            fast_implementation_num_cores=1,
+            use_vectorized_implementation=True,
+            use_fast_site_rate_implementation=vectorized_implementation_device == "cuda",
+            vectorized_implementation_device="cuda",
+            vectorized_implementation_num_cores=1,
 
             site_rate_grid=[x for (i, x) in enumerate(get_standard_site_rate_grid()) if (i - 10) % SITE_RATE_GRID_MOD == 0],  # Thinned out grid provides speedup. 1 site rate gives ~1.17.
             site_rate_prior=[x for (i, x) in enumerate(get_standard_site_rate_prior()) if (i - 10) % SITE_RATE_GRID_MOD == 0],  # Thinned out grid provides speedup.
@@ -1786,13 +1791,13 @@ def test_fast_site_rate_estimation_real_data():
             num_epochs=NUM_PYTORCH_EPOCHS,
             quantization_grid_num_steps=GRID_SIZE,
         )
-        site_rate_matrices[fast_implementation_device] = res_dict["learnt_rate_matrices"]
+        site_rate_matrices[vectorized_implementation_device] = res_dict["learnt_rate_matrices"]
         total_time = 0.0
         for k, v in res_dict.items():
             if k.startswith("time_"):
                 print(k, v)
                 total_time += float(v)
-        print(f"total_time {fast_implementation_device} = {total_time} (sum of times) vs {time.time() - st} (real time)")
+        print(f"total_time {vectorized_implementation_device} = {total_time} (sum of times) vs {time.time() - st} (real time)")
     assert(
         len(site_rate_matrices["cpu"]) == num_sites
     )
@@ -1853,10 +1858,10 @@ def test_fast_site_rate_estimation_real_data_2():
                 columns=["A", "C", "G", "T", "-"],
             ),
             regularization_strength=0.5,
-            use_fast_implementation=True,
+            use_vectorized_implementation=True,
             use_fast_site_rate_implementation=True,
-            fast_implementation_device="cuda",
-            fast_implementation_num_cores=1,
+            vectorized_implementation_device="cuda",
+            vectorized_implementation_num_cores=1,
             site_rate_grid=get_standard_site_rate_grid(num_site_rates=NUM_SITE_RATES),
             site_rate_prior=get_standard_site_rate_prior(num_site_rates=NUM_SITE_RATES),
             alphabet_for_site_rate_estimation=["A", "C", "G", "T"],

@@ -108,9 +108,9 @@ def learn_site_specific_rate_matrices(
         alphabet=alphabet,
         regularization_rate_matrix=regularization_rate_matrix,
         regularization_strength=regularization_strength,
-        use_fast_implementation=use_vectorized_implementation,
-        fast_implementation_device=device,
-        fast_implementation_num_cores=1,  # Doesn't really make sense to vectorize at this level.
+        use_vectorized_implementation=use_vectorized_implementation,
+        vectorized_implementation_device=device,
+        vectorized_implementation_num_cores=1,  # Doesn't really make sense to vectorize at this level.
         site_rate_grid=site_rate_grid,
         site_rate_prior=site_rate_prior,
         alphabet_for_site_rate_estimation=alphabet_for_site_rate_estimation,
