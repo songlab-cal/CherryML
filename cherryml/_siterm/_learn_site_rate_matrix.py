@@ -1283,7 +1283,7 @@ def learn_site_rate_matrices(
             )
             _tree = cherryml_io.read_tree(os.path.join(_output_tree_dir, "family_0.txt"))
             tree_newick = _tree.to_newick(format=2)
-    profiling_res["time_estimate_tree"] = time.time() - st
+    time_estimate_tree = time.time() - st
 
     time_convert_newick_to_CherryML_Tree = 0.0
     st = time.time()
@@ -1325,6 +1325,7 @@ def learn_site_rate_matrices(
 
         res = {
             "learnt_rate_matrices": learnt_rate_matrices,
+            "time_estimate_tree": time_estimate_tree,
             "learnt_site_rates": site_rates,
             "time_convert_newick_to_CherryML_Tree": time_convert_newick_to_CherryML_Tree,
             "time_estimate_site_rate": time_estimate_site_rate,
@@ -1364,6 +1365,7 @@ def learn_site_rate_matrices(
                 res_dict["learnt_site_rate"]
                 for res_dict in res_dicts
             ],
+            "time_estimate_tree": time_estimate_tree,
             "time_convert_newick_to_CherryML_Tree": sum(
                 res_dict["time_convert_newick_to_CherryML_Tree"]
                 for res_dict in res_dicts
