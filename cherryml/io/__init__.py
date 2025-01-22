@@ -29,4 +29,4 @@ from ._transitions_log_likelihood_per_site import (
     read_transitions_log_likelihood_per_site,
     write_transitions_log_likelihood_per_site,
 )
-from ._tree import Tree, read_tree, write_tree
+from ._tree import Tree, read_tree, write_tree, convert_newick_to_CherryML_Tree

@@ -2,11 +2,11 @@ import tempfile
 import time
 import os
 from cherryml import io as cherryml_io
+from cherryml.io import convert_newick_to_CherryML_Tree
 from cherryml import markov_chain
 import numpy as np
 import pandas as pd
 from typing import Any, Dict, List, Tuple, Optional
-from ete3 import Tree as TreeETE
 from ._site_specific_rate_matrix import _estimate_site_specific_rate_matrices_given_tree_and_site_rates
 from scipy.stats import gamma
 import logging
@@ -21,69 +21,6 @@ from cherryml.phylogeny_estimation._fast_cherries import fast_cherries
 QUANTIZATION_GRID_CENTER = 0.03
 QUANTIZATION_GRID_STEP = 1.1
 QUANTIZATION_GRID_NUM_STEPS = 64
-
-def _name_internal_nodes(t: TreeETE) -> None:
-    """
-    Assigns names to the internal nodes of tree t if they don't already have a
-    name.
-    """
-
-    def node_name_generator():
-        """Generates unique node names for the tree."""
-        internal_node_id = 1
-        while True:
-            yield f"internal-{internal_node_id}"
-            internal_node_id += 1
-
-    names = node_name_generator()
-
-    def dfs_name_internal_nodes(p: Optional[TreeETE], v: TreeETE) -> None:
-        global internal_node_id
-        if v.name == "":
-            v.name = next(names)
-        if p:
-            # print(f"{p.name} -> {v.name}")
-            pass
-        for u in v.get_children():
-            dfs_name_internal_nodes(v, u)
-
-    dfs_name_internal_nodes(None, t)
-
-
-def _translate_tree(tree_ete: TreeETE) -> cherryml_io.Tree:
-    tree = cherryml_io.Tree()
-
-    def dfs_translate_tree(p, v) -> None:
-        tree.add_node(v.name)
-        if p is not None:
-            try:
-                tree.add_edge(p.name, v.name, v.dist)
-            except Exception:
-                raise Exception("Could not translate tree")
-        for u in v.get_children():
-            dfs_translate_tree(v, u)
-
-    dfs_translate_tree(None, tree_ete)
-    return tree
-
-
-def _convert_newick_to_CherryML_Tree(
-    tree_newick: str,
-) -> cherryml_io.Tree:
-    tree_ete = TreeETE(tree_newick)
-    _name_internal_nodes(tree_ete)
-    tree = _translate_tree(tree_ete)
-    return tree
-
-
-def test__convert_newick_to_CherryML_Tree():
-    tree_newick = "((Homo_sapiens:0.00655,Pan_troglodytes:0.00684):0.00422);"
-    tree = _convert_newick_to_CherryML_Tree(
-        tree_newick=tree_newick,
-    )
-    assert(
-        tree.to_newick(format=1) == "((Homo_sapiens:0.00655,Pan_troglodytes:0.00684)internal-2:0.00422);"
-    )
 
 
 def _get_cherry_transitions(
@@ -959,7 +896,7 @@ def learn_site_rate_matrix(
 
 def test_learn_site_rate_matrix():
     site_rate_matrix = learn_site_rate_matrix(
-        tree=_convert_newick_to_CherryML_Tree("(((leaf_1:1.0,leaf_2:1.0):1.0):1.0,((leaf_3:1.0,leaf_4:1.0):1.0):1.0);"),
+        tree=convert_newick_to_CherryML_Tree("(((leaf_1:1.0,leaf_2:1.0):1.0):1.0,((leaf_3:1.0,leaf_4:1.0):1.0):1.0);"),
         leaf_states={"leaf_1": "A", "leaf_2": "A", "leaf_3": "C", "leaf_4": "G"},
         alphabet=["A", "C", "G", "T"],
         regularization_rate_matrix=pd.DataFrame(
@@ -1022,7 +959,7 @@ def test_learn_site_rate_matrix_with_site_rate_prior():
         ({"leaf_1": "A", "leaf_2": "A", "leaf_3": "A", "leaf_4": "A"}, 0.0009765625),  # Very small
     ]:
         res_dict = learn_site_rate_matrix(
-            tree=_convert_newick_to_CherryML_Tree("(((leaf_1:1.0,leaf_2:1.0):1.0):1.0,((leaf_3:1.0,leaf_4:1.0):1.0):1.0);"),
+            tree=convert_newick_to_CherryML_Tree("(((leaf_1:1.0,leaf_2:1.0):1.0):1.0,((leaf_3:1.0,leaf_4:1.0):1.0):1.0);"),
             leaf_states=leaf_states,
             alphabet=["A", "C", "G", "T"],
             regularization_rate_matrix=pd.DataFrame(
@@ -1051,7 +988,7 @@ def test_learn_site_rate_matrix_with_site_rate_prior():
         ({"leaf_1": "A", "leaf_2": "A", "leaf_3": "A", "leaf_4": "A"}, 0.25),  # This is no longer too small
     ]:
         res_dict = learn_site_rate_matrix(
-            tree=_convert_newick_to_CherryML_Tree("(((leaf_1:1.0,leaf_2:1.0):1.0):1.0,((leaf_3:1.0,leaf_4:1.0):1.0):1.0);"),
+            tree=convert_newick_to_CherryML_Tree("(((leaf_1:1.0,leaf_2:1.0):1.0):1.0,((leaf_3:1.0,leaf_4:1.0):1.0):1.0);"),
             leaf_states=leaf_states,
             alphabet=["A", "C", "G", "T"],
             regularization_rate_matrix=pd.DataFrame(
@@ -1082,7 +1019,7 @@ def test_learn_site_rate_matrix_with_site_rate_prior():
         ({"leaf_1": "A", "leaf_2": "A", "leaf_3": "A", "leaf_4": "A"}, 0.17651113509036334),
     ]:
         res_dict = learn_site_rate_matrix(
-            tree=_convert_newick_to_CherryML_Tree("(((leaf_1:1.0,leaf_2:1.0):1.0):1.0,((leaf_3:1.0,leaf_4:1.0):1.0):1.0);"),
+            tree=convert_newick_to_CherryML_Tree("(((leaf_1:1.0,leaf_2:1.0):1.0):1.0,((leaf_3:1.0,leaf_4:1.0):1.0):1.0);"),
             leaf_states=leaf_states,
             alphabet=["A", "C", "G", "T"],
             regularization_rate_matrix=pd.DataFrame(
@@ -1112,7 +1049,7 @@ def test_learn_site_rate_matrix_with_site_rate_prior_and_gaps():
     but then learn a site rate matrix that *includes* the gap state.
     """
     res_dict = learn_site_rate_matrices(
-        tree_newick="(((leaf_1:1.0,leaf_2:1.0):1.0):1.0,((leaf_3:1.0,leaf_4:1.0):1.0):1.0);",
+        tree=convert_newick_to_CherryML_Tree("(((leaf_1:1.0,leaf_2:1.0):1.0):1.0,((leaf_3:1.0,leaf_4:1.0):1.0):1.0);"),
         leaf_states={"leaf_1": "A", "leaf_2": "-", "leaf_3": "A", "leaf_4": "A"},
         alphabet=["A", "C", "G", "T", "-"],
         regularization_rate_matrix=pd.DataFrame(
@@ -1166,7 +1103,7 @@ def test_learn_site_rate_matrix_with_site_rate_prior_and_gaps():
 
 
 def learn_site_rate_matrices(
-    tree_newick: Optional[str],
+    tree: Optional[cherryml_io.Tree],
     leaf_states: Dict[str, str],
     alphabet: List[str],
     regularization_rate_matrix: pd.DataFrame,
@@ -1186,11 +1123,8 @@ def learn_site_rate_matrices(
     Learn a rate matrix per site given the tree and leaf states.
 
     Args:
-        tree_newick: The tree in newick format number 2. If `None`, then
-            FastCherries will be used to estimate the tree (cherries). If
-            `tree_newick` ends in ".txt" we will assume that this is a path to
-            a file containing the tree in the CherryML format, and hence read
-            it from that file.
+        tree: The tree in the CherryML Tree type. If `None`, then FastCherries
+            will be used to estimate the tree.
         leaf_states: For each leaf in the tree, the states for that leaf.
         alphabet: List of valid states.
         regularization_rate_matrix: Rate matrix to use to regularize the learnt
@@ -1249,7 +1183,7 @@ def learn_site_rate_matrices(
 
     # Estimate the tree if not provided
     st = time.time()
-    if tree_newick is None:
+    if tree is None:
         assert rate_matrix_for_site_rate_estimation is not None
         with tempfile.TemporaryDirectory() as temporary_dir:
             # temporary_dir = "temporary_dir"
@@ -1277,19 +1211,8 @@ def learn_site_rate_matrices(
                 output_site_rates_dir=_output_site_rates_dir,
                 output_likelihood_dir=_output_likelihood_dir,
             )
-            _tree = cherryml_io.read_tree(os.path.join(_output_tree_dir, "family_0.txt"))
-            tree_newick = _tree.to_newick(format=2)
-    elif tree_newick.endswith(".txt"):
-        _tree = cherryml_io.read_tree(tree_newick)
-        tree_newick = _tree.to_newick(format=2)
+            tree = cherryml_io.read_tree(os.path.join(_output_tree_dir, "family_0.txt"))
     time_estimate_tree = time.time() - st
-
-    time_convert_newick_to_CherryML_Tree = 0.0
-    st = time.time()
-    tree = _convert_newick_to_CherryML_Tree(
-        tree_newick=tree_newick,
-    )
-    time_convert_newick_to_CherryML_Tree = time.time() - st
 
     time_estimate_site_rate = 0.0
     st = time.time()
@@ -1326,7 +1249,6 @@ def learn_site_rate_matrices(
             "learnt_rate_matrices": learnt_rate_matrices,
             "learnt_site_rates": site_rates,
             "time_estimate_tree": time_estimate_tree,
-            "time_convert_newick_to_CherryML_Tree": time_convert_newick_to_CherryML_Tree,
             "time_estimate_site_rate": time_estimate_site_rate,
         }
         res = {**res, **learnt_rate_matrices__profiling_dict}
@@ -1365,7 +1287,6 @@ def learn_site_rate_matrices(
                 for res_dict in res_dicts
             ],
             "time_estimate_tree": time_estimate_tree,
-            "time_convert_newick_to_CherryML_Tree": time_convert_newick_to_CherryML_Tree,
             "time_estimate_site_rate": sum(
                 res_dict["time_estimate_site_rate"]
                 for res_dict in res_dicts
@@ -1381,7 +1302,7 @@ def learn_site_rate_matrices(
 def test_learn_site_rate_matrices():
     for use_vectorized_implementation in [False, True]:
         res_dict = learn_site_rate_matrices(
-            tree_newick="(((leaf_1:1.0,leaf_2:1.0):1.0):1.0,((leaf_3:1.0,leaf_4:1.0):1.0):1.0);",
+            tree=convert_newick_to_CherryML_Tree("(((leaf_1:1.0,leaf_2:1.0):1.0):1.0,((leaf_3:1.0,leaf_4:1.0):1.0):1.0);"),
             leaf_states={"leaf_1": "C", "leaf_2": "C", "leaf_3": "C", "leaf_4": "G"},
             alphabet=["A", "C", "G", "T"],
             regularization_rate_matrix=pd.DataFrame(
@@ -1426,10 +1347,10 @@ def _get_tree_newick() -> str:
 
 def test_learn_site_rate_matrix_large():
     tree_newick = _get_tree_newick()
-    leaves = _convert_newick_to_CherryML_Tree(tree_newick).leaves()
+    leaves = convert_newick_to_CherryML_Tree(tree_newick).leaves()
     alphabet = ["A", "C", "G", "T"]
     res_dict = learn_site_rate_matrix(
-        tree=_convert_newick_to_CherryML_Tree(tree_newick),
+        tree=convert_newick_to_CherryML_Tree(tree_newick),
         # leaf_states={leaf: "A" for leaf in leaves},  # Gives very slow rate matrix
         leaf_states={**{"hg38": "A"}, **{leaf: "C" for leaf in leaves if leaf != "hg38"}},  # Gives reasonable rate matrix
         # leaf_states={leaf: alphabet[len(leaf) % 4] for leaf in leaves},  # Gives rate matrix with massive rates.
@@ -1465,11 +1386,11 @@ def test_learn_site_rate_matrix_large():
 
 def test_learn_site_rate_matrices_large():
     tree_newick = _get_tree_newick()
-    leaves = _convert_newick_to_CherryML_Tree(tree_newick).leaves()
+    leaves = convert_newick_to_CherryML_Tree(tree_newick).leaves()
     alphabet = ["A", "C", "G", "T"]
     for use_vectorized_implementation in [False, True]:
         site_rate_matrices = learn_site_rate_matrices(
-            tree_newick=tree_newick,
+            tree=convert_newick_to_CherryML_Tree(tree_newick),
             # leaf_states={leaf: "A" for leaf in leaves},  # Gives very slow rate matrix
             leaf_states={**{"hg38": "A"}, **{leaf: "C" for leaf in leaves if leaf != "hg38"}},  # Gives reasonable rate matrix
             # leaf_states={leaf: alphabet[len(leaf) % 4] for leaf in leaves},  # Gives rate matrix with massive rates.
@@ -1541,7 +1462,7 @@ def test_learn_site_rate_matrix_real():
         alphabet = ["A", "C", "G", "T"]
         st = time.time()
         res_dict = learn_site_rate_matrix(
-            tree=_convert_newick_to_CherryML_Tree(tree_newick),
+            tree=convert_newick_to_CherryML_Tree(tree_newick),
             leaf_states=leaf_states,
             alphabet=alphabet,
             regularization_rate_matrix=pd.DataFrame(
@@ -1583,7 +1504,7 @@ def test_learn_site_rate_matrices_real_vectorized_GOAT():
         tree_newick = _get_tree_newick()
         st = time.time()
         res_dict = learn_site_rate_matrices(
-            tree_newick=tree_newick,
+            tree=convert_newick_to_CherryML_Tree(tree_newick),
             leaf_states={
                 k: v[:num_sites]
                 for (k, v) in leaf_states.items()
@@ -1624,7 +1545,6 @@ def test_learn_site_rate_matrices_real_vectorized_GOAT():
             if k.startswith("time_"):
                 print(k, v)
         if use_vectorized_implementation == False:
-            print("times_convert_newick_to_CherryML_Tree", res_dict["times_convert_newick_to_CherryML_Tree"])
             print("times_estimate_site_rate", res_dict["times_estimate_site_rate"])
             print("times_learn_site_rate_matrix_given_site_rate_too", res_dict["times_learn_site_rate_matrix_given_site_rate_too"])
     assert(
@@ -1659,7 +1579,7 @@ def test_learn_site_rate_matrices_real_cuda_GOAT():
         tree_newick = _get_tree_newick()
         st = time.time()
         res_dict = learn_site_rate_matrices(
-            tree_newick=tree_newick,
+            tree=convert_newick_to_CherryML_Tree(tree_newick),
             leaf_states={
                 k: v[:num_sites]
                 for (k, v) in leaf_states.items()
@@ -1737,7 +1657,7 @@ def test_fast_site_rate_estimation_real_data():
         tree_newick = _get_tree_newick()
         st = time.time()
         res_dict = learn_site_rate_matrices(
-            tree_newick=tree_newick,
+            tree=convert_newick_to_CherryML_Tree(tree_newick),
             leaf_states={
                 k: v[:num_sites]
                 for (k, v) in leaf_states.items()
@@ -1826,7 +1746,7 @@ def test_fast_site_rate_estimation_real_data_2():
         if repetition == 1:
             st = time.time()
         res_dict = learn_site_rate_matrices(
-            tree_newick=tree_newick,
+            tree=convert_newick_to_CherryML_Tree(tree_newick),
             leaf_states={
                 k: v[:num_sites]
                 for (k, v) in leaf_states.items()

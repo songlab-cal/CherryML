@@ -14,12 +14,12 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import pytest
 from cherryml._siterm._learn_site_rate_matrix import learn_site_rate_matrices
-from cherryml._siterm._learn_site_rate_matrix import get_standard_site_rate_grid, get_standard_site_rate_prior, _get_msa_example, _get_test_msa, _get_test_tree, _get_tree_newick, _convert_newick_to_CherryML_Tree
+from cherryml._siterm._learn_site_rate_matrix import get_standard_site_rate_grid, get_standard_site_rate_prior, _get_msa_example, _get_test_msa, _get_test_tree, _get_tree_newick, convert_newick_to_CherryML_Tree
 from cherryml.utils import get_amino_acids
 
 
 def learn_site_specific_rate_matrices(
-    tree_newick: Optional[str],
+    tree: Optional[cherryml_io.Tree],
     msa: Dict[str, str],  # TODO: Allow path to MSA too.
     alphabet: List[str],
     regularization_rate_matrix: pd.DataFrame,
@@ -46,9 +46,21 @@ def learn_site_specific_rate_matrices(
     ```
 
     Args:
-        tree_newick: The tree in newick format. If `None`, then FastCherries
-            will be used to estimate the tree (cherries).
-        msa: For each leaf in the tree, the states for that leaf.
+        tree: The tree of the CherryML Tree type. If `None`, then FastCherries
+            will be used to estimate the tree. NOTE: You can easily convert
+            a newick tree (in format number 2) to the CherryML Tree type using:
+            ```
+            from cherryml.io import convert_newick_to_CherryML_Tree
+            tree = convert_newick_to_CherryML_Tree(tree_newick)
+            ```
+            Alternatively, if you have a file containing a tree in the CherryML
+            format, you can just do:
+            ```
+            from cherryml.io import read_tree
+            tree = read_tree(tree_path)
+            ```
+        msa: Dictionary mapping each leaf in the tree to the states for that
+            leaf.
         alphabet: List of valid states, e.g. ["A", "C", "G", "T"].
         regularization_rate_matrix: Rate matrix to use to regularize the learnt
             rate matrix.
@@ -103,7 +115,7 @@ def learn_site_specific_rate_matrices(
     site_rate_grid = get_standard_site_rate_grid(num_site_rates=num_rate_categories)
     site_rate_prior = get_standard_site_rate_prior(num_site_rates=num_rate_categories)
     res_dict = learn_site_rate_matrices(
-        tree_newick=tree_newick,
+        tree=tree,
         leaf_states=msa,
         alphabet=alphabet,
         regularization_rate_matrix=regularization_rate_matrix,
@@ -124,7 +136,7 @@ def learn_site_specific_rate_matrices(
 
 def test_learn_site_specific_rate_matrices():
     res_dict = learn_site_specific_rate_matrices(
-        tree_newick="(((leaf_1:1.0,leaf_2:1.0):1.0):1.0,((leaf_3:1.0,leaf_4:1.0):1.0):1.0);",
+        tree=convert_newick_to_CherryML_Tree("(((leaf_1:1.0,leaf_2:1.0):1.0):1.0,((leaf_3:1.0,leaf_4:1.0):1.0):1.0);"),
         msa={"leaf_1": "C", "leaf_2": "C", "leaf_3": "C", "leaf_4": "G"},
         alphabet=["A", "C", "G", "T"],
         regularization_rate_matrix=pd.DataFrame(
@@ -160,10 +172,10 @@ def test_learn_site_specific_rate_matrices():
 
 def test_learn_site_specific_rate_matrices_large():
     tree_newick = _get_tree_newick()
-    leaves = _convert_newick_to_CherryML_Tree(tree_newick).leaves()
+    leaves = convert_newick_to_CherryML_Tree(tree_newick).leaves()
     alphabet = ["A", "C", "G", "T"]
     site_rate_matrices = learn_site_specific_rate_matrices(
-        tree_newick=tree_newick,
+        tree=convert_newick_to_CherryML_Tree(tree_newick),
         # msa={leaf: "A" for leaf in leaves},  # Gives very slow rate matrix
         msa={**{"hg38": "A"}, **{leaf: "C" for leaf in leaves if leaf != "hg38"}},  # Gives reasonable rate matrix
         # msa={leaf: alphabet[len(leaf) % 4] for leaf in leaves},  # Gives rate matrix with massive rates.
@@ -209,7 +221,7 @@ def test_learn_site_specific_rate_matrices_real_vectorized_GOAT():
     tree_newick = _get_tree_newick()
     st = time.time()
     res_dict = learn_site_specific_rate_matrices(
-        tree_newick=tree_newick,
+        tree=convert_newick_to_CherryML_Tree(tree_newick),
         msa={
             k: v[:num_sites]
             for (k, v) in leaf_states.items()
@@ -305,7 +317,7 @@ def test_learn_site_specific_rate_matrices_real_vectorized_GOAT_with_fast_cherri
     tree_newick = None  # (instead of _get_tree_newick())
     st = time.time()
     res_dict = learn_site_specific_rate_matrices(
-        tree_newick=tree_newick,
+        tree=convert_newick_to_CherryML_Tree(tree_newick),
         msa={
             k: v[:num_sites]
             for (k, v) in leaf_states.items()
@@ -403,7 +415,7 @@ def test_learn_site_specific_rate_matrices_real_cuda_GOAT():
         tree_newick = _get_tree_newick()
         st = time.time()
         res_dict = learn_site_rate_matrices(
-            tree_newick=tree_newick,
+            tree=convert_newick_to_CherryML_Tree(tree_newick),
             msa={
                 k: v[:num_sites]
                 for (k, v) in leaf_states.items()
@@ -476,7 +488,7 @@ def test_learn_site_specific_rate_matrices_real_data():
         tree_newick = _get_tree_newick()
         st = time.time()
         res_dict = learn_site_rate_matrices(
-            tree_newick=tree_newick,
+            tree=convert_newick_to_CherryML_Tree(tree_newick),
             msa={
                 k: v[:num_sites]
                 for (k, v) in leaf_states.items()
@@ -560,7 +572,7 @@ def test_learn_site_specific_rate_matrices_real_data_2():
         if repetition == 1:
             st = time.time()
         res_dict = learn_site_rate_matrices(
-            tree_newick=tree_newick,
+            tree=convert_newick_to_CherryML_Tree(tree_newick),
             msa={
                 k: v[:num_sites]
                 for (k, v) in leaf_states.items()
@@ -650,7 +662,7 @@ def test_learn_site_specific_rate_matrices_real_vectorized_GOAT_with_fast_cherri
     msa = cherryml_io.read_msa(os.path.join(dir_path, "../tests/data/Aln0037_txt-gb_phyml.txt"))
     st = time.time()
     res_dict = learn_site_specific_rate_matrices(
-        tree_newick=None,
+        tree=None,
         msa=msa,
         alphabet=get_amino_acids(),
         regularization_rate_matrix=cherryml_io.read_rate_matrix("data/rate_matrices/equ.txt"),
@@ -721,7 +733,7 @@ def test_learn_site_specific_rate_matrices_real_vectorized_GOAT_with_fast_cherri
     msa = cherryml_io.read_msa(os.path.join(dir_path, "../tests/data/Aln0037_txt-gb_phyml.txt"))
     st = time.time()
     res_dict = learn_site_specific_rate_matrices(
-        tree_newick=None,
+        tree=None,
         msa=msa,
         alphabet=get_amino_acids(),
         regularization_rate_matrix=cherryml_io.read_rate_matrix("data/rate_matrices/equ.txt"),
