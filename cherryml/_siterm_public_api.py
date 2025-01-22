@@ -314,10 +314,10 @@ def test_learn_site_specific_rate_matrices_real_vectorized_GOAT_with_fast_cherri
         msa.columns[species_id]: (''.join(list(msa.iloc[:, species_id])))[:num_sites].upper()
         for species_id in range(msa.shape[1])
     }
-    tree_newick = None  # (instead of _get_tree_newick())
+    tree = None  # (instead of _get_tree_newick())
     st = time.time()
     res_dict = learn_site_specific_rate_matrices(
-        tree=convert_newick_to_CherryML_Tree(tree_newick),
+        tree=tree,
         msa={
             k: v[:num_sites]
             for (k, v) in leaf_states.items()
