@@ -336,7 +336,7 @@ def test__estimate_site_rate():
 #         _matrix_exponential_reversible(
 #             rate_matrix=rate_matrix.to_numpy(),
 #             exponents=[rate * t for rate in site_rate_grid for (x, y, t) in cherries],
-#             device="cpu",  # TODO: "cuda" may be a lot faster for e.g. amino acid alphabet. This on CPU is already fast enough for nucleotides.
+#             device="cpu",
 #         )
 #     ).reshape(
 #         num_rates,
@@ -436,7 +436,7 @@ def _estimate_site_rates_fast(
         _matrix_exponential_reversible(
             rate_matrix=rate_matrix.to_numpy(),
             exponents=[rate * t for rate in site_rate_grid for (x, y, t) in cherries],
-            device="cpu",  # TODO: "cuda" may be a lot faster for e.g. amino acid alphabet. This on CPU is already fast enough for nucleotides.
+            device="cpu",
         )
     ).reshape(
         num_rates,

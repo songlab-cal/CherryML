@@ -387,9 +387,6 @@ def _fig_single_site_cherry(
         )
 
         # Now run the cherryml method.
-        # TODO: with one iteration and oracle pairing/ble/rates, should get exact same results
-        # TODO: get tree/rates directory from lg_end_to_end_with_cherryml_optimizer_res and 
-        # check that cherries are similar and branch lengths are similar
         lg_end_to_end_with_cherryml_optimizer_res = (
             lg_end_to_end_with_cherryml_optimizer(
                 msa_dir=msa_dir,

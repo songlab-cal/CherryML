@@ -20,7 +20,7 @@ from cherryml.utils import get_amino_acids
 
 def learn_site_specific_rate_matrices(
     tree: Optional[cherryml_io.Tree],
-    msa: Dict[str, str],  # TODO: Allow path to MSA too.
+    msa: Dict[str, str],
     alphabet: List[str],
     regularization_rate_matrix: pd.DataFrame,
     regularization_strength: float = 0.5,
@@ -33,7 +33,7 @@ def learn_site_specific_rate_matrices(
     use_vectorized_implementation: bool = True,
 ) -> Dict:
     """
-    Learn a rate matrix per site given the tree and leaf states.
+    Learn a rate matrix per site given an MSA (and optionally a tree).
 
     This function implements learning under the SiteRM model. Briefly, the
     SiteRM model uses a different rate matrix per site. It is described in
@@ -45,10 +45,25 @@ def learn_site_specific_rate_matrices(
     effect prediction.
     ```
 
+    We offer two different implementation of SiteRM training, a "vectorized"
+    version an a "non-vectorized" version. The default implementation is the
+    vectorized one. Briefly, in the vectorized implementation a single
+    computational graph is built encompassing all sites in the MSA, with the
+    loss (i.e. the data log-likelihood) being the sum over all sites. This
+    implementation uses 4D tensors to batch all the sites together, and is
+    great when used in combination with `device="cuda"`. In other words, the
+    vectorized implementation is recommended when GPU is available. When only
+    CPU is available, we provide an alternative implementation where we simply
+    loop over all sites in the MSA, one at a time. This implementation solves
+    one optimization problem per site in the MSA, and involves only 3D tensors.
+    This non-vectorized implementation makes sense if RAM memory becomes
+    a bottleneck (e.g. if working on a personal computer).
+
     Args:
-        tree: The tree of the CherryML Tree type. If `None`, then FastCherries
-            will be used to estimate the tree. NOTE: You can easily convert
-            a newick tree (in format number 2) to the CherryML Tree type using:
+        tree: If `None`, then FastCherries will be used to estimate the tree.
+            Otherwise, you can provide your own tree, which should be of
+            the CherryML Tree typr.  NOTE: You can easily convert a newick
+            tree (in format number 2) to the CherryML Tree type using:
             ```
             from cherryml.io import convert_newick_to_CherryML_Tree
             tree = convert_newick_to_CherryML_Tree(tree_newick)
@@ -59,37 +74,39 @@ def learn_site_specific_rate_matrices(
             from cherryml.io import read_tree
             tree = read_tree(tree_path)
             ```
-        msa: Dictionary mapping each leaf in the tree to the states for that
-            leaf.
-        alphabet: List of valid states, e.g. ["A", "C", "G", "T"].
+        msa: Dictionary mapping each leaf in the tree to the states (e.g.
+            protein or DNA sequence) for that leaf.
+        alphabet: List of valid states, e.g. ["A", "C", "G", "T"] for DNA.
         regularization_rate_matrix: Rate matrix to use to regularize the learnt
-            rate matrix.
-        regularization_strength: Between 0 and 1. 0 means no regularization at all,
-            and 1 means fully regularized model.
-        device: Whether to use "cpu" or GPU ("cuda").
-        num_rate_categories: Grid of site rates to consider. The standard site
-            rate grid (used in FastCherries/SiteRM) can be obtained with
-            `get_standard_site_rate_grid()`.
+            rate matrices.
+        regularization_strength: Between 0 and 1. 0 means no regularization at
+            all, and 1 means fully regularized model. This is lambda in our
+            paper.
+        device: Whether to use "cpu" or GPU ("cuda"). Note that this is only
+            used for the vectorized implementation, i.e. if
+            `use_vectorized_implementation=False` then only CPU will be used,
+            as it doesn't really make sense to use GPU in this case.
+        num_rate_categories: Number of rate categories to use.
         alphabet_for_site_rate_estimation: Alphabet for learning the SITE RATES.
-            If `None`, then the alphabet for the learnt rate matrix, i.e.
-            `alphabet`, will be used. In the FastCherries/SiteRM paper, we have
+            If `None`, then the alphabet for the learnt rate matrices, i.e.
+            `alphabet`, will be used. In our FastCherries/SiteRM paper, we have
             observed that for ProteinGym variant effect prediction, it works
             best to *exclude* gaps while estimating site rates (as is standard
             in statistical phylogenetics), but then use gaps when learning the
             rate matrix at the site. In that case, one would use
-            `alphabet_for_site_rate_estimation=["A", "C", "G", "T"]` in
-            combination with `alphabet=["A", "C", "G", "T", "-"]`.
+            `alphabet_for_site_rate_estimation=["A", "C", "G", "T"]`
+            together with `alphabet=["A", "C", "G", "T", "-"]`.
         rate_matrix_for_site_rate_estimation: If provided, the rate matrix to
             use to estimate site rates. If `None`, then the
             `regularization_rate_matrix` will be used.
         num_epochs: Number of epochs (Adam steps) in the PyTorch optimizer.
         quantization_grid_num_steps: Number of quantization points to use will
-            be `2 * quantization_grid_num_steps + 1` (we take this number of
+            be `2 * quantization_grid_num_steps + 1` (as we take this number of
             steps left and right of the grid center). Lowering
             `quantization_grid_num_steps` leads to faster training at the
             expense of some accuracy. By default,
-            `quantization_grid_num_steps=64` works really well, but reasonable
-            estimates can be obtained very fast with as low as
+            `quantization_grid_num_steps=64` works really well, but great
+            estimates can still be obtained faster with as low as
             `quantization_grid_num_steps=8`.
         use_vectorized_implementation: When `True`, a single computational
             graph including all sites of the MSA will be constructed to learn
@@ -107,10 +124,13 @@ def learn_site_specific_rate_matrices(
 
     Returns:
         A dictionary with the following entries:
-            - "learnt_rate_matrices": A numpy array with the learnt rate matrix per site.
-            - "learnt_site_rates": A List[float] with the learnt site rate per site.
+            - "learnt_rate_matrices": A 3D numpy array with the learnt rate
+                matrix per site.
+            - "learnt_site_rates": A List[float] with the learnt site rate per
+                site.
             - "time_...": The time taken by this substep. (They should add up
-                to the total runtime).
+                to the total runtime, up to a small rather negligible
+                difference).
     """
     site_rate_grid = get_standard_site_rate_grid(num_site_rates=num_rate_categories)
     site_rate_prior = get_standard_site_rate_prior(num_site_rates=num_rate_categories)
