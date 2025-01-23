@@ -592,9 +592,14 @@ As always, please make sure all the tests are passing before attempting to repro
 python -m pytest tests --runslow
 ```
 
-Sometime some tests may fail due to e.g. failing to build `Historian`. You can ignore that test since `Historian` is not needed for our paper (it's just a third-party tool we wrapped and made available from our package for convenience).
+In brief, running the python script `figures_neurips_2024.py` will reproduce all figures in our paper except the ProteinGym results. It should be as simple as:
+```
+$ time python figures_neurips_2024.py
+```
 
 By default, 10 CPU cores are used to parallelize the benchmarks. You can change the number of CPU cores by changing the line `num_processes = 10` in the file `figures_neurips_2024.py`.
+
+Below we detail which functions in this file correspond to each figure in our paper.
 
 ## Figures 2c and 2d
 
@@ -603,3 +608,11 @@ In the file `figures_neurips_2024.py`, the function `reproduce_lg()` reproduces 
 ## Supplementary Figure S1
 
 In the file `figures_neurips_2024.py`, the function `qmaker()` reproduces Supplementary Figure S1. After running this function, Supplementary Figure S1's subfigures will be located at `neurips_figures/fig_qmaker/[domain]/` as PNG files. The function `qmaker()` takes around 4 hours on my Macbook Pro with `Apple M3 Pro` chip.
+
+## Figures 2a and 2b
+
+In the file `figures_neurips_2024.py`, the function `efficiency()` reproduces Figures 2a and 2b. After running this function, Figures 2a and 2b will be located at `neurips_figures/simulated_estimated/times.png` and `neurips_figures/simulated_estimated/errors.png` respectively. The function `function()` takes around 5 hours on my Macbook Pro with `Apple M3 Pro` chip.
+
+## ProteinGym results
+
+ProteinGym provides standardized benchmarks for the variant effect prediction task. To reproduce the results of the SiteRM model on the ProteinGym benchmark, please refer to the ProteinGym repository on GitHub (https://github.com/OATML-Markslab/ProteinGym) and follow their standard workflow. The scripts for reproduce the SiteRM model results will be there. For example, to reproduce the DMS results, you should cd into `scripts/scoring_DMS_zero_shot/` and run the `scoring_SiteRM_substitutions.sh` script. Next, run the `merge_all_scores.sh` script, and finally the `performance_substitutions.sh` script.

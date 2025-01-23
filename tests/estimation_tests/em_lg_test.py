@@ -21,11 +21,14 @@ DATA_DIR = "./tests/estimation_tests/test_input_data"
 
 
 class TestEMLG(unittest.TestCase):
-    def test_installation(self):
-        """
-        Test that Historian is installed
-        """
-        _install_historian()
+    # def test_installation(self):
+    #     """
+    #     NOTE: I commented out this test since Historian is never used and it
+    #     has frequent installation issues on some machines.
+
+    #     Test that Historian is installed
+    #     """
+    #     _install_historian()
 
     def test_translate_tree_and_msa_to_stock_format(self):
         """

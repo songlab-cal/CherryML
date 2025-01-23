@@ -1,3 +1,11 @@
+"""
+Running this script will reproduce all figures in our paper
+`Ultrafast classical phylogenetic method beats large protein language models on variant effect prediction`
+except the ProteinGym results, which can be reproduced at the ProteinGym repo:
+https://github.com/OATML-Markslab/ProteinGym
+You can just run this script with e.g.:
+$ time python figures_neurips_2024.py
+"""
 import figures
 from cherryml.config import create_config_from_dict
 import sys
