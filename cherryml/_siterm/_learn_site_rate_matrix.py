@@ -1544,8 +1544,6 @@ def test_learn_site_rate_matrices_real_vectorized_GOAT():
         for k, v in res_dict.items():
             if k.startswith("time_"):
                 print(k, v)
-        if use_vectorized_implementation == False:
-            print("times_learn_site_rate_matrix_given_site_rate_too", res_dict["times_learn_site_rate_matrix_given_site_rate_too"])
     assert(
         len(site_rate_matrices[False]) == num_sites
     )
