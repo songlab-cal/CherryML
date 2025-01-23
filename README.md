@@ -21,13 +21,13 @@ Note that (1) is NOT the LG rate matrix but the LG _model_; the LG rate matrix [
 
 For a quick demonstration of an end-to-end application of CherryML to real data, please check out the section "[End-to-end worked-out application: plant dataset](#end-to-end-worked-out-application:-plant-dataset)".
 
-You can find the full API for CherryML in the section "[CherryML full API](#cherryml-full-api)"
+You can find the full API for CherryML in the section "[CherryML full API](#cherryml-full-api)".
 
 Secondly, as relates to our paper `Ultrafast classical phylogenetic method beats large protein language models on variant effect prediction`, this package implements the FastCherries phylogeny estimator and the SiteRM models:
 - FastCherries is a drop-in replacement for FastTree which speeds up the tree estimation step of CherryML by 10-100x.
 - SiteRM is an extension of the LG model that allows for a *different* rate matrix for each site of the MSA.
 
-We provide a Python API for SiteRM; please refer to the section "[SiteRM: Python API](#siterm:-python-api)"
+We provide a Python API for SiteRM; please refer to the section "[SiteRM: Python API](#siterm:-python-api)".
 
 # Citation
 
