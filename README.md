@@ -637,8 +637,9 @@ def learn_site_specific_rate_matrices(
     Args:
         tree: If `None`, then FastCherries will be used to estimate the tree.
             Otherwise, you can provide your own tree, which should be of
-            the CherryML Tree typr.  NOTE: You can easily convert a newick
-            tree (in format number 2) to the CherryML Tree type using:
+            the CherryML Tree type.
+            NOTE: You can easily convert a newick tree (in format number 2)
+            to the CherryML Tree type using:
             ```
             from cherryml.io import convert_newick_to_CherryML_Tree
             tree = convert_newick_to_CherryML_Tree(tree_newick)
