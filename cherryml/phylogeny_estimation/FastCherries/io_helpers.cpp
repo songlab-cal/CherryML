@@ -8,6 +8,7 @@
 #include <cmath>
 #include "io_helpers.h"
 #include "matrix_exponential/matrix_exponential.hpp"
+#include <limits>
 
 
 inline int get_char_index(char c, const unordered_map<char, int>& alphabet) {
