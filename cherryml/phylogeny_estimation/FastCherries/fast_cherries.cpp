@@ -49,7 +49,6 @@
 #include <cmath>
 #include <stdlib.h>
 #include <assert.h>
-#include <algorithm> // Required for std::sort
 
 
 // copied from FastTree 2.1
