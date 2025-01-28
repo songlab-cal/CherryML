@@ -112,7 +112,10 @@ def _map_func(args: List):
                     ):
                         cherries, distances = read_computed_cherries_from_file(fast_cherries_output_path)
                         msa = read_msa(msa_path)
-                        missing = [x for x in msa if not any(x in cherry for cherry in cherries)]
+
+                        all_seq = set(msa.keys())
+                        in_cherries = set([seq for cherry in cherries for seq in cherry])
+                        missing = list(all_seq.difference(in_cherries))
 
                         # create the tree
                         tree_ete = TreeETE(name="root")
