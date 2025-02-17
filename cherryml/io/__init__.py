@@ -19,6 +19,7 @@ from ._rate_matrix import (
 )
 from ._site_rates import read_site_rates, write_site_rates
 from ._sites_subset import read_sites_subset, write_sites_subset
+from ._str import read_str, write_str
 from ._transitions import TransitionsType, read_transitions, write_transitions
 from ._transitions_log_likelihood import (
     TransitionsLogLikelihoodType,
