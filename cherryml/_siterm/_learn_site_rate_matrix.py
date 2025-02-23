@@ -35,7 +35,7 @@ def _get_cherry_transitions(
     """
     cherries = []
 
-    def dfs(node) -> Optional[Tuple[int, float]]:
+    def dfs(node) -> Tuple[Optional[int], Optional[float]]:
         """
         Pair up leaves under me.
 
