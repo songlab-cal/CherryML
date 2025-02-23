@@ -196,16 +196,17 @@ def write_tree(
     scaling_factor: float = 1.0,
     node_name_prefix: str = "",
 ) -> None:
-    res = ""
-    res += f"{tree.num_nodes()} nodes\n"
+    res_list = []
+    res_list.append(f"{tree.num_nodes()} nodes\n")
     for node in tree.nodes():
-        res += f"{node_name_prefix + node}\n"
-    res += f"{tree.num_edges()} edges\n"
+        res_list.append(f"{node_name_prefix + node}\n")
+    res_list.append(f"{tree.num_edges()} edges\n")
     for u, v, d in tree.edges():
-        res += (
+        res_list.append(
             f"{node_name_prefix + u} {node_name_prefix + v} "
             f"{d * scaling_factor}\n"
         )
+    res = "".join(res_list)
     with open(tree_path, "w") as tree_file:
         tree_file.write(res)
 
