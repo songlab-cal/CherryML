@@ -1181,8 +1181,9 @@ def learn_site_rate_matrices(
     logger_to_shut_up.setLevel(0)
     profiling_res["time_init_learn_site_rate_matrices"] = time.time() - st
 
-    # Estimate the tree if not provided
+    # Estimate the tree if not provided. We also get the site rates for free.
     st = time.time()
+    site_rates_fast_cherries = None
     if tree is None:
         assert rate_matrix_for_site_rate_estimation is not None
         with tempfile.TemporaryDirectory() as temporary_dir:
@@ -1212,18 +1213,25 @@ def learn_site_rate_matrices(
                 output_likelihood_dir=_output_likelihood_dir,
             )
             tree = cherryml_io.read_tree(os.path.join(_output_tree_dir, "family_0.txt"))
+            site_rates_fast_cherries = cherryml_io.read_site_rates(os.path.join(_output_site_rates_dir, "family_0.txt"))
     time_estimate_tree = time.time() - st
 
     time_estimate_site_rate = 0.0
     st = time.time()
-    site_rate_fn = _estimate_site_rates_fast if use_fast_site_rate_implementation else _estimate_site_rates
-    site_rates = site_rate_fn(
-        tree=tree,
-        leaf_states=leaf_states,
-        site_rate_grid=site_rate_grid,
-        site_rate_prior=site_rate_prior,
-        rate_matrix=rate_matrix_for_site_rate_estimation,
-    )
+    if site_rates_fast_cherries is not None:
+        site_rates = site_rates_fast_cherries
+    else:
+        # Only if we have not estimated the tree with FastCherries, we estimate the site rates here.
+        # TODO: Since fast cherries is ridiculously fast, we should probably use it here too, completely getting rid of the python site rate estimation implementation.
+        # Would be nice to be able to hardcode the tree in fast cherries for this (in case it was provided) - I think it should be easy but should double check with Wilson.
+        site_rate_fn = _estimate_site_rates_fast if use_fast_site_rate_implementation else _estimate_site_rates
+        site_rates = site_rate_fn(
+            tree=tree,
+            leaf_states=leaf_states,
+            site_rate_grid=site_rate_grid,
+            site_rate_prior=site_rate_prior,
+            rate_matrix=rate_matrix_for_site_rate_estimation,
+        )
     time_estimate_site_rate += time.time() - st
 
     if use_vectorized_implementation:
