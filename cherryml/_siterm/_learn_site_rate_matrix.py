@@ -661,7 +661,9 @@ def _learn_site_rate_matrices_given_site_rates_too(
     quantization_grid_num_steps: int = QUANTIZATION_GRID_NUM_STEPS,
 ) -> Dict:
     """
-    Wrapper around _estimate_site_specific_rate_matrices_given_tree_and_site_rates.
+    Wrapper around _estimate_site_specific_rate_matrices_given_tree_and_site_rates
+    which automatically tunes the quantization grid based on
+    `quantization_grid_num_steps`.
 
     Returns a fictionary with:
         - "res": A List[pd.DataFrame] with the site-specific rate matrices.
@@ -1160,7 +1162,9 @@ def learn_site_rate_matrices(
             `regularization_rate_matrix` will be used.
         num_epochs: Number of epochs (Adam steps) in the PyTorch optimizer.
         use_fast_site_rate_implementation: Whether to use fast site rate implementation.
-            Only used if `use_vectorized_implementation=True`.
+            Only used if `use_vectorized_implementation=True` and if tree was
+            provided (indeed, if the tree was not provided, then we will use the
+            site rates provided by FastCherries).
 
     Returns:
         A dictionary with the following entries:
@@ -1224,8 +1228,10 @@ def learn_site_rate_matrices(
         site_rates = site_rates_fast_cherries
     else:
         # Only if we have not estimated the tree with FastCherries, we estimate the site rates here.
-        # TODO: Since fast cherries is ridiculously fast, we should probably use it here too, completely getting rid of the python site rate estimation implementation.
-        # Would be nice to be able to hardcode the tree in fast cherries for this (in case it was provided) - I think it should be easy but should double check with Wilson.
+        # The advantage of this implementation over FastCherries is that it is completely in-memory;
+        # i.e., if tree is provided and site rates are not, then the call to
+        # `learn_site_rate_matrices` will involve no disk I/O, making it extremely fast in
+        # applications such as learning DNA rate matrices.
         site_rate_fn = _estimate_site_rates_fast if use_fast_site_rate_implementation else _estimate_site_rates
         site_rates = site_rate_fn(
             tree=tree,

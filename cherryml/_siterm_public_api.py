@@ -319,7 +319,6 @@ def test_learn_site_specific_rate_matrices_real_vectorized_GOAT():
     # # assert(False)
 
 
-
 @pytest.mark.slow
 def test_learn_site_specific_rate_matrices_real_vectorized_GOAT_with_fast_cherries():
     """
