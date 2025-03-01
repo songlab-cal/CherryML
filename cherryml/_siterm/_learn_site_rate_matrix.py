@@ -1170,6 +1170,8 @@ def learn_site_rate_matrices(
         A dictionary with the following entries:
             - "learnt_rate_matrices": A List[pd.DataFrame] with the learnt rate matrix per site.
             - "learnt_site_rates": A List[float] with the learnt site rate per site.
+            - "learnt_tree": The learnt tree (or the provided tree if it was provided).
+                It is of type cherryml_io.Tree.
             - "time_...": The time taken by this substep. (They should add up
                 to the total runtime).
     """
@@ -1263,6 +1265,7 @@ def learn_site_rate_matrices(
     res = {
         "learnt_rate_matrices": learnt_rate_matrices,
         "learnt_site_rates": site_rates,
+        "learnt_tree": tree,
         "time_estimate_tree": time_estimate_tree,
         "time_estimate_site_rate": time_estimate_site_rate,
     }
