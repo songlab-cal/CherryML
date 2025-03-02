@@ -220,7 +220,6 @@ int main(int argc, char *argv[]) {
     if(arguments.count("-alphabet_path") > 0) {
         alphabet = read_alphabet(arguments["-alphabet_path"]);
     }
-    srand(seed);
 
     const std::vector<double>& quantization_points = compute_quantization_points(
         quantization_grid_center, 
@@ -242,6 +241,7 @@ int main(int argc, char *argv[]) {
     const transition_matrices& log_transition_matrices = read_rate_compute_log_transition_matrices(rate_matrix_path, quantization_points, rate_categories, alphabet.size());
 
     for(int i = 0; i < msa_paths.size(); i++) {
+        srand(seed);
         auto start_cpp = std::chrono::high_resolution_clock::now();
         std::string msa_path = msa_paths[i];
         std::string output_path = output_paths[i];

@@ -312,7 +312,7 @@ class TestFastCherries(unittest.TestCase):
                     rate_matrix_path = get_equ_path(),
                     num_rate_categories= 20,
                     max_iters = 50,
-                    num_processes=2,
+                    num_processes=4,
                     remake=False,
                 )
                 failed_families = []
