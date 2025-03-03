@@ -661,6 +661,10 @@ def _learn_site_rate_matrices_given_site_rates_too(
     quantization_grid_num_steps: int = QUANTIZATION_GRID_NUM_STEPS,
 ) -> Dict:
     """
+    Wrapper around _estimate_site_specific_rate_matrices_given_tree_and_site_rates
+    which automatically tunes the quantization grid based on
+    `quantization_grid_num_steps`.
+
     Returns a fictionary with:
         - "res": A List[pd.DataFrame] with the site-specific rate matrices.
         - "time_...": The time taken for this specific substep (should add up
@@ -1158,12 +1162,16 @@ def learn_site_rate_matrices(
             `regularization_rate_matrix` will be used.
         num_epochs: Number of epochs (Adam steps) in the PyTorch optimizer.
         use_fast_site_rate_implementation: Whether to use fast site rate implementation.
-            Only used if `use_vectorized_implementation=True`.
+            Only used if `use_vectorized_implementation=True` and if tree was
+            provided (indeed, if the tree was not provided, then we will use the
+            site rates provided by FastCherries).
 
     Returns:
         A dictionary with the following entries:
             - "learnt_rate_matrices": A List[pd.DataFrame] with the learnt rate matrix per site.
             - "learnt_site_rates": A List[float] with the learnt site rate per site.
+            - "learnt_tree": The learnt tree (or the provided tree if it was provided).
+                It is of type cherryml_io.Tree.
             - "time_...": The time taken by this substep. (They should add up
                 to the total runtime).
     """
@@ -1222,8 +1230,10 @@ def learn_site_rate_matrices(
         site_rates = site_rates_fast_cherries
     else:
         # Only if we have not estimated the tree with FastCherries, we estimate the site rates here.
-        # TODO: Since fast cherries is ridiculously fast, we should probably use it here too, completely getting rid of the python site rate estimation implementation.
-        # Would be nice to be able to hardcode the tree in fast cherries for this (in case it was provided) - I think it should be easy but should double check with Wilson.
+        # The advantage of this implementation over FastCherries is that it is completely in-memory;
+        # i.e., if tree is provided and site rates are not, then the call to
+        # `learn_site_rate_matrices` will involve no disk I/O, making it extremely fast in
+        # applications such as learning DNA rate matrices.
         site_rate_fn = _estimate_site_rates_fast if use_fast_site_rate_implementation else _estimate_site_rates
         site_rates = site_rate_fn(
             tree=tree,
@@ -1234,77 +1244,33 @@ def learn_site_rate_matrices(
         )
     time_estimate_site_rate += time.time() - st
 
-    if use_vectorized_implementation:
-        # For this step, we profile it at the subroutine level so we don't do `st = time.time()` as before.
-        # Instead, the profiling information comes from the returned dictionary.
-        learnt_rate_matrices__res_dict = _learn_site_rate_matrices_given_site_rates_too(
-            tree=tree,
-            site_rates=site_rates,
-            leaf_states=leaf_states,
-            alphabet=alphabet,
-            regularization_rate_matrix=regularization_rate_matrix,
-            regularization_strength=regularization_strength,
-            use_vectorized_cherryml_implementation=True,
-            vectorized_cherryml_implementation_device=vectorized_implementation_device,
-            vectorized_cherryml_implementation_num_cores=vectorized_implementation_num_cores,
-            num_epochs=num_epochs,
-            quantization_grid_num_steps=quantization_grid_num_steps,
-        )
-        learnt_rate_matrices = learnt_rate_matrices__res_dict["res"]
-        learnt_rate_matrices__profiling_dict = {k: v for k, v in learnt_rate_matrices__res_dict.items() if k.startswith("time_")}
+    # For this step, we profile it at the subroutine level so we don't do `st = time.time()` as before.
+    # Instead, the profiling information comes from the returned dictionary.
+    learnt_rate_matrices__res_dict = _learn_site_rate_matrices_given_site_rates_too(
+        tree=tree,
+        site_rates=site_rates,
+        leaf_states=leaf_states,
+        alphabet=alphabet,
+        regularization_rate_matrix=regularization_rate_matrix,
+        regularization_strength=regularization_strength,
+        use_vectorized_cherryml_implementation=use_vectorized_implementation,
+        vectorized_cherryml_implementation_device=vectorized_implementation_device,
+        vectorized_cherryml_implementation_num_cores=vectorized_implementation_num_cores,
+        num_epochs=num_epochs,
+        quantization_grid_num_steps=quantization_grid_num_steps,
+    )
+    learnt_rate_matrices = learnt_rate_matrices__res_dict["res"]
+    learnt_rate_matrices__profiling_dict = {k: v for k, v in learnt_rate_matrices__res_dict.items() if k.startswith("time_")}
 
-        res = {
-            "learnt_rate_matrices": learnt_rate_matrices,
-            "learnt_site_rates": site_rates,
-            "time_estimate_tree": time_estimate_tree,
-            "time_estimate_site_rate": time_estimate_site_rate,
-        }
-        res = {**res, **learnt_rate_matrices__profiling_dict}
-        return res
-    else:
-        num_sites = len(list(leaf_states.values())[0])
-        res_dicts = []
-        for i in range(num_sites):
-            res_dicts.append(
-                learn_site_rate_matrix(
-                    tree=tree,
-                    site_rate=site_rates[i],
-                    leaf_states={k: v[i] for (k, v) in leaf_states.items()},
-                    alphabet=alphabet,
-                    regularization_rate_matrix=regularization_rate_matrix,
-                    regularization_strength=regularization_strength,
-                    site_rate_grid=site_rate_grid,
-                    site_rate_prior=site_rate_prior,
-                    alphabet_for_site_rate_estimation=alphabet_for_site_rate_estimation,
-                    rate_matrix_for_site_rate_estimation=rate_matrix_for_site_rate_estimation,
-                    num_epochs=num_epochs,
-                    quantization_grid_num_steps=quantization_grid_num_steps,
-                    num_cores=1,
-                )
-            )
-        res = {
-            "learnt_rate_matrices": np.stack(
-                [
-                    res_dict["learnt_rate_matrix"].to_numpy()
-                    for res_dict in res_dicts
-                ],
-                axis=0,
-            ),
-            "learnt_site_rates": [
-                res_dict["learnt_site_rate"]
-                for res_dict in res_dicts
-            ],
-            "time_estimate_tree": time_estimate_tree,
-            "time_estimate_site_rate": sum(
-                res_dict["time_estimate_site_rate"]
-                for res_dict in res_dicts
-            ),
-            "time_learn_site_rate_matrix_given_site_rate_too": sum(
-                res_dict["time_learn_site_rate_matrix_given_site_rate_too"]
-                for res_dict in res_dicts
-            ),
-        }
-        return res
+    res = {
+        "learnt_rate_matrices": learnt_rate_matrices,
+        "learnt_site_rates": site_rates,
+        "learnt_tree": tree,
+        "time_estimate_tree": time_estimate_tree,
+        "time_estimate_site_rate": time_estimate_site_rate,
+    }
+    res = {**res, **learnt_rate_matrices__profiling_dict}
+    return res
 
 
 def test_learn_site_rate_matrices():
