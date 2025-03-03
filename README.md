@@ -39,6 +39,49 @@ If you use the SiteRM model or FastCherries, please cite:
 
 > Prillo, S., Wu, W., Song, Y.S.  (2024) Ultrafast classical phylogenetic method beats large protein language models on variant effect prediction. NeurIPS.
 
+# Installation
+
+## For users
+
+CherryML is on PyPI, so you can install is simply with:
+
+```
+pip install cherryml
+```
+
+## For developers
+
+Create a Python environment:
+
+```
+conda create --name cherryml-dev python=3.10
+conda activate cherryml-dev
+```
+
+Make sure to install `cython` first:
+
+```
+pip install cython
+```
+
+Install all required Python libraries:
+
+```
+pip install -r requirements.txt
+```
+
+Build cython modules:
+
+```
+python setup.py build_ext --inplace
+```
+
+Run all tests:
+
+```
+python -m pytest tests/ --runslow
+```
+
 # Demo: CherryML applied to the LG model (runtime on a normal computer: 1 - 5 minutes)
 
 The following command learns a rate matrix from a set of MSAs, trees, and site rates (try it out!):
@@ -489,13 +532,7 @@ FastTree is faster, which is better for the demo, and the results are similar. R
 
 ## System requirements
 
-CherryML has been tested on an Ubuntu system (20.04) with Python (3.8.5, miniconda 4.9.2).
-
-First, install all required Python libraries, e.g.:
-
-```
-pip install -r requirements.txt
-```
+CherryML has been tested on an Ubuntu system (20.04) with Python (3.10).
 
 The following are system requirements:
 
