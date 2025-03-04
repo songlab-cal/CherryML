@@ -624,6 +624,15 @@ Average log-likelihood per site: -20.21225223818571
 [...]
 ```
 
+For the rate matrix estimated with FastCherries in under a minute, we have almost identical performance:
+
+```
+Total log-likelihood: -2042833.0975
+Total number of sites: 101064
+Average log-likelihood per site: -20.213261868716852
+[...]
+```
+
 Finally, we compute the model fit of the LG rate matrix:
 
 ```
@@ -652,7 +661,7 @@ Average log-likelihood per site: -20.50697311703476
 [...]
 ```
 
-As we can see, the de-novo estimated rate matrix outperforms the LG rate matrix, with an average increase in log-likelihood per site of `0.295` (1.4%).
+As we can see, the de-novo estimated rate matrix (with either FastTree or FastCherries) outperforms the LG rate matrix, with an average increase in log-likelihood per site of `0.295` (1.4%).
 
 # Reproducing all figures in our paper `CherryML: scalable maximum likelihood estimation of phylogenetic models`.
 
