@@ -88,7 +88,7 @@ python -m pytest tests/ --runslow
 
 # Demo: CherryML applied to the LG model (runtime on a normal computer: 1 - 5 minutes)
 
-The following command learns a rate matrix from a set of MSAs, trees, and site rates (try it out!):
+The following command learns a rate matrix from a set of MSAs, trees, and site rates (try it out!). Later we explain how to use CherryML when you only have MSAs (i.e. no trees):
 
 ```
 python -m cherryml \
