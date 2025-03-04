@@ -427,7 +427,7 @@ The command line tool can be invoked with `python -m cherryml.evaluation` and ac
 
 # SiteRM/FastCherries: Python API
 
-You can train the SiteRM model (or just run FastCherries) with the function `learn_site_specific_rate_matrices`. You can import it with `from cherryml import learn_site_specific_rate_matrices`. The API is described below:
+You can train the SiteRM model (or just run FastCherries) with the function `learn_site_specific_rate_matrices`. You can import it with `from cherryml import learn_site_specific_rate_matrices`. The API is described below (if you just want to run FastCherries, use `just_run_fast_cherries=True`):
 
 ```
 def learn_site_specific_rate_matrices(
