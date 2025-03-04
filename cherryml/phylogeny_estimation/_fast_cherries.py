@@ -204,7 +204,7 @@ def fast_cherries(
     quantization_grid_step = 1.1,
     quantization_grid_num_steps = 64,
     verbose = True,
-    seed = 1234,  # NOTE: Results should be reproducible within the same machine, but may be slightly different across different machines, due to the use of rand() in the C++ code.
+    seed = 1234,
 ) -> None:
     logger = logging.getLogger(__name__)
     if verbose:
