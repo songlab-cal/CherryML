@@ -564,7 +564,7 @@ def learn_site_specific_rate_matrices(
 
 # End-to-end worked-out application: plant dataset
 
-We now combine the model estimation step and model selection steps to show a concrete example of applying CherryML to obtain a rate matrix superior than LG in record time. For this, we will use the plant dataset from Ran et al. (2018), `Phylogenomics resolves the deep phylogeny of seed plants and indicates partial convergent or homoplastic evolution between Gnetales and angiosperms`, with the train-test splits in the QMaker paper. The training MSAs are located at `demo_data/plant_train` and the testing MSAs are located at `demo_data/plant_test`. We start by fitting the LG model using FastTree tree estimator and the CherryML rate matrix optimizer. We start from the LG rate matrix and perform two rounds of alternating rate matrix and tree optimization (which is usually enough for convergence when adjusting the LG rate matrix to a new dataset). We will use 4 CPU cores in this example, as when running on a personal computer:
+Here we show a concrete example of how to use CherryML to estimate a rate matrix de-novo - which is more useful than LG for this dataset - just starting from MSAs. For this, we will use the plant dataset from Ran et al. (2018), `Phylogenomics resolves the deep phylogeny of seed plants and indicates partial convergent or homoplastic evolution between Gnetales and angiosperms`, with the train-test splits in the QMaker paper. The training MSAs are already located at `demo_data/plant_train` in this repository and the testing MSAs are located at `demo_data/plant_test`. (So, you do not need to download anything!) We start by fitting the LG model using the FastTree tree estimator and the CherryML rate matrix optimizer. We start from the LG rate matrix and perform two rounds of alternating rate matrix and tree optimization (which is usually enough for convergence when adjusting the LG rate matrix to a new dataset). We will use 4 CPU cores in this example, as when running on a personal computer:
 
 ```
 time python -m cherryml \
@@ -594,7 +594,7 @@ Processor: 2.6 GHz 6-Core Intel Core i7
 Memory: 16 GB 2400 MHz DDR4
 ```
 
-In our NeurIPS 2024 paper, we introduce FastCherries. Using FastCherries, end-to-end rate matrix estimation took under 1 minute instead! To use FastCherries, use `--tree_estimator_name FastCherries` instead.
+In our NeurIPS 2024 paper, we introduce FastCherries. Using FastCherries, end-to-end rate matrix estimation took under 1 minute instead! To use FastCherries, use `--tree_estimator_name FastCherries` instead. Try it out!
 
 Now we proceed to evaluate model fit on held-out data. The testing MSAs are located at `demo_data/plant_test`. Thus:
 
