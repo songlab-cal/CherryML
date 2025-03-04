@@ -137,7 +137,7 @@ Each file in `site_rates_dir` should list the site rates for a family following 
 
 The `cache_dir` is used to store intermediate computations for future runs. Caching is transparent to the user; just make sure to use a different `cache_dir` for different datasets. If not provided, a temporary directory will be used as the caching directory (in which case all intermediate data will be lost).
 
-If you have _not_ estimated trees and site rates already, CherryML will do that for you using FastTree. You can simply omit the `tree_dir` and `site_rates_dir` arguments and run:
+If you have _not_ estimated trees and site rates already, CherryML will do that for you using either FastTree or FastCherries. You can simply omit the `tree_dir` and `site_rates_dir` arguments and run. FastTree is used by default for backwards compatibility reasons. To use FastCherries - which is substantially faster - add `--tree_estimator FastCherries` to the command below:
 
 ```
 python -m cherryml \
@@ -150,7 +150,7 @@ python -m cherryml \
 
 Expected output: `learned_rate_matrix_LG.txt` contains the learned rate matrix.
 
-FastTree will by default be run with 20 rate categories and with the LG rate matrix (this can be changed by using the full API described later). The trees estimated with FastTree will be saved in the `cache_dir`, and will be re-used by CherryML if they are needed in future runs with the same data (for example when learning a rate matrix on a subset of families, as done via the `--families` argument, or when learning a rate matrix on a subset of sites, as done via the `--sites_subset_dir` argument; clearly trees do not need to be re-estimated in this case!). The argument `--num_processes_tree_estimation` is used to parallelize tree estimation. In the example above, 32 processes are used.
+FastTree will by default be run with 20 rate categories and with the LG rate matrix (this can be changed by using the full API described later). The trees estimated with FastTree will be saved in the `cache_dir`, and will be re-used by CherryML if they are needed in future runs with the same data (for example when learning a rate matrix on a subset of families, as done via the `--families` argument, or when learning a rate matrix on a subset of sites, as done via the `--sites_subset_dir` argument; clearly trees do not need to be re-estimated in this case!). The argument `--num_processes_tree_estimation` is used to parallelize tree estimation. In the example above, 32 processes are used. In our more recent work at NeurIPS 2024, we introduce FastCherries, which is 10-100x faster than FastTree. You can use it by adding the argument `--tree_estimator FastCherries`. Note that FastCherries only estimates the cherries in the tree, so the returned tree will be a star-type tree with all the inferred cherries hanging from the root. (FastCherries does also estimate the site rates.)
 
 To learn a rate matrix on only a subset of sites from each family (for example, when learning a domain-specific or structure-specific rate matrix), you can provide the indices of the sites used for each family with the `--sites_subset_dir` argument. Each file in `sites_subset_dir` should list the sites (0-based) for a family following the format in the following toy example:
 ```
