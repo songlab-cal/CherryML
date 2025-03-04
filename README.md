@@ -627,7 +627,7 @@ Tree estimation is parallelized, so by default you will need a machine with at l
 
 # SiteRM: Python API
 
-You can train the SiteRM model with the function `learn_site_specific_rate_matrices`. You can import it with `from cherryml import learn_site_specific_rate_matrices`. The API is described below:
+You can train the SiteRM model (or just run FastCherries) with the function `learn_site_specific_rate_matrices`. You can import it with `from cherryml import learn_site_specific_rate_matrices`. The API is described below:
 
 ```
 def learn_site_specific_rate_matrices(
@@ -643,6 +643,7 @@ def learn_site_specific_rate_matrices(
     num_epochs: int = 100,
     quantization_grid_num_steps: int = 64,
     use_vectorized_implementation: bool = True,
+    just_run_fast_cherries: bool = False,
 ) -> Dict:
     """
     Learn a rate matrix per site given an MSA (and optionally a tree).

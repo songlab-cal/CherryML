@@ -1122,6 +1122,7 @@ def learn_site_rate_matrices(
     num_epochs: int = 100,
     use_fast_site_rate_implementation: bool = False,
     quantization_grid_num_steps: int = QUANTIZATION_GRID_NUM_STEPS,
+    just_run_fast_cherries: bool = False,
 ) -> Dict:
     """
     Learn a rate matrix per site given the tree and leaf states.
@@ -1244,23 +1245,26 @@ def learn_site_rate_matrices(
         )
     time_estimate_site_rate += time.time() - st
 
-    # For this step, we profile it at the subroutine level so we don't do `st = time.time()` as before.
-    # Instead, the profiling information comes from the returned dictionary.
-    learnt_rate_matrices__res_dict = _learn_site_rate_matrices_given_site_rates_too(
-        tree=tree,
-        site_rates=site_rates,
-        leaf_states=leaf_states,
-        alphabet=alphabet,
-        regularization_rate_matrix=regularization_rate_matrix,
-        regularization_strength=regularization_strength,
-        use_vectorized_cherryml_implementation=use_vectorized_implementation,
-        vectorized_cherryml_implementation_device=vectorized_implementation_device,
-        vectorized_cherryml_implementation_num_cores=vectorized_implementation_num_cores,
-        num_epochs=num_epochs,
-        quantization_grid_num_steps=quantization_grid_num_steps,
-    )
-    learnt_rate_matrices = learnt_rate_matrices__res_dict["res"]
-    learnt_rate_matrices__profiling_dict = {k: v for k, v in learnt_rate_matrices__res_dict.items() if k.startswith("time_")}
+    if just_run_fast_cherries:
+        learnt_rate_matrices = None
+    else:
+        # For this step, we profile it at the subroutine level so we don't do `st = time.time()` as before.
+        # Instead, the profiling information comes from the returned dictionary.
+        learnt_rate_matrices__res_dict = _learn_site_rate_matrices_given_site_rates_too(
+            tree=tree,
+            site_rates=site_rates,
+            leaf_states=leaf_states,
+            alphabet=alphabet,
+            regularization_rate_matrix=regularization_rate_matrix,
+            regularization_strength=regularization_strength,
+            use_vectorized_cherryml_implementation=use_vectorized_implementation,
+            vectorized_cherryml_implementation_device=vectorized_implementation_device,
+            vectorized_cherryml_implementation_num_cores=vectorized_implementation_num_cores,
+            num_epochs=num_epochs,
+            quantization_grid_num_steps=quantization_grid_num_steps,
+        )
+        learnt_rate_matrices = learnt_rate_matrices__res_dict["res"]
+        learnt_rate_matrices__profiling_dict = {k: v for k, v in learnt_rate_matrices__res_dict.items() if k.startswith("time_")}
 
     res = {
         "learnt_rate_matrices": learnt_rate_matrices,

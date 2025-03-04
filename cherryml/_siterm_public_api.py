@@ -31,6 +31,7 @@ def learn_site_specific_rate_matrices(
     num_epochs: int = 100,
     quantization_grid_num_steps: int = 64,
     use_vectorized_implementation: bool = True,
+    just_run_fast_cherries: bool = False,
 ) -> Dict:
     """
     Learn a rate matrix per site given an MSA (and optionally a tree).
@@ -122,6 +123,13 @@ def learn_site_specific_rate_matrices(
             very similar. The main reason to use the non-vectorized
             implementation is because it requires less RAM memory, as each
             site it processes separately, making it faster when RAM is limited.
+        just_run_fast_cherries: If `True`, then only the trees estimated with
+            FastCherries will be returned, i.e. we will skip SiteRM. This is
+            useful if all you need are the cherries and site rates of
+            FastCherries. Recall that FastCherries only estimates the cherries
+            in the tree, so the returned tree will be a star tree with the
+            inferred cherries. `learnt_rate_matrices` will be None in this
+            case.
 
     Returns:
         A dictionary with the following entries:
@@ -151,6 +159,7 @@ def learn_site_specific_rate_matrices(
         num_epochs=num_epochs,
         use_fast_site_rate_implementation=True,
         quantization_grid_num_steps=quantization_grid_num_steps,
+        just_run_fast_cherries=just_run_fast_cherries,
     )
     return res_dict
 
