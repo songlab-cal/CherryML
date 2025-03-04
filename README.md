@@ -27,7 +27,7 @@ Secondly, as relates to our paper `Ultrafast classical phylogenetic method beats
 - FastCherries is a drop-in replacement for FastTree which speeds up the tree estimation step of CherryML by 10-100x.
 - SiteRM is an extension of the LG model that allows for a *different* rate matrix for each site of the MSA.
 
-We provide a Python API for SiteRM; please refer to the section "[SiteRM: Python API](#siterm:-python-api)".
+We provide a Python API for SiteRM; please refer to the section "[SiteRM/FastCherries: Python API](#siterm/fastcherries:-python-api)".
 
 # Citation
 
