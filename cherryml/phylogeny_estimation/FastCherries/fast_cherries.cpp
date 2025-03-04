@@ -49,6 +49,7 @@
 #include <cmath>
 #include <stdlib.h>
 #include <assert.h>
+#include <random>
 
 
 // copied from FastTree 2.1
@@ -241,7 +242,9 @@ int main(int argc, char *argv[]) {
     const transition_matrices& log_transition_matrices = read_rate_compute_log_transition_matrices(rate_matrix_path, quantization_points, rate_categories, alphabet.size());
 
     for(int i = 0; i < msa_paths.size(); i++) {
-        srand(seed);
+        // Set up Mersenne Twister random number generator
+        std::mt19937 rng(seed);
+        // srand(seed);  // Old code with rand() - not reproducible accross different machine architectures.
         auto start_cpp = std::chrono::high_resolution_clock::now();
         std::string msa_path = msa_paths[i];
         std::string output_path = output_paths[i];
@@ -257,7 +260,8 @@ int main(int argc, char *argv[]) {
         // perform pairing using the specified likelihood function
         std::vector<std::pair<std::string, std::string> > cherries_names = divide_and_pair(
             names_and_map.all_names,
-            names_and_map.names_to_sequence
+            names_and_map.names_to_sequence,
+            rng
         );
         
         std::vector<std::pair<std::vector<int>, std::vector<int> > > cherries(cherries_names.size());
@@ -315,4 +319,3 @@ int main(int argc, char *argv[]) {
     }
     return 0; 
 }
-
