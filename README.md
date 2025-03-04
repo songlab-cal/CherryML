@@ -425,6 +425,143 @@ The command line tool can be invoked with `python -m cherryml.evaluation` and ac
                         likelihoods. (default: None)
 ```
 
+# SiteRM/FastCherries: Python API
+
+You can train the SiteRM model (or just run FastCherries) with the function `learn_site_specific_rate_matrices`. You can import it with `from cherryml import learn_site_specific_rate_matrices`. The API is described below:
+
+```
+def learn_site_specific_rate_matrices(
+    tree: Optional[cherryml_io.Tree],
+    msa: Dict[str, str],
+    alphabet: List[str],
+    regularization_rate_matrix: pd.DataFrame,
+    regularization_strength: float = 0.5,
+    device: str = "cpu",
+    num_rate_categories: int = 20,
+    alphabet_for_site_rate_estimation: Optional[List[str]] = None,
+    rate_matrix_for_site_rate_estimation: Optional[pd.DataFrame] = None,
+    num_epochs: int = 100,
+    quantization_grid_num_steps: int = 64,
+    use_vectorized_implementation: bool = True,
+    just_run_fast_cherries: bool = False,
+) -> Dict:
+    """
+    Learn a rate matrix per site given an MSA (and optionally a tree).
+
+    This function implements learning under the SiteRM model. Briefly, the
+    SiteRM model uses a different rate matrix per site. It is described in
+    detail in our paper:
+
+    ```
+    Prillo, S., Wu, W., Song, Y.S.  (NeurIPS 2024) Ultrafast classical
+    phylogenetic method beats large protein language models on variant
+    effect prediction.
+    ```
+
+    We offer two different implementation of SiteRM training, a "vectorized"
+    version an a "non-vectorized" version. The default implementation is the
+    vectorized one. Briefly, in the vectorized implementation a single
+    computational graph is built encompassing all sites in the MSA, with the
+    loss (i.e. the data log-likelihood) being the sum over all sites. This
+    implementation uses 4D tensors to batch all the sites together, and is
+    great when used in combination with `device="cuda"`. In other words, the
+    vectorized implementation is recommended when GPU is available. When only
+    CPU is available, we provide an alternative implementation where we simply
+    loop over all sites in the MSA, one at a time. This implementation solves
+    one optimization problem per site in the MSA, and involves only 3D tensors.
+    This non-vectorized implementation makes sense if RAM memory becomes
+    a bottleneck (e.g. if working on a personal computer).
+
+    Args:
+        tree: If `None`, then FastCherries will be used to estimate the tree.
+            Otherwise, you can provide your own tree, which should be of
+            the CherryML Tree type.
+            NOTE: You can easily convert a newick tree to the CherryML Tree
+            type using:
+            ```
+            from cherryml.io import convert_newick_to_CherryML_Tree
+            tree = convert_newick_to_CherryML_Tree(tree_newick)
+            ```
+            Alternatively, if you have a file containing a tree in the CherryML
+            format, you can just do:
+            ```
+            from cherryml.io import read_tree
+            tree = read_tree(tree_path)
+            ```
+        msa: Dictionary mapping each leaf in the tree to the states (e.g.
+            protein or DNA sequence) for that leaf.
+        alphabet: List of valid states, e.g. ["A", "C", "G", "T"] for DNA.
+        regularization_rate_matrix: Rate matrix to use to regularize the learnt
+            rate matrices.
+        regularization_strength: Between 0 and 1. 0 means no regularization at
+            all, and 1 means fully regularized model. This is lambda in our
+            paper.
+        device: Whether to use "cpu" or GPU ("cuda"). Note that this is only
+            used for the vectorized implementation, i.e. if
+            `use_vectorized_implementation=False` then only CPU will be used,
+            as it doesn't really make sense to use GPU in this case.
+        num_rate_categories: Number of rate categories to use.
+        alphabet_for_site_rate_estimation: Alphabet for learning the SITE RATES.
+            If `None`, then the alphabet for the learnt rate matrices, i.e.
+            `alphabet`, will be used. In our FastCherries/SiteRM paper, we have
+            observed that for ProteinGym variant effect prediction, it works
+            best to *exclude* gaps while estimating site rates (as is standard
+            in statistical phylogenetics), but then use gaps when learning the
+            rate matrix at the site. In that case, one would use
+            `alphabet_for_site_rate_estimation=["A", "C", "G", "T"]`
+            together with `alphabet=["A", "C", "G", "T", "-"]`.
+        rate_matrix_for_site_rate_estimation: If provided, the rate matrix to
+            use to estimate site rates. If `None`, then the
+            `regularization_rate_matrix` will be used.
+        num_epochs: Number of epochs (Adam steps) in the PyTorch optimizer.
+        quantization_grid_num_steps: Number of quantization points to use will
+            be `2 * quantization_grid_num_steps + 1` (as we take this number of
+            steps left and right of the grid center). Lowering
+            `quantization_grid_num_steps` leads to faster training at the
+            expense of some accuracy. By default,
+            `quantization_grid_num_steps=64` works really well, but great
+            estimates can still be obtained faster with as low as
+            `quantization_grid_num_steps=8`.
+        use_vectorized_implementation: When `True`, a single computational
+            graph including all sites of the MSA will be constructed to learn
+            the site-specific rate matrices. Otherwise, the algorithm will loop
+            over each site in the MSA separately, running coordinate ascent
+            once for each site. As a note, while the vectorized and
+            non-vectorized implementation converge to the same solution, they
+            don't converge with the same trajectories, so when using a smaller
+            number of `num_epochs` (e.g. `num_epochs=30`) the learnt rate
+            matrices may differ in non-trivial ways. However, when using a
+            larger number of epochs, e.g. `num_epochs=200`, they should be
+            very similar. The main reason to use the non-vectorized
+            implementation is because it requires less RAM memory, as each
+            site it processes separately, making it faster when RAM is limited.
+        just_run_fast_cherries: If `True`, then only the trees estimated with
+            FastCherries will be returned, i.e. we will skip SiteRM. This is
+            useful if all you need are the cherries and site rates of
+            FastCherries. Recall that FastCherries only estimates the cherries
+            in the tree, so the returned tree will be a star-type tree with all
+            the inferred cherries hanging from the root. `learnt_rate_matrices`
+            will be None in this case.
+
+    Returns:
+        A dictionary with the following entries:
+            - "learnt_rate_matrices": A 3D numpy array with the learnt rate
+                matrix per site.
+            - "learnt_site_rates": A List[float] with the learnt site rate per
+                site.
+            - "learnt_tree": The FastCherries learnt tree (or the provided tree
+                if it was provided). It is of type cherryml_io.Tree. Note that
+                FastCherries only estimates the cherries in the tree and
+                therefore returns a star-type tree with all the inferred
+                cherries hanging from the root. Such as tree might look like
+                this in newick format:
+                "((leaf_1:0.17,leaf_2:0.17)internal-0:1,(leaf_3:0.17,leaf_4:0.17)internal-1:1);"
+            - "time_...": The time taken by this substep. (They should add up
+                to the total runtime, up to a small rather negligible
+                difference).
+    """
+```
+
 # End-to-end worked-out application: plant dataset
 
 We now combine the model estimation step and model selection steps to show a concrete example of applying CherryML to obtain a rate matrix superior than LG in record time. For this, we will use the plant dataset from Ran et al. (2018), `Phylogenomics resolves the deep phylogeny of seed plants and indicates partial convergent or homoplastic evolution between Gnetales and angiosperms`, with the train-test splits in the QMaker paper. The training MSAs are located at `demo_data/plant_train` and the testing MSAs are located at `demo_data/plant_test`. We start by fitting the LG model using FastTree tree estimator and the CherryML rate matrix optimizer. We start from the LG rate matrix and perform two rounds of alternating rate matrix and tree optimization (which is usually enough for convergence when adjusting the LG rate matrix to a new dataset). We will use 4 CPU cores in this example, as when running on a personal computer:
@@ -456,6 +593,8 @@ End-to-end rate matrix estimation took 22 minutes wall-clock time on a MacBook P
 Processor: 2.6 GHz 6-Core Intel Core i7
 Memory: 16 GB 2400 MHz DDR4
 ```
+
+In our NeurIPS 2024 paper, we introduce FastCherries. Using FastCherries, end-to-end rate matrix estimation took under 1 minute instead! To use FastCherries, use `--tree_estimator_name FastCherries` instead.
 
 Now we proceed to evaluate model fit on held-out data. The testing MSAs are located at `demo_data/plant_test`. Thus:
 
@@ -625,143 +764,6 @@ Our simulated datasets are available on Zenodo at https://zenodo.org/record/7830
 You are now ready to reproduce all figures in our paper. Just run `reproduce_all_figures.py` to reproduce all figures in our paper. The approximate runtime needed to reproduce each figure this way is commented in `reproduce_all_figures.py`. Note that the computational bottlenecks to reproduce all figures are (1) benchmarking EM with XRATE and (2) tree estimation (as opposed to the CherryML optimizer). To reproduce a specific figure, comment out the figures you do not want in `reproduce_all_figures.py`. The code is written in a functional style, so the functions can be run in any order at any time and will reproduce the results. All the intermediate computations are cached, so re-running the code will be very fast the second time around. The output figures will be found in the `images` folder.
 
 Tree estimation is parallelized, so by default you will need a machine with at least 32 cores. If you would like to use more (or less) cores, modify the value of `NUM_PROCESSES_TREE_ESTIMATION` at the top of the `figures.py` module. (However, note that the bottleneck when reproducing all figures is not tree estimation but performing EM with XRATE (Fig. 1b and Supp Fig. 1), which will take around 3-4 days regardless.)
-
-# SiteRM/FastCherries: Python API
-
-You can train the SiteRM model (or just run FastCherries) with the function `learn_site_specific_rate_matrices`. You can import it with `from cherryml import learn_site_specific_rate_matrices`. The API is described below:
-
-```
-def learn_site_specific_rate_matrices(
-    tree: Optional[cherryml_io.Tree],
-    msa: Dict[str, str],
-    alphabet: List[str],
-    regularization_rate_matrix: pd.DataFrame,
-    regularization_strength: float = 0.5,
-    device: str = "cpu",
-    num_rate_categories: int = 20,
-    alphabet_for_site_rate_estimation: Optional[List[str]] = None,
-    rate_matrix_for_site_rate_estimation: Optional[pd.DataFrame] = None,
-    num_epochs: int = 100,
-    quantization_grid_num_steps: int = 64,
-    use_vectorized_implementation: bool = True,
-    just_run_fast_cherries: bool = False,
-) -> Dict:
-    """
-    Learn a rate matrix per site given an MSA (and optionally a tree).
-
-    This function implements learning under the SiteRM model. Briefly, the
-    SiteRM model uses a different rate matrix per site. It is described in
-    detail in our paper:
-
-    ```
-    Prillo, S., Wu, W., Song, Y.S.  (NeurIPS 2024) Ultrafast classical
-    phylogenetic method beats large protein language models on variant
-    effect prediction.
-    ```
-
-    We offer two different implementation of SiteRM training, a "vectorized"
-    version an a "non-vectorized" version. The default implementation is the
-    vectorized one. Briefly, in the vectorized implementation a single
-    computational graph is built encompassing all sites in the MSA, with the
-    loss (i.e. the data log-likelihood) being the sum over all sites. This
-    implementation uses 4D tensors to batch all the sites together, and is
-    great when used in combination with `device="cuda"`. In other words, the
-    vectorized implementation is recommended when GPU is available. When only
-    CPU is available, we provide an alternative implementation where we simply
-    loop over all sites in the MSA, one at a time. This implementation solves
-    one optimization problem per site in the MSA, and involves only 3D tensors.
-    This non-vectorized implementation makes sense if RAM memory becomes
-    a bottleneck (e.g. if working on a personal computer).
-
-    Args:
-        tree: If `None`, then FastCherries will be used to estimate the tree.
-            Otherwise, you can provide your own tree, which should be of
-            the CherryML Tree type.
-            NOTE: You can easily convert a newick tree to the CherryML Tree
-            type using:
-            ```
-            from cherryml.io import convert_newick_to_CherryML_Tree
-            tree = convert_newick_to_CherryML_Tree(tree_newick)
-            ```
-            Alternatively, if you have a file containing a tree in the CherryML
-            format, you can just do:
-            ```
-            from cherryml.io import read_tree
-            tree = read_tree(tree_path)
-            ```
-        msa: Dictionary mapping each leaf in the tree to the states (e.g.
-            protein or DNA sequence) for that leaf.
-        alphabet: List of valid states, e.g. ["A", "C", "G", "T"] for DNA.
-        regularization_rate_matrix: Rate matrix to use to regularize the learnt
-            rate matrices.
-        regularization_strength: Between 0 and 1. 0 means no regularization at
-            all, and 1 means fully regularized model. This is lambda in our
-            paper.
-        device: Whether to use "cpu" or GPU ("cuda"). Note that this is only
-            used for the vectorized implementation, i.e. if
-            `use_vectorized_implementation=False` then only CPU will be used,
-            as it doesn't really make sense to use GPU in this case.
-        num_rate_categories: Number of rate categories to use.
-        alphabet_for_site_rate_estimation: Alphabet for learning the SITE RATES.
-            If `None`, then the alphabet for the learnt rate matrices, i.e.
-            `alphabet`, will be used. In our FastCherries/SiteRM paper, we have
-            observed that for ProteinGym variant effect prediction, it works
-            best to *exclude* gaps while estimating site rates (as is standard
-            in statistical phylogenetics), but then use gaps when learning the
-            rate matrix at the site. In that case, one would use
-            `alphabet_for_site_rate_estimation=["A", "C", "G", "T"]`
-            together with `alphabet=["A", "C", "G", "T", "-"]`.
-        rate_matrix_for_site_rate_estimation: If provided, the rate matrix to
-            use to estimate site rates. If `None`, then the
-            `regularization_rate_matrix` will be used.
-        num_epochs: Number of epochs (Adam steps) in the PyTorch optimizer.
-        quantization_grid_num_steps: Number of quantization points to use will
-            be `2 * quantization_grid_num_steps + 1` (as we take this number of
-            steps left and right of the grid center). Lowering
-            `quantization_grid_num_steps` leads to faster training at the
-            expense of some accuracy. By default,
-            `quantization_grid_num_steps=64` works really well, but great
-            estimates can still be obtained faster with as low as
-            `quantization_grid_num_steps=8`.
-        use_vectorized_implementation: When `True`, a single computational
-            graph including all sites of the MSA will be constructed to learn
-            the site-specific rate matrices. Otherwise, the algorithm will loop
-            over each site in the MSA separately, running coordinate ascent
-            once for each site. As a note, while the vectorized and
-            non-vectorized implementation converge to the same solution, they
-            don't converge with the same trajectories, so when using a smaller
-            number of `num_epochs` (e.g. `num_epochs=30`) the learnt rate
-            matrices may differ in non-trivial ways. However, when using a
-            larger number of epochs, e.g. `num_epochs=200`, they should be
-            very similar. The main reason to use the non-vectorized
-            implementation is because it requires less RAM memory, as each
-            site it processes separately, making it faster when RAM is limited.
-        just_run_fast_cherries: If `True`, then only the trees estimated with
-            FastCherries will be returned, i.e. we will skip SiteRM. This is
-            useful if all you need are the cherries and site rates of
-            FastCherries. Recall that FastCherries only estimates the cherries
-            in the tree, so the returned tree will be a star-type tree with all
-            the inferred cherries hanging from the root. `learnt_rate_matrices`
-            will be None in this case.
-
-    Returns:
-        A dictionary with the following entries:
-            - "learnt_rate_matrices": A 3D numpy array with the learnt rate
-                matrix per site.
-            - "learnt_site_rates": A List[float] with the learnt site rate per
-                site.
-            - "learnt_tree": The FastCherries learnt tree (or the provided tree
-                if it was provided). It is of type cherryml_io.Tree. Note that
-                FastCherries only estimates the cherries in the tree and
-                therefore returns a star-type tree with all the inferred
-                cherries hanging from the root. Such as tree might look like
-                this in newick format:
-                "((leaf_1:0.17,leaf_2:0.17)internal-0:1,(leaf_3:0.17,leaf_4:0.17)internal-1:1);"
-            - "time_...": The time taken by this substep. (They should add up
-                to the total runtime, up to a small rather negligible
-                difference).
-    """
-```
 
 
 # Reproducing all figures in our paper `Ultrafast classical phylogenetic method beats large protein language models on variant effect prediction` (a.k.a. SiteRM/FastCherries paper).
