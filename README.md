@@ -9,7 +9,7 @@
 
 This package implements the methods - and allows easily reproducing the results - from our papers:
 
-> Prillo, S., Deng, Y., Boyeau, P., Li, X., Chen, P.-Y., Song, Y.S.  (2023) CherryML: Scalable maximum likelihood estimation of phylogenetic models. Nature Methods, in press.
+> Prillo, S., Deng, Y., Boyeau, P., Li, X., Chen, P.-Y., Song, Y.S.  (2023) CherryML: Scalable maximum likelihood estimation of phylogenetic models. Nature Methods.
 
 > Prillo, S., Wu, W., Song, Y.S.  (2024) Ultrafast classical phylogenetic method beats large protein language models on variant effect prediction. NeurIPS.
 
