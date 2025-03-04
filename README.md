@@ -19,7 +19,7 @@ Firstly, as relates to our paper `CherryML: Scalable maximum likelihood estimati
 
 Note that (1) is NOT the LG rate matrix but the LG _model_; the LG rate matrix [Le and Gascuel 2008] was estimated under the LG model using a specific dataset (a version of Pfam from 2008).
 
-For a quick demonstration of an end-to-end application of CherryML to real data, please check out the section "[End-to-end worked-out application: plant dataset](#end-to-end-worked-out-application:-plant-dataset)".
+For a quick demonstration of an end-to-end application of CherryML to real data, please check out the section "[End-to-end worked-out application: plant dataset](#end-to-end-worked-out-application-plant-dataset)".
 
 You can find the full API for CherryML in the section "[CherryML full API](#cherryml-full-api)".
 
@@ -27,7 +27,7 @@ Secondly, as relates to our paper `Ultrafast classical phylogenetic method beats
 - FastCherries is a drop-in replacement for FastTree which speeds up the tree estimation step of CherryML by 10-100x.
 - SiteRM is an extension of the LG model that allows for a *different* rate matrix for each site of the MSA.
 
-We provide a Python API for SiteRM; please refer to the section "[SiteRM/FastCherries: Python API](#siterm/fastcherries:-python-api)".
+We provide a Python API for SiteRM; please refer to the section "[SiteRM/FastCherries: Python API](#sitermfastcherries-python-api)".
 
 # Citation
 
@@ -192,7 +192,7 @@ Each file in `contact_map_dir` should list the contact map for a family followin
 
 As before, if you have not estimated trees already, you can omit the `tree_dir` and CherryML will estimate these for you. (In this case, we recommend using `--num_rate_categories 1` since the coevolution model does not model site rate variation.)
 
-# Full API
+# CherryML Full API
 
 The CherryML API provides extensive functionality through additional flags, which we describe below (this is shown when running `python -m cherryml --help`):
 
