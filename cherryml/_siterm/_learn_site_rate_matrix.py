@@ -1171,7 +1171,7 @@ def learn_site_rate_matrices(
         A dictionary with the following entries:
             - "learnt_rate_matrices": A List[pd.DataFrame] with the learnt rate matrix per site.
             - "learnt_site_rates": A List[float] with the learnt site rate per site.
-            - "learnt_tree": The learnt tree (or the provided tree if it was provided).
+            - "learnt_tree": The FastCherries learnt tree (or the provided tree if it was provided).
                 It is of type cherryml_io.Tree.
             - "time_...": The time taken by this substep. (They should add up
                 to the total runtime).
@@ -1223,6 +1223,9 @@ def learn_site_rate_matrices(
             )
             tree = cherryml_io.read_tree(os.path.join(_output_tree_dir, "family_0.txt"))
             site_rates_fast_cherries = cherryml_io.read_site_rates(os.path.join(_output_site_rates_dir, "family_0.txt"))
+    else:
+        if just_run_fast_cherries:
+            raise ValueError("If just_run_fast_cherries is True, then tree must be None.")
     time_estimate_tree = time.time() - st
 
     time_estimate_site_rate = 0.0
@@ -1247,6 +1250,7 @@ def learn_site_rate_matrices(
 
     if just_run_fast_cherries:
         learnt_rate_matrices = None
+        learnt_rate_matrices__profiling_dict = {}
     else:
         # For this step, we profile it at the subroutine level so we don't do `st = time.time()` as before.
         # Instead, the profiling information comes from the returned dictionary.

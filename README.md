@@ -676,8 +676,8 @@ def learn_site_specific_rate_matrices(
         tree: If `None`, then FastCherries will be used to estimate the tree.
             Otherwise, you can provide your own tree, which should be of
             the CherryML Tree type.
-            NOTE: You can easily convert a newick tree (in format number 2)
-            to the CherryML Tree type using:
+            NOTE: You can easily convert a newick tree to the CherryML Tree
+            type using:
             ```
             from cherryml.io import convert_newick_to_CherryML_Tree
             tree = convert_newick_to_CherryML_Tree(tree_newick)
@@ -735,6 +735,13 @@ def learn_site_specific_rate_matrices(
             very similar. The main reason to use the non-vectorized
             implementation is because it requires less RAM memory, as each
             site it processes separately, making it faster when RAM is limited.
+        just_run_fast_cherries: If `True`, then only the trees estimated with
+            FastCherries will be returned, i.e. we will skip SiteRM. This is
+            useful if all you need are the cherries and site rates of
+            FastCherries. Recall that FastCherries only estimates the cherries
+            in the tree, so the returned tree will be a star-type tree with all
+            the inferred cherries hanging from the root. `learnt_rate_matrices`
+            will be None in this case.
 
     Returns:
         A dictionary with the following entries:
@@ -742,6 +749,13 @@ def learn_site_specific_rate_matrices(
                 matrix per site.
             - "learnt_site_rates": A List[float] with the learnt site rate per
                 site.
+            - "learnt_tree": The FastCherries learnt tree (or the provided tree
+                if it was provided). It is of type cherryml_io.Tree. Note that
+                FastCherries only estimates the cherries in the tree and
+                therefore returns a star-type tree with all the inferred
+                cherries hanging from the root. Such as tree might look like
+                this in newick format:
+                "((leaf_1:0.17,leaf_2:0.17)internal-0:1,(leaf_3:0.17,leaf_4:0.17)internal-1:1);"
             - "time_...": The time taken by this substep. (They should add up
                 to the total runtime, up to a small rather negligible
                 difference).
