@@ -3,7 +3,7 @@
     <h1 style="margin-left: 10px;">CherryML: Scalable Maximum Likelihood Estimation of Phylogenetic Models</h1>
 </div> -->
 
-# CherryML: Scalable Maximum Likelihood Estimation of Phylogenetic Models
+# CherryML: Scalable Maximum Likelihood Estimation of Phylogenetic Models (including SiteRM and FastCherries)
 
 ![Cover](docs/_static/cover.jpeg)
 
