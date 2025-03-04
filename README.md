@@ -23,11 +23,15 @@ For a quick demonstration of an end-to-end application of CherryML to real data,
 
 You can find the full API for CherryML in the section "[CherryML full API](#cherryml-full-api)".
 
+To reproduce all the figures from our Nature Methods 2023 paper, see the section "[Reproducing all figures in our paper CherryML: scalable maximum likelihood estimation of phylogenetic models](#reproducing-all-figures-in-our-paper-cherryml-scalable-maximum-likelihood-estimation-of-phylogenetic-models)".
+
 Secondly, as relates to our paper `Ultrafast classical phylogenetic method beats large protein language models on variant effect prediction`, this package implements the FastCherries phylogeny estimator and the SiteRM model:
 - FastCherries is a drop-in replacement for FastTree which speeds up the tree estimation step of CherryML by 10-100x.
 - SiteRM is an extension of the LG model that allows for a *different* rate matrix for each site of the MSA.
 
 We provide a Python API for SiteRM/FastCherries; please refer to the section "[SiteRM/FastCherries: Python API](#sitermfastcherries-python-api)".
+
+To reproduce all the figures from our NeurIPS 2024 paper, see the section "[Reproducing all figures in our paper Ultrafast classical phylogenetic method beats large protein language models on variant effect prediction (a.k.a. SiteRM/FastCherries paper)](#reproducing-all-figures-in-our-paper-ultrafast-classical-phylogenetic-method-beats-large-protein-language-models-on-variant-effect-prediction-aka-sitermfastcherries-paper)".
 
 # Citation
 
@@ -776,6 +780,8 @@ Tree estimation is parallelized, so by default you will need a machine with at l
 
 
 # Reproducing all figures in our paper `Ultrafast classical phylogenetic method beats large protein language models on variant effect prediction` (a.k.a. SiteRM/FastCherries paper).
+
+First, follow the same initial instructions as in section "[Reproducing all figures in our paper CherryML: scalable maximum likelihood estimation of phylogenetic models](#reproducing-all-figures-in-our-paper-cherryml-scalable-maximum-likelihood-estimation-of-phylogenetic-models)" to download the data.
 
 As always, please make sure all the tests are passing before attempting to reproduce any figures. You can run the tests with:
 
