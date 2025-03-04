@@ -1,5 +1,6 @@
 biotite
 black
+cython
 ete3
 flake8
 isort

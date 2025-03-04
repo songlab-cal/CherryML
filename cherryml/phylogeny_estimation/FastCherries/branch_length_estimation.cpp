@@ -5,6 +5,7 @@
 #include <cmath>
 #include <iostream>
 #include <float.h>
+#include <algorithm> // Required for std::sort
 
 void site_rates_gamma_bins_all_pairs_inplace(
     const std::vector<std::vector<int> >& all_sequences,

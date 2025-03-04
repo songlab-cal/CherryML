@@ -1,4 +1,5 @@
 import os
+import pytest
 import tempfile
 import unittest
 from typing import List
@@ -39,6 +40,7 @@ def run_command(
 
 
 class TestEvaluationPublicAPI(unittest.TestCase):
+    @pytest.mark.slow
     def test_with_fast_tree_from_CLI(self):
         """
         Run evaluation from CLI, using FastTree
@@ -76,6 +78,7 @@ class TestEvaluationPublicAPI(unittest.TestCase):
             for ll_wo_gamma, ll_w_gamma in zip(ll_fam_i, ll_fam_i_with_gamma):
                 self.assertGreater(ll_wo_gamma, ll_w_gamma)
 
+    @pytest.mark.slow
     def test_with_phyml_from_CLI(self):
         """
         Run evaluation from CLI, using PhyML

@@ -1,8 +1,9 @@
+import tempfile
 import unittest
 from cherryml.phylogeny_estimation._fast_cherries import fast_cherries
 from cherryml.markov_chain import get_equ_path, get_lg_path, normalized
 from cherryml.benchmarking.lg_paper import run_rate_estimator
-from cherryml.io import read_rate_matrix, read_msa, read_tree
+from cherryml.io import read_rate_matrix, read_msa, read_tree, read_site_rates
 import numpy as np
 from os import listdir
 from os.path import isfile, join
@@ -17,6 +18,8 @@ from cherryml.estimation_end_to_end import CHERRYML_TYPE
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
+import pytest
+
 
 class TestFastCherries(unittest.TestCase):
     def test_run_fast_cherries(self):
@@ -152,7 +155,7 @@ class TestFastCherries(unittest.TestCase):
         assert((cherry_with_lengths[0][0],cherry_with_lengths[1][0]) in expected)
         
 
-
+    @pytest.mark.slow
     def test_correct_runtime(self):
         """
         ensures that the runtimes are being recorded correctly
@@ -283,4 +286,47 @@ class TestFastCherries(unittest.TestCase):
             fast_cherries_output_path = os.path.join("tests/phylogeny_estimation_tests/pairing_ble_test_trees", family + ".txt")
             tree = read_tree(fast_cherries_output_path)
             assert len(tree.children(tree.root())) == len(msa)//2 + len(msa)%2
-    
+
+    def test_multiprocessing(self):
+        """
+        Makes sure that using multiple processes gives the same result as using one process.
+        """
+        families = [f[:-4] for f in listdir("tests/data")[:400] if isfile(join("tests/data", f)) and f[-4:] == ".txt"]
+        with tempfile.TemporaryDirectory() as cache_one_process:
+            with tempfile.TemporaryDirectory() as cache_multiple_processes:
+                caching.set_cache_dir(cache_one_process)
+                output_dirs_one_process = fast_cherries(
+                    msa_dir = "tests/data",
+                    families = families,
+                    rate_matrix_path = get_equ_path(),
+                    num_rate_categories= 20,
+                    max_iters = 50,
+                    num_processes=1,
+                    remake=False,
+                )
+
+                caching.set_cache_dir(cache_multiple_processes)
+                output_dirs_multiple_processes = fast_cherries(
+                    msa_dir = "tests/data",
+                    families = families,
+                    rate_matrix_path = get_equ_path(),
+                    num_rate_categories= 20,
+                    max_iters = 50,
+                    num_processes=4,
+                    remake=False,
+                )
+                failed_families = []
+                ok_families = []
+                for i, family in enumerate(families):
+                    # tree_one_process = read_tree(os.path.join(output_dirs_one_process["output_tree_dir"], family + ".txt"))
+                    # tree_multiple_processes = read_tree(os.path.join(output_dirs_multiple_processes["output_tree_dir"], family + ".txt"))
+                    # if tree_one_process.to_newick(format=2) != tree_multiple_processes.to_newick(format=2):
+                    #     failed_families.append(i)
+                    site_rates_one_process = read_site_rates(os.path.join(output_dirs_one_process["output_site_rates_dir"], family + ".txt"))
+                    site_rates_multiple_processes = read_site_rates(os.path.join(output_dirs_multiple_processes["output_site_rates_dir"], family + ".txt"))
+                    if site_rates_one_process != site_rates_multiple_processes:
+                        failed_families.append(i)
+                    else:
+                        ok_families.append(i)
+                if len(failed_families) > 0:
+                    raise Exception(f"The outputs for the following families differ: {failed_families}. These are OK: {ok_families}")

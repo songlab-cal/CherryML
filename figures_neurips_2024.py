@@ -1,3 +1,11 @@
+"""
+Running this script will reproduce all figures in our paper
+`Ultrafast classical phylogenetic method beats large protein language models on variant effect prediction`
+except the ProteinGym results, which can be reproduced at the ProteinGym repo:
+https://github.com/OATML-Markslab/ProteinGym
+You can just run this script with e.g.:
+$ time python figures_neurips_2024.py
+"""
 import figures
 from cherryml.config import create_config_from_dict
 import sys
@@ -35,7 +43,7 @@ def reproduce_lg():
     figures.fig_lg_paper(
         evaluation_phylogeny_estimator_name="PhyML",
         output_image_dir="neurips_figures/lg_reproduced",
-        num_processes=9,
+        num_processes=num_processes,
         rate_estimator_names=[
             ("reproduced WAG", "WAG\nrate \nmatrix"),
             ("reproduced LG", "LG\nrate \nmatrix"),

@@ -8,6 +8,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <algorithm>
+#include <random>
 
 
 inline double hamming_distance(
@@ -76,7 +77,8 @@ inline std::vector<bool> partition_subset_distance(
 
 inline std::pair<std::string, std::vector<std::pair<std::string, std::string> > > divide(
     const std::vector<std::string>& msa_list,
-    const std::unordered_map<std::string, std::vector<int> >& msa_map
+    const std::unordered_map<std::string, std::vector<int> >& msa_map,
+    std::mt19937& rng
 ) {
     // base cases
     if(msa_list.size() == 2) {
@@ -90,7 +92,10 @@ inline std::pair<std::string, std::vector<std::pair<std::string, std::string> > 
     }
 
     // only source of non-determinism, seed the rng in main file
-    std::string x = msa_list[rand()%msa_list.size()];
+    // Use Mersenne Twister instead of rand()
+    std::uniform_int_distribution<size_t> dist(0, msa_list.size() - 1);
+    std::string x = msa_list[dist(rng)];  // Randomly select from msa_list
+    // std::string x = msa_list[rand()%msa_list.size()];  // Old code with rand() - not reproducible accross different machine architectures.
     std::pair<std::string, std::vector<double> > node_and_dist;
     node_and_dist = find_farthest(
         msa_list,
@@ -125,11 +130,13 @@ inline std::pair<std::string, std::vector<std::pair<std::string, std::string> > 
     }
     std::pair<std::string, std::vector<std::pair<std::string, std::string> > > unpaired_and_cherries_x = divide(
         close_x,
-        msa_map
+        msa_map,
+        rng
     );
     std::pair<std::string, std::vector<std::pair<std::string, std::string> > > unpaired_and_cherries_y = divide(
         close_y,
-        msa_map
+        msa_map,
+        rng
     );
 
     std::vector<std::pair<std::string, std::string> > cherries;
@@ -157,10 +164,12 @@ inline std::pair<std::string, std::vector<std::pair<std::string, std::string> > 
 
 std::vector<std::pair<std::string, std::string> > divide_and_pair(
     const std::vector<std::string>& msa_list,
-    const std::unordered_map<std::string, std::vector<int> >& msa_map
+    const std::unordered_map<std::string, std::vector<int> >& msa_map,
+    std::mt19937& rng
 ) {
     return divide(
         msa_list,
-        msa_map
+        msa_map,
+        rng
     ).second;
 }
