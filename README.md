@@ -291,7 +291,8 @@ The CherryML API provides extensive functionality through additional flags, whic
                         expected format of these files. (default: None)
   --tree_estimator_name TREE_ESTIMATOR_NAME
                         Tree estimator to use. Can be either 'FastTree' or
-                        'PhyML'. (default: FastTree)
+                        'PhyML' or 'FastCherries'. ('FastCherries' is incredibly
+                        fast!) (default: FastTree)
   --cherryml_type CHERRYML_TYPE
                         Whether to use 'cherry' or 'cherry++'. Here, 'cherry'
                         uses just the cherries in the trees, whereas
@@ -528,7 +529,7 @@ time python reproduce_fig_1e_simplified_demo.py
 
 Expected output: `fig_1e_simplified/` contains the reproduced version of Fig. 1e (without EM).
 
-FastTree is faster, which is better for the demo, and the results are similar. Reproducing Fig. 1e (excluding EM) with FastTree takes ~10 minutes. Using PhyML (as in `reproduce_all_figures.py`, and as in our paper), would take ~4 hours. Note that if you have less than 32 cores available, you should change `num_processes=32` to a different value in `reproduce_fig_1e_simplified_demo.py`. In this case, it will take longer than ~10 minutes.
+FastTree is faster, which is better for the demo, and the results are similar. Reproducing Fig. 1e (excluding EM) with FastTree takes ~10 minutes. Using PhyML (as in `reproduce_all_figures.py`, and as in our paper), would take ~4 hours. Note that if you have less than 32 cores available, you should change `num_processes=32` to a different value in `reproduce_fig_1e_simplified_demo.py`. In this case, it will take longer than ~10 minutes. In our more recent work at NeurIPS 2024, we introduce FastCherries, which is 10-100x faster than FastTree!
 
 ## System requirements
 
@@ -763,7 +764,7 @@ def learn_site_specific_rate_matrices(
 ```
 
 
-# Reproducing all figures in our paper `Ultrafast classical phylogenetic method beats large protein language models on variant effect prediction`.
+# Reproducing all figures in our paper `Ultrafast classical phylogenetic method beats large protein language models on variant effect prediction` (a.k.a. SiteRM/FastCherries paper).
 
 As always, please make sure all the tests are passing before attempting to reproduce any figures. You can run the tests with:
 

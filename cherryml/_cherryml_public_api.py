@@ -15,7 +15,7 @@ from cherryml.estimation_end_to_end import (
 )
 from cherryml.io import read_rate_matrix, write_rate_matrix
 from cherryml.markov_chain import get_lg_path
-from cherryml.phylogeny_estimation import fast_tree, phyml
+from cherryml.phylogeny_estimation import fast_tree, phyml, fast_cherries
 
 
 def _init_logger():
@@ -161,6 +161,8 @@ def cherryml_public_api(
         tree_estimator = fast_tree
     elif tree_estimator_name == "PhyML":
         tree_estimator = phyml
+    elif tree_estimator_name == "FastCherries":
+        tree_estimator = partial(fast_cherries, max_iters=50)
     else:
         raise ValueError(f"Unknown tree_estimator_name: {tree_estimator_name}")
 
