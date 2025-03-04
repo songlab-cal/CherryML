@@ -19,7 +19,7 @@ Firstly, as relates to our paper `CherryML: Scalable maximum likelihood estimati
 
 Note that (1) is NOT the LG rate matrix but the LG _model_; the LG rate matrix [Le and Gascuel 2008] was estimated under the LG model using a specific dataset (a version of Pfam from 2008).
 
-For a quick demonstration of an end-to-end application of CherryML to real data, please check out the section "[End-to-end worked-out application: plant dataset](#end-to-end-worked-out-application-plant-dataset)".
+For a quick demonstration of an end-to-end application of CherryML and FastCherries to real data, please check out the section "[End-to-end worked-out application: plant dataset](#end-to-end-worked-out-application-plant-dataset)".
 
 You can find the full API for CherryML in the section "[CherryML full API](#cherryml-full-api)".
 
