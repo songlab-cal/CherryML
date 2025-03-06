@@ -614,7 +614,7 @@ def test_learn_site_specific_rate_matrices_real_cuda_large_GOAT():
     if not torch.cuda.is_available():
         return
 
-    num_sites = 65536  # Use all 65536 to appreciate speedup of vectorized implementation.
+    num_sites = 128  # Use all 128 to appreciate speedup of vectorized implementation. Later we multiply by 512 to get 65536 sites.
     NUM_PYTORCH_EPOCHS = 30  # Seems like we can go down to 30 alright.
     GRID_SIZE = 8  # We can go as low as 16 or even 8!
 
