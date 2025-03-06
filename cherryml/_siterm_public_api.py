@@ -472,7 +472,7 @@ def test_learn_site_specific_rate_matrices_real_cuda_GOAT():
         }
         tree_newick = _get_tree_newick()
         st = time.time()
-        res_dict = learn_site_rate_matrices(
+        res_dict = learn_site_specific_rate_matrices(
             tree=convert_newick_to_CherryML_Tree(tree_newick),
             msa={
                 k: v[:num_sites]
@@ -545,7 +545,7 @@ def test_learn_site_specific_rate_matrices_real_data():
         }
         tree_newick = _get_tree_newick()
         st = time.time()
-        res_dict = learn_site_rate_matrices(
+        res_dict = learn_site_specific_rate_matrices(
             tree=convert_newick_to_CherryML_Tree(tree_newick),
             msa={
                 k: v[:num_sites]
@@ -629,7 +629,7 @@ def test_learn_site_specific_rate_matrices_real_data_2():
         # First repetition is used to warm up the GPU.
         if repetition == 1:
             st = time.time()
-        res_dict = learn_site_rate_matrices(
+        res_dict = learn_site_specific_rate_matrices(
             tree=convert_newick_to_CherryML_Tree(tree_newick),
             msa={
                 k: v[:num_sites]
