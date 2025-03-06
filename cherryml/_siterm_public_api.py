@@ -621,7 +621,7 @@ def test_learn_site_specific_rate_matrices_real_cuda_large_GOAT():
 
     site_rate_matrices = {}
     msa = _get_msa_example()
-    assert(len(list(msa.values())[0]) == 128)
+    assert(msa.shape[0] == 128)
     leaf_states = {
         msa.columns[species_id]: (''.join(list(msa.iloc[:, species_id])))[:num_sites].upper() * int(num_sites/128)  # Repeat to get 65536 sites, like in GPN-MSA's batch size.
         for species_id in range(msa.shape[1])
