@@ -1,2 +1,3 @@
 recursive-include cherryml *.cpp
+recursive-include cherryml *.pyx
 recursive-include cherryml/phylogeny_estimation/FastCherries *
