@@ -614,16 +614,19 @@ def test_learn_site_specific_rate_matrices_real_cuda_large_GOAT():
     if not torch.cuda.is_available():
         return
 
-    num_sites = 128  # Use all 128 to appreciate speedup of vectorized implementation. Later we multiply by 512 to get 65536 sites.
+    num_sites = 65536  # Use all 65536 to appreciate speedup of vectorized implementation.
+    assert(num_sites % 128 == 0)
     NUM_PYTORCH_EPOCHS = 30  # Seems like we can go down to 30 alright.
     GRID_SIZE = 8  # We can go as low as 16 or even 8!
 
     site_rate_matrices = {}
     msa = _get_msa_example()
+    assert(len(list(msa.values())[0]) == 128)
     leaf_states = {
-        msa.columns[species_id]: (''.join(list(msa.iloc[:, species_id])))[:num_sites].upper() * 512  # Repeat to get 65536 sites, like in GPN-MSA's batch size.
+        msa.columns[species_id]: (''.join(list(msa.iloc[:, species_id])))[:num_sites].upper() * int(num_sites/128)  # Repeat to get 65536 sites, like in GPN-MSA's batch size.
         for species_id in range(msa.shape[1])
     }
+    assert(len(list(leaf_states.values())[0]) == num_sites)
     tree_newick = _get_tree_newick()
     for repetition in range(2):
         # First repetition is used to warm up the GPU.
