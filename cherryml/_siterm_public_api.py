@@ -141,7 +141,7 @@ def learn_site_specific_rate_matrices(
                 if it was provided). It is of type cherryml_io.Tree. Note that
                 FastCherries only estimates the cherries in the tree and
                 therefore returns a star-type tree with all the inferred
-                cherries hanging from the root. Such as tree might look like
+                cherries hanging from the root. Such a tree might look like
                 this in newick format:
                 "((leaf_1:0.17,leaf_2:0.17)internal-0:1,(leaf_3:0.17,leaf_4:0.17)internal-1:1);"
             - "time_...": The time taken by this substep. (They should add up
@@ -453,7 +453,7 @@ def test_learn_site_specific_rate_matrices_real_vectorized_GOAT_with_fast_cherri
 
 
 @pytest.mark.slow
-def test_learn_site_specific_rate_matrices_real_cuda_GOAT():
+def test_learn_site_specific_rate_matrices_real_cuda_small():
     """
     Tests that CUDA SiteRM implementation runs on real MSA.
 
@@ -472,7 +472,7 @@ def test_learn_site_specific_rate_matrices_real_cuda_GOAT():
         }
         tree_newick = _get_tree_newick()
         st = time.time()
-        res_dict = learn_site_rate_matrices(
+        res_dict = learn_site_specific_rate_matrices(
             tree=convert_newick_to_CherryML_Tree(tree_newick),
             msa={
                 k: v[:num_sites]
@@ -523,7 +523,7 @@ def test_learn_site_specific_rate_matrices_real_cuda_GOAT():
 
 
 @pytest.mark.slow
-def test_learn_site_specific_rate_matrices_real_data():
+def test_learn_site_specific_rate_matrices_real_cuda_medium():
     """
     Tests that fast site rate implementation gives same results as older one.
 
@@ -545,7 +545,7 @@ def test_learn_site_specific_rate_matrices_real_data():
         }
         tree_newick = _get_tree_newick()
         st = time.time()
-        res_dict = learn_site_rate_matrices(
+        res_dict = learn_site_specific_rate_matrices(
             tree=convert_newick_to_CherryML_Tree(tree_newick),
             msa={
                 k: v[:num_sites]
@@ -603,7 +603,7 @@ def test_learn_site_specific_rate_matrices_real_data():
 
 
 @pytest.mark.slow
-def test_learn_site_specific_rate_matrices_real_data_2():
+def test_learn_site_specific_rate_matrices_real_cuda_large_GOAT():
     """
     This test was used to tune the hyperparameters.
 
@@ -629,7 +629,7 @@ def test_learn_site_specific_rate_matrices_real_data_2():
         # First repetition is used to warm up the GPU.
         if repetition == 1:
             st = time.time()
-        res_dict = learn_site_rate_matrices(
+        res_dict = learn_site_specific_rate_matrices(
             tree=convert_newick_to_CherryML_Tree(tree_newick),
             msa={
                 k: v[:num_sites]
