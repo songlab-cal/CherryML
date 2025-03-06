@@ -453,7 +453,7 @@ def test_learn_site_specific_rate_matrices_real_vectorized_GOAT_with_fast_cherri
 
 
 @pytest.mark.slow
-def test_learn_site_specific_rate_matrices_real_cuda_GOAT():
+def test_learn_site_specific_rate_matrices_real_cuda_small():
     """
     Tests that CUDA SiteRM implementation runs on real MSA.
 
@@ -523,7 +523,7 @@ def test_learn_site_specific_rate_matrices_real_cuda_GOAT():
 
 
 @pytest.mark.slow
-def test_learn_site_specific_rate_matrices_real_data():
+def test_learn_site_specific_rate_matrices_real_cuda_medium():
     """
     Tests that fast site rate implementation gives same results as older one.
 
@@ -603,7 +603,7 @@ def test_learn_site_specific_rate_matrices_real_data():
 
 
 @pytest.mark.slow
-def test_learn_site_specific_rate_matrices_real_data_2():
+def test_learn_site_specific_rate_matrices_real_cuda_large_GOAT():
     """
     This test was used to tune the hyperparameters.
 
