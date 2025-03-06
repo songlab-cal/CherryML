@@ -1,5 +1,5 @@
 import tempfile
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 
 import ete3
 
@@ -196,23 +196,26 @@ def write_tree(
     scaling_factor: float = 1.0,
     node_name_prefix: str = "",
 ) -> None:
-    res = ""
-    res += f"{tree.num_nodes()} nodes\n"
+    res_list = []
+    res_list.append(f"{tree.num_nodes()} nodes\n")
     for node in tree.nodes():
-        res += f"{node_name_prefix + node}\n"
-    res += f"{tree.num_edges()} edges\n"
+        res_list.append(f"{node_name_prefix + node}\n")
+    res_list.append(f"{tree.num_edges()} edges\n")
     for u, v, d in tree.edges():
-        res += (
+        res_list.append(
             f"{node_name_prefix + u} {node_name_prefix + v} "
             f"{d * scaling_factor}\n"
         )
-    open(tree_path, "w").write(res)
+    res = "".join(res_list)
+    with open(tree_path, "w") as tree_file:
+        tree_file.write(res)
 
 
 def read_tree(
     tree_path: str,
 ) -> Tree:
-    lines = open(tree_path, "r").read().strip().split("\n")
+    with open(tree_path, "r") as tree_file:
+        lines = tree_file.read().strip().split("\n")
     try:
         n, s = lines[0].split(" ")
         if s != "nodes":
@@ -260,3 +263,67 @@ def read_tree(
     assert tree.num_nodes() == n
     assert tree.num_edges() == m
     return tree
+
+
+def _name_internal_nodes(t: ete3.Tree) -> None:
+    """
+    Assigns names to the internal nodes of tree t if they don't already have a
+    name.
+    """
+
+    def node_name_generator():
+        """Generates unique node names for the tree."""
+        internal_node_id = 1
+        while True:
+            yield f"internal-{internal_node_id}"
+            internal_node_id += 1
+
+    names = node_name_generator()
+
+    def dfs_name_internal_nodes(p: Optional[ete3.Tree], v: ete3.Tree) -> None:
+        global internal_node_id
+        if v.name == "":
+            v.name = next(names)
+        if p:
+            # print(f"{p.name} -> {v.name}")
+            pass
+        for u in v.get_children():
+            dfs_name_internal_nodes(v, u)
+
+    dfs_name_internal_nodes(None, t)
+
+
+def _translate_tree(tree_ete: ete3.Tree) -> Tree:
+    tree = Tree()
+
+    def dfs_translate_tree(p, v) -> None:
+        tree.add_node(v.name)
+        if p is not None:
+            try:
+                tree.add_edge(p.name, v.name, v.dist)
+            except Exception:
+                raise Exception("Could not translate tree")
+        for u in v.get_children():
+            dfs_translate_tree(v, u)
+
+    dfs_translate_tree(None, tree_ete)
+    return tree
+
+
+def convert_newick_to_CherryML_Tree(
+    tree_newick: str,
+) -> Tree:
+    tree_ete = ete3.Tree(tree_newick)
+    _name_internal_nodes(tree_ete)
+    tree = _translate_tree(tree_ete)
+    return tree
+
+
+def test_convert_newick_to_CherryML_Tree():
+    tree_newick = "((Homo_sapiens:0.00655,Pan_troglodytes:0.00684):0.00422);"
+    tree = convert_newick_to_CherryML_Tree(
+        tree_newick=tree_newick,
+    )
+    assert(
+        tree.to_newick(format=1) == "((Homo_sapiens:0.00655,Pan_troglodytes:0.00684)internal-2:0.00422);"
+    )

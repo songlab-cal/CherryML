@@ -181,7 +181,7 @@ if __name__ == "__main__":
         type=str,
         required=False,
         default="FastTree",
-        help="Tree estimator to use. Can be either 'FastTree' or 'PhyML'.",  # noqa
+        help="Tree estimator to use. Can be either 'FastTree' or 'PhyML' or 'FastCherries'. ('FastCherries' is incredibly fast!)",  # noqa
     )
     parser.add_argument(
         "--cherryml_type",

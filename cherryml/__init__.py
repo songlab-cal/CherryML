@@ -1,6 +1,7 @@
-__version__ = "v0.1.3"
+__version__ = "v0.2.0"
 
 from cherryml._cherryml_public_api import cherryml_public_api
+from cherryml._siterm_public_api import learn_site_specific_rate_matrices
 from cherryml.counting import count_co_transitions, count_transitions
 from cherryml.estimation import jtt_ipw, quantized_transitions_mle
 from cherryml.estimation_end_to_end import (

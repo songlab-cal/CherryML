@@ -1,1 +1,2 @@
 recursive-include cherryml *.cpp
+recursive-include cherryml/phylogeny_estimation/FastCherries *

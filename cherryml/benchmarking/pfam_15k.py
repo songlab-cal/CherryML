@@ -15,7 +15,7 @@ from cherryml import caching
 from cherryml.caching import secure_parallel_output
 from cherryml.evaluation import create_maximal_matching_contact_map
 from cherryml.global_vars import TITLES
-from cherryml.io import read_msa, write_contact_map, write_msa
+from cherryml.io import read_msa, write_contact_map, write_msa, read_site_rates, write_site_rates, write_tree, Tree
 from cherryml.markov_chain import (
     get_lg_path,
     get_lg_stationary_path,
@@ -418,6 +418,139 @@ def create_trivial_contact_maps(
 
 @caching.cached_parallel_computation(
     parallel_arg="families",
+    output_dirs=["output_contact_map_dir"],
+    write_extra_log_files=True,
+)
+def create_trivial_contact_maps_of_fixed_length(
+    sequence_length: int,
+    families: List[str],
+    output_contact_map_dir: Optional[str] = None,
+):
+    for family in families:
+        st = time.time()
+        num_sites = sequence_length
+        contact_map = np.zeros(shape=(num_sites, num_sites), dtype=int)
+        write_contact_map(
+            contact_map, os.path.join(output_contact_map_dir, family + ".txt")
+        )
+        et = time.time()
+        open(
+            os.path.join(output_contact_map_dir, family + ".profiling"), "w"
+        ).write(f"Total time: {et - st}\n")
+        secure_parallel_output(output_contact_map_dir, family)
+
+
+@caching.cached_parallel_computation(
+    parallel_arg="families",
+    output_dirs=["output_site_rates_dir"],
+    write_extra_log_files=True,
+)
+def extend_site_rates_to_fixed_length(
+    site_rates_dir: str,
+    sequence_length: int,
+    families: List[str],
+    output_site_rates_dir: Optional[str] = None,
+):
+    """
+    Extend the given site rates to a fixed length `sequence_length`.
+    So, if the site rates for a family are [1.1, 0.4, 0.7] and we extend to
+    sequence_length=7, we get [1.1, 0.4, 0.7, 1.1, 0.4, 0.7, 1.1]
+    """
+    for family in families:
+        st = time.time()
+        site_rates = read_site_rates(
+            os.path.join(site_rates_dir, family + ".txt")
+        )
+        extended_site_rates = [
+            site_rates[i % len(site_rates)] for i in range(sequence_length)
+        ]
+        write_site_rates(
+            extended_site_rates, os.path.join(output_site_rates_dir, family + ".txt")
+        )
+        et = time.time()
+        open(
+            os.path.join(output_site_rates_dir, family + ".profiling"), "w"
+        ).write(f"Total time: {et - st}\n")
+        secure_parallel_output(output_site_rates_dir, family)
+
+
+def create_perfect_binary_tree_for_family(
+    family: str,
+    levels: int,
+    edge_lengths: float,
+) -> Tree:
+    """
+    Create a perfect binary tree.
+
+    E.g.:
+
+    create_perfect_binary_tree_for_family(
+        family="hemoglobin",
+        levels=2,
+        edge_lengths=0.5
+    )
+
+    will return:
+
+    "((hemoglobin-3:0.5,hemoglobin-4:0.5)hemoglobin-1:0.5"
+    ",(hemoglobin-5:0.5,hemoglobin-6:0.5)hemoglobin-2:0.5);"
+    """
+    if levels < 1:
+        raise ValueError(
+            "At least one level needed. "
+            f"You provided: levels = {levels}"
+        )
+    tree = Tree()
+    nodes = [f"{family}-{i}" for i in range((2**(levels + 1)) - 1)]  # I.e. 3, 7, 15, ...
+    edges = [
+        (
+            f"{family}-{i}",
+            f"{family}-{2 * i + 1}",
+            edge_lengths
+        ) for i in range((2**levels) - 1)  # I.e. 1, 3, 7, ...
+    ] + [
+        (
+            f"{family}-{i}",
+            f"{family}-{2 * i + 2}",
+            edge_lengths
+        ) for i in range((2**levels) - 1)  # I.e. 1, 3, 7, ...
+    ]
+    tree.add_nodes(nodes)
+    tree.add_edges(edges)
+    return tree
+
+
+@caching.cached_parallel_computation(
+    parallel_arg="families",
+    output_dirs=["output_tree_dir"],
+    write_extra_log_files=True,
+)
+def create_perfect_binary_trees_cached(
+    families: List[str],
+    levels: int,
+    edge_lengths: float,
+    output_tree_dir: Optional[str] = None,
+) -> None:
+    """
+    Create a perfect binary tree for each family.
+    """
+    for family in families:
+        st = time.time()
+        tree = create_perfect_binary_tree_for_family(
+            family=family,
+            levels=levels,
+            edge_lengths=edge_lengths,
+        )
+        write_tree(tree, os.path.join(output_tree_dir, family + ".txt"))
+        et = time.time()
+        open(
+            os.path.join(output_tree_dir, family + ".profiling"), "w"
+        ).write(f"Total time: {et - st}\n")
+        secure_parallel_output(output_tree_dir, family)
+
+
+@caching.cached_parallel_computation(
+    parallel_arg="families",
     output_dirs=["output_msa_dir"],
     write_extra_log_files=True,
 )
@@ -441,7 +574,9 @@ def subset_msa_to_leaf_nodes(
         secure_parallel_output(output_msa_dir, family)
 
 
-@caching.cached()
+@caching.cached(
+    exclude_if_default=["sequence_length"],
+)
 def simulate_ground_truth_data_single_site(
     pfam_15k_msa_dir: str,
     families: List[str],
@@ -450,6 +585,9 @@ def simulate_ground_truth_data_single_site(
     num_processes: int,
     random_seed: int,
     use_cpp_simulation_implementation: bool = True,
+    sequence_length: Optional[int] = None,
+    use_binary_trees_with_these_levels: Optional[int] = None,
+    use_binary_trees_with_these_edge_lengths: Optional[float] = None,
 ):
     """
     Simulate ground truth MSAs with LG.
@@ -483,11 +621,48 @@ def simulate_ground_truth_data_single_site(
     )
 
     # We only investigate single-site model here.
-    contact_map_dir = create_trivial_contact_maps(
-        msa_dir=real_msa_dir,
-        families=families,
-        states=get_amino_acids(),
-    )["output_contact_map_dir"]
+    if sequence_length is None:
+        # We use the same sequence length as in the provided MSAs.
+        # (The length will thus vary between MSAs)
+        contact_map_dir = create_trivial_contact_maps(
+            msa_dir=real_msa_dir,
+            families=families,
+            states=get_amino_acids(),
+        )["output_contact_map_dir"]
+    else:
+        # We will need to create fake gt_site_rates and fake contact_map_dir
+        # of the given sequence_length.
+        if sequence_length <= 0:
+            raise ValueError(
+                "sequence_length should be >= 1. You provided: "
+                f"{sequence_length}"
+            )
+        contact_map_dir = create_trivial_contact_maps_of_fixed_length(
+            sequence_length=sequence_length,
+            families=families,
+        )["output_contact_map_dir"]
+        # For the site rates, we just extend them by looping until we achieve
+        # the desired length.
+        gt_site_rates = extend_site_rates_to_fixed_length(
+            site_rates_dir=gt_site_rates,
+            sequence_length=sequence_length,
+            families=families,
+        )["output_site_rates_dir"]
+
+    # If use_binary_trees_with_these_levels, we override the
+    # trees with perfect binary trees. Note that this does not
+    # require changing neither the gt_site_rates (since the number
+    # of sites remains the same) nor the contact_map_dir (for the
+    # same reason).
+    if use_binary_trees_with_these_levels is not None:
+        assert (use_binary_trees_with_these_edge_lengths is not None)
+        gt_trees = create_perfect_binary_trees_cached(
+            families=families,
+            levels=use_binary_trees_with_these_levels,
+            edge_lengths=use_binary_trees_with_these_edge_lengths,
+        )["output_tree_dir"]
+    else:
+        assert (use_binary_trees_with_these_edge_lengths is None)
 
     # Now we simulate MSAs
     gt_msa_dir = simulate_msas(

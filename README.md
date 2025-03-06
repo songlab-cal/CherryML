@@ -3,23 +3,35 @@
     <h1 style="margin-left: 10px;">CherryML: Scalable Maximum Likelihood Estimation of Phylogenetic Models</h1>
 </div> -->
 
-# CherryML: Scalable Maximum Likelihood Estimation of Phylogenetic Models
+# CherryML: Scalable Maximum Likelihood Estimation of Phylogenetic Models (including SiteRM and FastCherries)
 
 ![Cover](docs/_static/cover.jpeg)
 
+This package implements the methods - and allows easily reproducing the results - from our papers:
 
+> Prillo, S., Deng, Y., Boyeau, P., Li, X., Chen, P.-Y., Song, Y.S.  (2023) CherryML: Scalable maximum likelihood estimation of phylogenetic models. Nature Methods.
 
-This package implements the CherryML method as applied to:
+> Prillo, S., Wu, W., Song, Y.S.  (2024) Ultrafast classical phylogenetic method beats large protein language models on variant effect prediction. NeurIPS.
+
+Firstly, as relates to our paper `CherryML: Scalable maximum likelihood estimation of phylogenetic models`, this package implements the CherryML method as applied to:
 1. The classical LG model of amino acid evolution with site rate variation [Le and Gascuel 2008] (involving a $20 \times 20$ rate matrix), as well as
 2. A model of co-evolution at protein contact sites (involving a $400 \times 400$ rate matrix).
 
 Note that (1) is NOT the LG rate matrix but the LG _model_; the LG rate matrix [Le and Gascuel 2008] was estimated under the LG model using a specific dataset (a version of Pfam from 2008).
 
-We expect that the CherryML method will be applied to enable scalable estimation of many models in the future.
+For a quick demonstration of an end-to-end application of CherryML and FastCherries to real data, please check out the section "[End-to-end worked-out application: plant dataset](#end-to-end-worked-out-application-plant-dataset)".
 
-This package also enables seamless reproduction of all results in our paper.
+You can find the full API for CherryML in the section "[CherryML full API](#cherryml-full-api)".
 
-For a quick demonstration of an end-to-end application of CherryML to real data, please check out the section "[End-to-end worked-out application: plant dataset](#end-to-end-worked-out-application:-plant-dataset)".
+To reproduce all the figures from our Nature Methods 2023 paper, see the section "[Reproducing all figures in our paper CherryML: scalable maximum likelihood estimation of phylogenetic models](#reproducing-all-figures-in-our-paper-cherryml-scalable-maximum-likelihood-estimation-of-phylogenetic-models)".
+
+Secondly, as relates to our paper `Ultrafast classical phylogenetic method beats large protein language models on variant effect prediction`, this package implements the FastCherries phylogeny estimator and the SiteRM model:
+- FastCherries is a drop-in replacement for FastTree which speeds up the tree estimation step of CherryML by 10-100x.
+- SiteRM is an extension of the LG model that allows for a *different* rate matrix for each site of the MSA.
+
+We provide a Python API for SiteRM/FastCherries; please refer to the section "[SiteRM/FastCherries: Python API](#sitermfastcherries-python-api)".
+
+To reproduce all the figures from our NeurIPS 2024 paper, see the section "[Reproducing all figures in our paper Ultrafast classical phylogenetic method beats large protein language models on variant effect prediction (a.k.a. SiteRM/FastCherries paper)](#reproducing-all-figures-in-our-paper-ultrafast-classical-phylogenetic-method-beats-large-protein-language-models-on-variant-effect-prediction-aka-sitermfastcherries-paper)".
 
 # Citation
 
@@ -27,9 +39,56 @@ If you use `cherryml` in your work, please cite:
 
 > Prillo, S., Deng, Y., Boyeau, P., Li, X., Chen, P.-Y., Song, Y.S.  (2023) CherryML: Scalable maximum likelihood estimation of phylogenetic models. Nature Methods, in press.
 
+If you use the SiteRM model or FastCherries, please cite:
+
+> Prillo, S., Wu, W., Song, Y.S.  (2024) Ultrafast classical phylogenetic method beats large protein language models on variant effect prediction. NeurIPS.
+
+# Installation
+
+## For users
+
+CherryML is on PyPI, so you can install is simply with:
+
+```
+pip install cherryml
+```
+
+## For developers
+
+Create a Python environment:
+
+```
+conda create --name cherryml-dev python=3.10
+conda activate cherryml-dev
+```
+
+Make sure to install `cython` first:
+
+```
+pip install cython
+```
+
+Install all required Python libraries:
+
+```
+pip install -r requirements.txt
+```
+
+Build cython modules:
+
+```
+python setup.py build_ext --inplace
+```
+
+Run all tests:
+
+```
+python -m pytest tests/ --runslow
+```
+
 # Demo: CherryML applied to the LG model (runtime on a normal computer: 1 - 5 minutes)
 
-The following command learns a rate matrix from a set of MSAs, trees, and site rates (try it out!):
+The following command learns a rate matrix from a set of MSAs, trees, and site rates (try it out!). Later we explain how to use CherryML when you only have MSAs (i.e. no trees):
 
 ```
 python -m cherryml \
@@ -82,7 +141,7 @@ Each file in `site_rates_dir` should list the site rates for a family following 
 
 The `cache_dir` is used to store intermediate computations for future runs. Caching is transparent to the user; just make sure to use a different `cache_dir` for different datasets. If not provided, a temporary directory will be used as the caching directory (in which case all intermediate data will be lost).
 
-If you have _not_ estimated trees and site rates already, CherryML will do that for you using FastTree. You can simply omit the `tree_dir` and `site_rates_dir` arguments and run:
+If you have _not_ estimated trees and site rates already, CherryML will do that for you using either FastTree or FastCherries. You can simply omit the `tree_dir` and `site_rates_dir` arguments and run. FastTree is used by default for backwards compatibility reasons. To use FastCherries - which is substantially faster - add `--tree_estimator FastCherries` to the command below:
 
 ```
 python -m cherryml \
@@ -95,7 +154,7 @@ python -m cherryml \
 
 Expected output: `learned_rate_matrix_LG.txt` contains the learned rate matrix.
 
-FastTree will by default be run with 20 rate categories and with the LG rate matrix (this can be changed by using the full API described later). The trees estimated with FastTree will be saved in the `cache_dir`, and will be re-used by CherryML if they are needed in future runs with the same data (for example when learning a rate matrix on a subset of families, as done via the `--families` argument, or when learning a rate matrix on a subset of sites, as done via the `--sites_subset_dir` argument; clearly trees do not need to be re-estimated in this case!). The argument `--num_processes_tree_estimation` is used to parallelize tree estimation. In the example above, 32 processes are used.
+FastTree will by default be run with 20 rate categories and with the LG rate matrix (this can be changed by using the full API described later). The trees estimated with FastTree will be saved in the `cache_dir`, and will be re-used by CherryML if they are needed in future runs with the same data (for example when learning a rate matrix on a subset of families, as done via the `--families` argument, or when learning a rate matrix on a subset of sites, as done via the `--sites_subset_dir` argument; clearly trees do not need to be re-estimated in this case!). The argument `--num_processes_tree_estimation` is used to parallelize tree estimation. In the example above, 32 processes are used. In our more recent work at NeurIPS 2024, we introduce FastCherries, which is 10-100x faster than FastTree. You can use it by adding the argument `--tree_estimator FastCherries`. Note that FastCherries only estimates the cherries in the tree, so the returned tree will be a star-type tree with all the inferred cherries hanging from the root. (FastCherries does also estimate the site rates.)
 
 To learn a rate matrix on only a subset of sites from each family (for example, when learning a domain-specific or structure-specific rate matrix), you can provide the indices of the sites used for each family with the `--sites_subset_dir` argument. Each file in `sites_subset_dir` should list the sites (0-based) for a family following the format in the following toy example:
 ```
@@ -137,7 +196,7 @@ Each file in `contact_map_dir` should list the contact map for a family followin
 
 As before, if you have not estimated trees already, you can omit the `tree_dir` and CherryML will estimate these for you. (In this case, we recommend using `--num_rate_categories 1` since the coevolution model does not model site rate variation.)
 
-# Full API
+# CherryML Full API
 
 The CherryML API provides extensive functionality through additional flags, which we describe below (this is shown when running `python -m cherryml --help`):
 
@@ -236,7 +295,8 @@ The CherryML API provides extensive functionality through additional flags, whic
                         expected format of these files. (default: None)
   --tree_estimator_name TREE_ESTIMATOR_NAME
                         Tree estimator to use. Can be either 'FastTree' or
-                        'PhyML'. (default: FastTree)
+                        'PhyML' or 'FastCherries'. ('FastCherries' is incredibly
+                        fast!) (default: FastTree)
   --cherryml_type CHERRYML_TYPE
                         Whether to use 'cherry' or 'cherry++'. Here, 'cherry'
                         uses just the cherries in the trees, whereas
@@ -369,9 +429,146 @@ The command line tool can be invoked with `python -m cherryml.evaluation` and ac
                         likelihoods. (default: None)
 ```
 
+# SiteRM/FastCherries: Python API
+
+You can train the SiteRM model (or just run FastCherries) with the function `learn_site_specific_rate_matrices`. You can import it with `from cherryml import learn_site_specific_rate_matrices`. The API is described below (if you just want to run FastCherries, use `just_run_fast_cherries=True`):
+
+```
+def learn_site_specific_rate_matrices(
+    tree: Optional[cherryml_io.Tree],
+    msa: Dict[str, str],
+    alphabet: List[str],
+    regularization_rate_matrix: pd.DataFrame,
+    regularization_strength: float = 0.5,
+    device: str = "cpu",
+    num_rate_categories: int = 20,
+    alphabet_for_site_rate_estimation: Optional[List[str]] = None,
+    rate_matrix_for_site_rate_estimation: Optional[pd.DataFrame] = None,
+    num_epochs: int = 100,
+    quantization_grid_num_steps: int = 64,
+    use_vectorized_implementation: bool = True,
+    just_run_fast_cherries: bool = False,
+) -> Dict:
+    """
+    Learn a rate matrix per site given an MSA (and optionally a tree).
+
+    This function implements learning under the SiteRM model. Briefly, the
+    SiteRM model uses a different rate matrix per site. It is described in
+    detail in our paper:
+
+    ```
+    Prillo, S., Wu, W., Song, Y.S.  (NeurIPS 2024) Ultrafast classical
+    phylogenetic method beats large protein language models on variant
+    effect prediction.
+    ```
+
+    We offer two different implementation of SiteRM training, a "vectorized"
+    version an a "non-vectorized" version. The default implementation is the
+    vectorized one. Briefly, in the vectorized implementation a single
+    computational graph is built encompassing all sites in the MSA, with the
+    loss (i.e. the data log-likelihood) being the sum over all sites. This
+    implementation uses 4D tensors to batch all the sites together, and is
+    great when used in combination with `device="cuda"`. In other words, the
+    vectorized implementation is recommended when GPU is available. When only
+    CPU is available, we provide an alternative implementation where we simply
+    loop over all sites in the MSA, one at a time. This implementation solves
+    one optimization problem per site in the MSA, and involves only 3D tensors.
+    This non-vectorized implementation makes sense if RAM memory becomes
+    a bottleneck (e.g. if working on a personal computer).
+
+    Args:
+        tree: If `None`, then FastCherries will be used to estimate the tree.
+            Otherwise, you can provide your own tree, which should be of
+            the CherryML Tree type.
+            NOTE: You can easily convert a newick tree to the CherryML Tree
+            type using:
+            ```
+            from cherryml.io import convert_newick_to_CherryML_Tree
+            tree = convert_newick_to_CherryML_Tree(tree_newick)
+            ```
+            Alternatively, if you have a file containing a tree in the CherryML
+            format, you can just do:
+            ```
+            from cherryml.io import read_tree
+            tree = read_tree(tree_path)
+            ```
+        msa: Dictionary mapping each leaf in the tree to the states (e.g.
+            protein or DNA sequence) for that leaf.
+        alphabet: List of valid states, e.g. ["A", "C", "G", "T"] for DNA.
+        regularization_rate_matrix: Rate matrix to use to regularize the learnt
+            rate matrices.
+        regularization_strength: Between 0 and 1. 0 means no regularization at
+            all, and 1 means fully regularized model. This is lambda in our
+            paper.
+        device: Whether to use "cpu" or GPU ("cuda"). Note that this is only
+            used for the vectorized implementation, i.e. if
+            `use_vectorized_implementation=False` then only CPU will be used,
+            as it doesn't really make sense to use GPU in this case.
+        num_rate_categories: Number of rate categories to use.
+        alphabet_for_site_rate_estimation: Alphabet for learning the SITE RATES.
+            If `None`, then the alphabet for the learnt rate matrices, i.e.
+            `alphabet`, will be used. In our FastCherries/SiteRM paper, we have
+            observed that for ProteinGym variant effect prediction, it works
+            best to *exclude* gaps while estimating site rates (as is standard
+            in statistical phylogenetics), but then use gaps when learning the
+            rate matrix at the site. In that case, one would use
+            `alphabet_for_site_rate_estimation=["A", "C", "G", "T"]`
+            together with `alphabet=["A", "C", "G", "T", "-"]`.
+        rate_matrix_for_site_rate_estimation: If provided, the rate matrix to
+            use to estimate site rates. If `None`, then the
+            `regularization_rate_matrix` will be used.
+        num_epochs: Number of epochs (Adam steps) in the PyTorch optimizer.
+        quantization_grid_num_steps: Number of quantization points to use will
+            be `2 * quantization_grid_num_steps + 1` (as we take this number of
+            steps left and right of the grid center). Lowering
+            `quantization_grid_num_steps` leads to faster training at the
+            expense of some accuracy. By default,
+            `quantization_grid_num_steps=64` works really well, but great
+            estimates can still be obtained faster with as low as
+            `quantization_grid_num_steps=8`.
+        use_vectorized_implementation: When `True`, a single computational
+            graph including all sites of the MSA will be constructed to learn
+            the site-specific rate matrices. Otherwise, the algorithm will loop
+            over each site in the MSA separately, running coordinate ascent
+            once for each site. As a note, while the vectorized and
+            non-vectorized implementation converge to the same solution, they
+            don't converge with the same trajectories, so when using a smaller
+            number of `num_epochs` (e.g. `num_epochs=30`) the learnt rate
+            matrices may differ in non-trivial ways. However, when using a
+            larger number of epochs, e.g. `num_epochs=200`, they should be
+            very similar. The main reason to use the non-vectorized
+            implementation is because it requires less RAM memory, as each
+            site it processes separately, making it faster when RAM is limited.
+        just_run_fast_cherries: If `True`, then only the trees estimated with
+            FastCherries will be returned, i.e. we will skip SiteRM. This is
+            useful if all you need are the cherries and site rates of
+            FastCherries. Recall that FastCherries only estimates the cherries
+            in the tree, so the returned tree will be a star-type tree with all
+            the inferred cherries hanging from the root. `learnt_rate_matrices`
+            will be None in this case.
+
+    Returns:
+        A dictionary with the following entries:
+            - "learnt_rate_matrices": A 3D numpy array with the learnt rate
+                matrix per site.
+            - "learnt_site_rates": A List[float] with the learnt site rate per
+                site.
+            - "learnt_tree": The FastCherries learnt tree (or the provided tree
+                if it was provided). It is of type cherryml_io.Tree. Note that
+                FastCherries only estimates the cherries in the tree and
+                therefore returns a star-type tree with all the inferred
+                cherries hanging from the root. Such as tree might look like
+                this in newick format:
+                "((leaf_1:0.17,leaf_2:0.17)internal-0:1,(leaf_3:0.17,leaf_4:0.17)internal-1:1);"
+            - "time_...": The time taken by this substep. (They should add up
+                to the total runtime, up to a small rather negligible
+                difference).
+    """
+```
+
 # End-to-end worked-out application: plant dataset
 
-We now combine the model estimation step and model selection steps to show a concrete example of applying CherryML to obtain a rate matrix superior than LG in record time. For this, we will use the plant dataset from Ran et al. (2018), `Phylogenomics resolves the deep phylogeny of seed plants and indicates partial convergent or homoplastic evolution between Gnetales and angiosperms`, with the train-test splits in the QMaker paper. The training MSAs are located at `demo_data/plant_train` and the testing MSAs are located at `demo_data/plant_test`. We start by fitting the LG model using FastTree tree estimator and the CherryML rate matrix optimizer. We start from the LG rate matrix and perform two rounds of alternating rate matrix and tree optimization (which is usually enough for convergence when adjusting the LG rate matrix to a new dataset). We will use 4 CPU cores in this example, as when running on a personal computer:
+Here we show a concrete example of how to use CherryML to estimate a rate matrix de-novo - which is more useful than LG for this dataset - just starting from MSAs. For this, we will use the plant dataset from Ran et al. (2018), `Phylogenomics resolves the deep phylogeny of seed plants and indicates partial convergent or homoplastic evolution between Gnetales and angiosperms`, with the train-test splits in the QMaker paper. The training MSAs are already located at `demo_data/plant_train` in this repository and the testing MSAs are located at `demo_data/plant_test`. (So, you do not need to download anything!) We start by fitting the LG model using the FastTree tree estimator and the CherryML rate matrix optimizer. We start from the LG rate matrix and perform two rounds of alternating rate matrix and tree optimization (which is usually enough for convergence when adjusting the LG rate matrix to a new dataset). We will use 4 CPU cores in this example, as when running on a personal computer:
 
 ```
 time python -m cherryml \
@@ -401,6 +598,8 @@ Processor: 2.6 GHz 6-Core Intel Core i7
 Memory: 16 GB 2400 MHz DDR4
 ```
 
+In our NeurIPS 2024 paper, we introduce FastCherries. Using FastCherries, end-to-end rate matrix estimation took under 1 minute instead! To use FastCherries, use `--tree_estimator_name FastCherries` instead. Try it out!
+
 Now we proceed to evaluate model fit on held-out data. The testing MSAs are located at `demo_data/plant_test`. Thus:
 
 ```
@@ -426,6 +625,15 @@ Evaluation took 3 minutes wall-clock time on the same computer. The output is:
 Total log-likelihood: -2042731.0602000006
 Total number of sites: 101064
 Average log-likelihood per site: -20.21225223818571
+[...]
+```
+
+For the rate matrix estimated with FastCherries in under a minute, we have almost identical performance:
+
+```
+Total log-likelihood: -2042833.0975
+Total number of sites: 101064
+Average log-likelihood per site: -20.213261868716852
 [...]
 ```
 
@@ -457,9 +665,9 @@ Average log-likelihood per site: -20.50697311703476
 [...]
 ```
 
-As we can see, the de-novo estimated rate matrix outperforms the LG rate matrix, with an average increase in log-likelihood per site of `0.295` (1.4%).
+As we can see, the de-novo estimated rate matrix (with either FastTree or FastCherries) outperforms the LG rate matrix, with an average increase in log-likelihood per site of `0.295` (1.4%).
 
-# Reproducing all figures in our paper
+# Reproducing all figures in our paper `CherryML: scalable maximum likelihood estimation of phylogenetic models`.
 
 To reproduce all figures in our paper, proceed as described below. Please note that this will not work in the compute capsule associated with this work since memory and compute are limited in the capsule. To reproduce all figures, you will need a machine with 32 CPU cores and 150G of storage; the Pfam dataset is large and we are in the realm of high-performance computing, which is out of reach with a compute capsule.
 
@@ -473,17 +681,11 @@ time python reproduce_fig_1e_simplified_demo.py
 
 Expected output: `fig_1e_simplified/` contains the reproduced version of Fig. 1e (without EM).
 
-FastTree is faster, which is better for the demo, and the results are similar. Reproducing Fig. 1e (excluding EM) with FastTree takes ~10 minutes. Using PhyML (as in `reproduce_all_figures.py`, and as in our paper), would take ~4 hours. Note that if you have less than 32 cores available, you should change `num_processes=32` to a different value in `reproduce_fig_1e_simplified_demo.py`. In this case, it will take longer than ~10 minutes.
+FastTree is faster, which is better for the demo, and the results are similar. Reproducing Fig. 1e (excluding EM) with FastTree takes ~10 minutes. Using PhyML (as in `reproduce_all_figures.py`, and as in our paper), would take ~4 hours. Note that if you have less than 32 cores available, you should change `num_processes=32` to a different value in `reproduce_fig_1e_simplified_demo.py`. In this case, it will take longer than ~10 minutes. In our more recent work at NeurIPS 2024, we introduce FastCherries, which is 10-100x faster than FastTree!
 
 ## System requirements
 
-CherryML has been tested on an Ubuntu system (20.04) with Python (3.8.5, miniconda 4.9.2).
-
-First, install all required Python libraries, e.g.:
-
-```
-pip install -r requirements.txt
-```
+CherryML has been tested on an Ubuntu system (20.04) with Python (3.10).
 
 The following are system requirements:
 
@@ -575,3 +777,40 @@ Our simulated datasets are available on Zenodo at https://zenodo.org/record/7830
 You are now ready to reproduce all figures in our paper. Just run `reproduce_all_figures.py` to reproduce all figures in our paper. The approximate runtime needed to reproduce each figure this way is commented in `reproduce_all_figures.py`. Note that the computational bottlenecks to reproduce all figures are (1) benchmarking EM with XRATE and (2) tree estimation (as opposed to the CherryML optimizer). To reproduce a specific figure, comment out the figures you do not want in `reproduce_all_figures.py`. The code is written in a functional style, so the functions can be run in any order at any time and will reproduce the results. All the intermediate computations are cached, so re-running the code will be very fast the second time around. The output figures will be found in the `images` folder.
 
 Tree estimation is parallelized, so by default you will need a machine with at least 32 cores. If you would like to use more (or less) cores, modify the value of `NUM_PROCESSES_TREE_ESTIMATION` at the top of the `figures.py` module. (However, note that the bottleneck when reproducing all figures is not tree estimation but performing EM with XRATE (Fig. 1b and Supp Fig. 1), which will take around 3-4 days regardless.)
+
+
+# Reproducing all figures in our paper `Ultrafast classical phylogenetic method beats large protein language models on variant effect prediction` (a.k.a. SiteRM/FastCherries paper).
+
+First, follow the same initial instructions as in section "[Reproducing all figures in our paper CherryML: scalable maximum likelihood estimation of phylogenetic models](#reproducing-all-figures-in-our-paper-cherryml-scalable-maximum-likelihood-estimation-of-phylogenetic-models)" to download the data.
+
+As always, please make sure all the tests are passing before attempting to reproduce any figures. You can run the tests with:
+
+```
+python -m pytest tests --runslow
+```
+
+In brief, running the python script `figures_neurips_2024.py` will reproduce figures 2 and S1 in our paper. It is as simple as:
+
+```
+$ time python figures_neurips_2024.py
+```
+
+By default, 10 CPU cores are used to parallelize the benchmarks. You can change the number of CPU cores by changing the line `num_processes = 10` in the file `figures_neurips_2024.py`.
+
+Below we detail which functions in this file correspond to each figure in our paper, and how to reproduce the ProteinGym results.
+
+## Figures 2c and 2d
+
+In the file `figures_neurips_2024.py`, the function `reproduce_lg()` reproduces Figures 2c and 2d. After running this function, Figures 2c and 2d will be located at `neurips_figures/lg_reproduced/lg_paper_figure.png` and `neurips_figures/lg_reproduced/runtime_comparisson.png` respectively. The function `reproduce_lg()` takes around 1 hours and a half on a Macbook Pro with `Apple M3 Pro` chip.
+
+## Supplementary Figure S1
+
+In the file `figures_neurips_2024.py`, the function `qmaker()` reproduces Supplementary Figure S1. After running this function, Supplementary Figure S1's subfigures will be located at `neurips_figures/fig_qmaker/[domain]/` as PNG files. The function `qmaker()` takes around 4 hours on a Macbook Pro with `Apple M3 Pro` chip.
+
+## Figures 2a and 2b
+
+In the file `figures_neurips_2024.py`, the function `efficiency()` reproduces Figures 2a and 2b. After running this function, Figures 2a and 2b will be located at `neurips_figures/simulated_estimated/times.png` and `neurips_figures/simulated_estimated/errors.png` respectively. The function `function()` takes around 5 hours on a Macbook Pro with `Apple M3 Pro` chip.
+
+## ProteinGym results
+
+ProteinGym provides standardized benchmarks for the variant effect prediction task. To reproduce the results of the SiteRM model on the ProteinGym benchmark, please refer to the ProteinGym repository on GitHub (https://github.com/OATML-Markslab/ProteinGym) and follow their standard workflow. The scripts for reproduce the SiteRM model results will be there. For example, to reproduce the DMS results, you should cd into `scripts/scoring_DMS_zero_shot/` and run the `scoring_SiteRM_substitutions.sh` script. Next, run the `merge_all_scores.sh` script, and finally the `performance_substitutions.sh` script. In the script `scoring_SiteRM_substitutions.sh`, you can change `num_processes=32` to your available number of CPU cores. With 32 cores, it shouldn't take more than a few hours. The clinical substitutions benchmark following a similar process but you will want to run `scripts/scoring_clinical_zero_shot/scoring_SiteRM_substitutions.sh` instead. This takes longer - around a full day.
