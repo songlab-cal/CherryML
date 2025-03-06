@@ -557,7 +557,7 @@ def learn_site_specific_rate_matrices(
                 if it was provided). It is of type cherryml_io.Tree. Note that
                 FastCherries only estimates the cherries in the tree and
                 therefore returns a star-type tree with all the inferred
-                cherries hanging from the root. Such as tree might look like
+                cherries hanging from the root. Such a tree might look like
                 this in newick format:
                 "((leaf_1:0.17,leaf_2:0.17)internal-0:1,(leaf_3:0.17,leaf_4:0.17)internal-1:1);"
             - "time_...": The time taken by this substep. (They should add up
