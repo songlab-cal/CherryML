@@ -7,6 +7,33 @@
 
 ![Cover](docs/_static/cover.jpeg)
 
+# Table of Contents
+
+- [Introduction](#introduction)
+- [Citation](#citation)
+- [Installation](#installation)
+  - [For users](#for-users)
+  - [For developers](#for-developers)
+  - [System requirements](#system-requirements)
+- [Demo: CherryML applied to the LG model (runtime on a normal computer: 1 - 5 minutes)](#demo-cherryml-applied-to-the-lg-model-runtime-on-a-normal-computer-1---5-minutes)
+- [Demo: CherryML applied to the co-evolution model (runtime on a normal computer: 1 - 5 minutes)](#demo-cherryml-applied-to-the-co-evolution-model-runtime-on-a-normal-computer-1---5-minutes)
+- [CherryML API](#cherryml-api)
+- [Evaluation API](#evaluation-api)
+- [SiteRM/FastCherries: Python API](#sitermfastcherries-python-api)
+- [End-to-end worked-out application: plant dataset](#end-to-end-worked-out-application-plant-dataset)
+- [Reproducing all figures in our paper `CherryML: scalable maximum likelihood estimation of phylogenetic models`.](#reproducing-all-figures-in-our-paper-cherryml-scalable-maximum-likelihood-estimation-of-phylogenetic-models)
+  - [Demo: Reproducing a simplified version of Figure 1e (runtime on a normal computer: ~10 minutes)](#demo-reproducing-a-simplified-version-of-figure-1e-runtime-on-a-normal-computer-10-minutes)
+  - [Download data](#download-data)
+  - [Optional: Download simulated datasets](#optional-download-simulated-datasets)
+  - [Run code to reproduce all figures](#run-code-to-reproduce-all-figures)
+- [Reproducing all figures in our paper `Ultrafast classical phylogenetic method beats large protein language models on variant effect prediction` (a.k.a. SiteRM/FastCherries paper).](#reproducing-all-figures-in-our-paper-ultrafast-classical-phylogenetic-method-beats-large-protein-language-models-on-variant-effect-prediction-aka-sitermfastcherries-paper)
+  - [Figures 2c and 2d](#figures-2c-and-2d)
+  - [Supplementary Figure S1](#supplementary-figure-s1)
+  - [Figures 2a and 2b](#figures-2a-and-2b)
+  - [ProteinGym results](#proteingym-results)
+
+# Introduction
+
 This package implements the methods - and allows easily reproducing the results - from our papers:
 
 > Prillo, S., Deng, Y., Boyeau, P., Li, X., Chen, P.-Y., Song, Y.S.  (2023) CherryML: Scalable maximum likelihood estimation of phylogenetic models. Nature Methods.
@@ -21,7 +48,7 @@ Note that (1) is NOT the LG rate matrix but the LG _model_; the LG rate matrix [
 
 For a quick demonstration of an end-to-end application of CherryML and FastCherries to real data, please check out the section "[End-to-end worked-out application: plant dataset](#end-to-end-worked-out-application-plant-dataset)".
 
-You can find the full API for CherryML in the section "[CherryML full API](#cherryml-full-api)".
+You can find the full API for CherryML in the section "[CherryML API](#cherryml-api)".
 
 To reproduce all the figures from our Nature Methods 2023 paper, see the section "[Reproducing all figures in our paper CherryML: scalable maximum likelihood estimation of phylogenetic models](#reproducing-all-figures-in-our-paper-cherryml-scalable-maximum-likelihood-estimation-of-phylogenetic-models)".
 
@@ -85,6 +112,67 @@ Run all tests:
 ```
 python -m pytest tests/ --runslow
 ```
+
+## System requirements
+
+CherryML has been tested on an Ubuntu system (20.04) with Python (3.10).
+
+The following are system requirements:
+
+```
+autoconf
+automake
+gcc
+libboost-dev
+libboost-regex-dev
+libgsl-dev
+libopenmpi-dev
+mpich
+pkg-config
+wget
+zlib1g-dev
+```
+
+All third-party software, including FastTree [Price et al. 2010] (`FastTree` program), PhyML [Guindon et al. 2010] (`phyml` program), and XRATE [Klosterman et al. 2006] (`xrate` program), will be automatically installed locally into this repository by our code if you have not installed it already on your system. If you would like to install these third-party tools on your system, you can do e.g.:
+
+To install FastTree (again, this is optional, we will install FastTree locally otherwise):
+```
+mkdir -p /opt/FastTree/bin/
+mkdir -p /opt/FastTree/download/
+export PATH=/opt/FastTree/bin:$PATH
+wget http://www.microbesonline.org/fasttree/FastTree.c -P /opt/FastTree/download/
+gcc -DNO_SSE -DUSE_DOUBLE -O3 -finline-functions -funroll-loops -Wall \
+    -o /opt/FastTree/bin/FastTree /opt/FastTree/download/FastTree.c -lm
+```
+
+To install PhyML (again, this is optional, we will install PhyML locally otherwise):
+```
+mkdir -p /opt/phyml/bin/
+mkdir -p /opt/phyml/download/
+export PATH=/opt/phyml/bin:$PATH
+git clone https://github.com/stephaneguindon/phyml /opt/phyml/download/phyml
+pushd /opt/phyml/download/phyml/
+bash ./autogen.sh
+./configure --enable-phyml --prefix=/opt/phyml/bin/
+make
+make install
+popd
+```
+
+To install XRATE (again, this is optional, we will install XRATE locally otherwise):
+```
+mkdir -p /opt/xrate/bin/
+mkdir -p /opt/xrate/download/
+export PATH=/opt/xrate/bin:$PATH
+git clone https://github.com/ihh/dart /opt/xrate/download/xrate
+pushd /opt/xrate/download/xrate/
+./configure --without-guile
+make xrate
+cp /opt/xrate/download/xrate/bin/xrate /opt/xrate/bin/xrate
+popd
+```
+
+Finally, make sure you have `open-mpi` installed. Installation instructions may depend on the system. For example, for Mac, `brew install open-mpi` should work.
 
 # Demo: CherryML applied to the LG model (runtime on a normal computer: 1 - 5 minutes)
 
@@ -196,7 +284,7 @@ Each file in `contact_map_dir` should list the contact map for a family followin
 
 As before, if you have not estimated trees already, you can omit the `tree_dir` and CherryML will estimate these for you. (In this case, we recommend using `--num_rate_categories 1` since the coevolution model does not model site rate variation.)
 
-# CherryML Full API
+# CherryML API
 
 The CherryML API provides extensive functionality through additional flags, which we describe below (this is shown when running `python -m cherryml --help`):
 
@@ -387,8 +475,6 @@ Sites per family: 16 16 16
 ```
 
 You will note that PhyML obtained a better Gamma log-likelihood than FastTree. Unless over-ridden by the user with `--extra_command_line_args`, PhyML is being run with the extra command line arguments `--datatype aa --pinv e --r_seed 0 --bootstrap 0 -f m --alpha e --print_site_lnl`.
-
-# Full API
 
 The command line tool can be invoked with `python -m cherryml.evaluation` and accepts the following arguments:
 
@@ -683,81 +769,6 @@ Expected output: `fig_1e_simplified/` contains the reproduced version of Fig. 1e
 
 FastTree is faster, which is better for the demo, and the results are similar. Reproducing Fig. 1e (excluding EM) with FastTree takes ~10 minutes. Using PhyML (as in `reproduce_all_figures.py`, and as in our paper), would take ~4 hours. Note that if you have less than 32 cores available, you should change `num_processes=32` to a different value in `reproduce_fig_1e_simplified_demo.py`. In this case, it will take longer than ~10 minutes. In our more recent work at NeurIPS 2024, we introduce FastCherries, which is 10-100x faster than FastTree!
 
-## System requirements
-
-CherryML has been tested on an Ubuntu system (20.04) with Python (3.10).
-
-The following are system requirements:
-
-```
-autoconf
-automake
-gcc
-libboost-dev
-libboost-regex-dev
-libgsl-dev
-libopenmpi-dev
-mpich
-pkg-config
-wget
-zlib1g-dev
-```
-
-All third-party software, including FastTree [Price et al. 2010] (`FastTree` program), PhyML [Guindon et al. 2010] (`phyml` program), and XRATE [Klosterman et al. 2006] (`xrate` program), will be automatically installed locally into this repository by our code if you have not installed it already on your system. If you would like to install these third-party tools on your system, you can do e.g.:
-
-To install FastTree (again, this is optional, we will install FastTree locally otherwise):
-```
-mkdir -p /opt/FastTree/bin/
-mkdir -p /opt/FastTree/download/
-export PATH=/opt/FastTree/bin:$PATH
-wget http://www.microbesonline.org/fasttree/FastTree.c -P /opt/FastTree/download/
-gcc -DNO_SSE -DUSE_DOUBLE -O3 -finline-functions -funroll-loops -Wall \
-    -o /opt/FastTree/bin/FastTree /opt/FastTree/download/FastTree.c -lm
-```
-
-To install PhyML (again, this is optional, we will install PhyML locally otherwise):
-```
-mkdir -p /opt/phyml/bin/
-mkdir -p /opt/phyml/download/
-export PATH=/opt/phyml/bin:$PATH
-git clone https://github.com/stephaneguindon/phyml /opt/phyml/download/phyml
-pushd /opt/phyml/download/phyml/
-bash ./autogen.sh
-./configure --enable-phyml --prefix=/opt/phyml/bin/
-make
-make install
-popd
-```
-
-To install XRATE (again, this is optional, we will install XRATE locally otherwise):
-```
-mkdir -p /opt/xrate/bin/
-mkdir -p /opt/xrate/download/
-export PATH=/opt/xrate/bin:$PATH
-git clone https://github.com/ihh/dart /opt/xrate/download/xrate
-pushd /opt/xrate/download/xrate/
-./configure --without-guile
-make xrate
-cp /opt/xrate/download/xrate/bin/xrate /opt/xrate/bin/xrate
-popd
-```
-
-Finally, make sure you have `open-mpi` installed. Installation instructions may depend on the system. For example, for Mac, `brew install open-mpi` should work.
-
-Once you have met all the requirements, run the fast tests to make sure they pass:
-
-```
-python -m pytest tests
-```
-
-The run _all_ tests (including the slow tests, such as those for PhyML), and make sure they pass:
-
-```
-python -m pytest tests --runslow
-```
-
-This should take a few minutes. If all tests pass, you are good to go. You can install the `cherryml` package for future use in other projects by running `pip install .`. Then you can use it with `python -m cherryml [...]` as in the demo above.
-
 ## Download data
 
 Once all tests are passing, you will need to download the data from the trRosetta paper into this repository, which is available at the following link:
@@ -781,7 +792,7 @@ Tree estimation is parallelized, so by default you will need a machine with at l
 
 # Reproducing all figures in our paper `Ultrafast classical phylogenetic method beats large protein language models on variant effect prediction` (a.k.a. SiteRM/FastCherries paper).
 
-First, follow the same initial instructions as in section "[Reproducing all figures in our paper CherryML: scalable maximum likelihood estimation of phylogenetic models](#reproducing-all-figures-in-our-paper-cherryml-scalable-maximum-likelihood-estimation-of-phylogenetic-models)" to download the data.
+First, follow the same initial instructions as in section "[Reproducing all figures in our paper CherryML: scalable maximum likelihood estimation of phylogenetic models](#reproducing-all-figures-in-our-paper-cherryml-scalable-maximum-likelihood-estimation-of-phylogenetic-models)" to download the data. You can comfortably reproduce the figures from this paper using a laptop, since there is no need to run slow methods like EM as we did in the previous paper.
 
 As always, please make sure all the tests are passing before attempting to reproduce any figures. You can run the tests with:
 
@@ -813,4 +824,4 @@ In the file `figures_neurips_2024.py`, the function `efficiency()` reproduces Fi
 
 ## ProteinGym results
 
-ProteinGym provides standardized benchmarks for the variant effect prediction task. To reproduce the results of the SiteRM model on the ProteinGym benchmark, please refer to the ProteinGym repository on GitHub (https://github.com/OATML-Markslab/ProteinGym) and follow their standard workflow. The scripts for reproduce the SiteRM model results will be there. For example, to reproduce the DMS results, you should cd into `scripts/scoring_DMS_zero_shot/` and run the `scoring_SiteRM_substitutions.sh` script. Next, run the `merge_all_scores.sh` script, and finally the `performance_substitutions.sh` script. In the script `scoring_SiteRM_substitutions.sh`, you can change `num_processes=32` to your available number of CPU cores. With 32 cores, it shouldn't take more than a few hours. The clinical substitutions benchmark following a similar process but you will want to run `scripts/scoring_clinical_zero_shot/scoring_SiteRM_substitutions.sh` instead. This takes longer - around a full day.
+ProteinGym provides standardized benchmarks for the variant effect prediction task. To reproduce the results of the SiteRM model on the ProteinGym benchmark, please refer to the ProteinGym repository on GitHub (https://github.com/OATML-Markslab/ProteinGym) and follow their standard workflow. The scripts for reproduce the SiteRM model results will be there. For example, to reproduce the DMS results, you should cd into `scripts/scoring_DMS_zero_shot/` and run the `scoring_SiteRM_substitutions.sh` script. Next, run the `merge_all_scores.sh` script, and finally the `performance_substitutions.sh` script. In the script `scoring_SiteRM_substitutions.sh`, you can change `num_processes=32` to your available number of CPU cores. With 8 cores, the DMS zero shot benchmark takes just two hours on my MacBook laptop. The clinical substitutions benchmark following a similar process but you will want to run `scripts/scoring_clinical_zero_shot/scoring_SiteRM_substitutions.sh` instead. This takes longer - around a full day, since there are 10x more MSAs.
